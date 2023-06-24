@@ -17,11 +17,11 @@ function Index() {
     <>
       <Head title="TOP PAGE" />
       <div className="hero min-h-screen">
-        <div className="text-center hero-content">
+        <div className="hero-content text-center">
           <div>
             <h1 className="text-3xl font-bold">
               <a
-                className="link link-primary"
+                className="link-primary link"
                 target="_blank"
                 href="https://vitejs.dev/"
                 rel="noreferrer">
@@ -29,7 +29,7 @@ function Index() {
               </a>{' '}
               +{' '}
               <a
-                className="link link-primary"
+                className="link-primary link"
                 target="_blank"
                 href="https://reactjs.org/"
                 rel="noreferrer">
@@ -37,7 +37,7 @@ function Index() {
               </a>{' '}
               +{' '}
               <a
-                className="link link-primary"
+                className="link-primary link"
                 target="_blank"
                 href="https://www.typescriptlang.org/"
                 rel="noreferrer">
@@ -45,7 +45,7 @@ function Index() {
               </a>{' '}
               +{' '}
               <a
-                className="link link-primary"
+                className="link-primary link"
                 target="_blank"
                 href="https://tailwindcss.com/"
                 rel="noreferrer">
@@ -56,7 +56,7 @@ function Index() {
             <p className="mt-4 text-lg">
               For fast <b>prototyping</b>. Already set up{' '}
               <a
-                className="link link-primary"
+                className="link-primary link"
                 target="_blank"
                 href="https://github.com/firebase/firebase-js-sdk"
                 rel="noreferrer">
@@ -64,7 +64,7 @@ function Index() {
               </a>
               ,{' '}
               <a
-                className="link link-primary"
+                className="link-primary link"
                 target="_blank"
                 href="https://daisyui.com/"
                 rel="noreferrer">
@@ -72,7 +72,7 @@ function Index() {
               </a>
               ,{' '}
               <a
-                className="link link-primary"
+                className="link-primary link"
                 target="_blank"
                 href="https://github.com/eslint/eslint"
                 rel="noreferrer">
@@ -80,7 +80,7 @@ function Index() {
               </a>
               ,{' '}
               <a
-                className="link link-primary"
+                className="link-primary link"
                 target="_blank"
                 href="https://github.com/prettier/prettier"
                 rel="noreferrer">
@@ -96,19 +96,19 @@ function Index() {
         </div>
       </div>
       <Dialog
-        className="flex fixed inset-0 z-10 overflow-y-auto"
+        className="fixed inset-0 z-10 flex overflow-y-auto"
         initialFocus={completeButtonRef}
         open={isOpen}
         onClose={() => setIsOpen(false)}>
-        <div className="flex items-center justify-center min-h-screen w-screen">
+        <div className="flex min-h-screen w-screen items-center justify-center">
           <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-          <div className="relative bg-white rounded max-w-120 p-8 mx-auto">
+          <div className="relative mx-auto max-w-120 rounded bg-white p-8">
             <Dialog.Title>Dialog Title</Dialog.Title>
             <Dialog.Description>Dialog description</Dialog.Description>
             <button
               ref={completeButtonRef}
               type="button"
-              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               onClick={() => setIsOpen(false)}>
               Got it, thanks!
             </button>

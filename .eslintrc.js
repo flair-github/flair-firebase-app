@@ -1,5 +1,8 @@
 module.exports = {
-  extends: '@react-native-community',
+  extends: [
+    '@react-native-community',
+    "plugin:tailwindcss/recommended",
+  ],
   ignorePatterns: ['**/*.js'],
   rules: {
     'react-native/no-inline-styles': 'off',
