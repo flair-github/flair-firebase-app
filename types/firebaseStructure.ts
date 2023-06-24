@@ -1,17 +1,12 @@
 interface FSCollections {
   [collectionName: string]: {
     [documentId: string]: {
-      /** Documentの構造 */
       document: any
-      /** そのDocument内のSubcollectionのリスト */
       collections: FSCollections
     }
   }
 }
 
-/**
- * Firebase Realtime Database構造
- */
 export interface FirestoreStruct extends FSCollections {
   user_data: {
     [userId: string]: {
