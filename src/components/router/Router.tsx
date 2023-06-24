@@ -2,7 +2,7 @@ import React from 'react'
 import { useAtomValue } from 'jotai'
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Outlet, RouteObject, useRoutes } from 'react-router-dom'
-import { atomUser } from '~/jotai/jotai'
+import { atomUser, atomUserData } from '~/jotai/jotai'
 import LoginScreen from '../screens/Login'
 import PageLoader from '../screens/Loader'
 import { useAuth } from '~/lib/firebase'
@@ -13,7 +13,7 @@ const IndexScreen = lazy(() => import('~/components/screens/Index'))
 const Page404Screen = lazy(() => import('~/components/screens/404'))
 
 function Layout() {
-  const user = useAtomValue(atomUser)
+  const userData = useAtomValue(atomUserData)
   const auth = useAuth()
 
   const handleSignOut = () => {
@@ -31,9 +31,9 @@ function Layout() {
         <div className="flex-none">
           <div className="dropdown-end dropdown">
             <label tabIndex={0} className="btn-ghost btn flex px-2 normal-case">
-              <div>{user?.displayName || 'Flair User'}</div>
+              <div>{userData?.userName || 'Flair User'}</div>
               <div className="w-9 overflow-hidden rounded-full">
-                <img src={user?.photoURL || 'https://www.gravatar.com/avatar/' + user?.uid} />
+                <img src={userData?.userPhotoUrl} />
               </div>
             </label>
             <ul

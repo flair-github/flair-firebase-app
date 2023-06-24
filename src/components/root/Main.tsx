@@ -3,23 +3,24 @@ import { Router } from '~/components/router/Router'
 import { db, setupFirebase } from '~/lib/firebase'
 import { useEffect } from 'react'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { useSetAtom } from 'jotai'
-import { atomUser } from '~/jotai/jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { atomUser, atomUserData } from '~/jotai/jotai'
 import { DocUserData } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 
 function Main() {
-  const setUser = useSetAtom(atomUser)
+  const [user, setUser] = useAtom(atomUser)
+  const userId = user?.uid
 
   useEffect(() => {
     setupFirebase()
 
     const auth = getAuth()
 
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      setUser(user)
+    const unsubscribe = onAuthStateChanged(auth, newUser => {
+      setUser(newUser)
 
-      const uid = user?.uid
+      const uid = newUser?.uid
 
       if (typeof uid === 'string') {
         ;(async () => {
@@ -35,9 +36,10 @@ function Main() {
               docExists: true,
               updatedTimestamp: serverTimestamp() as Timestamp,
               userId: uid,
-              userName: user?.displayName || 'Flair User',
+              userName: newUser?.displayName || 'Flair User',
               userPhotoUrl:
-                user?.photoURL || 'https://www.gravatar.com/avatar/' + user?.uid + '?d=retro&f=y',
+                newUser?.photoURL ||
+                'https://www.gravatar.com/avatar/' + newUser?.uid + '?d=retro&f=y',
             }
             await userDataRef.set(newUserData)
           }
@@ -49,6 +51,25 @@ function Main() {
       unsubscribe()
     }
   }, [setUser])
+
+  const setUserData = useSetAtom(atomUserData)
+  useEffect(() => {
+    if (!userId) {
+      return
+    }
+
+    const unsub = db
+      .collection('user_data')
+      .doc(userId)
+      .onSnapshot(snap => {
+        const newUserData = snap.data() as DocUserData
+        setUserData(newUserData)
+      })
+
+    return () => {
+      unsub()
+    }
+  }, [setUserData, userId])
 
   return (
     <main>
