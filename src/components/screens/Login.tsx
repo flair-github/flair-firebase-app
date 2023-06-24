@@ -17,7 +17,7 @@ function PageLogin() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center  bg-gray-300">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-300">
       <div className="flex w-96 flex-col rounded-md bg-white px-4 py-8 shadow-md sm:px-6 md:px-8 lg:px-10">
         <div className="flex justify-center">
           <img src="images/flair-ai.svg" width={120} height={32} className="" />
