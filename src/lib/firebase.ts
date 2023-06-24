@@ -2,21 +2,29 @@ import { FirebaseApp, initializeApp } from 'firebase/app'
 import { getAuth, Auth, connectAuthEmulator } from 'firebase/auth'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import { connectStorageEmulator, getStorage } from 'firebase/storage'
+import firebase from 'firebase/compat/app'
+// Required for side-effects
+import 'firebase/compat/firestore'
 
 let firebaseApp: FirebaseApp
 const useEmulator = () => import.meta.env.VITE_USE_FIREBASE_EMULATOR
 
+const getFirebaseOptions = () => ({
+  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASEURL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECTID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_FIREBASE_APPID,
+})
+
+firebase.initializeApp(getFirebaseOptions())
+export const db = firebase.firestore()
+
 export const setupFirebase = () => {
   try {
-    firebaseApp = initializeApp({
-      apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
-      authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
-      databaseURL: import.meta.env.VITE_FIREBASE_DATABASEURL,
-      projectId: import.meta.env.VITE_FIREBASE_PROJECTID,
-      storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
-      messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGINGSENDERID,
-      appId: import.meta.env.VITE_FIREBASE_APPID,
-    })
+    firebaseApp = initializeApp(getFirebaseOptions())
   } catch (error) {
     console.error({ error })
   }
