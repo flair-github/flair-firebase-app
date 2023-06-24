@@ -34,7 +34,7 @@ export interface FirestoreStruct extends FSCollections {
   flow_execution_requests: {
     [flowExecutionRequestId: string] : {
       document: {
-        date: number;
+        date: any;
         executorUserId: string;
         flowDataId: string;
         flowJson: string;
@@ -45,7 +45,7 @@ export interface FirestoreStruct extends FSCollections {
   flow_execution_results: {
     [flowExecutionRequestId: string] : {
       document: {
-        date: number;
+        date: any;
         flowExecutionRequestId: string;
         executorUserId: string;
         flowDataId: string;
