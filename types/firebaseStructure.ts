@@ -2,11 +2,11 @@ interface FSCollections {
   [collectionName: string]: {
     [documentId: string]: {
       /** Documentの構造 */
-      document: any;
+      document: any
       /** そのDocument内のSubcollectionのリスト */
-      collections: FSCollections;
-    };
-  };
+      collections: FSCollections
+    }
+  }
 }
 
 /**
@@ -16,45 +16,45 @@ export interface FirestoreStruct extends FSCollections {
   user_data: {
     [userId: string]: {
       document: {
-        userId: string;
+        userId: string
         userName: string
-      };
-      collections: {};
-    };
-  };
+      }
+      collections: {}
+    }
+  }
   flow_data: {
-    [flowDataId: string] : {
+    [flowDataId: string]: {
       document: {
-        ownerUserId: string;
-        flowJson: string;
-      };
-      collections: {};
+        ownerUserId: string
+        flowJson: string
+      }
+      collections: {}
     }
-  };
+  }
   flow_execution_requests: {
-    [flowExecutionRequestId: string] : {
+    [flowExecutionRequestId: string]: {
       document: {
-        date: any;
-        executorUserId: string;
-        flowDataId: string;
-        flowJson: string;
-      };
-      collections: {};
+        date: any
+        executorUserId: string
+        flowDataId: string
+        flowJson: string
+      }
+      collections: {}
     }
-  };
+  }
   flow_execution_results: {
-    [flowExecutionRequestId: string] : {
+    [flowExecutionRequestId: string]: {
       document: {
-        date: any;
-        flowExecutionRequestId: string;
-        executorUserId: string;
-        flowDataId: string;
+        date: any
+        flowExecutionRequestId: string
+        executorUserId: string
+        flowDataId: string
         /** history */
-        flowJson: string;
+        flowJson: string
 
-        resultData: string;
-      };
-      collections: {};
+        resultData: string
+      }
+      collections: {}
     }
-  };
+  }
 }

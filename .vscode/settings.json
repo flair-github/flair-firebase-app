@@ -1,0 +1,12 @@
+{
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.rulers": [100],
+    "eslint.format.enable": true,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.workingDirectories": [
+        "functions/src"
+    ],
+}
