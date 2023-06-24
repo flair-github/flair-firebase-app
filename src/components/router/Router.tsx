@@ -30,8 +30,9 @@ function Layout() {
         </div>
         <div className="flex-none">
           <div className="dropdown-end dropdown">
-            <label tabIndex={0} className="btn-ghost btn-circle avatar btn">
-              <div className="w-9 rounded-full">
+            <label tabIndex={0} className="btn-ghost btn flex px-2 normal-case">
+              <div>{user?.displayName || 'Flair User'}</div>
+              <div className="w-9 overflow-hidden rounded-full">
                 <img src={user?.photoURL || 'https://www.gravatar.com/avatar/' + user?.uid} />
               </div>
             </label>
