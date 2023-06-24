@@ -1,7 +1,10 @@
 import React from 'react'
-import { Dialog } from '@headlessui/react'
-import { lazy, Suspense, useState } from 'react'
-import { Outlet, RouteObject, useRoutes, BrowserRouter } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
+import { lazy, Suspense } from 'react'
+import { BrowserRouter, Outlet, RouteObject, useRoutes } from 'react-router-dom'
+import { atomUser } from '~/jotai/jotai'
+import LoginScreen from '../screens/Login'
+import PageLoader from '../screens/Loader'
 
 const Loading = () => <p className="h-full w-full p-4 text-center">Loading...</p>
 
@@ -12,7 +15,7 @@ function Layout() {
   return (
     <div>
       <nav className="flex items-center justify-between p-4">
-        <span>Header</span>
+        <span>Flair</span>
       </nav>
       <Outlet />
     </div>
@@ -28,6 +31,8 @@ export const Router = () => {
 }
 
 const InnerRouter = () => {
+  const user = useAtomValue(atomUser)
+
   const routes: RouteObject[] = [
     {
       path: '/',
@@ -45,6 +50,15 @@ const InnerRouter = () => {
     },
   ]
   const element = useRoutes(routes)
+
+  if (user === undefined) {
+    return <PageLoader />
+  }
+
+  if (user === null) {
+    return <LoginScreen />
+  }
+
   return (
     <div>
       <Suspense fallback={<Loading />}>{element}</Suspense>
