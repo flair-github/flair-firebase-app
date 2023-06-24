@@ -24,12 +24,12 @@ export interface FirestoreStruct extends FSCollections {
   }
   flow_exec_requests: {
     [flowExecRequestId: string]: {
-      document: DocFlowData
+      document: DocFlowExecRequest
       collections: {}
     }
   }
   flow_exec_results: {
-    [flowExecRequestId: string]: {
+    [flowExecResultId: string]: {
       document: DocFlowExecResult
       collections: {}
     }
@@ -55,6 +55,8 @@ export interface DocFlowData extends DocRoot {
   flowDataId: string
 
   ownerUserId: string
+
+  lastSaveTimestamp: Timestamp
 
   flowDataTitle: string
   flowDataJson: string
