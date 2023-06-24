@@ -8,6 +8,7 @@ import { useAtomValue } from 'jotai'
 import { atomUser, atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { DocFlowData } from 'Types/firebaseStructure'
+import { Timestamp, serverTimestamp } from 'firebase/firestore'
 
 function Index() {
   const [isOpen, setIsOpen] = useState(true)
@@ -36,9 +37,29 @@ function Index() {
     return () => {
       unsub()
     }
-  }, [userData])
+  }, [userData?.userId])
 
-  const createNewFlow = () => {}
+  const createNewFlow = () => {
+    if (!userData?.userId) {
+      return
+    }
+
+    const ref = db.collection('flow_data').doc()
+    const newFlowData: DocFlowData = {
+      createdTimestamp: serverTimestamp() as Timestamp,
+      updatedTimestamp: serverTimestamp() as Timestamp,
+      lastSaveTimestamp: serverTimestamp() as Timestamp,
+      docExists: true,
+      flowDataId: ref.id,
+      flowDataJson: '',
+      flowDataTitle: 'New Flow',
+      ownerUserId: userData.userId,
+    }
+
+    ref.set(newFlowData)
+
+    // TODO: Continue to flow editor
+  }
 
   const [showNewFlowModal, setShowNewFlowModal] = useState(false)
 
