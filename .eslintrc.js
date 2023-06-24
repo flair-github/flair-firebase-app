@@ -13,6 +13,7 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'error',
     'semi': ['error', 'never'],
+    'no-extra-semi': 'off',
   },
   env: {
     browser: true,
