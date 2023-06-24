@@ -55,6 +55,8 @@ export interface DocFlowData extends DocRoot {
   flowDataId: string
 
   ownerUserId: string
+
+  flowDataTitle: string
   flowDataJson: string
 }
 
