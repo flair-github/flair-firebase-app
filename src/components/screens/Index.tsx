@@ -1,15 +1,17 @@
 import React from 'react'
 import { Dialog } from '@headlessui/react'
 import { useRef, useState } from 'react'
-import { useAuthState } from '~/components/contexts/UserContext'
 import { SignInButton } from '~/components/domain/auth/SignInButton'
 import { SignOutButton } from '~/components/domain/auth/SignOutButton'
 import { Head } from '~/components/shared/Head'
+import { useAtomValue } from 'jotai'
+import { atomUser } from '~/jotai/jotai'
 
 function Index() {
-  const { state } = useAuthState()
   const [isOpen, setIsOpen] = useState(true)
   const completeButtonRef = useRef(null)
+
+  const user = useAtomValue(atomUser)
 
   return (
     <>
@@ -87,11 +89,7 @@ function Index() {
               .
             </p>
             <div className="mt-4 grid gap-2">
-              {state.state === 'UNKNOWN' ? null : state.state === 'SIGNED_OUT' ? (
-                <SignInButton />
-              ) : (
-                <SignOutButton />
-              )}
+              {!user ? <SignInButton /> : <SignOutButton />}
               <button onClick={() => setIsOpen(true)}>Display Dialog</button>
             </div>
           </div>
