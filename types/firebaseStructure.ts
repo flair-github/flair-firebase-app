@@ -10,31 +10,27 @@ interface FSCollections {
 }
 
 export interface FirestoreStruct extends FSCollections {
-  // Rename to users
-  user_data: {
+  users: {
     [userId: string]: {
-      document: DocUserData
+      document: DocUser
       collections: {}
     }
   }
-  // Rename to workflows
-  flow_data: {
-    [flowDataId: string]: {
-      document: DocFlowData
+  workflows: {
+    [workflowId: string]: {
+      document: DocWorkflow
       collections: {}
     }
   }
-  // Rename to workflow_requests
-  flow_exec_requests: {
-    [flowExecRequestId: string]: {
-      document: DocFlowExecRequest
+  workflow_requests: {
+    [workflowRequestId: string]: {
+      document: DocWorkflowRequest
       collections: {}
     }
   }
-  // Rename to workflow_results
-  flow_exec_results: {
-    [flowExecResultId: string]: {
-      document: DocFlowExecResult
+  workflow_results: {
+    [workflowResultId: string]: {
+      document: DocWorkflowResult
       collections: {}
     }
   }
@@ -46,7 +42,7 @@ export interface DocRoot {
   updatedTimestamp: Timestamp
 }
 
-export interface DocUserData extends DocRoot {
+export interface DocUser extends DocRoot {
   /** Document Id */
   userId: string
 
@@ -54,48 +50,40 @@ export interface DocUserData extends DocRoot {
   userPhotoUrl: string
 }
 
-export interface DocFlowData extends DocRoot {
+export interface DocWorkflow extends DocRoot {
   /** Document Id */
-  // TODO: Rename to workflowId
-  flowDataId: string
+  workflowId: string
 
   ownerUserId: string
 
   lastSaveTimestamp: Timestamp
 
-  // TODO: Rename to workflowTitle
-  flowDataTitle: string
-  // TODO: Rename to workflowJson
-  flowDataJson: string
+  workflowTitle: string
+  frontendConfig: string
 }
 
-export interface DocFlowExecRequest extends DocRoot {
+export interface DocWorkflowRequest extends DocRoot {
   /** Document Id */
-  // TODO: Rename to workflowRequestId
-  flowExecRequestId: string
+  workflowRequestId: string
 
   executorUserId: string
-  // TODO: workflowId
-  flowDataId: string
+  workflowId: string
 
   requestTimestamp: Timestamp
 
-  // TODO: Rename to workflowConfig
-  flowDataJson: string
-
-  // TODO: Rename to generatedConfig
+  frontendConfig: string
+  generatedConfig: string
 }
 
-export interface DocFlowExecResult extends DocRoot {
+export interface DocWorkflowResult extends DocRoot {
   /** Document Id */
-  // workflowResultId
-  flowExecResultId: string
+  workflowResultId: string
 
-  // workflowRequestId
-  flowExecRequestId: string
+  workflowId: string
+  workflowRequestId: string
   executorUserId: string
 
-  resultTimestamp: Timestamp
+  completionTimestamp: Timestamp
   resultStatus: string
   resultData: any
 }

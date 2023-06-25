@@ -39,7 +39,7 @@ import { AwsUploaderNode, type AwsUploaderNodeContent } from './nodes/AwsUploade
 import { EvaluatorNode, type EvaluatorNodeContent } from './nodes/EvaluatorNode'
 import { db } from '~/lib/firebase'
 import { useLocation } from 'react-router-dom'
-import { DocFlowData, DocFlowExecRequest } from 'Types/firebaseStructure'
+import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { useAtomValue } from 'jotai'
 import { atomUserData } from '~/jotai/jotai'
@@ -141,24 +141,24 @@ export const FlowEditor = () => {
   const [edges, setEdges] = useState<typeof initialEdges>([])
 
   const { state } = useLocation()
-  const { flowDataId } = state || {} // Read values passed on state
+  const { workflowId } = state || {} // Read values passed on state
 
   // Load initial
   useEffect(() => {
     ;(async () => {
-      if (typeof flowDataId !== 'string') {
+      if (typeof workflowId !== 'string') {
         return
       }
 
-      const snap = await db.collection('flow_data').doc(flowDataId).get()
-      const data = snap.data() as DocFlowData
+      const snap = await db.collection('workflows').doc(workflowId).get()
+      const data = snap.data() as DocWorkflow
 
-      const { nodes: newNodes, edges: newEdges } = JSON.parse(data.flowDataJson)
+      const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
 
       setNodes(newNodes)
       setEdges(newEdges)
     })()
-  }, [flowDataId])
+  }, [workflowId])
 
   // const [rflow, setRflow] = useState<ReactFlowInstance>()
 
@@ -226,7 +226,7 @@ export const FlowEditor = () => {
   const [jsonConfigImport, setJsonConfigImport] = useState('')
 
   const saveFlow = async () => {
-    if (typeof flowDataId !== 'string') {
+    if (typeof workflowId !== 'string') {
       return
     }
 
@@ -236,11 +236,11 @@ export const FlowEditor = () => {
       el.data.initialContents = nodeContents.current[el.id]
     })
 
-    const docUpdate: Partial<DocFlowData> = {
+    const docUpdate: Partial<DocWorkflow> = {
       lastSaveTimestamp: serverTimestamp() as Timestamp,
-      flowDataJson: JSON.stringify(obj),
+      frontendConfig: JSON.stringify(obj),
     }
-    await db.collection('flow_data').doc(flowDataId).update(docUpdate)
+    await db.collection('workflows').doc(workflowId).update(docUpdate)
 
     return obj
   }
@@ -378,22 +378,23 @@ export const FlowEditor = () => {
                   return
                 }
 
-                if (typeof flowDataId !== 'string') {
+                if (typeof workflowId !== 'string') {
                   return
                 }
 
                 const flowData = await saveFlow()
 
-                const ref = db.collection('flow_exec_requests').doc()
-                const newExecution: DocFlowExecRequest = {
+                const ref = db.collection('workflow_requests').doc()
+                const newExecution: DocWorkflowRequest = {
                   createdTimestamp: serverTimestamp() as Timestamp,
                   requestTimestamp: serverTimestamp() as Timestamp,
                   updatedTimestamp: serverTimestamp() as Timestamp,
                   executorUserId: userData.userId,
                   docExists: true,
-                  flowDataId,
-                  flowDataJson: JSON.stringify(flowData),
-                  flowExecRequestId: ref.id,
+                  workflowId,
+                  frontendConfig: JSON.stringify(flowData),
+                  workflowRequestId: ref.id,
+                  generatedConfig: '',
                 }
 
                 await ref.set(newExecution)

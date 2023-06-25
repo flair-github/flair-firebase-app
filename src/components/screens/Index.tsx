@@ -7,7 +7,7 @@ import { Head } from '~/components/shared/Head'
 import { useAtomValue } from 'jotai'
 import { atomUser, atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
-import { DocFlowData } from 'Types/firebaseStructure'
+import { DocWorkflow } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 import { MoonLoader, RingLoader } from 'react-spinners'
@@ -18,7 +18,7 @@ function Index() {
 
   const userData = useAtomValue(atomUserData)
 
-  const [myFlows, setMyFlows] = useState<DocFlowData[]>()
+  const [myFlows, setMyFlows] = useState<DocWorkflow[]>()
 
   useEffect(() => {
     if (!userData?.userId) {
@@ -26,13 +26,13 @@ function Index() {
     }
 
     const unsub = db
-      .collection('flow_data')
+      .collection('workflows')
       .where('docExists', '==', true)
       .where('ownerUserId', '==', userData.userId)
       .orderBy('lastSaveTimestamp', 'desc')
       .limit(50)
       .onSnapshot(snaps => {
-        const newMyFlows = snaps.docs.map(snap => snap.data() as DocFlowData)
+        const newMyFlows = snaps.docs.map(snap => snap.data() as DocWorkflow)
         setMyFlows(newMyFlows)
       })
 
@@ -53,15 +53,15 @@ function Index() {
       return
     }
 
-    const ref = db.collection('flow_data').doc()
-    const newFlowData: DocFlowData = {
+    const ref = db.collection('workflows').doc()
+    const newFlowData: DocWorkflow = {
       createdTimestamp: serverTimestamp() as Timestamp,
       updatedTimestamp: serverTimestamp() as Timestamp,
       lastSaveTimestamp: serverTimestamp() as Timestamp,
       docExists: true,
-      flowDataId: ref.id,
-      flowDataJson: '',
-      flowDataTitle: title || 'New Flow',
+      workflowId: ref.id,
+      frontendConfig: '',
+      workflowTitle: title || 'New Flow',
       ownerUserId: userData.userId,
     }
 
@@ -96,14 +96,14 @@ function Index() {
         )}
         {myFlows &&
           myFlows.map(myFlow => (
-            <div key={myFlow.flowDataId} className="card mb-4 w-96 border bg-base-100 shadow-xl">
+            <div key={myFlow.workflowId} className="card mb-4 w-96 border bg-base-100 shadow-xl">
               <div className="card-body">
-                <h2 className="card-title">{myFlow.flowDataTitle}</h2>
+                <h2 className="card-title">{myFlow.workflowTitle}</h2>
                 <div className="card-actions flex justify-end">
                   <button
                     className="btn-ghost btn"
                     onClick={() => {
-                      db.collection('flow_data').doc(myFlow.flowDataId).delete()
+                      db.collection('workflows').doc(myFlow.workflowId).delete()
                     }}>
                     Delete
                   </button>
@@ -111,7 +111,7 @@ function Index() {
                   <button
                     className="btn"
                     onClick={() => {
-                      navigate('editor', { state: { flowDataId: myFlow.flowDataId } })
+                      navigate('editor', { state: { workflowId: myFlow.workflowId } })
                     }}>
                     Open
                   </button>

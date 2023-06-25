@@ -1,3 +1,10 @@
+# Flair
+
+```
+firebase firestore:indexes > firestore.indexes.json
+firebase deploy --only firestore:indexes
+```
+
 # ⚡ vite-react-ts-tailwind-starter
 
 Starter using Vite + React + TypeScript + Tailwind with Firebase.

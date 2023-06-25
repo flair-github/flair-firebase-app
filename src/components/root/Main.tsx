@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { atomUser, atomUserData } from '~/jotai/jotai'
-import { DocUserData } from 'Types/firebaseStructure'
+import { DocUser } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 
 function Main() {
@@ -24,14 +24,14 @@ function Main() {
 
       if (typeof uid === 'string') {
         ;(async () => {
-          const userDataRef = db.collection('user_data').doc(uid)
+          const userDataRef = db.collection('users').doc(uid)
           const snap = await userDataRef.get()
 
           if (snap.exists) {
             // If user data already exists, do nothing
           } else {
             // If it doesn't exist, create user data
-            const newUserData: DocUserData = {
+            const newUserData: DocUser = {
               createdTimestamp: serverTimestamp() as Timestamp,
               docExists: true,
               updatedTimestamp: serverTimestamp() as Timestamp,
@@ -59,10 +59,10 @@ function Main() {
     }
 
     const unsub = db
-      .collection('user_data')
+      .collection('users')
       .doc(userId)
       .onSnapshot(snap => {
-        const newUserData = snap.data() as DocUserData
+        const newUserData = snap.data() as DocUser
         setUserData(newUserData)
       })
 
