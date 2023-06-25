@@ -39,8 +39,10 @@ import { AwsUploaderNode, type AwsUploaderNodeContent } from './nodes/AwsUploade
 import { EvaluatorNode, type EvaluatorNodeContent } from './nodes/EvaluatorNode'
 import { db } from '~/lib/firebase'
 import { useLocation } from 'react-router-dom'
-import { DocFlowData } from 'Types/firebaseStructure'
+import { DocFlowData, DocFlowExecRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
+import { useAtomValue } from 'jotai'
+import { atomUserData } from '~/jotai/jotai'
 
 const nodeTypes = {
   DataSourceNode,
@@ -133,6 +135,8 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
 // }
 
 export const FlowEditor = () => {
+  const userData = useAtomValue(atomUserData)
+
   const [nodes, setNodes] = useState<typeof initialNodes>([])
   const [edges, setEdges] = useState<typeof initialEdges>([])
 
@@ -221,6 +225,26 @@ export const FlowEditor = () => {
   const [isJsonImportModalShown, setIsJsonImportModalShown] = useState(false)
   const [jsonConfigImport, setJsonConfigImport] = useState('')
 
+  const saveFlow = async () => {
+    if (typeof flowDataId !== 'string') {
+      return
+    }
+
+    const obj = { nodes, edges }
+
+    nodes.forEach(el => {
+      el.data.initialContents = nodeContents.current[el.id]
+    })
+
+    const docUpdate: Partial<DocFlowData> = {
+      lastSaveTimestamp: serverTimestamp() as Timestamp,
+      flowDataJson: JSON.stringify(obj),
+    }
+    await db.collection('flow_data').doc(flowDataId).update(docUpdate)
+
+    return obj
+  }
+
   return (
     <>
       <div className="flex h-[calc(100vh-4rem)]">
@@ -243,25 +267,7 @@ export const FlowEditor = () => {
           style={{ width: 400 }}
           className="border-r-grayscaleDivider flex flex-col border-r p-6">
           <div className="mb-3">
-            <button
-              className="btn-primary btn m-2"
-              onClick={() => {
-                if (typeof flowDataId !== 'string') {
-                  return
-                }
-
-                const obj = { nodes, edges }
-
-                nodes.forEach(el => {
-                  el.data.initialContents = nodeContents.current[el.id]
-                })
-
-                const docUpdate: Partial<DocFlowData> = {
-                  lastSaveTimestamp: serverTimestamp() as Timestamp,
-                  flowDataJson: JSON.stringify(obj),
-                }
-                db.collection('flow_data').doc(flowDataId).update(docUpdate)
-              }}>
+            <button className="btn-primary btn m-2" onClick={saveFlow}>
               Save
             </button>
             <button
@@ -367,8 +373,30 @@ export const FlowEditor = () => {
           <div className="flex">
             <button
               className="btn m-2"
-              onClick={() => {
-                // TODO: Implement Execute Here
+              onClick={async () => {
+                if (!userData?.userId) {
+                  return
+                }
+
+                if (typeof flowDataId !== 'string') {
+                  return
+                }
+
+                const flowData = await saveFlow()
+
+                const ref = db.collection('flow_exec_requests').doc()
+                const newExecution: DocFlowExecRequest = {
+                  createdTimestamp: serverTimestamp() as Timestamp,
+                  requestTimestamp: serverTimestamp() as Timestamp,
+                  updatedTimestamp: serverTimestamp() as Timestamp,
+                  executorUserId: userData.userId,
+                  docExists: true,
+                  flowDataId,
+                  flowDataJson: JSON.stringify(flowData),
+                  flowExecRequestId: ref.id,
+                }
+
+                await ref.set(newExecution)
               }}>
               Execute
             </button>

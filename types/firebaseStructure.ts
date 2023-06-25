@@ -64,7 +64,7 @@ export interface DocFlowData extends DocRoot {
 
 export interface DocFlowExecRequest extends DocRoot {
   /** Document Id */
-  flowExecRequestId: Timestamp
+  flowExecRequestId: string
 
   executorUserId: string
   flowDataId: string
