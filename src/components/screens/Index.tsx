@@ -9,6 +9,7 @@ import { atomUser, atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { DocFlowData } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
+import { useNavigate } from 'react-router-dom'
 
 function Index() {
   const [isOpen, setIsOpen] = useState(true)
@@ -69,6 +70,7 @@ function Index() {
   }
 
   const [showNewFlowModal, setShowNewFlowModal] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <>
@@ -98,7 +100,13 @@ function Index() {
                   Delete
                 </button>
                 <div className="flex-1" />
-                <button className="btn">Open</button>
+                <button
+                  className="btn"
+                  onClick={() => {
+                    navigate('editor')
+                  }}>
+                  Open
+                </button>
               </div>
             </div>
           </div>

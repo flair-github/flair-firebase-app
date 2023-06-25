@@ -11,6 +11,7 @@ const Loading = () => <p className="h-full w-full p-4 text-center">Loading...</p
 
 const IndexScreen = lazy(() => import('~/components/screens/Index'))
 const Page404Screen = lazy(() => import('~/components/screens/404'))
+const FlowEditorScreen = lazy(() => import('~/components/screens/FlowEditor'))
 
 function Layout() {
   const userData = useAtomValue(atomUserData)
@@ -21,8 +22,8 @@ function Layout() {
   }
 
   return (
-    <div>
-      <div className="navbar border-b bg-base-100">
+    <div className="min-h-screen">
+      <div className="navbar h-1 max-h-16 border-b bg-base-100">
         <div className="flex-1">
           <div className="btn-ghost btn text-xl normal-case">
             <img src="/images/flair-ai.svg" width={120} height={2} className="" />
@@ -79,6 +80,10 @@ const InnerRouter = () => {
         {
           index: true,
           element: <IndexScreen />,
+        },
+        {
+          path: 'editor',
+          element: <FlowEditorScreen />,
         },
         {
           path: '*',

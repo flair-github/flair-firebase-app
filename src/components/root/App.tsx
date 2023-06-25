@@ -1,3 +1,5 @@
+window.global ||= window
+
 import React from 'react'
 import { HelmetProvider } from 'react-helmet-async'
 import Main from '~/components/root/Main'
