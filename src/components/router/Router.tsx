@@ -34,6 +34,20 @@ function Layout() {
             }}>
             <img src="/images/flair-ai.svg" width={120} height={2} className="" />
           </div>
+          <ul className="menu menu-horizontal px-1">
+            <li
+              onClick={() => {
+                navigate('/')
+              }}>
+              <a>Studio</a>
+            </li>
+            <li
+              onClick={() => {
+                navigate('/results')
+              }}>
+              <a>Results</a>
+            </li>
+          </ul>
         </div>
         <div className="flex-none">
           <div className="dropdown-end dropdown">
@@ -86,6 +100,10 @@ const InnerRouter = () => {
         {
           index: true,
           element: <IndexScreen />,
+        },
+        {
+          path: 'results',
+          element: <div />,
         },
         {
           path: 'editor',
