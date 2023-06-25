@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "deploy": "tsc && vite build && firebase deploy --only hosting"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
