@@ -10,6 +10,7 @@ import { db } from '~/lib/firebase'
 import { DocFlowData } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
+import { MoonLoader, RingLoader } from 'react-spinners'
 
 function Index() {
   const [isOpen, setIsOpen] = useState(true)
@@ -17,7 +18,7 @@ function Index() {
 
   const userData = useAtomValue(atomUserData)
 
-  const [myFlows, setMyFlows] = useState<DocFlowData[]>([])
+  const [myFlows, setMyFlows] = useState<DocFlowData[]>()
 
   useEffect(() => {
     if (!userData?.userId) {
@@ -87,30 +88,37 @@ function Index() {
         </div>
 
         {/* List of My Flows */}
-        {myFlows.map(myFlow => (
-          <div key={myFlow.flowDataId} className="card mb-4 w-96 border bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">{myFlow.flowDataTitle}</h2>
-              <div className="card-actions flex justify-end">
-                <button
-                  className="btn-ghost btn"
-                  onClick={() => {
-                    db.collection('flow_data').doc(myFlow.flowDataId).delete()
-                  }}>
-                  Delete
-                </button>
-                <div className="flex-1" />
-                <button
-                  className="btn"
-                  onClick={() => {
-                    navigate('editor', { state: { flowDataId: myFlow.flowDataId } })
-                  }}>
-                  Open
-                </button>
+
+        {!myFlows && (
+          <div className="flex h-52 items-center justify-center">
+            <MoonLoader color="rgba(0,0,0,0.2)" />
+          </div>
+        )}
+        {myFlows &&
+          myFlows.map(myFlow => (
+            <div key={myFlow.flowDataId} className="card mb-4 w-96 border bg-base-100 shadow-xl">
+              <div className="card-body">
+                <h2 className="card-title">{myFlow.flowDataTitle}</h2>
+                <div className="card-actions flex justify-end">
+                  <button
+                    className="btn-ghost btn"
+                    onClick={() => {
+                      db.collection('flow_data').doc(myFlow.flowDataId).delete()
+                    }}>
+                    Delete
+                  </button>
+                  <div className="flex-1" />
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      navigate('editor', { state: { flowDataId: myFlow.flowDataId } })
+                    }}>
+                    Open
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
 
         {/* New Flow Modal */}
         <dialog className={['modal', showNewFlowModal ? 'modal-open' : ''].join(' ')}>
