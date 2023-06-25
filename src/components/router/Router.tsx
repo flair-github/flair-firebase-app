@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAtomValue } from 'jotai'
 import { lazy, Suspense } from 'react'
-import { BrowserRouter, Outlet, RouteObject, useRoutes } from 'react-router-dom'
+import { BrowserRouter, Outlet, RouteObject, useNavigate, useRoutes } from 'react-router-dom'
 import { atomUser, atomUserData } from '~/jotai/jotai'
 import LoginScreen from '../screens/Login'
 import PageLoader from '../screens/Loader'
@@ -21,11 +21,17 @@ function Layout() {
     auth.signOut()
   }
 
+  const navigate = useNavigate()
+
   return (
     <div className="min-h-screen">
       <div className="navbar h-1 max-h-16 border-b bg-base-100">
         <div className="flex-1">
-          <div className="btn-ghost btn text-xl normal-case">
+          <div
+            className="btn-ghost btn text-xl normal-case"
+            onClick={() => {
+              navigate('/')
+            }}>
             <img src="/images/flair-ai.svg" width={120} height={2} className="" />
           </div>
         </div>

@@ -37,6 +37,10 @@ import { DataSourceNode, type DataSourceNodeContent } from './nodes/DataSourceNo
 import { DataExtractorNode, type DataExtractorNodeContent } from './nodes/DataExtractorNode'
 import { AwsUploaderNode, type AwsUploaderNodeContent } from './nodes/AwsUploaderNode'
 import { EvaluatorNode, type EvaluatorNodeContent } from './nodes/EvaluatorNode'
+import { db } from '~/lib/firebase'
+import { useLocation } from 'react-router-dom'
+import { DocFlowData } from 'Types/firebaseStructure'
+import { Timestamp, serverTimestamp } from 'firebase/firestore'
 
 const nodeTypes = {
   DataSourceNode,
@@ -132,6 +136,26 @@ export const FlowEditor = () => {
   const [nodes, setNodes] = useState<typeof initialNodes>([])
   const [edges, setEdges] = useState<typeof initialEdges>([])
 
+  const { state } = useLocation()
+  const { flowDataId } = state || {} // Read values passed on state
+
+  // Load initial
+  useEffect(() => {
+    ;(async () => {
+      if (typeof flowDataId !== 'string') {
+        return
+      }
+
+      const snap = await db.collection('flow_data').doc(flowDataId).get()
+      const data = snap.data() as DocFlowData
+
+      const { nodes: newNodes, edges: newEdges } = JSON.parse(data.flowDataJson)
+
+      setNodes(newNodes)
+      setEdges(newEdges)
+    })()
+  }, [flowDataId])
+
   // const [rflow, setRflow] = useState<ReactFlowInstance>()
 
   // const onInit = useCallback((reactflowInstance: ReactFlowInstance) => {
@@ -220,6 +244,27 @@ export const FlowEditor = () => {
           className="border-r-grayscaleDivider flex flex-col border-r p-6">
           <div className="mb-3">
             <button
+              className="btn-primary btn m-2"
+              onClick={() => {
+                if (typeof flowDataId !== 'string') {
+                  return
+                }
+
+                const obj = { nodes, edges }
+
+                nodes.forEach(el => {
+                  el.data.initialContents = nodeContents.current[el.id]
+                })
+
+                const docUpdate: Partial<DocFlowData> = {
+                  lastSaveTimestamp: serverTimestamp() as Timestamp,
+                  flowDataJson: JSON.stringify(obj),
+                }
+                db.collection('flow_data').doc(flowDataId).update(docUpdate)
+              }}>
+              Save
+            </button>
+            <button
               className="btn m-2"
               onClick={() => {
                 setNodes([])
@@ -227,18 +272,16 @@ export const FlowEditor = () => {
               }}>
               Clear
             </button>
-            <div>
-              <button
-                className="btn m-2"
-                onClick={() => {
-                  const { nodes: newNodes, edges: newEdges } = JSON.parse(sample2)
+            <button
+              className="btn m-2"
+              onClick={() => {
+                const { nodes: newNodes, edges: newEdges } = JSON.parse(sample2)
 
-                  setNodes(newNodes)
-                  setEdges(newEdges)
-                }}>
-                Sample
-              </button>
-            </div>
+                setNodes(newNodes)
+                setEdges(newEdges)
+              }}>
+              Sample
+            </button>
           </div>
 
           {/* Data Connectors */}
@@ -325,23 +368,9 @@ export const FlowEditor = () => {
             <button
               className="btn m-2"
               onClick={() => {
-                setIsJsonImportModalShown(true)
+                // TODO: Implement Execute Here
               }}>
-              Import
-            </button>
-            <button
-              className="btn m-2"
-              onClick={() => {
-                const obj = { nodes, edges }
-
-                nodes.forEach(el => {
-                  el.data.initialContents = nodeContents.current[el.id]
-                })
-
-                setJsonConfig(JSON.stringify(obj, null, 2))
-                setIsJsonModalShown(true)
-              }}>
-              Export
+              Execute
             </button>
           </div>
         </div>

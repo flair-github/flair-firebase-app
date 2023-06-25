@@ -103,7 +103,7 @@ function Index() {
                 <button
                   className="btn"
                   onClick={() => {
-                    navigate('editor')
+                    navigate('editor', { state: { flowDataId: myFlow.flowDataId } })
                   }}>
                   Open
                 </button>
