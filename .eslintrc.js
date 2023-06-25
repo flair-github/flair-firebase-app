@@ -14,6 +14,7 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'error',
     'semi': ['error', 'never'],
     'no-extra-semi': 'off',
+    'tailwindcss/no-custom-classname': 'off'
   },
   env: {
     browser: true,
