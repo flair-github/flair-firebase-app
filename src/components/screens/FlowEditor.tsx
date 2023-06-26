@@ -395,6 +395,7 @@ export const FlowEditor = () => {
                   frontendConfig: JSON.stringify(flowData),
                   workflowRequestId: ref.id,
                   generatedConfig: '',
+                  status: 'requested',
                 }
 
                 await ref.set(newExecution)

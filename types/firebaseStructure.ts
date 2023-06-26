@@ -69,6 +69,8 @@ export interface DocWorkflowRequest extends DocRoot {
   executorUserId: string
   workflowId: string
 
+  status: 'requested' | 'initiated' | 'completed'
+
   requestTimestamp: Timestamp
 
   frontendConfig: string
@@ -84,6 +86,5 @@ export interface DocWorkflowResult extends DocRoot {
   executorUserId: string
 
   completionTimestamp: Timestamp
-  resultStatus: string
   resultData: any
 }
