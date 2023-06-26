@@ -76,7 +76,7 @@ function Index() {
   return (
     <>
       <Head title="Home" />
-      <div className="container mx-auto py-2">
+      <div className="container mx-auto px-4 py-2">
         <div className="mb-5 mt-3">
           <button
             className="btn-primary btn normal-case"

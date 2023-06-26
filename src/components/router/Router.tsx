@@ -12,6 +12,7 @@ const Loading = () => <p className="h-full w-full p-4 text-center">Loading...</p
 const IndexScreen = lazy(() => import('~/components/screens/Index'))
 const Page404Screen = lazy(() => import('~/components/screens/404'))
 const FlowEditorScreen = lazy(() => import('~/components/screens/FlowEditor'))
+const ResultsScreen = lazy(() => import('~/components/screens/Results'))
 
 function Layout() {
   const userData = useAtomValue(atomUserData)
@@ -103,7 +104,7 @@ const InnerRouter = () => {
         },
         {
           path: 'results',
-          element: <div />,
+          element: <ResultsScreen />,
         },
         {
           path: 'editor',
