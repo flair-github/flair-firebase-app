@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { SignInButton } from '~/components/domain/auth/SignInButton'
 import { SignOutButton } from '~/components/domain/auth/SignOutButton'
 import { Head } from '~/components/shared/Head'
-import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth'
 import { useAuth } from '~/lib/firebase'
 
 function PageLogin() {
@@ -13,7 +13,7 @@ function PageLogin() {
   const handleGoogleLoginClick = () => {
     const provider = new GoogleAuthProvider()
 
-    signInWithRedirect(auth, provider)
+    signInWithPopup(auth, provider)
   }
 
   return (
