@@ -15,6 +15,7 @@ function PageResults() {
               <th>Workflow Name</th>
               <th>Request Date</th>
               <th>Total Time Taken</th>
+              <th>Model</th>
               <th>Stats</th>
               <th>Result Link</th>
             </tr>
@@ -25,6 +26,7 @@ function PageResults() {
               <td>Customer Call Workflow</td>
               <td>2023-06-25 10:45:30</td>
               <td>15 minutes</td>
+              <th>GPT-4</th>
               <td>Accuracy: 98%, Hallucination 0.2%, Invalid Format: 0%, Latency: 500ms</td>
               <td>
                 <a className="btn bg-slate-200" href="#">
@@ -37,6 +39,7 @@ function PageResults() {
               <td>Invoice Approval Workflow</td>
               <td>2023-06-24 14:30:00</td>
               <td>8 minutes</td>
+              <th>GPT-4</th>
               <td>Accuracy: 95%, Hallucination 0.2%, Invalid Format: 2%, Latency: 700ms</td>
               <td>
                 <a className="btn bg-slate-200" href="#">
@@ -49,6 +52,7 @@ function PageResults() {
               <td>Supply Chain Optimization Workflow</td>
               <td>2023-06-24 12:00:00</td>
               <td>30 minutes</td>
+              <th>Falcon</th>
               <td>Accuracy: 90%, Hallucination 0.2%, Invalid Format: 5%, Latency: 800ms</td>
               <td>
                 <a className="btn bg-slate-200" href="#">
@@ -61,6 +65,7 @@ function PageResults() {
               <td>Product Launch Process Workflow</td>
               <td>2023-06-23 16:15:00</td>
               <td>45 minutes</td>
+              <th>GPT-3.5</th>
               <td>Accuracy: 93%, Hallucination 0.2%, Invalid Format: 1%, Latency: 550ms</td>
               <td>
                 <a className="btn bg-slate-200" href="#">
@@ -73,6 +78,7 @@ function PageResults() {
               <td>Financial Reporting</td>
               <td>2023-06-23 09:30:00</td>
               <td>20 minutes</td>
+              <th>GPT-4</th>
               <td>Accuracy: 97%, Hallucination 0.2%, Invalid Format: 0%, Latency: 600ms</td>
               <td>
                 <a className="btn bg-slate-200" href="#">
