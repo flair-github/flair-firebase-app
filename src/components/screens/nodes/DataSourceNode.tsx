@@ -8,12 +8,18 @@ export interface DataSourceNodeContent {
   dataType: string
   apiKey: string
   path: string
+  secretApiKey: string
+  bucketName: string
+  regionName: string
 }
 
 export const DataSourceNode = ({ data }: { data: NodeData }) => {
   const [source, setSource] = useState<string>('aws')
   const [dataType, setDataType] = useState<string>('txt')
   const [apiKey, setApiKey] = useState<string>('')
+  const [secretApiKey, setSecretApiKey] = useState<string>('')
+  const [bucketName, setBucketName] = useState<string>('')
+  const [regionName, setRegionName] = useState<string>('')
   const [path, setPath] = useState<string>('')
 
   // Initial data
@@ -30,6 +36,15 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
     if ('path' in data.initialContents) {
       setPath(data.initialContents.path)
     }
+    if ('secretApiKey' in data.initialContents) {
+      setSecretApiKey(data.initialContents.secretApiKey)
+    }
+    if ('bucketName' in data.initialContents) {
+      setBucketName(data.initialContents.bucketName)
+    }
+    if ('regionName' in data.initialContents) {
+      setRegionName(data.initialContents.regionName)
+    }
   }, [data.initialContents])
 
   // Copy node data to cache
@@ -38,9 +53,12 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
       source,
       dataType,
       apiKey,
+      secretApiKey,
+      bucketName,
+      regionName,
       path,
     }
-  }, [data.nodeId, source, dataType, apiKey, path])
+  }, [data.nodeId, source, dataType, apiKey, secretApiKey, bucketName, regionName, path])
 
   return (
     <div
@@ -95,6 +113,45 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
             onChange={e => {
               const newApiKey = e.target.value
               setApiKey(newApiKey)
+            }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Secret Key</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            value={secretApiKey}
+            onChange={e => {
+              const newSecretKey = e.target.value
+              setSecretApiKey(newSecretKey)
+            }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Bucket Name</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            value={bucketName}
+            onChange={e => {
+              const newBucketName = e.target.value
+              setBucketName(newBucketName)
+            }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Region Name</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            value={regionName}
+            onChange={e => {
+              const newRegionName = e.target.value
+              setRegionName(newRegionName)
             }}
           />
         </div>
