@@ -16,4 +16,20 @@ import * as logger from 'firebase-functions/logger'
 export const helloWorld = onRequest((request, response) => {
   logger.info('Hello logs!', { structuredData: true })
   response.send('Hello from Firebase!')
+
+  // Call flairchain API
+  // {
+  //   /** Document Id */
+  //   workflowRequestId: string
+
+  //   executorUserId: string
+  //   workflowId: string
+
+  //   status: 'requested' | 'initiated' | 'completed'
+
+  //   requestTimestamp: Timestamp
+
+  //   frontendConfig: string
+  //   generatedConfig: string
+  // }
 })
