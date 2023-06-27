@@ -225,16 +225,22 @@ export const FlowEditor = () => {
   const [isJsonImportModalShown, setIsJsonImportModalShown] = useState(false)
   const [jsonConfigImport, setJsonConfigImport] = useState('')
 
-  const saveFlow = async () => {
-    if (typeof workflowId !== 'string') {
-      return
-    }
-
+  const getFrontendConfig = () => {
     const obj = { nodes, edges }
 
     nodes.forEach(el => {
       el.data.initialContents = nodeContents.current[el.id]
     })
+
+    return obj
+  }
+
+  const saveFlow = async () => {
+    if (typeof workflowId !== 'string') {
+      return
+    }
+
+    const obj = getFrontendConfig()
 
     const docUpdate: Partial<DocWorkflow> = {
       lastSaveTimestamp: serverTimestamp() as Timestamp,
@@ -401,6 +407,14 @@ export const FlowEditor = () => {
                 await ref.set(newExecution)
               }}>
               Execute
+            </button>
+            <button
+              className="btn m-2"
+              onClick={async () => {
+                setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
+                setIsJsonModalShown(true)
+              }}>
+              Show Config
             </button>
           </div>
         </div>
