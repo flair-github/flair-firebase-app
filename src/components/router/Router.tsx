@@ -13,6 +13,7 @@ const IndexScreen = lazy(() => import('~/components/screens/Index'))
 const Page404Screen = lazy(() => import('~/components/screens/404'))
 const FlowEditorScreen = lazy(() => import('~/components/screens/FlowEditor'))
 const ResultsScreen = lazy(() => import('~/components/screens/Results'))
+const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
 
 function Layout() {
   const userData = useAtomValue(atomUserData)
@@ -66,10 +67,13 @@ function Layout() {
                   Profile
                   <span className="badge">New</span>
                 </a>
-              </li>
-              <li>
-                <a>Settings</a>
               </li> */}
+              <li
+                onClick={() => {
+                  navigate('/settings')
+                }}>
+                <a>Settings</a>
+              </li>
               <li onClick={handleSignOut}>
                 <a>Logout</a>
               </li>
@@ -105,6 +109,10 @@ const InnerRouter = () => {
         {
           path: 'results',
           element: <ResultsScreen />,
+        },
+        {
+          path: 'settings',
+          element: <SettingsScreen />,
         },
         {
           path: 'editor',
