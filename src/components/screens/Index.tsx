@@ -6,7 +6,7 @@ import { SignOutButton } from '~/components/domain/auth/SignOutButton'
 import { Head } from '~/components/shared/Head'
 import { useAtomValue } from 'jotai'
 import { atomUser, atomUserData } from '~/jotai/jotai'
-import { db } from '~/lib/firebase'
+import { db, functions } from '~/lib/firebase'
 import { DocWorkflow } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
@@ -84,6 +84,17 @@ function Index() {
               setShowNewFlowModal(true)
             }}>
             Create New Flow
+          </button>
+          <button
+            className="btn-primary btn normal-case"
+            onClick={async () => {
+              const helloWorld = functions.httpsCallable('helloWorld')
+
+              const result = helloWorld({ name: 'Alice' })
+
+              console.log(result)
+            }}>
+            Demo Functions
           </button>
         </div>
 

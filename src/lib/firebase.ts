@@ -5,6 +5,7 @@ import { connectStorageEmulator, getStorage } from 'firebase/storage'
 import firebase from 'firebase/compat/app'
 // Required for side-effects
 import 'firebase/compat/firestore'
+import 'firebase/compat/functions'
 
 let firebaseApp: FirebaseApp
 const useEmulator = () => import.meta.env.VITE_USE_FIREBASE_EMULATOR
@@ -21,6 +22,7 @@ const getFirebaseOptions = () => ({
 
 firebase.initializeApp(getFirebaseOptions())
 export const db = firebase.firestore()
+export const functions = firebase.functions()
 
 export const setupFirebase = () => {
   try {
