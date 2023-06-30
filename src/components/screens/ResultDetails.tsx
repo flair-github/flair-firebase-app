@@ -162,7 +162,7 @@ function ResultDetails() {
         </table>
       )}
       {activeTab === 'workflow' && (
-        <div className="w-full [height:720px]">
+        <div className="w-full border [height:720px]">
           <FlowEditor viewerOnly={true} initialNodes={nodes} initialEdges={edges} />
         </div>
       )}
