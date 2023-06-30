@@ -363,80 +363,119 @@ export const FlowEditor: React.FC<{
 
           {/* Data Connectors */}
           <div className="mb-3">
-            <div className="text-16 mb-1 font-bold">Nodes</div>
             <div className="my-2" />
-            <button
-              className="btn m-2"
-              onClick={() => {
-                setNodes(prev => {
-                  const nodeId = 'data-source-' + String(Date.now())
-                  return [
-                    ...prev,
-                    {
-                      id: nodeId,
-                      type: 'DataSourceNode',
-                      data: { nodeId, initialContents: {} },
-                      position: randPos(viewport.current),
-                    },
-                  ]
-                })
-              }}>
-              Data Source
-            </button>
-            <button
-              className="btn m-2"
-              onClick={() => {
-                setNodes(prev => {
-                  const nodeId = 'data-extractor-' + String(Date.now())
-                  return [
-                    ...prev,
-                    {
-                      id: nodeId,
-                      type: 'DataExtractorNode',
-                      data: { nodeId, initialContents: {} },
-                      position: randPos(viewport.current),
-                    },
-                  ]
-                })
-              }}>
-              Data Extractor
-            </button>
-            <button
-              className="btn m-2"
-              onClick={() => {
-                setNodes(prev => {
-                  const nodeId = 'aws-uploader-' + String(Date.now())
-                  return [
-                    ...prev,
-                    {
-                      id: nodeId,
-                      type: 'AwsUploaderNode',
-                      data: { nodeId, initialContents: {} },
-                      position: randPos(viewport.current),
-                    },
-                  ]
-                })
-              }}>
-              AWS Uploader
-            </button>
-            <button
-              className="btn m-2"
-              onClick={() => {
-                setNodes(prev => {
-                  const nodeId = 'evaluator-' + String(Date.now())
-                  return [
-                    ...prev,
-                    {
-                      id: nodeId,
-                      type: 'EvaluatorNode',
-                      data: { nodeId, initialContents: {} },
-                      position: randPos(viewport.current),
-                    },
-                  ]
-                })
-              }}>
-              Evaluator
-            </button>
+            <div className="join-vertical join w-full">
+              <div className="collapse-arrow join-item collapse border border-base-300">
+                <input type="radio" name="my-accordion-4" />
+                <div className="collapse-title text-xl font-medium">Data Source</div>
+                <div className="collapse-content">
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'data-source-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataSourceNode',
+                            data: { nodeId, initialContents: {} },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    Data Source
+                  </button>
+                </div>
+              </div>
+              <div className="collapse-arrow join-item collapse border border-base-300">
+                <input type="radio" name="my-accordion-4" />
+                <div className="collapse-title text-xl font-medium">Data Indexer</div>
+                <div className="collapse-content">
+                  <p>-</p>
+                </div>
+              </div>
+              <div className="collapse-arrow join-item collapse border border-base-300">
+                <input type="radio" name="my-accordion-4" />
+                <div className="collapse-title text-xl font-medium">Data Retriever</div>
+                <div className="collapse-content">
+                  <p>-</p>
+                </div>
+              </div>
+              <div className="collapse-arrow join-item collapse border border-base-300">
+                <input type="radio" name="my-accordion-4" />
+                <div className="collapse-title text-xl font-medium">Data Extractor</div>
+                <div className="collapse-content">
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'data-extractor-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataExtractorNode',
+                            data: { nodeId, initialContents: {} },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    Data Extractor
+                  </button>
+                </div>
+              </div>
+              <div className="collapse-arrow join-item collapse border border-base-300">
+                <input type="radio" name="my-accordion-4" />
+                <div className="collapse-title text-xl font-medium">Data Exporter</div>
+                <div className="collapse-content">
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'aws-uploader-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'AwsUploaderNode',
+                            data: { nodeId, initialContents: {} },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    AWS Uploader
+                  </button>
+                </div>
+              </div>
+              <div className="collapse-arrow join-item collapse border border-base-300">
+                <input type="radio" name="my-accordion-4" />
+                <div className="collapse-title text-xl font-medium">Evaluation</div>
+                <div className="collapse-content">
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'evaluator-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'EvaluatorNode',
+                            data: { nodeId, initialContents: {} },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    Evaluator
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="flex-1" />
