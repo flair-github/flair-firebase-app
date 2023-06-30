@@ -21,35 +21,39 @@ function PageResults() {
               <th>Total Time Taken</th>
               <th>Model</th>
               <th>Stats</th>
-              <th>Result Link</th>
+              <th>Result</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>1</td>
-              <td>
-                <a onClick={() => navigate('/result-details')}>Customer Call Workflow</a>
-              </td>
+              <td>Customer Call Workflow</td>
               <td>2023-06-25 10:45:30</td>
               <td>15 minutes</td>
               <td>GPT-4</td>
               <td>Accuracy: 98%, Hallucination 0.2%, Invalid Format: 0%, Latency: 500ms</td>
               <td>
-                <a className="btn bg-slate-200" href="#">
-                  Link
+                <a
+                  className="btn bg-slate-200"
+                  href="#"
+                  onClick={() => navigate('/result-details')}>
+                  Open
                 </a>
               </td>
             </tr>
             <tr>
               <td>2</td>
-              <td>Invoice Approval Workflow</td>
+              <td>Customer Call Workflow</td>
               <td>2023-06-24 14:30:00</td>
               <td>8 minutes</td>
-              <td>GPT-4</td>
+              <td>GPT-3.5</td>
               <td>Accuracy: 95%, Hallucination 0.2%, Invalid Format: 2%, Latency: 700ms</td>
               <td>
-                <a className="btn bg-slate-200" href="#">
-                  Link
+                <a
+                  className="btn bg-slate-200"
+                  href="#"
+                  onClick={() => navigate('/result-details')}>
+                  Open
                 </a>
               </td>
             </tr>
@@ -61,8 +65,11 @@ function PageResults() {
               <td>Falcon</td>
               <td>Accuracy: 90%, Hallucination 0.2%, Invalid Format: 5%, Latency: 800ms</td>
               <td>
-                <a className="btn bg-slate-200" href="#">
-                  Link
+                <a
+                  className="btn bg-slate-200"
+                  href="#"
+                  onClick={() => navigate('/result-details')}>
+                  Open
                 </a>
               </td>
             </tr>
@@ -74,8 +81,11 @@ function PageResults() {
               <td>GPT-3.5</td>
               <td>Accuracy: 93%, Hallucination 0.2%, Invalid Format: 1%, Latency: 550ms</td>
               <td>
-                <a className="btn bg-slate-200" href="#">
-                  Link
+                <a
+                  className="btn bg-slate-200"
+                  href="#"
+                  onClick={() => navigate('/result-details')}>
+                  Open
                 </a>
               </td>
             </tr>
@@ -87,8 +97,11 @@ function PageResults() {
               <td>GPT-4</td>
               <td>Accuracy: 97%, Hallucination 0.2%, Invalid Format: 0%, Latency: 600ms</td>
               <td>
-                <a className="btn bg-slate-200" href="#">
-                  Link
+                <a
+                  className="btn bg-slate-200"
+                  href="#"
+                  onClick={() => navigate('/result-details')}>
+                  Open
                 </a>
               </td>
             </tr>

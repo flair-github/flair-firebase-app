@@ -15,7 +15,7 @@ function ResultDetails() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="mb-2 text-3xl font-bold">Customer Call Workflow</h1>
+      <h1 className="mb-2 text-3xl font-bold">Customer Call Workflow #1</h1>
       <div className="stats mb-4 w-full shadow">
         <div className="stat">
           <div className="stat-title">Model</div>
