@@ -37,12 +37,13 @@ import { DataSourceNode, type DataSourceNodeContent } from './nodes/DataSourceNo
 import { DataExtractorNode, type DataExtractorNodeContent } from './nodes/DataExtractorNode'
 import { AwsUploaderNode, type AwsUploaderNodeContent } from './nodes/AwsUploaderNode'
 import { EvaluatorNode, type EvaluatorNodeContent } from './nodes/EvaluatorNode'
-import { db } from '~/lib/firebase'
 import { useLocation } from 'react-router-dom'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { useAtomValue } from 'jotai'
 import { atomUserData } from '~/jotai/jotai'
+import { db, functions } from '~/lib/firebase'
+import { CORE_API_URL, AUTH_TOKEN } from '../../constants'
 
 const nodeTypes = {
   DataSourceNode,
@@ -251,6 +252,39 @@ export const FlowEditor = () => {
     return obj
   }
 
+  async function executeFlow() {
+    if (!userData?.userId) {
+      return
+    }
+
+    if (typeof workflowId !== 'string') {
+      return
+    }
+
+    const flowData = await saveFlow()
+    const ref = db.collection('workflow_requests').doc()
+    const newWorkflowRequest: DocWorkflowRequest = {
+      createdTimestamp: serverTimestamp() as Timestamp,
+      requestTimestamp: serverTimestamp() as Timestamp,
+      updatedTimestamp: serverTimestamp() as Timestamp,
+      executorUserId: userData.userId,
+      docExists: true,
+      workflowId,
+      frontendConfig: JSON.stringify(flowData),
+      workflowRequestId: ref.id,
+      generatedConfig: '',
+      status: 'requested',
+    }
+    await ref.set(newWorkflowRequest)
+    console.log('workflow_request_id = ' + ref.id)
+    const URL = `${CORE_API_URL}/api/flair-studio/flair-chain-runner`
+    await axios.post(
+      URL,
+      { workflow_request_id: ref.id },
+      { headers: { Authorization: AUTH_TOKEN } },
+    )
+  }
+
   return (
     <>
       <div className="flex h-[calc(100vh-4rem)]">
@@ -380,31 +414,7 @@ export const FlowEditor = () => {
             <button
               className="btn m-2"
               onClick={async () => {
-                if (!userData?.userId) {
-                  return
-                }
-
-                if (typeof workflowId !== 'string') {
-                  return
-                }
-
-                const flowData = await saveFlow()
-
-                const ref = db.collection('workflow_requests').doc()
-                const newExecution: DocWorkflowRequest = {
-                  createdTimestamp: serverTimestamp() as Timestamp,
-                  requestTimestamp: serverTimestamp() as Timestamp,
-                  updatedTimestamp: serverTimestamp() as Timestamp,
-                  executorUserId: userData.userId,
-                  docExists: true,
-                  workflowId,
-                  frontendConfig: JSON.stringify(flowData),
-                  workflowRequestId: ref.id,
-                  generatedConfig: '',
-                  status: 'requested',
-                }
-
-                await ref.set(newExecution)
+                await executeFlow()
               }}>
               Execute
             </button>
