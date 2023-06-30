@@ -3,8 +3,11 @@ import { SignInButton } from '~/components/domain/auth/SignInButton'
 import { SignOutButton } from '~/components/domain/auth/SignOutButton'
 import { Head } from '~/components/shared/Head'
 import FlowEditor from './FlowEditor'
+import { useNavigate } from 'react-router-dom'
 
 function PageResults() {
+  const navigate = useNavigate()
+
   return (
     <div className="container mx-auto px-4">
       <div className="overflow-x-auto">
@@ -25,7 +28,7 @@ function PageResults() {
             <tr>
               <td>1</td>
               <td>
-                <a href="/result-details">Customer Call Workflow</a>
+                <a onClick={() => navigate('/result-details')}>Customer Call Workflow</a>
               </td>
               <td>2023-06-25 10:45:30</td>
               <td>15 minutes</td>
