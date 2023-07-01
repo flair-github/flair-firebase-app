@@ -3,16 +3,17 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from '../FlowEditor'
 
-export interface DataExtractorNodeContent {
-  nodeType: 'data-extractor'
+export interface LLMProcessorNodeContent {
+  nodeType: 'llm-processor'
   keyPromptPairs: Record<string, string>
 }
 
-export const inputNodeContents: MutableRefObject<{ [id: string]: DataExtractorNodeContent }> = {
-  current: {},
-}
+export const llmProcessorNodeContents: MutableRefObject<{ [id: string]: LLMProcessorNodeContent }> =
+  {
+    current: {},
+  }
 
-export const DataExtractorNode = ({ data }: { data: NodeData }) => {
+export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
   const [keyPromptPairArr, setKeyPromptPairArr] = useState<
     Array<{ uniqueId: string; key: string; prompt: string }>
   >([])
@@ -38,16 +39,16 @@ export const DataExtractorNode = ({ data }: { data: NodeData }) => {
 
   // Copy node data to cache
   useEffect(() => {
-    const newCache: DataExtractorNodeContent = {
-      nodeType: 'data-extractor',
+    const cache: LLMProcessorNodeContent = {
+      nodeType: 'llm-processor',
       keyPromptPairs: {},
     }
 
     keyPromptPairArr.forEach(el => {
-      newCache.keyPromptPairs[el.key] = el.prompt
+      cache.keyPromptPairs[el.key] = el.prompt
     })
 
-    nodeContents.current[data.nodeId] = newCache
+    nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, keyPromptPairArr])
 
   return (
