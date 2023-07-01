@@ -5,6 +5,7 @@ import React, {
   useRef,
   Fragment,
   type MutableRefObject,
+  LegacyRef,
 } from 'react'
 import ReactFlow, {
   Controls,
@@ -37,7 +38,7 @@ import { DataSourceNode, type DataSourceNodeContent } from './nodes/DataSourceNo
 import { DataExtractorNode, type DataExtractorNodeContent } from './nodes/DataExtractorNode'
 import { AwsUploaderNode, type AwsUploaderNodeContent } from './nodes/AwsUploaderNode'
 import { EvaluatorNode, type EvaluatorNodeContent } from './nodes/EvaluatorNode'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { useAtomValue } from 'jotai'
@@ -45,6 +46,7 @@ import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { CORE_API_URL, AUTH_TOKEN } from '../../constants'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
+import { AiOutlineCheckCircle } from 'react-icons/ai'
 
 const nodeTypes = {
   DataSourceNode,
@@ -146,6 +148,7 @@ export const FlowEditor: React.FC<{
   const [nodes, setNodes] = useState<Nodes>(initialNodes || [])
   const [edges, setEdges] = useState<Edges>(initialEdges || [])
 
+  const navigate = useNavigate()
   const { state } = useLocation()
   const { workflowId } = state || {} // Read values passed on state
 
@@ -290,6 +293,8 @@ export const FlowEditor: React.FC<{
     )
   }
 
+  const executeModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
+
   const ReactFlowComp = (
     <ReactFlow
       // onInit={onInit}
@@ -309,8 +314,6 @@ export const FlowEditor: React.FC<{
       <Controls />
     </ReactFlow>
   )
-
-  console.log('viewerOnly', viewerOnly)
 
   if (viewerOnly) {
     return ReactFlowComp
@@ -496,7 +499,8 @@ export const FlowEditor: React.FC<{
             <button
               className="btn m-2"
               onClick={async () => {
-                await executeFlow()
+                executeFlow()
+                executeModalRef.current?.showModal()
               }}>
               Execute
             </button>
@@ -513,6 +517,41 @@ export const FlowEditor: React.FC<{
         <div className="flex-1">{ReactFlowComp}</div>
       </div>
 
+      {/* Execute modal */}
+      <dialog ref={executeModalRef} className="modal">
+        <form method="dialog" className="modal-box">
+          <h3 className="mb-5 text-center text-lg font-bold">Workflow Executed</h3>
+          <button className="btn-ghost btn-sm btn-circle btn absolute right-2 top-2">✕</button>
+          <div className="mb-5 flex justify-center">
+            <AiOutlineCheckCircle size={120} className="mb-2 text-green-500" />
+          </div>
+          <p className=" text-center">
+            The execution result will be available in the{' '}
+            <a
+              href="#"
+              onClick={() => {
+                navigate('results')
+              }}>
+              results
+            </a>{' '}
+            page.
+          </p>
+          {/* <div className="flex justify-end">
+            <button
+              className="btn m-2"
+              onClick={() => {
+                executeModalRef.current?.close()
+              }}>
+              Close
+            </button>
+          </div> */}
+        </form>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
+
+      {/* JSON Importer */}
       <Modal
         isOpen={isJsonImportModalShown}
         onClose={() => {
@@ -562,6 +601,8 @@ export const FlowEditor: React.FC<{
           </button>
         </div>
       </Modal>
+
+      {/* Show JSON Config */}
       <Modal
         isOpen={isJsonModalShown}
         onClose={() => {
