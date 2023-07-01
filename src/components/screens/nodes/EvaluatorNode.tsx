@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from '../FlowEditor'
 
 export interface EvaluatorNodeContent {
+  nodeType: 'evaluator'
   strategy: string
 }
 
@@ -19,9 +20,12 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
 
   // Copy node data to cache
   useEffect(() => {
-    nodeContents.current[data.nodeId] = {
+    const cache: EvaluatorNodeContent = {
+      nodeType: 'evaluator',
       strategy,
     }
+
+    nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, strategy])
 
   return (

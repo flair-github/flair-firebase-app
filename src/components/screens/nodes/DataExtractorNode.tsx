@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from '../FlowEditor'
 
 export interface DataExtractorNodeContent {
+  nodeType: 'data-extractor'
   keyPromptPairs: Record<string, string>
 }
 
@@ -38,6 +39,7 @@ export const DataExtractorNode = ({ data }: { data: NodeData }) => {
   // Copy node data to cache
   useEffect(() => {
     const newCache: DataExtractorNodeContent = {
+      nodeType: 'data-extractor',
       keyPromptPairs: {},
     }
 

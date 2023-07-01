@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from '../FlowEditor'
 
 export interface AwsUploaderNodeContent {
+  nodeType: 'aws-uploader'
   apiKey: string
   path: string
   period: string
@@ -29,11 +30,14 @@ export const AwsUploaderNode = ({ data }: { data: NodeData }) => {
 
   // Copy node data to cache
   useEffect(() => {
-    nodeContents.current[data.nodeId] = {
+    const cache: AwsUploaderNodeContent = {
+      nodeType: 'aws-uploader',
       path,
       period,
       apiKey,
     }
+
+    nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, path, period, apiKey])
 
   return (

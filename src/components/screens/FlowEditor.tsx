@@ -47,20 +47,23 @@ import { db } from '~/lib/firebase'
 import { CORE_API_URL, AUTH_TOKEN } from '../../constants'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { AiOutlineCheckCircle } from 'react-icons/ai'
+import { LLMProcessorNode, LLMProcessorNodeContent } from './nodes/LLMProcessorNode'
 
 const nodeTypes = {
   DataSourceNode,
   DataExtractorNode,
   AwsUploaderNode,
   EvaluatorNode,
+  LLMProcessorNode,
 }
 
 export type NodeContent =
-  | {}
+  | { nodeType: 'init' }
   | DataSourceNodeContent
   | DataExtractorNodeContent
   | AwsUploaderNodeContent
   | EvaluatorNodeContent
+  | LLMProcessorNodeContent
 
 export const nodeContents: MutableRefObject<{ [nodeId: string]: NodeContent }> = {
   current: {},
@@ -382,7 +385,7 @@ export const FlowEditor: React.FC<{
                           {
                             id: nodeId,
                             type: 'DataSourceNode',
-                            data: { nodeId, initialContents: {} },
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
                             position: randPos(viewport.current),
                           },
                         ]
@@ -432,13 +435,31 @@ export const FlowEditor: React.FC<{
                           {
                             id: nodeId,
                             type: 'DataExtractorNode',
-                            data: { nodeId, initialContents: {} },
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
                             position: randPos(viewport.current),
                           },
                         ]
                       })
                     }}>
                     Data Extractor
+                  </button>
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'llm-processor-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'LLMProcessorNode',
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    LLM Processor
                   </button>
                 </div>
               </div>
@@ -456,7 +477,7 @@ export const FlowEditor: React.FC<{
                           {
                             id: nodeId,
                             type: 'AwsUploaderNode',
-                            data: { nodeId, initialContents: {} },
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
                             position: randPos(viewport.current),
                           },
                         ]
@@ -480,7 +501,7 @@ export const FlowEditor: React.FC<{
                           {
                             id: nodeId,
                             type: 'EvaluatorNode',
-                            data: { nodeId, initialContents: {} },
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
                             position: randPos(viewport.current),
                           },
                         ]

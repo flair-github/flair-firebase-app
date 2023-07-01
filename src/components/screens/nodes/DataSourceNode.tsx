@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from '../FlowEditor'
 
 export interface DataSourceNodeContent {
+  nodeType: 'data-source'
   source: string
   dataType: string
   apiKey: string
@@ -49,7 +50,8 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
 
   // Copy node data to cache
   useEffect(() => {
-    nodeContents.current[data.nodeId] = {
+    const cache: DataSourceNodeContent = {
+      nodeType: 'data-source',
       source,
       dataType,
       apiKey,
@@ -58,6 +60,8 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
       regionName,
       path,
     }
+
+    nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, source, dataType, apiKey, secretApiKey, bucketName, regionName, path])
 
   return (
