@@ -393,14 +393,26 @@ export const FlowEditor: React.FC<{
                 <input type="radio" name="my-accordion-4" />
                 <div className="collapse-title text-xl font-medium">Data Indexer</div>
                 <div className="collapse-content">
-                  <p>-</p>
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      // TODO: Add data indexer node
+                    }}>
+                    Data Indexer
+                  </button>
                 </div>
               </div>
               <div className="collapse-arrow join-item collapse border border-base-300">
                 <input type="radio" name="my-accordion-4" />
                 <div className="collapse-title text-xl font-medium">Data Retriever</div>
                 <div className="collapse-content">
-                  <p>-</p>
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      // TODO: Add data retriever node
+                    }}>
+                    Data Retriever
+                  </button>
                 </div>
               </div>
               <div className="collapse-arrow join-item collapse border border-base-300">
