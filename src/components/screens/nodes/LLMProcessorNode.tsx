@@ -156,6 +156,30 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
               <form method="dialog" className="modal-box">
                 <h3 className="text-lg font-bold">Edit Prompt: {el.name}</h3>
 
+                {/* Column Name */}
+                <label className="label">
+                  <span className="label-text">Column Name</span>
+                </label>
+                <input
+                  type="text"
+                  className="input mb-3 w-full"
+                  value={el.name}
+                  onChange={e => {
+                    const newName = e.target.value
+
+                    if (typeof newName !== 'string') {
+                      return
+                    }
+
+                    setColumns(prev => {
+                      const newColumns = [...prev]
+                      newColumns[index].name = newName
+                      return newColumns
+                    })
+                  }}
+                  style={{ borderColor: 'black', resize: 'none' }}
+                />
+
                 {/* Instruction */}
                 <label className="label">
                   <span className="label-text">Instruction</span>
