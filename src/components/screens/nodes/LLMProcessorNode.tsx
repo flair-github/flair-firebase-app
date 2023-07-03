@@ -107,8 +107,11 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
           {/* Name */}
           <div className="mr-2 flex-1 font-semibold">Column Name</div>
 
-          {/* Edit Prompt */}
-          <div className="mr-2 flex w-32 items-center" />
+          {/* Prompt */}
+          <div className="mr-2 flex-[2] font-semibold">Prompt</div>
+
+          {/* Advanced */}
+          <div className="mr-2 flex w-24 items-center" />
 
           <div className="ml-2 flex w-10 items-center justify-center" />
         </div>
@@ -142,19 +145,42 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
               />
             </div>
 
-            {/* Edit Prompt */}
-            <div className="mr-2 flex w-32 items-center">
+            {/* Prompt */}
+            <div className="mr-2 flex-[2]">
+              <input
+                type="text"
+                className="input w-full"
+                value={el.prompt}
+                onChange={e => {
+                  const newText = e.target.value
+
+                  if (typeof newText !== 'string') {
+                    return
+                  }
+
+                  setColumns(prev => {
+                    const newColumns = [...prev]
+                    newColumns[index].prompt = newText
+                    return newColumns
+                  })
+                }}
+                style={{ borderColor: 'black', resize: 'none' }}
+              />
+            </div>
+
+            {/* Advanced */}
+            <div className="mr-2 flex w-24 items-center">
               <button
                 className="btn"
-                onClick={() => (window as any)['edit-prompt-' + el.columnId].showModal()}>
-                Edit Prompt
+                onClick={() => (window as any)['advanced-options-' + el.columnId].showModal()}>
+                Advanced
               </button>
             </div>
 
-            {/* Edit Prompt Modal */}
-            <dialog id={'edit-prompt-' + el.columnId} className="modal">
+            {/* Advanced Options Modal */}
+            <dialog id={'advanced-options-' + el.columnId} className="modal">
               <form method="dialog" className="modal-box">
-                <h3 className="text-lg font-bold">Edit Prompt: {el.name}</h3>
+                <h3 className="text-lg font-bold">Advanced Options: {el.name}</h3>
 
                 {/* Column Name */}
                 <label className="label">
