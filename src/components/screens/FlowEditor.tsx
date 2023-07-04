@@ -41,7 +41,7 @@ import { EvaluatorNode, type EvaluatorNodeContent } from './nodes/EvaluatorNode'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
-import { useAtomValue } from 'jotai'
+import { atom, useAtomValue } from 'jotai'
 import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { CORE_API_URL, AUTH_TOKEN } from '../../constants'
@@ -140,6 +140,8 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
 
 //   return res
 // }
+
+export const jotaiAllowInteraction = atom(true)
 
 export const FlowEditor: React.FC<{
   viewerOnly?: boolean
@@ -298,8 +300,18 @@ export const FlowEditor: React.FC<{
 
   const executeModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
 
+  const allowInteraction = useAtomValue(jotaiAllowInteraction)
+
   const ReactFlowComp = (
     <ReactFlow
+      elementsSelectable={allowInteraction}
+      nodesConnectable={allowInteraction}
+      nodesDraggable={allowInteraction}
+      zoomOnScroll={allowInteraction}
+      panOnScroll={allowInteraction}
+      zoomOnDoubleClick={allowInteraction}
+      panOnDrag={allowInteraction}
+      selectionOnDrag={allowInteraction}
       // onInit={onInit}
       nodes={nodes}
       onNodesChange={onNodesChange}
@@ -307,8 +319,8 @@ export const FlowEditor: React.FC<{
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       nodeTypes={nodeTypes}
-      panOnScroll
-      selectionOnDrag
+      // panOnScroll
+      // selectionOnDrag
       selectionMode={SelectionMode.Partial}
       onMove={(_, newViewport) => {
         viewport.current = newViewport

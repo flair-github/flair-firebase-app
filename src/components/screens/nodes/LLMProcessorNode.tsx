@@ -1,8 +1,9 @@
 import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
-import { type NodeData, nodeContents } from '../FlowEditor'
+import { type NodeData, nodeContents, jotaiAllowInteraction } from '../FlowEditor'
 import { v4 } from 'uuid'
+import { useSetAtom } from 'jotai'
 
 type ColumnContent =
   | {
@@ -58,6 +59,7 @@ export const llmProcessorNodeContents: MutableRefObject<{ [id: string]: LLMProce
 
 export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
   const [columns, setColumns] = useState<LLMProcessorNodeContent['columns']>([])
+  const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
 
   // Initial data
   useEffect(() => {
@@ -176,14 +178,17 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
             <div className="mr-2 flex w-24 items-center">
               <button
                 className="btn"
-                onClick={() => (window as any)['advanced-options-' + el.columnId].showModal()}>
+                onClick={() => {
+                  setAllowInteraction(false)
+                  ;(window as any)['advanced-options-' + el.columnId].showModal()
+                }}>
                 Advanced
               </button>
             </div>
 
             {/* Advanced Options Modal */}
-            <dialog id={'advanced-options-' + el.columnId} className="modal">
-              <form method="dialog" className="modal-box">
+            <dialog id={'advanced-options-' + el.columnId} className="nowheel modal">
+              <form method="dialog" className="max-w-5xl modal-box w-11/12">
                 <h3 className="text-lg font-bold">Advanced Options: {el.name}</h3>
 
                 {/* Column Name */}
@@ -445,7 +450,13 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
 
                 <div className="modal-action">
                   {/* if there is a button in form, it will close the modal */}
-                  <button className="btn">Close</button>
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      setAllowInteraction(true)
+                    }}>
+                    Close
+                  </button>
                 </div>
               </form>
             </dialog>
