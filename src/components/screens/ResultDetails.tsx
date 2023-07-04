@@ -86,7 +86,10 @@ function ResultDetails() {
                 "I can assist you with your account balance. Please provide me with your account
                 details."
               </td>
-              <td>"Can you help me with my account balance?"</td>
+              <td>
+                "I can assist you with your account balance. Please provide me with your account
+                details."
+              </td>
               <td>0.98</td>
             </tr>
             <tr>
@@ -94,7 +97,9 @@ function ResultDetails() {
               <td>
                 "Let's troubleshoot your internet connection. Have you tried restarting your modem?"
               </td>
-              <td>"I'm experiencing issues with my internet connection."</td>
+              <td>
+                "Let's troubleshoot your internet connection. Have you tried restarting your modem?"
+              </td>
               <td>0.93</td>
             </tr>
             <tr>
@@ -103,19 +108,22 @@ function ResultDetails() {
                 "To cancel your subscription, please visit our website and go to the account
                 settings."
               </td>
-              <td>"How can I cancel my subscription?"</td>
+              <td>
+                "To cancel your subscription, please visit our website and go to the account
+                settings."
+              </td>
               <td>0.85</td>
             </tr>
             <tr>
               <td>"What are your business hours?"</td>
               <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
-              <td>"What are your business hours?"</td>
+              <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
               <td>0.97</td>
             </tr>
             <tr>
               <td>"Do you offer a money-back guarantee?"</td>
               <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
-              <td>"Do you offer a money-back guarantee?"</td>
+              <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
               <td>0.91</td>
             </tr>
             <tr>
@@ -123,7 +131,9 @@ function ResultDetails() {
               <td>
                 "Certainly! Please provide your new shipping address and we'll update it for you."
               </td>
-              <td>"Can I change my shipping address?"</td>
+              <td>
+                "Certainly! Please provide your new shipping address and we'll update it for you."
+              </td>
               <td>0.96</td>
             </tr>
             <tr>
@@ -131,7 +141,9 @@ function ResultDetails() {
               <td>
                 "Let me check the status of your order. Can you please provide your order number?"
               </td>
-              <td>"What's the status of my order?"</td>
+              <td>
+                "Let me check the status of your order. Can you please provide your order number?"
+              </td>
               <td>0.89</td>
             </tr>
             <tr>
@@ -140,7 +152,10 @@ function ResultDetails() {
                 "To reset your password, click on the 'Forgot Password' link and follow the
                 instructions."
               </td>
-              <td>"How do I reset my password?"</td>
+              <td>
+                "To reset your password, click on the 'Forgot Password' link and follow the
+                instructions."
+              </td>
               <td>0.95</td>
             </tr>
             <tr>
@@ -155,7 +170,7 @@ function ResultDetails() {
             <tr>
               <td>"What's the best way to contact customer support?"</td>
               <td>"You can contact our customer support team via phone, email, or live chat."</td>
-              <td>"What's the best way to contact customer support?"</td>
+              <td>"You can contact our customer support team via phone, email, or live chat."</td>
               <td>0.92</td>
             </tr>
           </tbody>

@@ -1,8 +1,9 @@
 import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
-import { type NodeData, nodeContents } from '../FlowEditor'
+import { type NodeData, nodeContents, jotaiAllowInteraction } from '../FlowEditor'
 import { v4 } from 'uuid'
+import { useSetAtom } from 'jotai'
 
 type ColumnContent =
   | {
@@ -10,6 +11,7 @@ type ColumnContent =
       name: string
       type: 'text'
       promptStrategy: string
+      model: string
       instruction: string
       prompt: string
     }
@@ -18,6 +20,7 @@ type ColumnContent =
       name: string
       type: 'list'
       promptStrategy: string
+      model: string
       instruction: string
       prompt: string
     }
@@ -28,6 +31,7 @@ type ColumnContent =
       /** comma seperated */
       options: string
       promptStrategy: string
+      model: string
       instruction: string
       prompt: string
     }
@@ -38,6 +42,7 @@ type ColumnContent =
       min: number
       max: number
       promptStrategy: string
+      model: string
       instruction: string
       prompt: string
     }
@@ -54,6 +59,7 @@ export const llmProcessorNodeContents: MutableRefObject<{ [id: string]: LLMProce
 
 export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
   const [columns, setColumns] = useState<LLMProcessorNodeContent['columns']>([])
+  const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
 
   // Initial data
   useEffect(() => {
@@ -172,14 +178,17 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
             <div className="mr-2 flex w-24 items-center">
               <button
                 className="btn"
-                onClick={() => (window as any)['advanced-options-' + el.columnId].showModal()}>
+                onClick={() => {
+                  setAllowInteraction(false)
+                  ;(window as any)['advanced-options-' + el.columnId].showModal()
+                }}>
                 Advanced
               </button>
             </div>
 
             {/* Advanced Options Modal */}
-            <dialog id={'advanced-options-' + el.columnId} className="modal">
-              <form method="dialog" className="modal-box">
+            <dialog id={'advanced-options-' + el.columnId} className="nowheel modal">
+              <form method="dialog" className="max-w-5xl modal-box w-11/12">
                 <h3 className="text-lg font-bold">Advanced Options: {el.name}</h3>
 
                 {/* Column Name */}
@@ -281,6 +290,34 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
                   <option value={'consistency' satisfies ColumnContent['promptStrategy']}>
                     Consistency
                   </option>
+                </select>
+
+                {/* Model */}
+                <label className="label">
+                  <span className="label-text">Model</span>
+                </label>
+                <select
+                  value={el.model}
+                  className="max-w-xs select mb-3 w-full border-black"
+                  onChange={e => {
+                    const newValue = e.target.value
+
+                    if (typeof newValue !== 'string') {
+                      return
+                    }
+
+                    setColumns(prev => {
+                      const newColumns = [...prev]
+                      newColumns[index].model = newValue as ColumnContent['model']
+                      return newColumns
+                    })
+                  }}>
+                  <option value={'GPT-3.5-turbo' satisfies ColumnContent['model']}>
+                    GPT-3.5-turbo
+                  </option>
+                  <option value={'GPT-4' satisfies ColumnContent['model']}>GPT-4</option>
+                  <option value={'falcon-40b' satisfies ColumnContent['model']}>falcon-40b</option>
+                  <option value={'vicuna-13' satisfies ColumnContent['model']}>vicuna-13</option>
                 </select>
 
                 {/* Result Type */}
@@ -413,7 +450,13 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
 
                 <div className="modal-action">
                   {/* if there is a button in form, it will close the modal */}
-                  <button className="btn">Close</button>
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      setAllowInteraction(true)
+                    }}>
+                    Close
+                  </button>
                 </div>
               </form>
             </dialog>
@@ -439,6 +482,7 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
                 columnId: v4(),
                 type: 'text',
                 promptStrategy: 'default',
+                model: 'gpt-3.5-turbo',
                 instruction: '',
                 name: '',
                 prompt: '',
