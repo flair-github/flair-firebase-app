@@ -10,6 +10,7 @@ type ColumnContent =
       name: string
       type: 'text'
       promptStrategy: string
+      model: string
       instruction: string
       prompt: string
     }
@@ -18,6 +19,7 @@ type ColumnContent =
       name: string
       type: 'list'
       promptStrategy: string
+      model: string
       instruction: string
       prompt: string
     }
@@ -28,6 +30,7 @@ type ColumnContent =
       /** comma seperated */
       options: string
       promptStrategy: string
+      model: string
       instruction: string
       prompt: string
     }
@@ -38,6 +41,7 @@ type ColumnContent =
       min: number
       max: number
       promptStrategy: string
+      model: string
       instruction: string
       prompt: string
     }
@@ -283,6 +287,34 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
                   </option>
                 </select>
 
+                {/* Model */}
+                <label className="label">
+                  <span className="label-text">Model</span>
+                </label>
+                <select
+                  value={el.model}
+                  className="max-w-xs select mb-3 w-full border-black"
+                  onChange={e => {
+                    const newValue = e.target.value
+
+                    if (typeof newValue !== 'string') {
+                      return
+                    }
+
+                    setColumns(prev => {
+                      const newColumns = [...prev]
+                      newColumns[index].model = newValue as ColumnContent['model']
+                      return newColumns
+                    })
+                  }}>
+                  <option value={'GPT-3.5-turbo' satisfies ColumnContent['model']}>
+                    GPT-3.5-turbo
+                  </option>
+                  <option value={'GPT-4' satisfies ColumnContent['model']}>GPT-4</option>
+                  <option value={'falcon-40b' satisfies ColumnContent['model']}>falcon-40b</option>
+                  <option value={'vicuna-13' satisfies ColumnContent['model']}>vicuna-13</option>
+                </select>
+
                 {/* Result Type */}
                 <label className="label">
                   <span className="label-text">Result Type</span>
@@ -439,6 +471,7 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
                 columnId: v4(),
                 type: 'text',
                 promptStrategy: 'default',
+                model: 'gpt-3.5-turbo',
                 instruction: '',
                 name: '',
                 prompt: '',
