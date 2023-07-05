@@ -19,7 +19,7 @@ function ResultDetails() {
       <div className="stats mb-4 w-full shadow">
         <div className="stat">
           <div className="stat-title">Model</div>
-          <div className="stat-value">GPT-4</div>
+          <div className="stat-value">gpt-4</div>
         </div>
         <div className="stat">
           <div className="stat-title">Accuracy</div>

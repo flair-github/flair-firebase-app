@@ -403,7 +403,79 @@ export const FlowEditor: React.FC<{
                         ]
                       })
                     }}>
-                    Data Source
+                    S3
+                  </button>
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'data-source-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataSourceNode',
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    GCP
+                  </button>
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'data-source-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataSourceNode',
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    Azure
+                  </button>
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'data-source-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataSourceNode',
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    Salesforce
+                  </button>
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'data-source-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataSourceNode',
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    Zendesk
                   </button>
                 </div>
               </div>
@@ -495,7 +567,43 @@ export const FlowEditor: React.FC<{
                         ]
                       })
                     }}>
-                    AWS Uploader
+                    S3
+                  </button>
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'aws-uploader-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'AwsUploaderNode',
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    GCP Blob Storage
+                  </button>
+                  <button
+                    className="btn m-2"
+                    onClick={() => {
+                      setNodes(prev => {
+                        const nodeId = 'aws-uploader-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'AwsUploaderNode',
+                            data: { nodeId, initialContents: { nodeType: 'init' } },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
+                    }}>
+                    Azure Blob Storage
                   </button>
                 </div>
               </div>

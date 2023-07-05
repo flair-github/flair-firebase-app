@@ -312,10 +312,10 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
                       return newColumns
                     })
                   }}>
-                  <option value={'GPT-3.5-turbo' satisfies ColumnContent['model']}>
-                    GPT-3.5-turbo
+                  <option value={'gpt-3.5-turbo' satisfies ColumnContent['model']}>
+                    gpt-3.5-turbo
                   </option>
-                  <option value={'GPT-4' satisfies ColumnContent['model']}>GPT-4</option>
+                  <option value={'gpt-4' satisfies ColumnContent['model']}>gpt-4</option>
                   <option value={'falcon-40b' satisfies ColumnContent['model']}>falcon-40b</option>
                   <option value={'vicuna-13' satisfies ColumnContent['model']}>vicuna-13</option>
                 </select>
