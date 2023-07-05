@@ -585,7 +585,7 @@ export const FlowEditor: React.FC<{
                         ]
                       })
                     }}>
-                    GCP Blob Storage
+                    GCP
                   </button>
                   <button
                     className="btn m-2"
@@ -603,7 +603,7 @@ export const FlowEditor: React.FC<{
                         ]
                       })
                     }}>
-                    Azure Blob Storage
+                    Azure
                   </button>
                 </div>
               </div>
