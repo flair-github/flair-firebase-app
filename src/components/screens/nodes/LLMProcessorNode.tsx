@@ -283,12 +283,17 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
                       return newColumns
                     })
                   }}>
-                  <option value={'default' satisfies ColumnContent['promptStrategy']}>
+                  <option value={'Default' satisfies ColumnContent['promptStrategy']}>
                     Default
                   </option>
-                  <option value={'cot' satisfies ColumnContent['promptStrategy']}>CoT</option>
-                  <option value={'consistency' satisfies ColumnContent['promptStrategy']}>
-                    Consistency
+                  <option value={'Chain of Thought' satisfies ColumnContent['promptStrategy']}>
+                    Chain of Thought
+                  </option>
+                  <option value={'Tree of Thought' satisfies ColumnContent['promptStrategy']}>
+                    Tree of Thought
+                  </option>
+                  <option value={'Self Consistency' satisfies ColumnContent['promptStrategy']}>
+                    Self Consistency
                   </option>
                 </select>
 
