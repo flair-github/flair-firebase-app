@@ -19,10 +19,10 @@ function ResultDetails() {
       <div className="mb-2 flex items-center ">
         <h1 className="text-3xl font-bold">Customer Call Workflow #1831</h1>
         <div className="flex-1" />
-        <a className="btn mr-2 bg-slate-200" href="#" onClick={() => {}}>
+        <a className="btn mr-2" href="#" onClick={() => {}}>
           <FaShare /> Share
         </a>
-        <a className="btn bg-slate-200" href="#" onClick={() => {}}>
+        <a className="btn" href="#" onClick={() => {}}>
           <FaCloudDownloadAlt /> Download
         </a>
       </div>
