@@ -6,6 +6,7 @@ import { SignOutButton } from '~/components/domain/auth/SignOutButton'
 import { Head } from '~/components/shared/Head'
 import FlowEditor from './FlowEditor'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
+import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
 
 const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 const edges = JSON.parse(FLOW_SAMPLE_2).edges
@@ -15,7 +16,16 @@ function ResultDetails() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="mb-2 text-3xl font-bold">Customer Call Workflow #1</h1>
+      <div className="mb-2 flex items-center ">
+        <h1 className="text-3xl font-bold">Customer Call Workflow #1831</h1>
+        <div className="flex-1" />
+        <a className="btn mr-2" href="#" onClick={() => {}}>
+          <FaShare /> Share
+        </a>
+        <a className="btn" href="#" onClick={() => {}}>
+          <FaCloudDownloadAlt /> Download
+        </a>
+      </div>
       <div className="stats mb-4 w-full shadow">
         <div className="stat">
           <div className="stat-title">Model</div>
@@ -28,7 +38,7 @@ function ResultDetails() {
         </div>
         <div className="stat">
           <div className="stat-title">Hallucination</div>
-          <div className="stat-value">0.2%</div>
+          <div className="stat-value">1.2%</div>
           <div className="stat-desc">21% more than last run</div>
         </div>
         <div className="stat">
@@ -53,7 +63,7 @@ function ResultDetails() {
         </div>
         <div className="stat">
           <div className="stat-title">Latency</div>
-          <div className="stat-value">500ms</div>
+          <div className="stat-value">200ms</div>
           <div className="stat-desc">2% more than last run</div>
         </div>
       </div>

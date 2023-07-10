@@ -286,15 +286,28 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
                   <option value={'Default' satisfies ColumnContent['promptStrategy']}>
                     Default
                   </option>
-                  <option value={'Chain of Thought' satisfies ColumnContent['promptStrategy']}>
-                    Chain of Thought
+                  <option value={'Chain-of-Thought' satisfies ColumnContent['promptStrategy']}>
+                    Chain-of-Thought
                   </option>
-                  <option value={'Tree of Thought' satisfies ColumnContent['promptStrategy']}>
-                    Tree of Thought
+                  <option value={'Tree-of-Thought' satisfies ColumnContent['promptStrategy']}>
+                    Tree-of-Thought
                   </option>
-                  <option value={'Self Consistency' satisfies ColumnContent['promptStrategy']}>
-                    Self Consistency
+                  <option value={'Consistency' satisfies ColumnContent['promptStrategy']}>
+                    Reflection
                   </option>
+                  <option value={'Reflection' satisfies ColumnContent['promptStrategy']}>
+                    Consistency
+                  </option>
+                  <option value={'Reflection' satisfies ColumnContent['promptStrategy']}>
+                    Multi-hop Prompt
+                  </option>
+                  <option value={'QA Prompt' satisfies ColumnContent['promptStrategy']}>
+                    QA Prompt
+                  </option>
+                  <option value={'Few-shot' satisfies ColumnContent['promptStrategy']}>
+                    Few-shot
+                  </option>
+                  <option value={'DSP' satisfies ColumnContent['promptStrategy']}>DSP</option>
                 </select>
 
                 {/* Model */}
@@ -323,11 +336,13 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
                   <option value={'gpt-4' satisfies ColumnContent['model']}>gpt-4</option>
                   <option value={'falcon-40b' satisfies ColumnContent['model']}>falcon-40b</option>
                   <option value={'vicuna-13' satisfies ColumnContent['model']}>vicuna-13</option>
+                  <option value={'claude' satisfies ColumnContent['model']}>Claude</option>
+                  <option value={'bard' satisfies ColumnContent['model']}>Bard</option>
                 </select>
 
-                {/* Result Type */}
+                {/* Column Type */}
                 <label className="label">
-                  <span className="label-text">Result Type</span>
+                  <span className="label-text">Column Type</span>
                 </label>
                 <select
                   value={el.type}
