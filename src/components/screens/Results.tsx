@@ -17,8 +17,8 @@ function PageResults() {
           {/* head */}
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Workflow Name</th>
+              <th>Job Id</th>
+              <th>Workflow</th>
               <th>Request Date</th>
               <th>Total Time Taken</th>
               <th>Model</th>
@@ -29,7 +29,13 @@ function PageResults() {
           <tbody>
             <tr>
               <td>#1831</td>
-              <td>Customer Call Workflow</td>
+              <td>
+                Customer Call Workflow <br />
+                <span className="badge badge-outline whitespace-nowrap text-xs">
+                  {' '}
+                  Workflow Id: #12
+                </span>
+              </td>
               <td>2023-06-25 10:45:30</td>
               <td>15 minutes</td>
               <td>gpt-4</td>
@@ -50,7 +56,14 @@ function PageResults() {
             </tr>
             <tr>
               <td>#1830</td>
-              <td>Customer Call Workflow</td>
+              <td>
+                Customer Call Workflow
+                <br />
+                <span className="badge badge-outline whitespace-nowrap text-xs">
+                  {' '}
+                  Workflow Id: #12
+                </span>
+              </td>
               <td>2023-06-24 14:30:00</td>
               <td>8 minutes</td>
               <td>gpt-3.5</td>
@@ -71,7 +84,12 @@ function PageResults() {
             </tr>
             <tr>
               <td>#1829</td>
-              <td>Supply Chain Optimization Workflow</td>
+              <td>
+                Supply Chain Optimization Workflow <br />
+                <span className="badge badge-outline whitespace-nowrap text-xs">
+                  Workflow Id: #3
+                </span>
+              </td>
               <td>2023-06-24 12:00:00</td>
               <td>30 minutes</td>
               <td>Falcon</td>
@@ -92,7 +110,14 @@ function PageResults() {
             </tr>
             <tr>
               <td>#1828</td>
-              <td>Product Launch Process Workflow</td>
+              <td>
+                Product Launch Process Workflow
+                <br />
+                <span className="badge badge-outline whitespace-nowrap text-xs">
+                  {' '}
+                  Workflow Id: #5
+                </span>
+              </td>
               <td>2023-06-23 16:15:00</td>
               <td>45 minutes</td>
               <td>gpt-3.5</td>
@@ -113,7 +138,13 @@ function PageResults() {
             </tr>
             <tr>
               <td>#1827</td>
-              <td>Financial Reporting</td>
+              <td>
+                Financial Reporting <br />
+                <span className="badge badge-outline whitespace-nowrap text-xs">
+                  {' '}
+                  Workflow Id: #6
+                </span>
+              </td>
               <td>2023-06-23 09:30:00</td>
               <td>20 minutes</td>
               <td>gpt-4</td>
