@@ -547,6 +547,15 @@ export const FlowEditor: React.FC<{
                   </button>
                 </div>
               </div>
+              <div className="collapse-arrow join-item collapse border border-base-300">
+                <input type="radio" name="my-accordion-4" />
+                <div className="collapse-title text-xl font-medium">Custom Fine-Tuning</div>
+                <div className="collapse-content">
+                  <button className="btn m-2" onClick={() => {}}>
+                    Fine-Tuning
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
