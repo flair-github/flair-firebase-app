@@ -1,7 +1,8 @@
 import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
-import { type NodeData, nodeContents, jotaiAllowInteraction } from '../FlowEditor'
+import { type NodeData, nodeContents } from './Registry'
+import { jotaiAllowInteraction } from '../FlowEditor'
 import { v4 } from 'uuid'
 import { useSetAtom } from 'jotai'
 

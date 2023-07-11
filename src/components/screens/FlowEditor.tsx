@@ -1,81 +1,39 @@
+import { Dialog } from '@headlessui/react'
+import axios from 'axios'
 import React, {
-  useState,
+  LegacyRef,
   useCallback,
   useEffect,
   useRef,
-  Fragment,
-  type MutableRefObject,
-  LegacyRef,
+  useState
 } from 'react'
 import ReactFlow, {
-  Controls,
   Background,
-  applyNodeChanges,
-  applyEdgeChanges,
-  addEdge,
-  type Edge,
-  type NodeChange,
-  type EdgeChange,
-  type Connection,
-  type Node,
-  Handle,
-  Position,
+  Controls,
   SelectionMode,
-  type XYPosition,
+  addEdge,
+  applyEdgeChanges,
+  applyNodeChanges,
+  type Connection,
+  type EdgeChange,
+  type NodeChange,
 } from 'reactflow'
-import axios from 'axios'
-import { GrFormClose } from 'react-icons/gr'
-import { IoIosCloudDone } from 'react-icons/io'
-import { Dialog, Transition } from '@headlessui/react'
 
 import 'reactflow/dist/style.css'
 // import '@manifoldco/react-select-zero/assets/react-select-zero.css'
 // import './style/override.css'
-import { CodeBlock, nord } from 'react-code-blocks'
-import Modal from '../ui/modal'
-import { GridLoader } from 'react-spinners'
-import { DataSourceNode, type DataSourceNodeContent } from './nodes/DataSourceNode'
-import { DataExtractorNode, type DataExtractorNodeContent } from './nodes/DataExtractorNode'
-import { AwsUploaderNode, type AwsUploaderNodeContent } from './nodes/AwsUploaderNode'
-import { EvaluatorNode, type EvaluatorNodeContent } from './nodes/EvaluatorNode'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { atom, useAtomValue } from 'jotai'
+import { CodeBlock } from 'react-code-blocks'
+import { AiOutlineCheckCircle } from 'react-icons/ai'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
-import { CORE_API_URL, AUTH_TOKEN } from '../../constants'
-import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
-import { AiOutlineCheckCircle } from 'react-icons/ai'
-import { LLMProcessorNode, LLMProcessorNodeContent } from './nodes/LLMProcessorNode'
-
-const nodeTypes = {
-  DataSourceNode,
-  DataExtractorNode,
-  AwsUploaderNode,
-  EvaluatorNode,
-  LLMProcessorNode,
-}
-
-export type NodeContent =
-  | { nodeType: 'init' }
-  | DataSourceNodeContent
-  | DataExtractorNodeContent
-  | AwsUploaderNodeContent
-  | EvaluatorNodeContent
-  | LLMProcessorNodeContent
-
-export const nodeContents: MutableRefObject<{ [nodeId: string]: NodeContent }> = {
-  current: {},
-}
-
-export interface NodeData {
-  nodeId: string
-  initialContents: NodeContent
-}
-
-export type Nodes = Array<Node<NodeData>>
-export type Edges = Edge[]
+import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
+import Modal from '../ui/modal'
+import { Edges, Nodes, nodeContents, nodeTypes } from './nodes/Registry'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -90,56 +48,6 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
     y: -viewport.y * (1 / viewport.zoom) + randomY,
   }
 }
-
-// export type FlowJsonFormat = Array<{
-//   nodeId: string
-//   nodeType: string | undefined
-//   pos: XYPosition
-//   inboundEdges: string[]
-//   outboundEdges: string[]
-//   contents: NodeContent
-// }>
-
-// const nodesToJson = (nodes: Nodes, edges: Edges) => {
-//   console.log('nodes', nodes)
-//   console.log('edges', edges)
-
-//   const res: FlowJsonFormat = []
-
-//   nodes.forEach(el => {
-//     res.push({
-//       nodeId: el.id,
-//       nodeType: el.type,
-//       pos: el.position,
-//       inboundEdges: [],
-//       outboundEdges: [],
-//       contents: nodeContents.current[el.id],
-//     })
-//   })
-
-//   edges.forEach(edge => {
-//     const {
-//       source: sourceNodeId,
-//       sourceHandle,
-//       target: targetNodeId,
-//       targetHandle,
-//     } = edge
-
-//     if (sourceHandle === 'outbound' && targetHandle === 'inbound') {
-//       const sourceNode = res.find(el => el.nodeId === sourceNodeId)
-//       const targetNode = res.find(el => el.nodeId === targetNodeId)
-
-//       if (sourceNode && targetNode) {
-//         sourceNode.outboundEdges.push(targetNodeId)
-//         targetNode.inboundEdges.push(sourceNodeId)
-//       }
-//     }
-//   })
-
-//   console.log(res)
-
-//   return res
-// }
 
 export const jotaiAllowInteraction = atom(true)
 

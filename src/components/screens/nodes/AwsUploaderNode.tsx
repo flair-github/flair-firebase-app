@@ -1,7 +1,7 @@
 import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
-import { type NodeData, nodeContents } from '../FlowEditor'
+import { NodeData, nodeContents } from './Registry'
 
 export interface AwsUploaderNodeContent {
   nodeType: 'aws-uploader'
