@@ -49,22 +49,26 @@ function ResultDetails() {
       </div>
       <div className="stats mb-4 w-full shadow">
         <div className="stat">
-          <div className="stat-title">Request Date</div>
-          <div className="stat-value">2023-06-25</div>
-        </div>
-        <div className="stat">
           <div className="stat-title">Request Time</div>
-          <div className="stat-value">10:45:30</div>
+          <div className="stat-value">
+            <div className="text-3xl">2023/06/25</div>
+            <div className="stat-desc text-lg font-bold">10:45:30</div>
+          </div>
         </div>
         <div className="stat">
-          <div className="stat-title">Total Time Taken</div>
-          <div className="stat-value">15 minutes </div>
-          <div className="stat-desc">1% more than last run</div>
+          <div className="stat-title">Total Time</div>
+          <div className="stat-value">25 minutes</div>
+          <div className="stat-desc text-lg font-bold">Avg: 2.3 minutes</div>
         </div>
         <div className="stat">
-          <div className="stat-title">Latency</div>
-          <div className="stat-value">200ms</div>
-          <div className="stat-desc">2% more than last run</div>
+          <div className="stat-title">Total Token</div>
+          <div className="stat-value">5,200 tokens</div>
+          <div className="stat-desc text-lg font-bold">Avg: 56 tokens</div>
+        </div>
+        <div className="stat">
+          <div className="stat-title">Total Latency</div>
+          <div className="stat-value">90s</div>
+          <div className="stat-desc text-lg font-bold">Avg: 200ms</div>
         </div>
       </div>
       <div className="tabs mb-2 w-full">
