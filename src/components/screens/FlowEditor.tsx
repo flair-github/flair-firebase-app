@@ -1,12 +1,6 @@
 import { Dialog } from '@headlessui/react'
 import axios from 'axios'
-import React, {
-  LegacyRef,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from 'react'
+import React, { LegacyRef, useCallback, useEffect, useRef, useState } from 'react'
 import ReactFlow, {
   Background,
   Controls,
@@ -34,6 +28,8 @@ import { db } from '~/lib/firebase'
 import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
 import Modal from '../ui/modal'
 import { Edges, Nodes, nodeContents, nodeTypes } from './nodes/Registry'
+import { dataIndexerDefaultContent } from './nodes/DataIndexer'
+import { dataRetrieverDefaultContent } from './nodes/DataRetriever'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -337,7 +333,18 @@ export const FlowEditor: React.FC<{
                   <button
                     className="btn m-2"
                     onClick={() => {
-                      // TODO: Add data indexer node
+                      setNodes(prev => {
+                        const nodeId = 'data-indexer-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataIndexerNode',
+                            data: { nodeId, initialContents: dataIndexerDefaultContent },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
                     }}>
                     Data Indexer
                   </button>
@@ -350,7 +357,18 @@ export const FlowEditor: React.FC<{
                   <button
                     className="btn m-2"
                     onClick={() => {
-                      // TODO: Add data retriever node
+                      setNodes(prev => {
+                        const nodeId = 'data-retriever-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataRetrieverNode',
+                            data: { nodeId, initialContents: dataRetrieverDefaultContent },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
                     }}>
                     Data Retriever
                   </button>

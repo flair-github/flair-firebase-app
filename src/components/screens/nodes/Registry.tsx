@@ -5,6 +5,8 @@ import { DataSourceNode, DataSourceNodeContent } from './DataSourceNode'
 import { EvaluatorNode, EvaluatorNodeContent } from './EvaluatorNode'
 import { LLMProcessorNode, LLMProcessorNodeContent } from './LLMProcessorNode'
 import { Edge, type Node } from 'reactflow'
+import { DataIndexerNode, DataIndexerNodeContent } from './DataIndexer'
+import { DataRetrieverNode, DataRetrieverNodeContent } from './DataRetriever'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -12,6 +14,8 @@ export const nodeTypes = {
   AwsUploaderNode,
   EvaluatorNode,
   LLMProcessorNode,
+  DataIndexerNode,
+  DataRetrieverNode,
 }
 
 export type NodeContent =
@@ -21,6 +25,8 @@ export type NodeContent =
   | AwsUploaderNodeContent
   | EvaluatorNodeContent
   | LLMProcessorNodeContent
+  | DataIndexerNodeContent
+  | DataRetrieverNodeContent
 
 export interface NodeData {
   nodeId: string
