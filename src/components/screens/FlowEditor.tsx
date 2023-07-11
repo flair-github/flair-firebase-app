@@ -258,7 +258,7 @@ export const FlowEditor: React.FC<{
       </Teleporter.Source> */}
         <div
           style={{ width: 400 }}
-          className="border-r-grayscaleDivider flex flex-col border-r p-6">
+          className="border-r-grayscaleDivider flex flex-col overflow-y-auto border-r p-6">
           <div className="mb-3">
             <button className="btn-primary btn m-2" onClick={saveFlow}>
               Save
