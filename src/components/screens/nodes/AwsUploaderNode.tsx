@@ -1,7 +1,7 @@
 import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
-import { type NodeData, nodeContents } from '../FlowEditor'
+import { NodeData, nodeContents } from './Registry'
 
 export interface AwsUploaderNodeContent {
   nodeType: 'aws-uploader'
@@ -62,7 +62,7 @@ export const AwsUploaderNode = ({ data }: { data: NodeData }) => {
       />
 
       <div>
-        <div className="fw-bold mb-2">AWS Uploader</div>
+        <div className="fw-bold mb-2">S3 Uploader</div>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">API Key</span>

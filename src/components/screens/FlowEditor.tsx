@@ -1,81 +1,35 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  Fragment,
-  type MutableRefObject,
-  LegacyRef,
-} from 'react'
-import ReactFlow, {
-  Controls,
-  Background,
-  applyNodeChanges,
-  applyEdgeChanges,
-  addEdge,
-  type Edge,
-  type NodeChange,
-  type EdgeChange,
-  type Connection,
-  type Node,
-  Handle,
-  Position,
-  SelectionMode,
-  type XYPosition,
-} from 'reactflow'
+import { Dialog } from '@headlessui/react'
 import axios from 'axios'
-import { GrFormClose } from 'react-icons/gr'
-import { IoIosCloudDone } from 'react-icons/io'
-import { Dialog, Transition } from '@headlessui/react'
+import React, { LegacyRef, useCallback, useEffect, useRef, useState } from 'react'
+import ReactFlow, {
+  Background,
+  Controls,
+  SelectionMode,
+  addEdge,
+  applyEdgeChanges,
+  applyNodeChanges,
+  type Connection,
+  type EdgeChange,
+  type NodeChange,
+} from 'reactflow'
 
 import 'reactflow/dist/style.css'
 // import '@manifoldco/react-select-zero/assets/react-select-zero.css'
 // import './style/override.css'
-import { CodeBlock, nord } from 'react-code-blocks'
-import Modal from '../ui/modal'
-import { GridLoader } from 'react-spinners'
-import { DataSourceNode, type DataSourceNodeContent } from './nodes/DataSourceNode'
-import { DataExtractorNode, type DataExtractorNodeContent } from './nodes/DataExtractorNode'
-import { AwsUploaderNode, type AwsUploaderNodeContent } from './nodes/AwsUploaderNode'
-import { EvaluatorNode, type EvaluatorNodeContent } from './nodes/EvaluatorNode'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { atom, useAtomValue } from 'jotai'
+import { CodeBlock } from 'react-code-blocks'
+import { AiOutlineCheckCircle } from 'react-icons/ai'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
-import { CORE_API_URL, AUTH_TOKEN } from '../../constants'
-import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
-import { AiOutlineCheckCircle } from 'react-icons/ai'
-import { LLMProcessorNode, LLMProcessorNodeContent } from './nodes/LLMProcessorNode'
-
-const nodeTypes = {
-  DataSourceNode,
-  DataExtractorNode,
-  AwsUploaderNode,
-  EvaluatorNode,
-  LLMProcessorNode,
-}
-
-export type NodeContent =
-  | { nodeType: 'init' }
-  | DataSourceNodeContent
-  | DataExtractorNodeContent
-  | AwsUploaderNodeContent
-  | EvaluatorNodeContent
-  | LLMProcessorNodeContent
-
-export const nodeContents: MutableRefObject<{ [nodeId: string]: NodeContent }> = {
-  current: {},
-}
-
-export interface NodeData {
-  nodeId: string
-  initialContents: NodeContent
-}
-
-export type Nodes = Array<Node<NodeData>>
-export type Edges = Edge[]
+import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
+import Modal from '../ui/modal'
+import { Edges, Nodes, nodeContents, nodeTypes } from './nodes/Registry'
+import { dataIndexerDefaultContent } from './nodes/DataIndexer'
+import { dataRetrieverDefaultContent } from './nodes/DataRetriever'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -90,56 +44,6 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
     y: -viewport.y * (1 / viewport.zoom) + randomY,
   }
 }
-
-// export type FlowJsonFormat = Array<{
-//   nodeId: string
-//   nodeType: string | undefined
-//   pos: XYPosition
-//   inboundEdges: string[]
-//   outboundEdges: string[]
-//   contents: NodeContent
-// }>
-
-// const nodesToJson = (nodes: Nodes, edges: Edges) => {
-//   console.log('nodes', nodes)
-//   console.log('edges', edges)
-
-//   const res: FlowJsonFormat = []
-
-//   nodes.forEach(el => {
-//     res.push({
-//       nodeId: el.id,
-//       nodeType: el.type,
-//       pos: el.position,
-//       inboundEdges: [],
-//       outboundEdges: [],
-//       contents: nodeContents.current[el.id],
-//     })
-//   })
-
-//   edges.forEach(edge => {
-//     const {
-//       source: sourceNodeId,
-//       sourceHandle,
-//       target: targetNodeId,
-//       targetHandle,
-//     } = edge
-
-//     if (sourceHandle === 'outbound' && targetHandle === 'inbound') {
-//       const sourceNode = res.find(el => el.nodeId === sourceNodeId)
-//       const targetNode = res.find(el => el.nodeId === targetNodeId)
-
-//       if (sourceNode && targetNode) {
-//         sourceNode.outboundEdges.push(targetNodeId)
-//         targetNode.inboundEdges.push(sourceNodeId)
-//       }
-//     }
-//   })
-
-//   console.log(res)
-
-//   return res
-// }
 
 export const jotaiAllowInteraction = atom(true)
 
@@ -354,7 +258,7 @@ export const FlowEditor: React.FC<{
       </Teleporter.Source> */}
         <div
           style={{ width: 400 }}
-          className="border-r-grayscaleDivider flex flex-col border-r p-6">
+          className="border-r-grayscaleDivider flex flex-col overflow-y-auto border-r p-6">
           <div className="mb-3">
             <button className="btn-primary btn m-2" onClick={saveFlow}>
               Save
@@ -405,77 +309,20 @@ export const FlowEditor: React.FC<{
                     }}>
                     S3
                   </button>
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'data-source-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'DataSourceNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
+                  <button className="btn m-2" onClick={() => {}}>
                     GCP
                   </button>
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'data-source-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'DataSourceNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
+                  <button className="btn m-2" onClick={() => {}}>
                     Azure
                   </button>
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'data-source-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'DataSourceNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
+                  <button className="btn m-2" onClick={() => {}}>
                     Salesforce
                   </button>
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'data-source-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'DataSourceNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
+                  <button className="btn m-2" onClick={() => {}}>
                     Zendesk
+                  </button>
+                  <button className="btn m-2" onClick={() => {}}>
+                    API
                   </button>
                 </div>
               </div>
@@ -486,7 +333,18 @@ export const FlowEditor: React.FC<{
                   <button
                     className="btn m-2"
                     onClick={() => {
-                      // TODO: Add data indexer node
+                      setNodes(prev => {
+                        const nodeId = 'data-indexer-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataIndexerNode',
+                            data: { nodeId, initialContents: dataIndexerDefaultContent },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
                     }}>
                     Data Indexer
                   </button>
@@ -499,7 +357,18 @@ export const FlowEditor: React.FC<{
                   <button
                     className="btn m-2"
                     onClick={() => {
-                      // TODO: Add data retriever node
+                      setNodes(prev => {
+                        const nodeId = 'data-retriever-' + String(Date.now())
+                        return [
+                          ...prev,
+                          {
+                            id: nodeId,
+                            type: 'DataRetrieverNode',
+                            data: { nodeId, initialContents: dataRetrieverDefaultContent },
+                            position: randPos(viewport.current),
+                          },
+                        ]
+                      })
                     }}>
                     Data Retriever
                   </button>
@@ -569,41 +438,14 @@ export const FlowEditor: React.FC<{
                     }}>
                     S3
                   </button>
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'aws-uploader-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'AwsUploaderNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
+                  <button className="btn m-2" onClick={() => {}}>
                     GCP
                   </button>
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'aws-uploader-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'AwsUploaderNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
+                  <button className="btn m-2" onClick={() => {}}>
                     Azure
+                  </button>
+                  <button className="btn m-2" onClick={() => {}}>
+                    API
                   </button>
                 </div>
               </div>
@@ -628,6 +470,15 @@ export const FlowEditor: React.FC<{
                       })
                     }}>
                     Evaluator
+                  </button>
+                </div>
+              </div>
+              <div className="collapse-arrow join-item collapse border border-base-300">
+                <input type="radio" name="my-accordion-4" />
+                <div className="collapse-title text-xl font-medium">Custom Fine-Tuning</div>
+                <div className="collapse-content">
+                  <button className="btn m-2" onClick={() => {}}>
+                    Fine-Tuning
                   </button>
                 </div>
               </div>
