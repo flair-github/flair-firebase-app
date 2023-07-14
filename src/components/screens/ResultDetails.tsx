@@ -7,12 +7,13 @@ import { Head } from '~/components/shared/Head'
 import FlowEditor from './FlowEditor'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
+import { PiFileCsvFill } from 'react-icons/pi'
 
 const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 const edges = JSON.parse(FLOW_SAMPLE_2).edges
 
 function ResultDetails() {
-  const [activeTab, setActiveTab] = useState<'workflow' | 'evaluation'>('evaluation')
+  const [activeTab, setActiveTab] = useState<'workflow' | 'evaluation' | 'result'>('evaluation')
 
   return (
     <div className="container mx-auto p-4">
@@ -61,14 +62,14 @@ function ResultDetails() {
           <div className="stat-desc text-lg font-bold">Avg: 2.3 minutes</div>
         </div>
         <div className="stat">
-          <div className="stat-title">Total Token</div>
-          <div className="stat-value">5,200 tokens</div>
-          <div className="stat-desc text-lg font-bold">Avg: 56 tokens</div>
+          <div className="stat-title">Average Tokens</div>
+          <div className="stat-value">192.3 tokens</div>
+          {/* <div className="stat-desc text-lg font-bold">Avg: 56 tokens</div> */}
         </div>
         <div className="stat">
-          <div className="stat-title">Total Latency</div>
-          <div className="stat-value">90s</div>
-          <div className="stat-desc text-lg font-bold">Avg: 200ms</div>
+          <div className="stat-title">Average Latency</div>
+          <div className="stat-value">211.2ms</div>
+          {/* <div className="stat-desc text-lg font-bold">Avg: 200ms</div> */}
         </div>
       </div>
       <div className="tabs mb-2 w-full">
@@ -76,6 +77,11 @@ function ResultDetails() {
           className={`tab-lifted tab tab-lg ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('evaluation')}>
           Evaluation
+        </a>
+        <a
+          className={`tab-lifted tab tab-lg ${activeTab === 'result' ? 'tab-active' : ''}`}
+          onClick={() => setActiveTab('result')}>
+          Result
         </a>
         <a
           className={`tab-lifted tab tab-lg ${activeTab === 'workflow' ? 'tab-active' : ''}`}
@@ -189,6 +195,87 @@ function ResultDetails() {
             </tr>
           </tbody>
         </table>
+      )}
+      {activeTab === 'result' && (
+        <div className="justify-left flex w-full border [height:720px]">
+          <div className="container max-w-200 p-5">
+            <div className="px-4 sm:px-0">
+              <h3 className="text-base font-semibold leading-7 text-gray-900">Workflow Result</h3>
+              {/* <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">
+                Personal details and application.
+              </p> */}
+            </div>
+            <div className="mt-6 border-t border-gray-100">
+              <dl className="divide-y divide-gray-100">
+                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt className="text-sm font-medium leading-6 text-gray-900">Storage Location</dt>
+                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">S3</dd>
+                </div>
+                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt className="text-sm font-medium leading-6 text-gray-900">Region</dt>
+                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    us-west-2
+                  </dd>
+                </div>
+                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt className="text-sm font-medium leading-6 text-gray-900">Bucket</dt>
+                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    bn-complete-dev-test
+                  </dd>
+                </div>
+                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt className="text-sm font-medium leading-6 text-gray-900">Path</dt>
+                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    llm/result/workflow1/*
+                  </dd>
+                </div>
+                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt className="text-sm font-medium leading-6 text-gray-900">Result Type</dt>
+                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    CSV
+                  </dd>
+                </div>
+                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt className="text-sm font-medium leading-6 text-gray-900">Files</dt>
+                  <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    <ul
+                      role="list"
+                      className="divide-y divide-gray-100 rounded-md border border-gray-200">
+                      <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                        <div className="flex w-0 flex-1 items-center">
+                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
+                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
+                            <span className="truncate font-medium">llm_result.csv</span>
+                            <span className="shrink-0 text-gray-400">2.5 MB</span>
+                          </div>
+                        </div>
+                        <div className="ml-4 shrink-0">
+                          <a href="#" className="font-medium text-primary hover:text-primary/80">
+                            Download
+                          </a>
+                        </div>
+                      </li>
+                      <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                        <div className="flex w-0 flex-1 items-center">
+                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
+                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
+                            <span className="truncate font-medium">evaluation_result.csv</span>
+                            <span className="shrink-0 text-gray-400">2.6 MB</span>
+                          </div>
+                        </div>
+                        <div className="ml-4 shrink-0">
+                          <a href="#" className="font-medium text-primary hover:text-primary/80">
+                            Download
+                          </a>
+                        </div>
+                      </li>
+                    </ul>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
       )}
       {activeTab === 'workflow' && (
         <div className="w-full border [height:720px]">
