@@ -18,7 +18,7 @@ function PageLogin() {
   }
 
   return (
-    <div className="flex justify-center bg-gray-50">
+    <div className="flex justify-center overflow-y-auto bg-gray-50">
       <section className="[min-width:640px] dark:bg-gray-900">
         <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
           <a
