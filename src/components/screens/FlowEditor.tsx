@@ -241,21 +241,6 @@ export const FlowEditor: React.FC<{
   return (
     <>
       <div className="flex h-[calc(100vh-4rem)]">
-        {/* <Teleporter.Source>
-        <CreatableSelect
-          styles={{
-            control: (baseStyles, state) => ({ ...baseStyles, position: 'absolute', maxWidth: '200px', minWidth: '200px', zIndex: 100, pointerEvents: 'auto' }),
-          }}
-          // onChange={(v) => { setSelectedOptions(v); return false }}
-          autoFocus={false}
-          isDisabled={false}
-          isMulti={true}
-          isClearable={true}
-          isSearchable={true}
-          options={options}
-          // defaultValue={selectedOptions}
-        />
-      </Teleporter.Source> */}
         <div
           style={{ width: 400 }}
           className="border-r-grayscaleDivider flex flex-col overflow-y-auto border-r p-6">
