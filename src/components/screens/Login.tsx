@@ -88,30 +88,32 @@ function PageLogin() {
                   </a>
                 </div>
                 <div>
-                  <button className="relative mt-1 w-full rounded-md border bg-gray-100 py-2 text-sm text-gray-800 hover:bg-gray-200">
+                  <button className="relative my-1 w-full rounded-md border bg-gray-100 py-2 text-sm text-gray-800 hover:bg-gray-200">
                     <span>Login with Email</span>
                   </button>
-                  <div className="mb-2 mt-5 text-center text-sm font-bold text-gray-400">
-                    Other methods
-                  </div>
-                  <button
-                    onClick={handleGoogleLoginClick}
-                    className="relative mt-1 flex w-full items-center justify-center rounded-md border bg-gray-100 py-2 text-sm text-gray-800 hover:bg-gray-200">
-                    <div className="inline-flex items-center">
-                      <FcGoogle className="mr-2" size={20} />
-                      <span>Login with Google</span>
-                    </div>
-                  </button>
+                  <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                    Don’t have an account yet?{' '}
+                    <a
+                      href="#"
+                      className="text-primary-600 dark:text-primary-500 font-medium hover:underline">
+                      Sign up
+                    </a>
+                  </p>
                 </div>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Don’t have an account yet?{' '}
-                  <a
-                    href="#"
-                    className="text-primary-600 dark:text-primary-500 font-medium hover:underline">
-                    Sign up
-                  </a>
-                </p>
               </form>
+              <div>
+                <div className=" mt-5 text-center text-sm font-bold text-gray-400">
+                  Other methods
+                </div>
+                <button
+                  onClick={handleGoogleLoginClick}
+                  className="relative mt-1 flex w-full items-center justify-center rounded-md border bg-gray-100 py-2 text-sm text-gray-800 hover:bg-gray-200">
+                  <div className="inline-flex items-center">
+                    <FcGoogle className="mr-2" size={20} />
+                    <span>Login with Google</span>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         </div>
