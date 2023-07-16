@@ -240,258 +240,258 @@ export const FlowEditor: React.FC<{
 
   return (
     <>
-      <div className="flex h-[calc(100vh-4rem)]">
-        <div
-          style={{ width: 400 }}
-          className="border-r-grayscaleDivider flex flex-col overflow-y-auto border-r p-6">
-          <div className="mb-3">
-            <button className="btn-primary btn m-2" onClick={saveFlow}>
-              Save
-            </button>
-            <button
-              className="btn m-2"
-              onClick={() => {
-                setNodes([])
-                setEdges([])
-              }}>
-              Clear
-            </button>
-            <button
-              className="btn m-2"
-              onClick={() => {
-                const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
+      <div className="h-[calc(100vh-4rem)]">
+        <div className="border-grayscaleDivider flex h-[3rem] border-b">
+          <button className="btn-primary btn m-1 h-[2.5rem] min-h-[2.5rem]" onClick={saveFlow}>
+            Save
+          </button>
+          <button
+            className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
+            onClick={() => {
+              setNodes([])
+              setEdges([])
+            }}>
+            Clear
+          </button>
+          <button
+            className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
+            onClick={() => {
+              const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
 
-                setNodes(newNodes)
-                setEdges(newEdges)
-              }}>
-              Sample
-            </button>
-          </div>
+              setNodes(newNodes)
+              setEdges(newEdges)
+            }}>
+            Sample
+          </button>
+          <div className="flex-1" />
 
-          {/* Data Connectors */}
-          <div className="mb-3">
-            <div className="my-2" />
-            <div className="join-vertical join w-full">
-              <div className="collapse-arrow join-item collapse border border-base-300">
-                <input type="radio" name="my-accordion-4" />
-                <div className="collapse-title text-xl font-medium">Data Source</div>
-                <div className="collapse-content">
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'data-source-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'DataSourceNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
-                    S3
-                  </button>
-                  <button className="btn m-2" onClick={() => {}}>
-                    GCP
-                  </button>
-                  <button className="btn m-2" onClick={() => {}}>
-                    Azure
-                  </button>
-                  <button className="btn m-2" onClick={() => {}}>
-                    Salesforce
-                  </button>
-                  <button className="btn m-2" onClick={() => {}}>
-                    Zendesk
-                  </button>
-                  <button className="btn m-2" onClick={() => {}}>
-                    API
-                  </button>
+          <button
+            className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
+            onClick={async () => {
+              executeFlow()
+              executeModalRef.current?.showModal()
+            }}>
+            Execute
+          </button>
+          <button
+            className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
+            onClick={async () => {
+              setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
+              setIsJsonModalShown(true)
+            }}>
+            Show Config
+          </button>
+        </div>
+        <div className="flex h-[calc(100vh-4rem-3rem)]">
+          <div
+            style={{ width: 400 }}
+            className="border-r-grayscaleDivider flex flex-col overflow-y-auto border-r p-3">
+            {/* Data Connectors */}
+            <div className="mb-3">
+              <div className="my-2" />
+              <div className="join-vertical join w-full">
+                <div className="collapse-arrow join-item collapse border border-base-300">
+                  <input type="radio" name="my-accordion-4" />
+                  <div className="collapse-title text-xl font-medium">Data Source</div>
+                  <div className="collapse-content">
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        setNodes(prev => {
+                          const nodeId = 'data-source-' + String(Date.now())
+                          return [
+                            ...prev,
+                            {
+                              id: nodeId,
+                              type: 'DataSourceNode',
+                              data: { nodeId, initialContents: { nodeType: 'init' } },
+                              position: randPos(viewport.current),
+                            },
+                          ]
+                        })
+                      }}>
+                      S3
+                    </button>
+                    <button className="btn m-2" onClick={() => {}}>
+                      GCP
+                    </button>
+                    <button className="btn m-2" onClick={() => {}}>
+                      Azure
+                    </button>
+                    <button className="btn m-2" onClick={() => {}}>
+                      Salesforce
+                    </button>
+                    <button className="btn m-2" onClick={() => {}}>
+                      Zendesk
+                    </button>
+                    <button className="btn m-2" onClick={() => {}}>
+                      API
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="collapse-arrow join-item collapse border border-base-300">
-                <input type="radio" name="my-accordion-4" />
-                <div className="collapse-title text-xl font-medium">Data Indexer</div>
-                <div className="collapse-content">
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'data-indexer-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'DataIndexerNode',
-                            data: { nodeId, initialContents: dataIndexerDefaultContent },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
-                    Data Indexer
-                  </button>
+                <div className="collapse-arrow join-item collapse border border-base-300">
+                  <input type="radio" name="my-accordion-4" />
+                  <div className="collapse-title text-xl font-medium">Data Indexer</div>
+                  <div className="collapse-content">
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        setNodes(prev => {
+                          const nodeId = 'data-indexer-' + String(Date.now())
+                          return [
+                            ...prev,
+                            {
+                              id: nodeId,
+                              type: 'DataIndexerNode',
+                              data: { nodeId, initialContents: dataIndexerDefaultContent },
+                              position: randPos(viewport.current),
+                            },
+                          ]
+                        })
+                      }}>
+                      Data Indexer
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="collapse-arrow join-item collapse border border-base-300">
-                <input type="radio" name="my-accordion-4" />
-                <div className="collapse-title text-xl font-medium">Data Retriever</div>
-                <div className="collapse-content">
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'data-retriever-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'DataRetrieverNode',
-                            data: { nodeId, initialContents: dataRetrieverDefaultContent },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
-                    Data Retriever
-                  </button>
+                <div className="collapse-arrow join-item collapse border border-base-300">
+                  <input type="radio" name="my-accordion-4" />
+                  <div className="collapse-title text-xl font-medium">Data Retriever</div>
+                  <div className="collapse-content">
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        setNodes(prev => {
+                          const nodeId = 'data-retriever-' + String(Date.now())
+                          return [
+                            ...prev,
+                            {
+                              id: nodeId,
+                              type: 'DataRetrieverNode',
+                              data: { nodeId, initialContents: dataRetrieverDefaultContent },
+                              position: randPos(viewport.current),
+                            },
+                          ]
+                        })
+                      }}>
+                      Data Retriever
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="collapse-arrow join-item collapse border border-base-300">
-                <input type="radio" name="my-accordion-4" />
-                <div className="collapse-title text-xl font-medium">Data Extractor</div>
-                <div className="collapse-content">
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'data-extractor-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'DataExtractorNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
-                    Data Extractor
-                  </button>
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'llm-processor-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'LLMProcessorNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
-                    LLM Processor
-                  </button>
+                <div className="collapse-arrow join-item collapse border border-base-300">
+                  <input type="radio" name="my-accordion-4" />
+                  <div className="collapse-title text-xl font-medium">Data Extractor</div>
+                  <div className="collapse-content">
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        setNodes(prev => {
+                          const nodeId = 'data-extractor-' + String(Date.now())
+                          return [
+                            ...prev,
+                            {
+                              id: nodeId,
+                              type: 'DataExtractorNode',
+                              data: { nodeId, initialContents: { nodeType: 'init' } },
+                              position: randPos(viewport.current),
+                            },
+                          ]
+                        })
+                      }}>
+                      Data Extractor
+                    </button>
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        setNodes(prev => {
+                          const nodeId = 'llm-processor-' + String(Date.now())
+                          return [
+                            ...prev,
+                            {
+                              id: nodeId,
+                              type: 'LLMProcessorNode',
+                              data: { nodeId, initialContents: { nodeType: 'init' } },
+                              position: randPos(viewport.current),
+                            },
+                          ]
+                        })
+                      }}>
+                      LLM Processor
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="collapse-arrow join-item collapse border border-base-300">
-                <input type="radio" name="my-accordion-4" />
-                <div className="collapse-title text-xl font-medium">Data Exporter</div>
-                <div className="collapse-content">
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'aws-uploader-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'AwsUploaderNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
-                    S3
-                  </button>
-                  <button className="btn m-2" onClick={() => {}}>
-                    GCP
-                  </button>
-                  <button className="btn m-2" onClick={() => {}}>
-                    Azure
-                  </button>
-                  <button className="btn m-2" onClick={() => {}}>
-                    API
-                  </button>
+                <div className="collapse-arrow join-item collapse border border-base-300">
+                  <input type="radio" name="my-accordion-4" />
+                  <div className="collapse-title text-xl font-medium">Data Exporter</div>
+                  <div className="collapse-content">
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        setNodes(prev => {
+                          const nodeId = 'aws-uploader-' + String(Date.now())
+                          return [
+                            ...prev,
+                            {
+                              id: nodeId,
+                              type: 'AwsUploaderNode',
+                              data: { nodeId, initialContents: { nodeType: 'init' } },
+                              position: randPos(viewport.current),
+                            },
+                          ]
+                        })
+                      }}>
+                      S3
+                    </button>
+                    <button className="btn m-2" onClick={() => {}}>
+                      GCP
+                    </button>
+                    <button className="btn m-2" onClick={() => {}}>
+                      Azure
+                    </button>
+                    <button className="btn m-2" onClick={() => {}}>
+                      API
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="collapse-arrow join-item collapse border border-base-300">
-                <input type="radio" name="my-accordion-4" />
-                <div className="collapse-title text-xl font-medium">Evaluation</div>
-                <div className="collapse-content">
-                  <button
-                    className="btn m-2"
-                    onClick={() => {
-                      setNodes(prev => {
-                        const nodeId = 'evaluator-' + String(Date.now())
-                        return [
-                          ...prev,
-                          {
-                            id: nodeId,
-                            type: 'EvaluatorNode',
-                            data: { nodeId, initialContents: { nodeType: 'init' } },
-                            position: randPos(viewport.current),
-                          },
-                        ]
-                      })
-                    }}>
-                    Evaluator
-                  </button>
+                <div className="collapse-arrow join-item collapse border border-base-300">
+                  <input type="radio" name="my-accordion-4" />
+                  <div className="collapse-title text-xl font-medium">Evaluation</div>
+                  <div className="collapse-content">
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        setNodes(prev => {
+                          const nodeId = 'evaluator-' + String(Date.now())
+                          return [
+                            ...prev,
+                            {
+                              id: nodeId,
+                              type: 'EvaluatorNode',
+                              data: { nodeId, initialContents: { nodeType: 'init' } },
+                              position: randPos(viewport.current),
+                            },
+                          ]
+                        })
+                      }}>
+                      Evaluator
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="collapse-arrow join-item collapse border border-base-300">
-                <input type="radio" name="my-accordion-4" />
-                <div className="collapse-title text-xl font-medium">Custom Fine-Tuning</div>
-                <div className="collapse-content">
-                  <button className="btn m-2" onClick={() => {}}>
-                    Fine-Tuning
-                  </button>
+                <div className="collapse-arrow join-item collapse border border-base-300">
+                  <input type="radio" name="my-accordion-4" />
+                  <div className="collapse-title text-xl font-medium">Custom Fine-Tuning</div>
+                  <div className="collapse-content">
+                    <button className="btn m-2" onClick={() => {}}>
+                      Fine-Tuning
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex-1" />
-
-          <div className="flex">
-            <button
-              className="btn m-2"
-              onClick={async () => {
-                executeFlow()
-                executeModalRef.current?.showModal()
-              }}>
-              Execute
-            </button>
-            <button
-              className="btn m-2"
-              onClick={async () => {
-                setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
-                setIsJsonModalShown(true)
-              }}>
-              Show Config
-            </button>
+            <div className="flex-1" />
           </div>
+          <div className="flex-1">{ReactFlowComp}</div>
         </div>
-        <div className="flex-1">{ReactFlowComp}</div>
       </div>
 
       {/* Execute modal */}
