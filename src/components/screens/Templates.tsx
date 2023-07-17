@@ -226,7 +226,7 @@ function Settings() {
                 <div className="mb-2">
                   Load local files, write prompts, and produce LLM results in under 5 minutes
                 </div>
-                <button className="btn-primary btn text-white">
+                <button className="btn-primary btn">
                   Get Started <FiArrowRight size={18} />
                 </button>
               </div>
