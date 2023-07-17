@@ -73,6 +73,10 @@ function Index() {
   const [showNewFlowModal, setShowNewFlowModal] = useState(false)
   const navigate = useNavigate()
 
+  const openWorkflow = (workflowId: string) => {
+    navigate('editor', { state: { workflowId } })
+  }
+
   return (
     <>
       <Head title="Home" />
@@ -94,31 +98,50 @@ function Index() {
             <MoonLoader color="rgba(0,0,0,0.2)" />
           </div>
         )}
-        {myFlows &&
-          myFlows.map(myFlow => (
-            <div key={myFlow.workflowId} className="card mb-4 w-96 border bg-base-100 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title">{myFlow.workflowTitle}</h2>
-                <div className="card-actions flex justify-end">
-                  <button
-                    className="btn-ghost btn"
+        <div className="-m-4 flex flex-wrap">
+          {myFlows &&
+            myFlows.map(myFlow => (
+              <div key={myFlow.workflowId} className="card m-4 w-96 border bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <h2
                     onClick={() => {
-                      db.collection('workflows').doc(myFlow.workflowId).delete()
-                    }}>
-                    Delete
-                  </button>
-                  <div className="flex-1" />
-                  <button
-                    className="btn"
+                      openWorkflow(myFlow.workflowId)
+                    }}
+                    className="card-title overflow-hidden text-ellipsis whitespace-nowrap">
+                    {myFlow.workflowTitle}
+                  </h2>
+                  <img
                     onClick={() => {
-                      navigate('editor', { state: { workflowId: myFlow.workflowId } })
-                    }}>
-                    Open
-                  </button>
+                      openWorkflow(myFlow.workflowId)
+                    }}
+                    src="/images/flow-artwork.svg"
+                    width={330}
+                    height={180}
+                    className=""
+                  />
+                  <div className="card-actions flex justify-end">
+                    <button
+                      className="btn-ghost btn"
+                      onClick={() => {
+                        db.collection('workflows').doc(myFlow.workflowId).update({
+                          docExists: false,
+                        })
+                      }}>
+                      Delete
+                    </button>
+                    <div className="flex-1" />
+                    <button
+                      className="btn"
+                      onClick={() => {
+                        openWorkflow(myFlow.workflowId)
+                      }}>
+                      Open
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </div>
 
         {/* New Flow Modal */}
         <dialog className={['modal', showNewFlowModal ? 'modal-open' : ''].join(' ')}>
