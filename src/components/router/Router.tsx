@@ -15,6 +15,7 @@ const FlowEditorScreen = lazy(() => import('~/components/screens/FlowEditor'))
 const ResultsScreen = lazy(() => import('~/components/screens/Results'))
 const ResultDetailsScreen = lazy(() => import('~/components/screens/ResultDetails'))
 const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
+const TemplatesScreen = lazy(() => import('~/components/screens/Templates'))
 
 function Layout() {
   const userData = useAtomValue(atomUserData)
@@ -126,6 +127,10 @@ const InnerRouter = () => {
         {
           path: '*',
           element: <Page404Screen />,
+        },
+        {
+          path: 'templates',
+          element: <TemplatesScreen />,
         },
       ],
     },

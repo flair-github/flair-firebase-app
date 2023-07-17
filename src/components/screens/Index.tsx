@@ -87,7 +87,14 @@ function Index() {
             onClick={() => {
               setShowNewFlowModal(true)
             }}>
-            Create New Flow
+            New Empty Flow
+          </button>
+          <button
+            className="btn ml-2 normal-case"
+            onClick={() => {
+              navigate('templates')
+            }}>
+            Flow Templates
           </button>
         </div>
 
