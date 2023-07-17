@@ -27,9 +27,10 @@ import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
 import Modal from '../ui/modal'
-import { Edges, Nodes, nodeContents, nodeTypes } from './nodes/Registry'
+import { Edges, NodeContent, Nodes, nodeContents, nodeTypes } from './nodes/Registry'
 import { dataIndexerDefaultContent } from './nodes/DataIndexer'
 import { dataRetrieverDefaultContent } from './nodes/DataRetriever'
+import { v4 } from 'uuid'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -202,6 +203,25 @@ export const FlowEditor: React.FC<{
     )
   }
 
+  const addNode = (
+    nodeTypeDash: NodeContent['nodeType'],
+    nodeTypePascal: keyof typeof nodeTypes,
+  ) => {
+    setNodes(prev => {
+      const nodeId = nodeTypeDash + '-' + v4()
+
+      return [
+        ...prev,
+        {
+          id: nodeId,
+          type: nodeTypePascal,
+          data: { nodeId, initialContents: { nodeType: 'init' } },
+          position: randPos(viewport.current),
+        },
+      ]
+    })
+  }
+
   const executeModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
 
   const allowInteraction = useAtomValue(jotaiAllowInteraction)
@@ -311,6 +331,13 @@ export const FlowEditor: React.FC<{
                         })
                       }}>
                       S3
+                    </button>
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        addNode('data-source-local-files', 'DataSourceLocalFilesNode')
+                      }}>
+                      Local Files
                     </button>
                     <button className="btn m-2" onClick={() => {}}>
                       GCP
@@ -440,6 +467,13 @@ export const FlowEditor: React.FC<{
                         })
                       }}>
                       S3
+                    </button>
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        addNode('data-exporter-flair', 'DataExporterFlairNode')
+                      }}>
+                      Flair
                     </button>
                     <button className="btn m-2" onClick={() => {}}>
                       GCP

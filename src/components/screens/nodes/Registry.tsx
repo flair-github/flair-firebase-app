@@ -7,6 +7,8 @@ import { LLMProcessorNode, LLMProcessorNodeContent } from './LLMProcessorNode'
 import { Edge, type Node } from 'reactflow'
 import { DataIndexerNode, DataIndexerNodeContent } from './DataIndexer'
 import { DataRetrieverNode, DataRetrieverNodeContent } from './DataRetriever'
+import { DataSourceLocalFilesNode, DataSourceLocalFilesNodeContent } from './DataSourceLocalFiles'
+import { DataExporterFlairNode, DataExporterFlairNodeContent } from './DataExporterFlair'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -16,6 +18,8 @@ export const nodeTypes = {
   LLMProcessorNode,
   DataIndexerNode,
   DataRetrieverNode,
+  DataSourceLocalFilesNode,
+  DataExporterFlairNode,
 }
 
 export type NodeContent =
@@ -27,6 +31,8 @@ export type NodeContent =
   | LLMProcessorNodeContent
   | DataIndexerNodeContent
   | DataRetrieverNodeContent
+  | DataSourceLocalFilesNodeContent
+  | DataExporterFlairNodeContent
 
 export interface NodeData {
   nodeId: string
