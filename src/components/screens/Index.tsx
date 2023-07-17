@@ -117,7 +117,7 @@ function Index() {
                     src="/images/flow-artwork.svg"
                     width={330}
                     height={180}
-                    className=""
+                    className="border"
                   />
                   <div className="card-actions flex justify-end">
                     <button
