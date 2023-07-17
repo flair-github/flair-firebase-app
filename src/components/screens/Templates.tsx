@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { atomUserData } from '~/jotai/jotai'
 import { FiArrowRight } from 'react-icons/fi'
+import { db } from '~/lib/firebase'
+import { DocWorkflow } from 'Types/firebaseStructure'
+import { Timestamp, serverTimestamp } from 'firebase/firestore'
+import { useNavigate } from 'react-router-dom'
 
 function Settings() {
   const userData = useAtomValue(atomUserData)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!userData?.userId) {
@@ -14,6 +19,37 @@ function Settings() {
 
     return () => {}
   }, [userData?.userId])
+
+  const createNewFlow = async (frontendConfig: string) => {
+    const titleInput = window.document.getElementById('flow-title-field') as HTMLInputElement
+    const title = titleInput?.value || 'New Flow'
+
+    if (titleInput) {
+      titleInput.value = ''
+    }
+
+    if (!userData?.userId) {
+      return
+    }
+
+    const ref = db.collection('workflows').doc()
+    const newFlowData: DocWorkflow = {
+      createdTimestamp: serverTimestamp() as Timestamp,
+      updatedTimestamp: serverTimestamp() as Timestamp,
+      lastSaveTimestamp: serverTimestamp() as Timestamp,
+      docExists: true,
+      workflowId: ref.id,
+      frontendConfig,
+      workflowTitle: title || 'New Flow',
+      ownerUserId: userData.userId,
+    }
+
+    await ref.set(newFlowData)
+
+    navigate('/editor', { state: { workflowId: ref.id } })
+  }
+
+  const [showNewFlowModal, setShowNewFlowModal] = useState(false)
 
   return (
     <>
@@ -226,7 +262,11 @@ function Settings() {
                 <div className="mb-2">
                   Load local files, write prompts, and produce LLM results in under 5 minutes
                 </div>
-                <button className="btn-primary btn">
+                <button
+                  className="btn-primary btn"
+                  onClick={() => {
+                    setShowNewFlowModal(true)
+                  }}>
                   Get Started <FiArrowRight size={18} />
                 </button>
               </div>
@@ -234,6 +274,47 @@ function Settings() {
           </div>
         </div>
       </div>
+
+      <dialog className={['modal', showNewFlowModal ? 'modal-open' : ''].join(' ')}>
+        <form method="dialog" className="modal-box">
+          <h3 className="text-lg font-bold">Create New Flow</h3>
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Flow Title</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Flow Title"
+              id="flow-title-field"
+              className="input-bordered input w-full"
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  setShowNewFlowModal(false)
+                  createNewFlow('')
+                }
+              }}
+            />
+          </div>
+          <div className="modal-action">
+            <button
+              className="btn"
+              onClick={() => {
+                setShowNewFlowModal(false)
+              }}>
+              Close
+            </button>
+            <button
+              className="btn-primary btn"
+              onClick={() => {
+                setShowNewFlowModal(false)
+                createNewFlow('')
+              }}>
+              Create
+            </button>
+          </div>
+        </form>
+      </dialog>
     </>
   )
 }
