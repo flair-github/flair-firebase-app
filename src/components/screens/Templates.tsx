@@ -8,7 +8,7 @@ import { DocWorkflow } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 
-function Settings() {
+function Templates() {
   const userData = useAtomValue(atomUserData)
   const navigate = useNavigate()
 
@@ -19,37 +19,6 @@ function Settings() {
 
     return () => {}
   }, [userData?.userId])
-
-  const createNewFlow = async (frontendConfig: string) => {
-    const titleInput = window.document.getElementById('flow-title-field') as HTMLInputElement
-    const title = titleInput?.value || 'New Flow'
-
-    if (titleInput) {
-      titleInput.value = ''
-    }
-
-    if (!userData?.userId) {
-      return
-    }
-
-    const ref = db.collection('workflows').doc()
-    const newFlowData: DocWorkflow = {
-      createdTimestamp: serverTimestamp() as Timestamp,
-      updatedTimestamp: serverTimestamp() as Timestamp,
-      lastSaveTimestamp: serverTimestamp() as Timestamp,
-      docExists: true,
-      workflowId: ref.id,
-      frontendConfig,
-      workflowTitle: title || 'New Flow',
-      ownerUserId: userData.userId,
-    }
-
-    await ref.set(newFlowData)
-
-    navigate('/editor', { state: { workflowId: ref.id } })
-  }
-
-  const [showNewFlowModal, setShowNewFlowModal] = useState(false)
 
   return (
     <>
@@ -258,14 +227,15 @@ function Settings() {
                 />
               </div>
               <div className="flex-1">
-                <div className="mb-2 text-3xl font-semibold">Basic Local Files Loader</div>
+                <div className="mb-2 text-3xl font-semibold">Basic Prompting</div>
                 <div className="mb-2">
-                  Load local files, write prompts, and produce LLM results in under 5 minutes
+                  Load files from external source, write prompts, and produce LLM results in under 5
+                  minutes
                 </div>
                 <button
                   className="btn-primary btn"
                   onClick={() => {
-                    setShowNewFlowModal(true)
+                    navigate('/template-wizard')
                   }}>
                   Get Started <FiArrowRight size={18} />
                 </button>
@@ -274,168 +244,8 @@ function Settings() {
           </div>
         </div>
       </div>
-
-      <dialog className={['modal', showNewFlowModal ? 'modal-open' : ''].join(' ')}>
-        <form method="dialog" className="modal-box">
-          <h3 className="text-lg font-bold">Create New Flow</h3>
-          <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text">Flow Title</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Flow Title"
-              id="flow-title-field"
-              className="input-bordered input w-full"
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  e.preventDefault()
-                  setShowNewFlowModal(false)
-                  createNewFlow(basicData)
-                }
-              }}
-            />
-          </div>
-          <div className="modal-action">
-            <button
-              className="btn"
-              onClick={() => {
-                setShowNewFlowModal(false)
-              }}>
-              Close
-            </button>
-            <button
-              className="btn-primary btn"
-              onClick={() => {
-                setShowNewFlowModal(false)
-                createNewFlow(basicData)
-              }}>
-              Create
-            </button>
-          </div>
-        </form>
-      </dialog>
     </>
   )
 }
 
-export default Settings
-
-const basicData = `
-{
-  "nodes": [
-    {
-      "id": "data-source-local-files-4f90967d-8227-4ae5-baa3-9bf9c205bcc9",
-      "type": "DataSourceLocalFilesNode",
-      "data": {
-        "nodeId": "data-source-local-files-4f90967d-8227-4ae5-baa3-9bf9c205bcc9",
-        "initialContents": {
-          "nodeType": "data-source-local-files",
-          "fileType": "mp3"
-        }
-      },
-      "position": {
-        "x": 178.31151480939184,
-        "y": 46.39311308810596
-      },
-      "width": 400,
-      "height": 258,
-      "selected": true,
-      "positionAbsolute": {
-        "x": 178.31151480939184,
-        "y": 46.39311308810596
-      },
-      "dragging": false
-    },
-    {
-      "id": "llm-processor-1689608674366",
-      "type": "LLMProcessorNode",
-      "data": {
-        "nodeId": "llm-processor-1689608674366",
-        "initialContents": {
-          "nodeType": "llm-processor",
-          "columns": [
-            {
-              "columnId": "853742ba-54e9-45b4-b654-4cf063afe855",
-              "type": "text",
-              "promptStrategy": "default",
-              "model": "gpt-3.5-turbo",
-              "instruction": "",
-              "name": "",
-              "prompt": ""
-            },
-            {
-              "columnId": "cd9b9211-eff9-49a6-b0c6-894b2b63d55c",
-              "type": "text",
-              "promptStrategy": "default",
-              "model": "gpt-3.5-turbo",
-              "instruction": "",
-              "name": "",
-              "prompt": ""
-            },
-            {
-              "columnId": "a63f6a85-7406-4c7f-86a4-9fae2ec1dee5",
-              "type": "text",
-              "promptStrategy": "default",
-              "model": "gpt-3.5-turbo",
-              "instruction": "",
-              "name": "",
-              "prompt": ""
-            }
-          ]
-        }
-      },
-      "position": {
-        "x": 635.7765576865063,
-        "y": 19.164929944612766
-      },
-      "width": 800,
-      "height": 314,
-      "selected": false,
-      "positionAbsolute": {
-        "x": 635.7765576865063,
-        "y": 19.164929944612766
-      },
-      "dragging": false
-    },
-    {
-      "id": "data-exporter-flair-453348be-effb-4c12-b4ee-8ffa743eeaf8",
-      "type": "DataExporterFlairNode",
-      "data": {
-        "nodeId": "data-exporter-flair-453348be-effb-4c12-b4ee-8ffa743eeaf8",
-        "initialContents": {
-          "nodeType": "data-exporter-flair"
-        }
-      },
-      "position": {
-        "x": 1486.8547183729236,
-        "y": 83.11311250149566
-      },
-      "width": 400,
-      "height": 186,
-      "selected": false,
-      "positionAbsolute": {
-        "x": 1486.8547183729236,
-        "y": 83.11311250149566
-      },
-      "dragging": false
-    }
-  ],
-  "edges": [
-    {
-      "source": "data-source-local-files-4f90967d-8227-4ae5-baa3-9bf9c205bcc9",
-      "sourceHandle": "out",
-      "target": "llm-processor-1689608674366",
-      "targetHandle": "in",
-      "id": "reactflow__edge-data-source-local-files-4f90967d-8227-4ae5-baa3-9bf9c205bcc9out-llm-processor-1689608674366in"
-    },
-    {
-      "source": "llm-processor-1689608674366",
-      "sourceHandle": "out",
-      "target": "data-exporter-flair-453348be-effb-4c12-b4ee-8ffa743eeaf8",
-      "targetHandle": "in",
-      "id": "reactflow__edge-llm-processor-1689608674366out-data-exporter-flair-453348be-effb-4c12-b4ee-8ffa743eeaf8in"
-    }
-  ]
-}
-`
+export default Templates

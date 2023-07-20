@@ -8,7 +8,13 @@ export interface DataExporterFlairNodeContent {
   nodeType: 'data-exporter-flair'
 }
 
-export const DataExporterFlairNode = ({ data }: { data: NodeData }) => {
+export const DataExporterFlairNode = ({
+  data,
+  noHandle,
+}: {
+  data: NodeData
+  noHandle?: boolean
+}) => {
   // Initial data
   useEffect(() => {}, [data.initialContents])
 
@@ -31,16 +37,18 @@ export const DataExporterFlairNode = ({ data }: { data: NodeData }) => {
         padding: '20px',
         width: 400,
       }}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="in"
-        style={{
-          width: 16,
-          height: 16,
-          left: -8,
-        }}
-      />
+      {!noHandle && (
+        <Handle
+          type="target"
+          position={Position.Left}
+          id="in"
+          style={{
+            width: 16,
+            height: 16,
+            left: -8,
+          }}
+        />
+      )}
 
       <div>
         <div className="fw-bold mb-2">Data Exporter: Flair Hosted</div>

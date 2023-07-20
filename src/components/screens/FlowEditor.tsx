@@ -27,10 +27,35 @@ import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
 import Modal from '../ui/modal'
-import { Edges, NodeContent, Nodes, nodeContents, nodeTypes } from './nodes/Registry'
+import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from './nodes/Registry'
 import { dataIndexerDefaultContent } from './nodes/DataIndexer'
 import { dataRetrieverDefaultContent } from './nodes/DataRetriever'
 import { v4 } from 'uuid'
+import { AwsUploaderNode, AwsUploaderNodeContent } from './nodes/AwsUploaderNode'
+import { DataExtractorNode, DataExtractorNodeContent } from './nodes/DataExtractorNode'
+import { DataSourceNode, DataSourceNodeContent } from './nodes/DataSourceNode'
+import { EvaluatorNode, EvaluatorNodeContent } from './nodes/EvaluatorNode'
+import { LLMProcessorNode, LLMProcessorNodeContent } from './nodes/LLMProcessorNode'
+import { Edge, type Node } from 'reactflow'
+import { DataIndexerNode, DataIndexerNodeContent } from './nodes/DataIndexer'
+import { DataRetrieverNode, DataRetrieverNodeContent } from './nodes/DataRetriever'
+import {
+  DataSourceLocalFilesNode,
+  DataSourceLocalFilesNodeContent,
+} from './nodes/DataSourceLocalFiles'
+import { DataExporterFlairNode, DataExporterFlairNodeContent } from './nodes/DataExporterFlair'
+
+export const nodeTypes = {
+  DataSourceNode,
+  DataExtractorNode,
+  AwsUploaderNode,
+  EvaluatorNode,
+  LLMProcessorNode,
+  DataIndexerNode,
+  DataRetrieverNode,
+  DataSourceLocalFilesNode,
+  DataExporterFlairNode,
+}
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -45,8 +70,6 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
     y: -viewport.y * (1 / viewport.zoom) + randomY,
   }
 }
-
-export const jotaiAllowInteraction = atom(true)
 
 export const FlowEditor: React.FC<{
   viewerOnly?: boolean

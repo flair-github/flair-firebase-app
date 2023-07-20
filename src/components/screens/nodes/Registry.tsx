@@ -1,26 +1,15 @@
 import { MutableRefObject } from 'react'
-import { AwsUploaderNode, AwsUploaderNodeContent } from './AwsUploaderNode'
-import { DataExtractorNode, DataExtractorNodeContent } from './DataExtractorNode'
-import { DataSourceNode, DataSourceNodeContent } from './DataSourceNode'
-import { EvaluatorNode, EvaluatorNodeContent } from './EvaluatorNode'
-import { LLMProcessorNode, LLMProcessorNodeContent } from './LLMProcessorNode'
 import { Edge, type Node } from 'reactflow'
-import { DataIndexerNode, DataIndexerNodeContent } from './DataIndexer'
-import { DataRetrieverNode, DataRetrieverNodeContent } from './DataRetriever'
-import { DataSourceLocalFilesNode, DataSourceLocalFilesNodeContent } from './DataSourceLocalFiles'
-import { DataExporterFlairNode, DataExporterFlairNodeContent } from './DataExporterFlair'
-
-export const nodeTypes = {
-  DataSourceNode,
-  DataExtractorNode,
-  AwsUploaderNode,
-  EvaluatorNode,
-  LLMProcessorNode,
-  DataIndexerNode,
-  DataRetrieverNode,
-  DataSourceLocalFilesNode,
-  DataExporterFlairNode,
-}
+import { AwsUploaderNodeContent } from './AwsUploaderNode'
+import { DataExporterFlairNodeContent } from './DataExporterFlair'
+import { DataExtractorNodeContent } from './DataExtractorNode'
+import { DataIndexerNodeContent } from './DataIndexer'
+import { DataRetrieverNodeContent } from './DataRetriever'
+import { DataSourceLocalFilesNodeContent } from './DataSourceLocalFiles'
+import { DataSourceNodeContent } from './DataSourceNode'
+import { EvaluatorNodeContent } from './EvaluatorNode'
+import { LLMProcessorNodeContent } from './LLMProcessorNode'
+import { atom } from 'jotai'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -45,3 +34,5 @@ export type Edges = Edge[]
 export const nodeContents: MutableRefObject<{ [nodeId: string]: NodeContent }> = {
   current: {},
 }
+
+export const jotaiAllowInteraction = atom(true)

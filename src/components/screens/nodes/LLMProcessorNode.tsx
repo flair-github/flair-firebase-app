@@ -1,8 +1,7 @@
 import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
-import { type NodeData, nodeContents } from './Registry'
-import { jotaiAllowInteraction } from '../FlowEditor'
+import { type NodeData, nodeContents, jotaiAllowInteraction } from './Registry'
 import { v4 } from 'uuid'
 import { useSetAtom } from 'jotai'
 
@@ -58,7 +57,7 @@ export const llmProcessorNodeContents: MutableRefObject<{ [id: string]: LLMProce
     current: {},
   }
 
-export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
+export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
   const [columns, setColumns] = useState<LLMProcessorNodeContent['columns']>([])
   const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
 
@@ -91,16 +90,18 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
         padding: '20px',
         width: 800,
       }}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="in"
-        style={{
-          width: 16,
-          height: 16,
-          left: -8,
-        }}
-      />
+      {!noHandle && (
+        <Handle
+          type="target"
+          position={Position.Left}
+          id="in"
+          style={{
+            width: 16,
+            height: 16,
+            left: -8,
+          }}
+        />
+      )}
 
       <div>
         <div className="mb-4 flex justify-between">
@@ -513,16 +514,19 @@ export const LLMProcessorNode = ({ data }: { data: NodeData }) => {
           Add
         </button>
       </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="out"
-        style={{
-          width: 16,
-          height: 16,
-          right: -8,
-        }}
-      />
+
+      {!noHandle && (
+        <Handle
+          type="source"
+          position={Position.Right}
+          id="out"
+          style={{
+            width: 16,
+            height: 16,
+            right: -8,
+          }}
+        />
+      )}
     </div>
   )
 }
