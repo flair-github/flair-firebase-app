@@ -14,7 +14,13 @@ export const dataSourceLocalFilesDefaultContent: DataSourceLocalFilesNodeContent
   fileType: 'mp3',
 }
 
-export const DataSourceLocalFilesNode = ({ data }: { data: NodeData }) => {
+export const DataSourceLocalFilesNode = ({
+  data,
+  noHandle,
+}: {
+  data: NodeData
+  noHandle?: boolean
+}) => {
   const [nodeContent, setNodeContent] = useState<DataSourceLocalFilesNodeContent>(
     dataSourceLocalFilesDefaultContent,
   )
@@ -57,7 +63,7 @@ export const DataSourceLocalFilesNode = ({ data }: { data: NodeData }) => {
             className="max-w-xs select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataSourceLocalFilesNodeContent['fileType']
-              setNodeContent(prev => ({ ...prev, embeddingType: newVal }))
+              setNodeContent(prev => ({ ...prev, fileType: newVal }))
             }}
             value={nodeContent.fileType}>
             <option value={'csv' satisfies DataSourceLocalFilesNodeContent['fileType']}>csv</option>
@@ -69,23 +75,25 @@ export const DataSourceLocalFilesNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Data Type</span>
+            <span className="label-text">Files</span>
           </label>
           <a className="btn" href="#" onClick={() => {}}>
             <FaCloudUploadAlt /> Upload
           </a>
         </div>
       </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="out"
-        style={{
-          width: 16,
-          height: 16,
-          right: -8,
-        }}
-      />
+      {!noHandle && (
+        <Handle
+          type="source"
+          position={Position.Right}
+          id="out"
+          style={{
+            width: 16,
+            height: 16,
+            right: -8,
+          }}
+        />
+      )}
     </div>
   )
 }

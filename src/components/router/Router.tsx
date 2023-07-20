@@ -16,6 +16,7 @@ const ResultsScreen = lazy(() => import('~/components/screens/Results'))
 const ResultDetailsScreen = lazy(() => import('~/components/screens/ResultDetails'))
 const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
 const TemplatesScreen = lazy(() => import('~/components/screens/Templates'))
+const TemplateWizardScreen = lazy(() => import('~/components/screens/TemplateWizard'))
 
 function Layout() {
   const userData = useAtomValue(atomUserData)
@@ -131,6 +132,10 @@ const InnerRouter = () => {
         {
           path: 'templates',
           element: <TemplatesScreen />,
+        },
+        {
+          path: 'template-wizard',
+          element: <TemplateWizardScreen />,
         },
       ],
     },
