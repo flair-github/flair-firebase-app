@@ -6,7 +6,7 @@ import { FaCloudUploadAlt } from 'react-icons/fa'
 
 export interface DataSourceLocalFilesNodeContent {
   nodeType: 'data-source-local-files'
-  fileType: 'csv' | 'mp3' | 'json'
+  fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
 }
 
 export const dataSourceLocalFilesDefaultContent: DataSourceLocalFilesNodeContent = {
@@ -66,11 +66,10 @@ export const DataSourceLocalFilesNode = ({
               setNodeContent(prev => ({ ...prev, fileType: newVal }))
             }}
             value={nodeContent.fileType}>
+            <option value={'txt' satisfies DataSourceLocalFilesNodeContent['fileType']}>txt</option>
             <option value={'csv' satisfies DataSourceLocalFilesNodeContent['fileType']}>csv</option>
             <option value={'mp3' satisfies DataSourceLocalFilesNodeContent['fileType']}>mp3</option>
-            <option value={'json' satisfies DataSourceLocalFilesNodeContent['fileType']}>
-              json
-            </option>
+            <option value={'pdf' satisfies DataSourceLocalFilesNodeContent['fileType']}>pdf</option>
           </select>
         </div>
         <div className="mb-2 mt-1">
