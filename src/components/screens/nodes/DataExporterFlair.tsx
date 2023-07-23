@@ -56,9 +56,9 @@ export const DataExporterFlairNode = ({
           <p className="mb-2">
             Workflow job results will be available in the <b>Results</b> page
           </p>
-          <a className="btn" href="#" onClick={() => {}}>
+          {/* <a className="btn" href="#" onClick={() => {}}>
             <HiDocumentReport /> Open Results
-          </a>
+          </a> */}
         </div>
       </div>
     </div>

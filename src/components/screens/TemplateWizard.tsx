@@ -119,31 +119,31 @@ function TemplateWizard() {
       {page === 1 && (
         <>
           <div className="rounded-box mb-1 flex space-x-3 overflow-x-auto py-2">
-            <div className="shrink-0 rounded-md border border-blue-600 bg-slate-50 px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border border-blue-600 bg-slate-50 px-5 py-3">
               <img src="/images/data-sources/local-files.svg" width={75} height={75} />
               <div className="text-center font-bold">Local Files</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/s3.svg" width={75} height={75} />
               <div className="text-center">S3</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/gcp.svg" width={75} height={75} />
               <div className="text-center">GCP</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/azure.svg" width={75} height={75} />
               <div className="text-center">Azure</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/salesforce.svg" width={75} height={75} />
               <div className="text-center">Salesforce</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/zendesk.svg" width={75} height={75} />
               <div className="text-center">Zendesk</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/api.svg" width={75} height={75} />
               <div className="text-center">API</div>
             </div>
@@ -202,25 +202,33 @@ function TemplateWizard() {
       {page === 3 && (
         <>
           <div className="rounded-box mb-1 flex space-x-3 overflow-x-auto py-2">
-            <div className="shrink-0 rounded-md border border-blue-600 bg-slate-50 px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border border-blue-600 bg-slate-50 px-5 py-3">
               <img src="/images/flair-logo.svg" width={75} height={75} className="p-1" />
               <div className="text-center font-bold">Flair</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/s3.svg" width={75} height={75} />
               <div className="text-center">S3</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/gcp.svg" width={75} height={75} />
               <div className="text-center">GCP</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/azure.svg" width={75} height={75} />
               <div className="text-center">Azure</div>
             </div>
-            <div className="shrink-0 rounded-md border px-5 py-3">
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
               <img src="/images/data-sources/api.svg" width={75} height={75} />
               <div className="text-center">API</div>
+            </div>
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
+              <img src="/images/data-sources/database.svg" width={75} height={75} />
+              <div className="text-center">Database</div>
+            </div>
+            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
+              <img src="/images/data-sources/google-drive.svg" width={75} height={75} />
+              <div className="text-center">Google Drive</div>
             </div>
           </div>
           <div className="mb-5 flex items-center justify-center rounded-md border bg-slate-100 p-10 py-20">
