@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Handle, Position } from 'reactflow'
 import { nodeContents, type NodeData } from './Registry'
 import { FaCloudUploadAlt } from 'react-icons/fa'
+import { useDropzone } from 'react-dropzone'
 
 export interface DataSourceLocalFilesNodeContent {
   nodeType: 'data-source-local-files'
@@ -24,6 +25,7 @@ export const DataSourceLocalFilesNode = ({
   const [nodeContent, setNodeContent] = useState<DataSourceLocalFilesNodeContent>(
     dataSourceLocalFilesDefaultContent,
   )
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
 
   // Initial data
   useEffect(() => {
@@ -76,9 +78,31 @@ export const DataSourceLocalFilesNode = ({
           <label className="label">
             <span className="label-text">Files</span>
           </label>
-          <a className="btn" href="#" onClick={() => {}}>
+          <section className="container">
+            <div {...getRootProps()} className="mb-2 border-2 border-dashed bg-slate-100 p-4">
+              <input {...getInputProps()} />
+              <p>Drag and drop files here, or click to select files</p>
+            </div>
+            {acceptedFiles.length > 0 && (
+              <div className="max-h-28 overflow-y-auto border p-2">
+                <ul>
+                  {acceptedFiles.map(file => (
+                    <li key={file.name}>
+                      <div className="flex">
+                        <div className="font-bold">{file.name}</div>
+                        <div className="flex-1" />
+                        <div>{Math.floor(file.size / 1000) / 1000} MB</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+
+          {/* <a className="btn" href="#" onClick={() => {}}>
             <FaCloudUploadAlt /> Upload
-          </a>
+          </a> */}
         </div>
       </div>
       {!noHandle && (
