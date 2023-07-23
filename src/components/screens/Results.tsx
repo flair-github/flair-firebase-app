@@ -11,12 +11,19 @@ function PageResults() {
   const navigate = useNavigate()
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto border-x">
+      <div className="border-grayscaleDivider flex h-[3rem] border-b">
+        <div className="flex-1" />
+        <button className="btn m-1 h-[2.5rem] min-h-[2.5rem]" onClick={async () => {}}>
+          Compare Selections
+        </button>
+      </div>
       <div className="overflow-x-auto">
         <table className="table-zebra table">
           {/* head */}
           <thead>
             <tr>
+              <th />
               <th>Job Id</th>
               <th>Workflow</th>
               <th>Request Date</th>
@@ -28,11 +35,15 @@ function PageResults() {
           </thead>
           <tbody>
             <tr>
+              <td>
+                <div className="flex h-full w-full items-center justify-center">
+                  <input type="checkbox" className="checkbox" />
+                </div>
+              </td>
               <td>#1831</td>
               <td>
                 Customer Call Workflow <br />
                 <span className="badge badge-outline whitespace-nowrap text-xs">
-                  {' '}
                   Workflow Id: #12
                 </span>
               </td>
@@ -55,12 +66,16 @@ function PageResults() {
               </td>
             </tr>
             <tr>
+              <td>
+                <div className="flex h-full w-full items-center justify-center">
+                  <input type="checkbox" className="checkbox" />
+                </div>
+              </td>
               <td>#1830</td>
               <td>
                 Customer Call Workflow
                 <br />
                 <span className="badge badge-outline whitespace-nowrap text-xs">
-                  {' '}
                   Workflow Id: #12
                 </span>
               </td>
@@ -83,6 +98,11 @@ function PageResults() {
               </td>
             </tr>
             <tr>
+              <td>
+                <div className="flex h-full w-full items-center justify-center">
+                  <input type="checkbox" className="checkbox" />
+                </div>
+              </td>
               <td>#1829</td>
               <td>
                 Supply Chain Optimization Workflow <br />
@@ -109,12 +129,16 @@ function PageResults() {
               </td>
             </tr>
             <tr>
+              <td>
+                <div className="flex h-full w-full items-center justify-center">
+                  <input type="checkbox" className="checkbox" />
+                </div>
+              </td>
               <td>#1828</td>
               <td>
                 Product Launch Process Workflow
                 <br />
                 <span className="badge badge-outline whitespace-nowrap text-xs">
-                  {' '}
                   Workflow Id: #5
                 </span>
               </td>
@@ -137,6 +161,11 @@ function PageResults() {
               </td>
             </tr>
             <tr>
+              <td>
+                <div className="flex h-full w-full items-center justify-center">
+                  <input type="checkbox" className="checkbox" />
+                </div>
+              </td>
               <td>#1827</td>
               <td>
                 Financial Reporting <br />
