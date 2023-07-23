@@ -14,6 +14,8 @@ import {
 import { v4 } from 'uuid'
 import { LLMProcessorNode, llmProcessorNodeContents } from './nodes/LLMProcessorNode'
 import { DataExporterFlairNode } from './nodes/DataExporterFlair'
+import { NodeContent } from './nodes/Registry'
+import { DataSourceS3Node, dataSourceS3DefaultContent } from './nodes/DataSourceS3'
 
 function TemplateWizard() {
   const userData = useAtomValue(atomUserData)
@@ -118,45 +120,7 @@ function TemplateWizard() {
       {/* Contents */}
       {page === 1 && (
         <>
-          <div className="rounded-box mb-1 flex space-x-3 overflow-x-auto py-2">
-            <div className="flex shrink-0 flex-col items-center rounded-md border border-blue-600 bg-slate-50 px-5 py-3">
-              <img src="/images/data-sources/local-files.svg" width={75} height={75} />
-              <div className="text-center font-bold">Local Files</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/s3.svg" width={75} height={75} />
-              <div className="text-center">S3</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/gcp.svg" width={75} height={75} />
-              <div className="text-center">GCP</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/azure.svg" width={75} height={75} />
-              <div className="text-center">Azure</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/salesforce.svg" width={75} height={75} />
-              <div className="text-center">Salesforce</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/zendesk.svg" width={75} height={75} />
-              <div className="text-center">Zendesk</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/api.svg" width={75} height={75} />
-              <div className="text-center">API</div>
-            </div>
-          </div>
-          <div className="mb-5 flex flex-col items-center justify-center space-y-4 rounded-md border bg-slate-100 p-10 py-20">
-            <DataSourceLocalFilesNode
-              data={{
-                initialContents: dataSourceLocalFilesDefaultContent,
-                nodeId: 'data-source-local-files' + '-' + v4(),
-              }}
-              noHandle={true}
-            />
-          </div>
+          <DataSourcePage />
           <div className="flex justify-center space-x-2">
             <button
               className="btn-primary btn"
@@ -300,6 +264,87 @@ function TemplateWizard() {
         </form>
       </dialog>
     </div>
+  )
+}
+
+export const DataSourcePage: React.FC<{}> = () => {
+  const [selectedTab, setSelectedTab] = useState<NodeContent['nodeType']>('data-source-local-files')
+
+  return (
+    <>
+      <div className="rounded-box mb-1 flex space-x-3 overflow-x-auto py-2">
+        <div
+          onClick={() => {
+            setSelectedTab('data-source-local-files')
+          }}
+          className={[
+            'flex shrink-0 flex-col items-center rounded-md border px-5 py-3 w-32',
+            selectedTab === 'data-source-local-files' ? 'border-blue-600 bg-slate-50' : '',
+          ].join(' ')}>
+          <img src="/images/data-sources/local-files.svg" width={75} height={75} />
+          <div
+            className={
+              selectedTab === 'data-source-local-files' ? 'text-center font-bold' : 'text-center'
+            }>
+            Local Files
+          </div>
+        </div>
+        <div
+          onClick={() => {
+            setSelectedTab('data-source-s3')
+          }}
+          className={[
+            'flex shrink-0 flex-col items-center rounded-md border px-5 py-3 w-32',
+            selectedTab === 'data-source-s3' ? 'border-blue-600 bg-slate-50' : '',
+          ].join(' ')}>
+          <img src="/images/data-sources/s3.svg" width={75} height={75} />
+          <div
+            className={selectedTab === 'data-source-s3' ? 'text-center font-bold' : 'text-center'}>
+            S3
+          </div>
+        </div>
+        <div className="flex w-32 shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/gcp.svg" width={75} height={75} />
+          <div className="text-center">GCP</div>
+        </div>
+        <div className="flex w-32 shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/azure.svg" width={75} height={75} />
+          <div className="text-center">Azure</div>
+        </div>
+        <div className="flex w-32 shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/salesforce.svg" width={75} height={75} />
+          <div className="text-center">Salesforce</div>
+        </div>
+        <div className="flex w-32 shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/zendesk.svg" width={75} height={75} />
+          <div className="text-center">Zendesk</div>
+        </div>
+        <div className="flex w-32 shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/api.svg" width={75} height={75} />
+          <div className="text-center">API</div>
+        </div>
+      </div>
+      <div className="mb-5 flex flex-col items-center justify-center space-y-4 rounded-md border bg-slate-100 p-10 py-20">
+        {selectedTab === 'data-source-local-files' && (
+          <DataSourceLocalFilesNode
+            data={{
+              initialContents: dataSourceLocalFilesDefaultContent,
+              nodeId: 'data-source-local-files' + '-' + v4(),
+            }}
+            noHandle={true}
+          />
+        )}
+        {selectedTab === 'data-source-s3' && (
+          <DataSourceS3Node
+            data={{
+              initialContents: dataSourceS3DefaultContent,
+              nodeId: 'data-source-s3' + '-' + v4(),
+            }}
+            noHandle={true}
+          />
+        )}
+      </div>
+    </>
   )
 }
 

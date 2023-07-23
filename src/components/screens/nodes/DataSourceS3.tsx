@@ -141,16 +141,18 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
           />
         </div>
       </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="out"
-        style={{
-          width: 16,
-          height: 16,
-          right: -8,
-        }}
-      />
+      {!noHandle && (
+        <Handle
+          type="source"
+          position={Position.Right}
+          id="out"
+          style={{
+            width: 16,
+            height: 16,
+            right: -8,
+          }}
+        />
+      )}
     </div>
   )
 }

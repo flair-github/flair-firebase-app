@@ -11,7 +11,7 @@ export interface DataSourceLocalFilesNodeContent {
 
 export const dataSourceLocalFilesDefaultContent: DataSourceLocalFilesNodeContent = {
   nodeType: 'data-source-local-files',
-  fileType: 'mp3',
+  fileType: 'csv',
 }
 
 export const DataSourceLocalFilesNode = ({
