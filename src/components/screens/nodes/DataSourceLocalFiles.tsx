@@ -88,10 +88,11 @@ export const DataSourceLocalFilesNode = ({
                 <ul>
                   {acceptedFiles.map(file => (
                     <li key={file.name}>
-                      <div className="flex">
-                        <div className="font-bold">{file.name}</div>
-                        <div className="flex-1" />
-                        <div>{Math.floor(file.size / 1000) / 1000} MB</div>
+                      <div className="flex space-x-2">
+                        <div className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-bold">
+                          {file.name}
+                        </div>
+                        <div>{Math.ceil(file.size / 1000) / 1000} MB</div>
                       </div>
                     </li>
                   ))}
