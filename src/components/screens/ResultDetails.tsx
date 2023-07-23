@@ -27,7 +27,7 @@ function ResultDetails() {
           <FaCloudDownloadAlt /> Download
         </a>
       </div>
-      <div className="stats mb-4 w-full shadow">
+      <div className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat">
           <div className="stat-title">Model</div>
           <div className="stat-value">gpt-4</div>
@@ -48,7 +48,7 @@ function ResultDetails() {
           <div className="stat-desc">4% more than last run</div>
         </div>
       </div>
-      <div className="stats mb-4 w-full shadow">
+      <div className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat">
           <div className="stat-title">Request Time</div>
           <div className="stat-value">
@@ -72,129 +72,222 @@ function ResultDetails() {
           {/* <div className="stat-desc text-lg font-bold">Avg: 200ms</div> */}
         </div>
       </div>
-      <div className="tabs mb-2 w-full">
+      <div className="tabs tabs-boxed mb-2 w-full justify-center">
         <a
-          className={`tab-lifted tab tab-lg ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
+          className={`tab tab-lg font-bold ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('evaluation')}>
           Evaluation
         </a>
         <a
-          className={`tab-lifted tab tab-lg ${activeTab === 'result' ? 'tab-active' : ''}`}
+          className={`tab tab-lg font-bold ${activeTab === 'result' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('result')}>
           Result
         </a>
         <a
-          className={`tab-lifted tab tab-lg ${activeTab === 'workflow' ? 'tab-active' : ''}`}
+          className={`tab tab-lg font-bold ${activeTab === 'workflow' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('workflow')}>
           Workflow
         </a>
       </div>
       {activeTab === 'evaluation' && (
-        <table className="table w-full shadow">
-          <thead>
-            <tr>
-              <th>LLM Input</th>
-              <th>LLM Output</th>
-              <th>Ground Truth</th>
-              <th>Similarity Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>"Can you help me with my account balance?"</td>
-              <td>
-                "I can assist you with your account balance. Please provide me with your account
-                details."
-              </td>
-              <td>
-                "I can assist you with your account balance. Please provide me with your account
-                details."
-              </td>
-              <td>0.98</td>
-            </tr>
-            <tr>
-              <td>"I'm experiencing issues with my internet connection."</td>
-              <td>
-                "Let's troubleshoot your internet connection. Have you tried restarting your modem?"
-              </td>
-              <td>
-                "Let's troubleshoot your internet connection. Have you tried restarting your modem?"
-              </td>
-              <td>0.93</td>
-            </tr>
-            <tr>
-              <td>"How can I cancel my subscription?"</td>
-              <td>
-                "To cancel your subscription, please visit our website and go to the account
-                settings."
-              </td>
-              <td>
-                "To cancel your subscription, please visit our website and go to the account
-                settings."
-              </td>
-              <td>0.85</td>
-            </tr>
-            <tr>
-              <td>"What are your business hours?"</td>
-              <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
-              <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
-              <td>0.97</td>
-            </tr>
-            <tr>
-              <td>"Do you offer a money-back guarantee?"</td>
-              <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
-              <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
-              <td>0.91</td>
-            </tr>
-            <tr>
-              <td>"Can I change my shipping address?"</td>
-              <td>
-                "Certainly! Please provide your new shipping address and we'll update it for you."
-              </td>
-              <td>
-                "Certainly! Please provide your new shipping address and we'll update it for you."
-              </td>
-              <td>0.96</td>
-            </tr>
-            <tr>
-              <td>"What's the status of my order?"</td>
-              <td>
-                "Let me check the status of your order. Can you please provide your order number?"
-              </td>
-              <td>
-                "Let me check the status of your order. Can you please provide your order number?"
-              </td>
-              <td>0.89</td>
-            </tr>
-            <tr>
-              <td>"How do I reset my password?"</td>
-              <td>
-                "To reset your password, click on the 'Forgot Password' link and follow the
-                instructions."
-              </td>
-              <td>
-                "To reset your password, click on the 'Forgot Password' link and follow the
-                instructions."
-              </td>
-              <td>0.95</td>
-            </tr>
-            <tr>
-              <td>"Can I return an item for a refund?"</td>
-              <td>
-                "Yes, we accept returns for a refund within 30 days of purchase. Please provide your
-                order details."
-              </td>
-              <td>"Can I return an item for a refund?"</td>
-              <td>0.88</td>
-            </tr>
-            <tr>
-              <td>"What's the best way to contact customer support?"</td>
-              <td>"You can contact our customer support team via phone, email, or live chat."</td>
-              <td>"You can contact our customer support team via phone, email, or live chat."</td>
-              <td>0.92</td>
-            </tr>
-          </tbody>
-        </table>
+        <div>
+          <div className="mb-3 flex space-x-2">
+            <div className="form-control w-80">
+              <label className="label">
+                <span className="label-text">LLM Output Column</span>
+              </label>
+              <select className="select-bordered select">
+                <option>Call Question</option>
+                <option>Answer</option>
+                <option>Score</option>
+              </select>
+            </div>
+            <div className="flex-1" />
+            <div className="form-control w-80">
+              <label className="label">
+                <span className="label-text">Similarity Score</span>
+              </label>
+              <select className="select-bordered select">
+                <option>All</option>
+                <option>{'< 0.9'}</option>
+                <option>{'< 0.8'}</option>
+                <option>{'< 0.7'}</option>
+                <option>{'< 0.6'}</option>
+                <option>{'< 0.5'}</option>
+              </select>
+            </div>
+            <div className="form-control w-80">
+              <label className="label">
+                <span className="label-text">OpenAI Eval</span>
+              </label>
+              <select className="select-bordered select">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+              </select>
+            </div>
+          </div>
+          <table className="table w-full shadow">
+            <thead>
+              <tr>
+                <th>LLM Input</th>
+                <th>LLM Output</th>
+                <th>Ground Truth</th>
+                <th>Similarity Score</th>
+                <th>OpenAI Eval</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>"Can you help me with my account balance?"</td>
+                <td>
+                  "I can assist you with your account balance. Please provide me with your account
+                  details."
+                </td>
+                <td>
+                  "I can assist you with your account balance. Please provide me with your account
+                  details."
+                </td>
+                <td>
+                  <span className="font-bold">0.98</span>
+                </td>
+                <td>
+                  <span className="font-bold">1</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"I'm experiencing issues with my internet connection."</td>
+                <td>
+                  "Let's troubleshoot your internet connection. Have you tried restarting your
+                  modem?"
+                </td>
+                <td>
+                  "Let's troubleshoot your internet connection. Have you tried restarting your
+                  modem?"
+                </td>
+                <td>
+                  <span className="font-bold">0.93</span>
+                </td>
+                <td>
+                  <span className="font-bold">2</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"How can I cancel my subscription?"</td>
+                <td>
+                  "To cancel your subscription, please visit our website and go to the account
+                  settings."
+                </td>
+                <td>
+                  "To cancel your subscription, please visit our website and go to the account
+                  settings."
+                </td>
+                <td>
+                  <span className="font-bold text-red-500">0.65</span>
+                </td>
+                <td>
+                  <span className="font-bold">3</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"What are your business hours?"</td>
+                <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
+                <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
+                <td>
+                  <div className="font-bold">0.97</div>
+                </td>
+                <td>
+                  <span className="font-bold">2</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"Do you offer a money-back guarantee?"</td>
+                <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
+                <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
+                <td>
+                  <div className="font-bold">0.91</div>
+                </td>
+                <td>
+                  <span className="font-bold">1</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"Can I change my shipping address?"</td>
+                <td>
+                  "Certainly! Please provide your new shipping address and we'll update it for you."
+                </td>
+                <td>
+                  "Certainly! Please provide your new shipping address and we'll update it for you."
+                </td>
+                <td>
+                  <span className="font-bold text-orange-500">0.75</span>
+                </td>
+                <td>
+                  <span className="font-bold">2</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"What's the status of my order?"</td>
+                <td>
+                  "Let me check the status of your order. Can you please provide your order number?"
+                </td>
+                <td>
+                  "Let me check the status of your order. Can you please provide your order number?"
+                </td>
+                <td>
+                  <span className="font-bold text-orange-500">0.78</span>
+                </td>
+                <td>
+                  <span className="font-bold">1</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"How do I reset my password?"</td>
+                <td>
+                  "To reset your password, click on the 'Forgot Password' link and follow the
+                  instructions."
+                </td>
+                <td>
+                  "To reset your password, click on the 'Forgot Password' link and follow the
+                  instructions."
+                </td>
+                <td>
+                  <div className="font-bold">0.95</div>
+                </td>
+                <td>
+                  <span className="font-bold">4</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"Can I return an item for a refund?"</td>
+                <td>
+                  "Yes, we accept returns for a refund within 30 days of purchase. Please provide
+                  your order details."
+                </td>
+                <td>"Can I return an item for a refund?"</td>
+                <td>
+                  <div className="font-bold">0.88</div>
+                </td>
+                <td>
+                  <span className="font-bold">3</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"What's the best way to contact customer support?"</td>
+                <td>"You can contact our customer support team via phone, email, or live chat."</td>
+                <td>"You can contact our customer support team via phone, email, or live chat."</td>
+                <td>
+                  <div className="font-bold">0.92</div>
+                </td>
+                <td>
+                  <span className="font-bold">4</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       )}
       {activeTab === 'result' && (
         <div className="justify-left flex w-full border [height:720px]">
