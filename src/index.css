@@ -23,3 +23,11 @@ code {
 .btn-primary {
   @apply text-white;
 }
+
+.select-bordered {
+  @apply border border-slate-400
+}
+
+.tabs-boxed .tab-active:not(.tab-disabled):not([disabled]) {
+  @apply text-white
+}

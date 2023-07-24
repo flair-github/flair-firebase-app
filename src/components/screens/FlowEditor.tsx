@@ -44,9 +44,11 @@ import {
   DataSourceLocalFilesNodeContent,
 } from './nodes/DataSourceLocalFiles'
 import { DataExporterFlairNode, DataExporterFlairNodeContent } from './nodes/DataExporterFlair'
+import { DataSourceS3Node } from './nodes/DataSourceS3'
 
 export const nodeTypes = {
   DataSourceNode,
+  DataSourceS3Node,
   DataExtractorNode,
   AwsUploaderNode,
   EvaluatorNode,
@@ -340,18 +342,7 @@ export const FlowEditor: React.FC<{
                     <button
                       className="btn m-2"
                       onClick={() => {
-                        setNodes(prev => {
-                          const nodeId = 'data-source-' + String(Date.now())
-                          return [
-                            ...prev,
-                            {
-                              id: nodeId,
-                              type: 'DataSourceNode',
-                              data: { nodeId, initialContents: { nodeType: 'init' } },
-                              position: randPos(viewport.current),
-                            },
-                          ]
-                        })
+                        addNode('data-source-s3', 'DataSourceS3Node')
                       }}>
                       S3
                     </button>

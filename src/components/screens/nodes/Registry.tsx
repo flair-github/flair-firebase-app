@@ -10,10 +10,12 @@ import { DataSourceNodeContent } from './DataSourceNode'
 import { EvaluatorNodeContent } from './EvaluatorNode'
 import { LLMProcessorNodeContent } from './LLMProcessorNode'
 import { atom } from 'jotai'
+import { DataSourceS3NodeContent } from './DataSourceS3'
 
 export type NodeContent =
   | { nodeType: 'init' }
   | DataSourceNodeContent
+  | DataSourceS3NodeContent
   | DataExtractorNodeContent
   | AwsUploaderNodeContent
   | EvaluatorNodeContent
