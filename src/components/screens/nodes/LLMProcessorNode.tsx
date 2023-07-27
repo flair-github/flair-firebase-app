@@ -52,10 +52,10 @@ export interface LLMProcessorNodeContent {
   columns: Array<ColumnContent>
 }
 
-export const llmProcessorNodeContents: MutableRefObject<{ [id: string]: LLMProcessorNodeContent }> =
-  {
-    current: {},
-  }
+export const llmProcessorNodeDefaultContent: LLMProcessorNodeContent = {
+  nodeType: 'llm-processor',
+  columns: [],
+}
 
 export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
   const [columns, setColumns] = useState<LLMProcessorNodeContent['columns']>([])
