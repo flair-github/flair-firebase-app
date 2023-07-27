@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { atomUserData } from '~/jotai/jotai'
@@ -12,14 +12,72 @@ import {
   dataSourceLocalFilesDefaultContent,
 } from './nodes/DataSourceLocalFiles'
 import { v4 } from 'uuid'
-import { LLMProcessorNode, llmProcessorNodeContents } from './nodes/LLMProcessorNode'
-import { DataExporterFlairNode } from './nodes/DataExporterFlair'
-import { NodeContent } from './nodes/Registry'
+import { LLMProcessorNode, llmProcessorNodeDefaultContent } from './nodes/LLMProcessorNode'
+import { DataExporterFlairNode, dataExporterFlairDefaultContent } from './nodes/DataExporterFlair'
+import { NodeContent, nodeContents } from './nodes/Registry'
 import { DataSourceS3Node, dataSourceS3DefaultContent } from './nodes/DataSourceS3'
+import { nodeTypes } from './FlowEditor'
 
 function TemplateWizard() {
   const userData = useAtomValue(atomUserData)
   const navigate = useNavigate()
+
+  const [dataSourceLocalFilesNodeId] = useState('data-source-local-files' + '-' + v4())
+  const [dataSourceS3NodeId] = useState('data-source-s3' + '-' + v4())
+  const [llmProcessorNodeId] = useState('llm-processor' + '-' + v4())
+  const [dataExporterFlairNodeId] = useState('data-exporter-flair-' + '-' + v4())
+
+  const [page, setPage] = useState(1)
+
+  const [step1NodeType, setStep1NodeType] =
+    useState<NodeContent['nodeType']>('data-source-local-files')
+  const [step2NodeType, setStep2NodeType] = useState<NodeContent['nodeType']>('llm-processor')
+  const [step3NodeType, setStep3NodeType] = useState<NodeContent['nodeType']>('data-exporter-flair')
+
+  type StepNodeData = {
+    id: string
+    type: keyof typeof nodeTypes
+  }
+
+  const step1Node: StepNodeData = useMemo(() => {
+    if (step1NodeType === 'data-source-local-files') {
+      return {
+        id: dataSourceLocalFilesNodeId,
+        type: 'DataSourceLocalFilesNode',
+      }
+    }
+
+    if (step1NodeType === 'data-source-s3') {
+      return {
+        id: dataSourceS3NodeId,
+        type: 'DataSourceS3Node',
+      }
+    }
+
+    throw new Error('Failed executing step1Node')
+  }, [step1NodeType, dataSourceLocalFilesNodeId, dataSourceS3NodeId])
+
+  const step2Node: StepNodeData = useMemo(() => {
+    if (step2NodeType === 'llm-processor') {
+      return {
+        id: llmProcessorNodeId,
+        type: 'LLMProcessorNode',
+      }
+    }
+
+    throw new Error('Failed executing step2Node')
+  }, [step2NodeType, llmProcessorNodeId])
+
+  const step3Node: StepNodeData = useMemo(() => {
+    if (step3NodeType === 'data-exporter-flair') {
+      return {
+        id: dataExporterFlairNodeId,
+        type: 'DataExporterFlairNode',
+      }
+    }
+
+    throw new Error('Failed executing step3Node')
+  }, [step3NodeType, dataExporterFlairNodeId])
 
   useEffect(() => {
     if (!userData?.userId) {
@@ -29,9 +87,7 @@ function TemplateWizard() {
     return () => {}
   }, [userData?.userId])
 
-  const [page, setPage] = useState(1)
-
-  const createNewFlow = async (frontendConfig: string) => {
+  const createNewFlow = async () => {
     const titleInput = window.document.getElementById('flow-title-field') as HTMLInputElement
     const title = titleInput?.value || 'New Flow'
 
@@ -43,6 +99,89 @@ function TemplateWizard() {
       return
     }
 
+    const flowData = {
+      nodes: [
+        {
+          id: step1Node.id,
+          type: step1Node.type,
+          data: {
+            nodeId: step1Node.id,
+            initialContents: nodeContents.current[step1Node.id],
+          },
+          position: {
+            x: 0,
+            y: 0,
+          },
+          width: 400,
+          height: 258,
+          selected: true,
+          positionAbsolute: {
+            x: 0,
+            y: 0,
+          },
+          dragging: false,
+        },
+        {
+          id: step2Node.id,
+          type: step2Node.type,
+          data: {
+            nodeId: step2Node.id,
+            initialContents: nodeContents.current[step2Node.id],
+          },
+          position: {
+            x: 600,
+            y: 0,
+          },
+          width: 800,
+          height: 314,
+          selected: false,
+          positionAbsolute: {
+            x: 600,
+            y: 0,
+          },
+          dragging: false,
+        },
+        {
+          id: step3Node.id,
+          type: step3Node.type,
+          data: {
+            nodeId: step3Node.id,
+            initialContents: nodeContents.current[step3Node.id],
+          },
+          position: {
+            x: 1600,
+            y: 0,
+          },
+          width: 400,
+          height: 186,
+          selected: false,
+          positionAbsolute: {
+            x: 1600,
+            y: 0,
+          },
+          dragging: false,
+        },
+      ],
+      edges: [
+        {
+          source: step1Node.id,
+          sourceHandle: 'out',
+          target: step2Node.id,
+          targetHandle: 'in',
+          id: `reactflow__edge-${step1Node.id}out-${step2Node.id}in`,
+        },
+        {
+          source: step2Node.id,
+          sourceHandle: 'out',
+          target: step3Node.id,
+          targetHandle: 'in',
+          id: `reactflow__edge-${step2Node.id}out-${step3Node.id}in`,
+        },
+      ],
+    }
+
+    console.log(flowData)
+
     const ref = db.collection('workflows').doc()
     const newFlowData: DocWorkflow = {
       createdTimestamp: serverTimestamp() as Timestamp,
@@ -50,7 +189,7 @@ function TemplateWizard() {
       lastSaveTimestamp: serverTimestamp() as Timestamp,
       docExists: true,
       workflowId: ref.id,
-      frontendConfig,
+      frontendConfig: JSON.stringify(flowData),
       workflowTitle: title || 'New Flow',
       ownerUserId: userData.userId,
     }
@@ -120,7 +259,12 @@ function TemplateWizard() {
       {/* Contents */}
       {page === 1 && (
         <>
-          <DataSourcePage />
+          <DataSourcePage
+            dataSourceLocalFilesNodeId={dataSourceLocalFilesNodeId}
+            dataSourceS3NodeId={dataSourceS3NodeId}
+            selectedNodeType={step1NodeType}
+            setSelectedNodeType={setStep1NodeType}
+          />
           <div className="flex justify-center space-x-2">
             <button
               className="btn-primary btn"
@@ -138,8 +282,9 @@ function TemplateWizard() {
           <div className="my-5 flex items-center justify-center rounded-md border bg-slate-100 p-10 py-20">
             <LLMProcessorNode
               data={{
-                initialContents: { nodeType: 'init' },
-                nodeId: 'llm-processor' + '-' + v4(),
+                initialContents:
+                  nodeContents.current[llmProcessorNodeId] || llmProcessorNodeDefaultContent,
+                nodeId: llmProcessorNodeId,
               }}
               noHandle={true}
             />
@@ -165,45 +310,11 @@ function TemplateWizard() {
 
       {page === 3 && (
         <>
-          <div className="rounded-box mb-1 flex space-x-3 overflow-x-auto py-2">
-            <div className="flex shrink-0 flex-col items-center rounded-md border border-blue-600 bg-slate-50 px-5 py-3">
-              <img src="/images/flair-logo.svg" width={75} height={75} className="p-1" />
-              <div className="text-center font-bold">Flair</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/s3.svg" width={75} height={75} />
-              <div className="text-center">S3</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/gcp.svg" width={75} height={75} />
-              <div className="text-center">GCP</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/azure.svg" width={75} height={75} />
-              <div className="text-center">Azure</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/api.svg" width={75} height={75} />
-              <div className="text-center">API</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/database.svg" width={75} height={75} />
-              <div className="text-center">Database</div>
-            </div>
-            <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
-              <img src="/images/data-sources/google-drive.svg" width={75} height={75} />
-              <div className="text-center">Google Drive</div>
-            </div>
-          </div>
-          <div className="mb-5 flex items-center justify-center rounded-md border bg-slate-100 p-10 py-20">
-            <DataExporterFlairNode
-              data={{
-                initialContents: { nodeType: 'init' },
-                nodeId: 'data-exporter-flair-' + '-' + v4(),
-              }}
-              noHandle={true}
-            />
-          </div>
+          <DataExporterPage
+            dataExporterFlairNodeId={dataExporterFlairNodeId}
+            selectedNodeType={step3NodeType}
+            setSelectedNodeType={setStep3NodeType}
+          />
           <div className="flex justify-center space-x-2">
             <button
               className="btn"
@@ -239,7 +350,7 @@ function TemplateWizard() {
                 if (e.key === 'Enter') {
                   e.preventDefault()
                   setShowNewFlowModal(false)
-                  createNewFlow(basicData)
+                  createNewFlow()
                 }
               }}
             />
@@ -256,7 +367,7 @@ function TemplateWizard() {
               className="btn-primary btn"
               onClick={() => {
                 setShowNewFlowModal(false)
-                createNewFlow(basicData)
+                createNewFlow()
               }}>
               Create
             </button>
@@ -267,39 +378,51 @@ function TemplateWizard() {
   )
 }
 
-export const DataSourcePage: React.FC<{}> = () => {
-  const [selectedTab, setSelectedTab] = useState<NodeContent['nodeType']>('data-source-local-files')
-
+export const DataSourcePage: React.FC<{
+  dataSourceLocalFilesNodeId: string
+  dataSourceS3NodeId: string
+  selectedNodeType: NodeContent['nodeType']
+  setSelectedNodeType: React.Dispatch<React.SetStateAction<NodeContent['nodeType']>>
+}> = ({
+  dataSourceLocalFilesNodeId,
+  dataSourceS3NodeId,
+  selectedNodeType,
+  setSelectedNodeType,
+}) => {
   return (
     <>
       <div className="rounded-box mb-1 flex space-x-3 overflow-x-auto py-2">
         <div
           onClick={() => {
-            setSelectedTab('data-source-local-files')
+            setSelectedNodeType('data-source-local-files')
           }}
           className={[
             'flex shrink-0 flex-col items-center rounded-md border px-5 py-3 w-32',
-            selectedTab === 'data-source-local-files' ? 'border-blue-600 bg-slate-50' : '',
+            selectedNodeType === 'data-source-local-files' ? 'border-blue-600 bg-slate-50' : '',
           ].join(' ')}>
           <img src="/images/data-sources/local-files.svg" width={75} height={75} />
           <div
             className={
-              selectedTab === 'data-source-local-files' ? 'text-center font-bold' : 'text-center'
+              selectedNodeType === 'data-source-local-files'
+                ? 'text-center font-bold'
+                : 'text-center'
             }>
             Local Files
           </div>
         </div>
         <div
           onClick={() => {
-            setSelectedTab('data-source-s3')
+            setSelectedNodeType('data-source-s3')
           }}
           className={[
             'flex shrink-0 flex-col items-center rounded-md border px-5 py-3 w-32',
-            selectedTab === 'data-source-s3' ? 'border-blue-600 bg-slate-50' : '',
+            selectedNodeType === 'data-source-s3' ? 'border-blue-600 bg-slate-50' : '',
           ].join(' ')}>
           <img src="/images/data-sources/s3.svg" width={75} height={75} />
           <div
-            className={selectedTab === 'data-source-s3' ? 'text-center font-bold' : 'text-center'}>
+            className={
+              selectedNodeType === 'data-source-s3' ? 'text-center font-bold' : 'text-center'
+            }>
             S3
           </div>
         </div>
@@ -325,20 +448,76 @@ export const DataSourcePage: React.FC<{}> = () => {
         </div>
       </div>
       <div className="mb-5 flex flex-col items-center justify-center space-y-4 rounded-md border bg-slate-100 p-10 py-20">
-        {selectedTab === 'data-source-local-files' && (
+        {selectedNodeType === 'data-source-local-files' && (
           <DataSourceLocalFilesNode
             data={{
-              initialContents: dataSourceLocalFilesDefaultContent,
-              nodeId: 'data-source-local-files' + '-' + v4(),
+              initialContents:
+                nodeContents.current[dataSourceLocalFilesNodeId] ||
+                dataSourceLocalFilesDefaultContent,
+              nodeId: dataSourceLocalFilesNodeId,
             }}
             noHandle={true}
           />
         )}
-        {selectedTab === 'data-source-s3' && (
+        {selectedNodeType === 'data-source-s3' && (
           <DataSourceS3Node
             data={{
-              initialContents: dataSourceS3DefaultContent,
-              nodeId: 'data-source-s3' + '-' + v4(),
+              initialContents:
+                nodeContents.current[dataSourceS3NodeId] || dataSourceS3DefaultContent,
+              nodeId: dataSourceS3NodeId,
+            }}
+            noHandle={true}
+          />
+        )}
+      </div>
+    </>
+  )
+}
+
+export const DataExporterPage: React.FC<{
+  dataExporterFlairNodeId: string
+  selectedNodeType: NodeContent['nodeType']
+  setSelectedNodeType: React.Dispatch<React.SetStateAction<NodeContent['nodeType']>>
+}> = ({ dataExporterFlairNodeId, selectedNodeType, setSelectedNodeType }) => {
+  return (
+    <>
+      <div className="rounded-box mb-1 flex space-x-3 overflow-x-auto py-2">
+        <div className="flex shrink-0 flex-col items-center rounded-md border border-blue-600 bg-slate-50 px-5 py-3">
+          <img src="/images/flair-logo.svg" width={75} height={75} className="p-1" />
+          <div className="text-center font-bold">Flair</div>
+        </div>
+        <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/s3.svg" width={75} height={75} />
+          <div className="text-center">S3</div>
+        </div>
+        <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/gcp.svg" width={75} height={75} />
+          <div className="text-center">GCP</div>
+        </div>
+        <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/azure.svg" width={75} height={75} />
+          <div className="text-center">Azure</div>
+        </div>
+        <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/api.svg" width={75} height={75} />
+          <div className="text-center">API</div>
+        </div>
+        <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/database.svg" width={75} height={75} />
+          <div className="text-center">Database</div>
+        </div>
+        <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/google-drive.svg" width={75} height={75} />
+          <div className="text-center">Google Drive</div>
+        </div>
+      </div>
+      <div className="mb-5 flex items-center justify-center rounded-md border bg-slate-100 p-10 py-20">
+        {selectedNodeType === 'data-exporter-flair' && (
+          <DataExporterFlairNode
+            data={{
+              initialContents:
+                nodeContents.current[dataExporterFlairNodeId] || dataExporterFlairDefaultContent,
+              nodeId: dataExporterFlairNodeId,
             }}
             noHandle={true}
           />
@@ -349,122 +528,3 @@ export const DataSourcePage: React.FC<{}> = () => {
 }
 
 export default TemplateWizard
-
-const basicData = `
-{
-  "nodes": [
-    {
-      "id": "data-source-local-files-4f90967d-8227-4ae5-baa3-9bf9c205bcc9",
-      "type": "DataSourceLocalFilesNode",
-      "data": {
-        "nodeId": "data-source-local-files-4f90967d-8227-4ae5-baa3-9bf9c205bcc9",
-        "initialContents": {
-          "nodeType": "data-source-local-files",
-          "fileType": "mp3"
-        }
-      },
-      "position": {
-        "x": 178.31151480939184,
-        "y": 46.39311308810596
-      },
-      "width": 400,
-      "height": 258,
-      "selected": true,
-      "positionAbsolute": {
-        "x": 178.31151480939184,
-        "y": 46.39311308810596
-      },
-      "dragging": false
-    },
-    {
-      "id": "llm-processor-1689608674366",
-      "type": "LLMProcessorNode",
-      "data": {
-        "nodeId": "llm-processor-1689608674366",
-        "initialContents": {
-          "nodeType": "llm-processor",
-          "columns": [
-            {
-              "columnId": "853742ba-54e9-45b4-b654-4cf063afe855",
-              "type": "text",
-              "promptStrategy": "default",
-              "model": "gpt-3.5-turbo",
-              "instruction": "",
-              "name": "",
-              "prompt": ""
-            },
-            {
-              "columnId": "cd9b9211-eff9-49a6-b0c6-894b2b63d55c",
-              "type": "text",
-              "promptStrategy": "default",
-              "model": "gpt-3.5-turbo",
-              "instruction": "",
-              "name": "",
-              "prompt": ""
-            },
-            {
-              "columnId": "a63f6a85-7406-4c7f-86a4-9fae2ec1dee5",
-              "type": "text",
-              "promptStrategy": "default",
-              "model": "gpt-3.5-turbo",
-              "instruction": "",
-              "name": "",
-              "prompt": ""
-            }
-          ]
-        }
-      },
-      "position": {
-        "x": 635.7765576865063,
-        "y": 19.164929944612766
-      },
-      "width": 800,
-      "height": 314,
-      "selected": false,
-      "positionAbsolute": {
-        "x": 635.7765576865063,
-        "y": 19.164929944612766
-      },
-      "dragging": false
-    },
-    {
-      "id": "data-exporter-flair-453348be-effb-4c12-b4ee-8ffa743eeaf8",
-      "type": "DataExporterFlairNode",
-      "data": {
-        "nodeId": "data-exporter-flair-453348be-effb-4c12-b4ee-8ffa743eeaf8",
-        "initialContents": {
-          "nodeType": "data-exporter-flair"
-        }
-      },
-      "position": {
-        "x": 1486.8547183729236,
-        "y": 83.11311250149566
-      },
-      "width": 400,
-      "height": 186,
-      "selected": false,
-      "positionAbsolute": {
-        "x": 1486.8547183729236,
-        "y": 83.11311250149566
-      },
-      "dragging": false
-    }
-  ],
-  "edges": [
-    {
-      "source": "data-source-local-files-4f90967d-8227-4ae5-baa3-9bf9c205bcc9",
-      "sourceHandle": "out",
-      "target": "llm-processor-1689608674366",
-      "targetHandle": "in",
-      "id": "reactflow__edge-data-source-local-files-4f90967d-8227-4ae5-baa3-9bf9c205bcc9out-llm-processor-1689608674366in"
-    },
-    {
-      "source": "llm-processor-1689608674366",
-      "sourceHandle": "out",
-      "target": "data-exporter-flair-453348be-effb-4c12-b4ee-8ffa743eeaf8",
-      "targetHandle": "in",
-      "id": "reactflow__edge-llm-processor-1689608674366out-data-exporter-flair-453348be-effb-4c12-b4ee-8ffa743eeaf8in"
-    }
-  ]
-}
-`

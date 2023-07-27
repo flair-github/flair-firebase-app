@@ -8,6 +8,10 @@ export interface DataExporterFlairNodeContent {
   nodeType: 'data-exporter-flair'
 }
 
+export const dataExporterFlairDefaultContent: DataExporterFlairNodeContent = {
+  nodeType: 'data-exporter-flair',
+}
+
 export const DataExporterFlairNode = ({
   data,
   noHandle,
