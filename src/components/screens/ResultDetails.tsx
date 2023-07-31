@@ -8,12 +8,13 @@ import FlowEditor from './FlowEditor'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
 import { PiFileCsvFill } from 'react-icons/pi'
+import { CodeBlock } from 'react-code-blocks'
 
 const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 const edges = JSON.parse(FLOW_SAMPLE_2).edges
 
 function ResultDetails() {
-  const [activeTab, setActiveTab] = useState<'workflow' | 'evaluation' | 'result'>('evaluation')
+  const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
 
   return (
     <div className="container mx-auto p-4">
@@ -84,9 +85,9 @@ function ResultDetails() {
           Result
         </a>
         <a
-          className={`tab tab-lg font-bold ${activeTab === 'workflow' ? 'tab-active' : ''}`}
-          onClick={() => setActiveTab('workflow')}>
-          Workflow
+          className={`tab tab-lg font-bold ${activeTab === 'config' ? 'tab-active' : ''}`}
+          onClick={() => setActiveTab('config')}>
+          Config
         </a>
       </div>
       {activeTab === 'evaluation' && (
@@ -370,9 +371,9 @@ function ResultDetails() {
           </div>
         </div>
       )}
-      {activeTab === 'workflow' && (
-        <div className="w-full border [height:720px]">
-          <FlowEditor viewerOnly={true} initialNodes={nodes} initialEdges={edges} />
+      {activeTab === 'config' && (
+        <div className="w-full overflow-y-auto border font-mono">
+          <CodeBlock text={yaml} language="yaml" showLineNumbers={true} wrapLines />
         </div>
       )}
     </div>
@@ -380,3 +381,55 @@ function ResultDetails() {
 }
 
 export default ResultDetails
+
+const yaml = `name: 'My LLM workflow'
+description: 'Workflow that extracts information from customer support calls.'
+tags: ['audio-pipelines']
+frequency: '1d'
+customer_id: 'IVqAyQJR4ugRGR8qL9UuB809OX82'
+
+data_sources:
+  - name: s3
+    type: s3
+    uri: mp3s
+    data_type: mp3
+    data_indexer_name: data_indexer_1
+    data_retriever_name: data_retriever_1
+
+data_indexers:
+  - name: data_indexer_1
+    type: default
+
+data_retrievers:
+  - name: data_retriever_1
+    type: default
+
+llm_processors:
+  - name: llm_processor_1
+    type: qa
+    data_exporter_name: s3
+    data_sources:
+      - s3
+    questions:
+      - name: 'customer_objections'
+        type: 'text'
+        prompt_strategy: 'CoT'
+        model_name: 'gpt-3.5-turbo'
+        instruction: ''
+        prompt: 'What are some customer objections if there are any otherwise None.'
+        self_consistency: 0
+      - name: 'call_type'
+        type: 'category'
+        options: ['schedule_appt', 'live_transfer', 'callback', 'NA']
+        prompt_strategy: 'CoT'
+        model_name: 'gpt-3.5-turbo'
+        instruction: ''
+        prompt: 'Which of the categories does the conversation best match?'
+        self_consistency: 10
+
+data_exporters:
+  - name: s3
+    type: s3
+    uri: 'output'
+    data_type: 'csv'
+`
