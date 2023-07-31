@@ -435,16 +435,16 @@ export const DataSourcePage: React.FC<{
           <div className="text-center">Azure</div>
         </div>
         <div className="flex w-32 shrink-0 flex-col items-center rounded-md border px-5 py-3">
+          <img src="/images/data-sources/api.svg" width={75} height={75} />
+          <div className="text-center">API</div>
+        </div>
+        <div className="flex w-32 shrink-0 flex-col items-center rounded-md border bg-slate-200 px-5 py-3 opacity-50">
           <img src="/images/data-sources/salesforce.svg" width={75} height={75} />
           <div className="text-center">Salesforce</div>
         </div>
-        <div className="flex w-32 shrink-0 flex-col items-center rounded-md border px-5 py-3">
+        <div className="flex w-32 shrink-0 flex-col items-center rounded-md border bg-slate-200 px-5 py-3 opacity-50">
           <img src="/images/data-sources/zendesk.svg" width={75} height={75} />
           <div className="text-center">Zendesk</div>
-        </div>
-        <div className="flex w-32 shrink-0 flex-col items-center rounded-md border px-5 py-3">
-          <img src="/images/data-sources/api.svg" width={75} height={75} />
-          <div className="text-center">API</div>
         </div>
       </div>
       <div className="mb-5 flex flex-col items-center justify-center space-y-4 rounded-md border bg-slate-100 p-10 py-20">
