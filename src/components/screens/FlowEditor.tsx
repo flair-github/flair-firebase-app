@@ -360,13 +360,19 @@ export const FlowEditor: React.FC<{
                       Azure
                     </button>
                     <button className="btn m-2" onClick={() => {}}>
-                      Salesforce
-                    </button>
-                    <button className="btn m-2" onClick={() => {}}>
-                      Zendesk
-                    </button>
-                    <button className="btn m-2" onClick={() => {}}>
                       API
+                    </button>
+                    <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
+                      <div>Salesforce</div>
+                      <div className="text-xs">(soon)</div>
+                    </button>
+                    <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
+                      <div>Zendesk</div>
+                      <div className="text-xs">(soon)</div>
+                    </button>
+                    <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
+                      <div>Slack</div>
+                      <div className="text-xs">(soon)</div>
                     </button>
                   </div>
                 </div>

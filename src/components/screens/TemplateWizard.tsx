@@ -502,14 +502,14 @@ export const DataExporterPage: React.FC<{
           <img src="/images/data-sources/api.svg" width={75} height={75} />
           <div className="text-center">API</div>
         </div>
-        <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
+        {/* <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
           <img src="/images/data-sources/database.svg" width={75} height={75} />
           <div className="text-center">Database</div>
         </div>
         <div className="flex shrink-0 flex-col items-center rounded-md border px-5 py-3">
           <img src="/images/data-sources/google-drive.svg" width={75} height={75} />
           <div className="text-center">Google Drive</div>
-        </div>
+        </div> */}
       </div>
       <div className="mb-5 flex items-center justify-center rounded-md border bg-slate-100 p-10 py-20">
         {selectedNodeType === 'data-exporter-flair' && (
