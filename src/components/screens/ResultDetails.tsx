@@ -148,8 +148,7 @@ function ResultDetails() {
                   details."
                 </td>
                 <td>
-                  "I can assist you with your account balance. Please provide me with your account
-                  details."
+                  "Sure, I can help you with that. Could you please provide your account details?"
                 </td>
                 <td>
                   <span className="font-bold">0.98</span>
@@ -165,8 +164,7 @@ function ResultDetails() {
                   modem?"
                 </td>
                 <td>
-                  "Let's troubleshoot your internet connection. Have you tried restarting your
-                  modem?"
+                  "We can certainly help troubleshoot. Have you attempted to reset your modem?"
                 </td>
                 <td>
                   <span className="font-bold">0.93</span>
@@ -182,8 +180,8 @@ function ResultDetails() {
                   settings."
                 </td>
                 <td>
-                  "To cancel your subscription, please visit our website and go to the account
-                  settings."
+                  "If you wish to cancel your subscription, navigate to account settings on our
+                  site."
                 </td>
                 <td>
                   <span className="font-bold text-red-500">0.65</span>
@@ -195,7 +193,7 @@ function ResultDetails() {
               <tr>
                 <td>"What are your business hours?"</td>
                 <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
-                <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
+                <td>"We operate from 9:00 AM to 6:00 PM, Monday through Friday."</td>
                 <td>
                   <div className="font-bold">0.97</div>
                 </td>
@@ -206,7 +204,7 @@ function ResultDetails() {
               <tr>
                 <td>"Do you offer a money-back guarantee?"</td>
                 <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
-                <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
+                <td>"Absolutely, we provide a 30-day refund policy for all items."</td>
                 <td>
                   <div className="font-bold">0.91</div>
                 </td>
@@ -220,7 +218,8 @@ function ResultDetails() {
                   "Certainly! Please provide your new shipping address and we'll update it for you."
                 </td>
                 <td>
-                  "Certainly! Please provide your new shipping address and we'll update it for you."
+                  "Of course! Please share your updated shipping address and we'll make the
+                  necessary changes."
                 </td>
                 <td>
                   <span className="font-bold text-orange-500">0.75</span>
@@ -234,9 +233,7 @@ function ResultDetails() {
                 <td>
                   "Let me check the status of your order. Can you please provide your order number?"
                 </td>
-                <td>
-                  "Let me check the status of your order. Can you please provide your order number?"
-                </td>
+                <td>"I can do that. Please share your order number so I can track it."</td>
                 <td>
                   <span className="font-bold text-orange-500">0.78</span>
                 </td>
@@ -251,8 +248,8 @@ function ResultDetails() {
                   instructions."
                 </td>
                 <td>
-                  "To reset your password, click on the 'Forgot Password' link and follow the
-                  instructions."
+                  "You can reset your password by clicking 'Forgot Password' and then adhering to
+                  the given steps."
                 </td>
                 <td>
                   <div className="font-bold">0.95</div>
@@ -267,7 +264,10 @@ function ResultDetails() {
                   "Yes, we accept returns for a refund within 30 days of purchase. Please provide
                   your order details."
                 </td>
-                <td>"Can I return an item for a refund?"</td>
+                <td>
+                  "Sure, you can return an item within 30 days of buying it for a refund. Could you
+                  share your order details?"
+                </td>
                 <td>
                   <div className="font-bold">0.88</div>
                 </td>
@@ -278,7 +278,9 @@ function ResultDetails() {
               <tr>
                 <td>"What's the best way to contact customer support?"</td>
                 <td>"You can contact our customer support team via phone, email, or live chat."</td>
-                <td>"You can contact our customer support team via phone, email, or live chat."</td>
+                <td>
+                  "Our customer support can be reached via phone, email, or through live chat."
+                </td>
                 <td>
                   <div className="font-bold">0.92</div>
                 </td>
@@ -287,7 +289,7 @@ function ResultDetails() {
                 </td>
               </tr>
             </tbody>
-          </table>
+          </table>{' '}
         </div>
       )}
       {activeTab === 'result' && (
