@@ -12,12 +12,14 @@ import { LLMProcessorNodeContent } from './LLMProcessorNode'
 import { atom } from 'jotai'
 import { DataSourceS3NodeContent } from './DataSourceS3'
 import { DataSourceGCPNodeContent } from './DataSourceGCP'
+import { DataSourceAzureNodeContent } from './DataSourceAzure'
 
 export type NodeContent =
   | { nodeType: 'init' }
   | DataSourceNodeContent
   | DataSourceS3NodeContent
   | DataSourceGCPNodeContent
+  | DataSourceAzureNodeContent
   | DataExtractorNodeContent
   | AwsUploaderNodeContent
   | EvaluatorNodeContent
