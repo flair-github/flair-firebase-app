@@ -45,10 +45,14 @@ import {
 } from './nodes/DataSourceLocalFiles'
 import { DataExporterFlairNode, DataExporterFlairNodeContent } from './nodes/DataExporterFlair'
 import { DataSourceS3Node } from './nodes/DataSourceS3'
+import { DataSourceGCPNode } from './nodes/DataSourceGCP'
+import { DataSourceAzureNode } from './nodes/DataSourceAzure'
 
 export const nodeTypes = {
   DataSourceNode,
   DataSourceS3Node,
+  DataSourceGCPNode,
+  DataSourceAzureNode,
   DataExtractorNode,
   AwsUploaderNode,
   EvaluatorNode,
@@ -353,10 +357,18 @@ export const FlowEditor: React.FC<{
                       }}>
                       Local Files
                     </button>
-                    <button className="btn m-2" onClick={() => {}}>
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        addNode('data-source-gcp', 'DataSourceGCPNode')
+                      }}>
                       GCP
                     </button>
-                    <button className="btn m-2" onClick={() => {}}>
+                    <button
+                      className="btn m-2"
+                      onClick={() => {
+                        addNode('data-source-azure', 'DataSourceAzureNode')
+                      }}>
                       Azure
                     </button>
                     <button className="btn m-2" onClick={() => {}}>
