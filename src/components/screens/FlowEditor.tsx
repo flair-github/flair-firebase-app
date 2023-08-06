@@ -429,7 +429,7 @@ export const FlowEditor: React.FC<{
                   <div className="collapse-title text-xl font-medium">Data Extractor</div>
                   <div className="collapse-content">
                     <button
-                      className="btn m-2"
+                      className="btn m-2 hidden"
                       onClick={() => {
                         setNodes(prev => {
                           const nodeId = 'data-extractor-' + String(Date.now())
