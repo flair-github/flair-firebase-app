@@ -346,7 +346,10 @@ function ResultDetails() {
                           </div>
                         </div>
                         <div className="ml-4 shrink-0">
-                          <a href="#" className="font-medium text-primary hover:text-primary/80">
+                          <a
+                            target="_blank"
+                            href="https://firebasestorage.googleapis.com/v0/b/flair-labs.appspot.com/o/llm_outputs%2Fuptrain_test_detect_live_connection%2Fuptrain_test_experiment%2Fuptrain_test.csv?alt=media&token=6be1bdc2-26db-42f9-875d-415ed6baf7a4"
+                            className="font-medium text-primary hover:text-primary/80">
                             Download
                           </a>
                         </div>
@@ -355,12 +358,15 @@ function ResultDetails() {
                         <div className="flex w-0 flex-1 items-center">
                           <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
                           <div className="min-w-0 ml-4 flex flex-1 gap-2">
-                            <span className="truncate font-medium">evaluation_result.csv</span>
+                            <span className="truncate font-medium">evaluation_result.jsonl</span>
                             <span className="shrink-0 text-gray-400">2.6 MB</span>
                           </div>
                         </div>
                         <div className="ml-4 shrink-0">
-                          <a href="#" className="font-medium text-primary hover:text-primary/80">
+                          <a
+                            target="_blank"
+                            href="https://firebasestorage.googleapis.com/v0/b/flair-labs.appspot.com/o/evaluation_outputs%2Fuptrain_test_detect_live_connection%2Fuptrain_test_experiment_1%2Fuptrain_test.jsonl?alt=media&token=7d5c54ba-dbac-4efe-98d3-88abe791a089"
+                            className="font-medium text-primary hover:text-primary/80">
                             Download
                           </a>
                         </div>
