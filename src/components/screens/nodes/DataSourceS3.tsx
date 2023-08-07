@@ -2,6 +2,7 @@ import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
+import { BiLogoAws, BiX } from 'react-icons/bi'
 
 export interface DataSourceS3NodeContent {
   nodeType: 'data-source-s3'
@@ -52,12 +53,15 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
-        borderRadius: '5px',
-        padding: '20px',
+        borderRadius: '6px',
         width: 400,
       }}>
-      <div>
-        <div className="fw-bold mb-2">Data Source: S3</div>
+      <header className="fw-bold mb-2 flex items-center bg-primary-content px-5 py-3 rounded-t-md">
+        <BiLogoAws className="w-7 h-7" />
+        <h4 className="grow ml-3">Data Source: Simple Storage Service</h4>
+        <BiX className="w-6 h-6 cursor-pointer" onClick={() => {}} />
+      </header>
+      <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">File Type</span>
@@ -140,7 +144,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
             }}
           />
         </div>
-      </div>
+      </section>
       {!noHandle && (
         <Handle
           type="source"
@@ -150,6 +154,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
             width: 16,
             height: 16,
             right: -8,
+            padding: '0px 20px 20px 20px;',
           }}
         />
       )}
