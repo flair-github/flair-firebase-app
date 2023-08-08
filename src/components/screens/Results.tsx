@@ -29,7 +29,10 @@ function PageResults() {
               <th>Request Date</th>
               <th>Total Time Taken</th>
               <th>Model</th>
-              <th>Stats</th>
+              <th>Accuracy</th>
+              <th>Hallucination</th>
+              <th>Invalid Format</th>
+              <th>Latency</th>
               <th>Result</th>
             </tr>
           </thead>
@@ -50,7 +53,10 @@ function PageResults() {
               <td>2023-06-25 10:45:30</td>
               <td>15 minutes</td>
               <td>gpt-4</td>
-              <td>Accuracy: 98%, Hallucination 1.2%, Invalid Format: 0%, Latency: 200ms</td>
+              <td>98%</td>
+              <td>1.2%</td>
+              <td>0%</td>
+              <td>200ms</td>
               <td>
                 <div style={{ minWidth: 300 }}>
                   <a
@@ -82,7 +88,10 @@ function PageResults() {
               <td>2023-06-24 14:30:00</td>
               <td>8 minutes</td>
               <td>gpt-3.5</td>
-              <td>Accuracy: 95%, Hallucination 2.4%, Invalid Format: 2%, Latency: 500ms</td>
+              <td>95%</td>
+              <td>2.4%</td>
+              <td>2%</td>
+              <td>500ms</td>
               <td>
                 <div style={{ minWidth: 300 }}>
                   <a
@@ -113,7 +122,10 @@ function PageResults() {
               <td>2023-06-24 12:00:00</td>
               <td>30 minutes</td>
               <td>Falcon</td>
-              <td>Accuracy: 90%, Hallucination 0.2%, Invalid Format: 5%, Latency: 800ms</td>
+              <td>90%</td>
+              <td>0.2%</td>
+              <td>5%</td>
+              <td>800ms</td>
               <td>
                 <div style={{ minWidth: 300 }}>
                   <a
@@ -145,7 +157,10 @@ function PageResults() {
               <td>2023-06-23 16:15:00</td>
               <td>45 minutes</td>
               <td>gpt-3.5</td>
-              <td>Accuracy: 93%, Hallucination 0.2%, Invalid Format: 1%, Latency: 550ms</td>
+              <td>93%</td>
+              <td>0.2%</td>
+              <td>1%</td>
+              <td>550ms</td>
               <td>
                 <div style={{ minWidth: 300 }}>
                   <a
@@ -177,7 +192,10 @@ function PageResults() {
               <td>2023-06-23 09:30:00</td>
               <td>20 minutes</td>
               <td>gpt-4</td>
-              <td>Accuracy: 97%, Hallucination 0.2%, Invalid Format: 0%, Latency: 600ms</td>
+              <td>97%</td>
+              <td>0.2%</td>
+              <td>0%</td>
+              <td>600ms</td>
               <td>
                 <div style={{ minWidth: 300 }}>
                   <a
