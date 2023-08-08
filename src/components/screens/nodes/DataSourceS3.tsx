@@ -7,7 +7,7 @@ import { BiLogoAws, BiX } from 'react-icons/bi'
 export interface DataSourceS3NodeContent {
   nodeType: 'data-source-s3'
   fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
-  apiKey: string
+  accessKey: string
   path: string
   secretKey: string
   bucketName: string
@@ -17,7 +17,7 @@ export interface DataSourceS3NodeContent {
 export const dataSourceS3DefaultContent: DataSourceS3NodeContent = {
   nodeType: 'data-source-s3',
   fileType: 'csv',
-  apiKey: '',
+  accessKey: '',
   path: '',
   secretKey: '',
   bucketName: '',
@@ -58,7 +58,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
       }}>
       <header className="fw-bold mb-2 flex items-center bg-primary-content px-5 py-3 rounded-t-md">
         <BiLogoAws className="w-7 h-7" />
-        <h4 className="grow ml-3">Data Source: Simple Storage Service</h4>
+        <h4 className="grow ml-3">Data Source: S3</h4>
         <BiX className="w-6 h-6 cursor-pointer" onClick={() => {}} />
       </header>
       <section className="px-5 pb-5">
@@ -81,19 +81,6 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">API Key</span>
-          </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.apiKey}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, apiKey: newVal }))
-            }}
-          />
-        </div>
-        <div className="mb-2 mt-1">
-          <label className="label">
             <span className="label-text">Secret Key</span>
           </label>
           <input
@@ -107,14 +94,14 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Bucket Name</span>
+            <span className="label-text">Access Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.bucketName}
+            value={nodeContent.accessKey}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, bucketName: newVal }))
+              setNodeContent(prev => ({ ...prev, accessKey: newVal }))
             }}
           />
         </div>
@@ -128,6 +115,19 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
             onChange={e => {
               const newVal = e.target.value
               setNodeContent(prev => ({ ...prev, regionName: newVal }))
+            }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Bucket Name</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            value={nodeContent.bucketName}
+            onChange={e => {
+              const newVal = e.target.value
+              setNodeContent(prev => ({ ...prev, bucketName: newVal }))
             }}
           />
         </div>

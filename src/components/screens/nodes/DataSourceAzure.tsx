@@ -7,21 +7,19 @@ import { BiLogoMicrosoft, BiX } from 'react-icons/bi'
 export interface DataSourceAzureNodeContent {
   nodeType: 'data-source-azure'
   fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
-  apiKey: string
+  accountName: string
+  accountKey: string
+  containerName: string
   path: string
-  secretKey: string
-  bucketName: string
-  regionName: string
 }
 
 export const dataSourceAzureDefaultContent: DataSourceAzureNodeContent = {
   nodeType: 'data-source-azure',
   fileType: 'csv',
-  apiKey: '',
+  accountName: '',
+  accountKey: '',
+  containerName: '',
   path: '',
-  secretKey: '',
-  bucketName: '',
-  regionName: '',
 }
 
 export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
@@ -81,53 +79,40 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">API Key</span>
+            <span className="label-text">Account Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.apiKey}
+            value={nodeContent.accountName}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, apiKey: newVal }))
+              setNodeContent(prev => ({ ...prev, accountName: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Secret Key</span>
+            <span className="label-text">Account Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.secretKey}
+            value={nodeContent.accountKey}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, secretKey: newVal }))
+              setNodeContent(prev => ({ ...prev, accountKey: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Bucket Name</span>
+            <span className="label-text">Container Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.bucketName}
+            value={nodeContent.containerName}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, bucketName: newVal }))
-            }}
-          />
-        </div>
-        <div className="mb-2 mt-1">
-          <label className="label">
-            <span className="label-text">Region Name</span>
-          </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.regionName}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, regionName: newVal }))
+              setNodeContent(prev => ({ ...prev, containerName: newVal }))
             }}
           />
         </div>

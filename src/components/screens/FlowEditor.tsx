@@ -341,39 +341,37 @@ export const FlowEditor: React.FC<{
               <div className="join-vertical join w-full">
                 <div className="collapse-arrow join-item collapse border border-base-300">
                   <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium bg-primary-content">
-                    Data Source
-                  </div>
+                  <div className="collapse-title text-xl font-medium">Data Source</div>
                   <div className="collapse-content">
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-primary-content"
                       onClick={() => {
                         addNode('data-source-s3', 'DataSourceS3Node')
                       }}>
                       AWS S3
                     </button>
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-primary-content"
                       onClick={() => {
                         addNode('data-source-gcp', 'DataSourceGCPNode')
                       }}>
                       Google Cloud Storage
                     </button>
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-primary-content"
                       onClick={() => {
                         addNode('data-source-azure', 'DataSourceAzureNode')
                       }}>
                       Azure Blob Storage
                     </button>
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-primary-content"
                       onClick={() => {
                         addNode('data-source-local-files', 'DataSourceLocalFilesNode')
                       }}>
                       Local Files
                     </button>
-                    <button className="btn m-2" onClick={() => {}}>
+                    <button className="btn m-2 bg-primary-content" onClick={() => {}}>
                       API
                     </button>
                     <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
@@ -482,12 +480,10 @@ export const FlowEditor: React.FC<{
                 </div>
                 <div className="collapse-arrow join-item collapse border border-base-300">
                   <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium bg-secondary-content">
-                    Data Exporter
-                  </div>
+                  <div className="collapse-title text-xl font-medium">Data Exporter</div>
                   <div className="collapse-content">
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-secondary-content"
                       onClick={() => {
                         setNodes(prev => {
                           const nodeId = 'aws-uploader-' + String(Date.now())
@@ -504,20 +500,20 @@ export const FlowEditor: React.FC<{
                       }}>
                       AWS S3
                     </button>
-                    <button className="btn m-2" onClick={() => {}}>
+                    <button className="btn m-2 bg-secondary-content" onClick={() => {}}>
                       Google Cloud Storage
                     </button>
-                    <button className="btn m-2" onClick={() => {}}>
+                    <button className="btn m-2 bg-secondary-content" onClick={() => {}}>
                       Azure Blob Storage
                     </button>
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-secondary-content"
                       onClick={() => {
                         addNode('data-exporter-flair', 'DataExporterFlairNode')
                       }}>
                       Flair
                     </button>
-                    <button className="btn m-2" onClick={() => {}}>
+                    <button className="btn m-2 bg-secondary-content" onClick={() => {}}>
                       API
                     </button>
                   </div>
