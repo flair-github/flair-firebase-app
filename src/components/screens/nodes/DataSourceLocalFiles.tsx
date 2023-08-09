@@ -51,12 +51,14 @@ export const DataSourceLocalFilesNode = ({
         background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
-        borderRadius: '5px',
-        padding: '20px',
+        borderRadius: '6px',
         width: 400,
       }}>
-      <div>
-        <div className="fw-bold mb-2">Data Source: Local Files</div>
+      <header className="fw-bold mb-2 flex items-center bg-purple-200 px-5 py-3 rounded-t-md">
+        <FaCloudUploadAlt className="w-7 h-7" />
+        <h4 className="grow ml-3">Data Source: Local Files</h4>
+      </header>
+      <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">File Type</span>
@@ -105,7 +107,7 @@ export const DataSourceLocalFilesNode = ({
             <FaCloudUploadAlt /> Upload
           </a> */}
         </div>
-      </div>
+      </section>
       {!noHandle && (
         <Handle
           type="source"
@@ -115,6 +117,7 @@ export const DataSourceLocalFilesNode = ({
             width: 16,
             height: 16,
             right: -8,
+            padding: '0px 20px 20px 20px;',
           }}
         />
       )}

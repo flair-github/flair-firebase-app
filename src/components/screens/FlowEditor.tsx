@@ -344,34 +344,36 @@ export const FlowEditor: React.FC<{
                   <div className="collapse-title text-xl font-medium">Data Source</div>
                   <div className="collapse-content">
                     <button
-                      className="btn m-2 bg-primary-content"
+                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
                       onClick={() => {
                         addNode('data-source-s3', 'DataSourceS3Node')
                       }}>
                       AWS S3
                     </button>
                     <button
-                      className="btn m-2 bg-primary-content"
+                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
                       onClick={() => {
                         addNode('data-source-gcp', 'DataSourceGCPNode')
                       }}>
                       Google Cloud Storage
                     </button>
                     <button
-                      className="btn m-2 bg-primary-content"
+                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
                       onClick={() => {
                         addNode('data-source-azure', 'DataSourceAzureNode')
                       }}>
                       Azure Blob Storage
                     </button>
                     <button
-                      className="btn m-2 bg-primary-content"
+                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
                       onClick={() => {
                         addNode('data-source-local-files', 'DataSourceLocalFilesNode')
                       }}>
                       Local Files
                     </button>
-                    <button className="btn m-2 bg-primary-content" onClick={() => {}}>
+                    <button
+                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
+                      onClick={() => {}}>
                       API
                     </button>
                     <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
