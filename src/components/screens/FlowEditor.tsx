@@ -329,7 +329,7 @@ export const FlowEditor: React.FC<{
               executeFlow()
               executeModalRef.current?.showModal()
             }}>
-            Execute
+            Deploy
           </button>
           <button
             className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
@@ -591,31 +591,29 @@ export const FlowEditor: React.FC<{
       {/* Execute modal */}
       <dialog ref={executeModalRef} className="modal">
         <form method="dialog" className="modal-box">
-          <h3 className="mb-5 text-center text-lg font-bold">Workflow Executed</h3>
+          <h3 className="mb-5 text-center text-lg font-bold">Deployment Options</h3>
           <button className="btn-ghost btn-sm btn-circle btn absolute right-2 top-2">✕</button>
-          <div className="mb-5 flex justify-center">
-            <AiOutlineCheckCircle size={120} className="mb-2 text-green-500" />
+          <div className="mb-2 mt-1">
+            <label className="label">
+              <span className="label-text">Frequency</span>
+            </label>
+            <select className="max-w-xs select mb-3 w-full border-black">
+              <option value={'one-time'}>One time</option>
+              <option value={'1d'}>1d</option>
+              <option value={'7d'}>7d</option>
+              <option value={'30d'}>30d</option>
+            </select>
+            <div className="flex justify-start">
+              <button
+                className="btn-primary btn"
+                onClick={async () => {
+                  executeFlow()
+                  executeModalRef.current?.showModal()
+                }}>
+                Deploy
+              </button>
+            </div>
           </div>
-          <p className=" text-center">
-            The execution result will be available in the{' '}
-            <a
-              href="#"
-              onClick={() => {
-                navigate('results')
-              }}>
-              results
-            </a>{' '}
-            page.
-          </p>
-          {/* <div className="flex justify-end">
-            <button
-              className="btn m-2"
-              onClick={() => {
-                executeModalRef.current?.close()
-              }}>
-              Close
-            </button>
-          </div> */}
         </form>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
