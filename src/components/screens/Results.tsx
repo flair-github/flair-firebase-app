@@ -14,8 +14,11 @@ function PageResults() {
     <div className="container mx-auto border-x">
       <div className="border-grayscaleDivider flex h-[3rem] border-b">
         <div className="flex-1" />
-        <button className="btn m-1 h-[2.5rem] min-h-[2.5rem]" onClick={async () => {}}>
-          Compare Selections
+        <button
+          className="btn-disabled btn m-1 h-[2.5rem] min-h-[2.5rem] gap-1"
+          onClick={async () => {}}>
+          <div>Compare Selections</div>
+          <div className="text-xs">(soon)</div>
         </button>
       </div>
       <div className="overflow-x-auto">
