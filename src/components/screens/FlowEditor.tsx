@@ -46,12 +46,14 @@ import {
 import { DataExporterFlairNode, DataExporterFlairNodeContent } from './nodes/DataExporterFlair'
 import { DataSourceS3Node } from './nodes/DataSourceS3'
 import { DataSourceGCPNode } from './nodes/DataSourceGCP'
+import { DataSourceAPINode } from './nodes/DataSourceAPI'
 import { DataSourceAzureNode } from './nodes/DataSourceAzure'
 
 export const nodeTypes = {
   DataSourceNode,
   DataSourceS3Node,
   DataSourceGCPNode,
+  DataSourceAPINode,
   DataSourceAzureNode,
   DataExtractorNode,
   AwsUploaderNode,
@@ -373,7 +375,9 @@ export const FlowEditor: React.FC<{
                     </button>
                     <button
                       className="btn m-2 bg-purple-200 hover:bg-purple-300"
-                      onClick={() => {}}>
+                      onClick={() => {
+                        addNode('data-source-api', 'DataSourceAPINode')
+                      }}>
                       API
                     </button>
                     <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>

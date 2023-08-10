@@ -13,12 +13,14 @@ import { atom } from 'jotai'
 import { DataSourceS3NodeContent } from './DataSourceS3'
 import { DataSourceGCPNodeContent } from './DataSourceGCP'
 import { DataSourceAzureNodeContent } from './DataSourceAzure'
+import { DataSourceAPINodeContent } from './DataSourceAPI'
 
 export type NodeContent =
   | { nodeType: 'init' }
   | DataSourceNodeContent
   | DataSourceS3NodeContent
   | DataSourceGCPNodeContent
+  | DataSourceAPINodeContent
   | DataSourceAzureNodeContent
   | DataExtractorNodeContent
   | AwsUploaderNodeContent
