@@ -2,34 +2,34 @@ import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
-import { BiLogoMicrosoft } from 'react-icons/bi'
+import { AiFillApi } from 'react-icons/ai'
 
-export interface DataSourceAzureNodeContent {
-  nodeType: 'data-source-azure'
+export interface DataSourceAPINodeContent {
+  nodeType: 'data-source-api'
   fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
-  accountName: string
-  accountKey: string
-  containerName: string
-  path: string
+  url: string
+  method: string
+  headers: string
+  body: string
 }
 
-export const dataSourceAzureDefaultContent: DataSourceAzureNodeContent = {
-  nodeType: 'data-source-azure',
+export const dataSourceAPIDefaultContent: DataSourceAPINodeContent = {
+  nodeType: 'data-source-api',
   fileType: 'csv',
-  accountName: '',
-  accountKey: '',
-  containerName: '',
-  path: '',
+  url: '',
+  method: 'GET',
+  headers: '',
+  body: '',
 }
 
-export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceAzureNodeContent>(
-    dataSourceAzureDefaultContent,
+export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
+  const [nodeContent, setNodeContent] = useState<DataSourceAPINodeContent>(
+    dataSourceAPIDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-azure') {
+    if (data.initialContents.nodeType === 'data-source-api') {
       setNodeContent({
         ...data.initialContents,
       })
@@ -38,7 +38,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
 
   // Copy node data to cache
   useEffect(() => {
-    const cache: DataSourceAzureNodeContent = {
+    const cache: DataSourceAPINodeContent = {
       ...nodeContent,
     }
 
@@ -55,8 +55,8 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         width: 400,
       }}>
       <header className="fw-bold mb-2 flex items-center bg-purple-200 px-5 py-3 rounded-t-md">
-        <BiLogoMicrosoft className="w-7 h-7" />
-        <h4 className="grow ml-3">Data Source: Azure Blob Storage</h4>
+        <AiFillApi className="w-7 h-7" />
+        <h4 className="grow ml-3">Data Source: API</h4>
       </header>
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
@@ -66,65 +66,70 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
           <select
             className="max-w-xs select w-full border-black "
             onChange={e => {
-              const newVal = e.target.value as DataSourceAzureNodeContent['fileType']
+              const newVal = e.target.value as DataSourceAPINodeContent['fileType']
               setNodeContent(prev => ({ ...prev, fileType: newVal }))
             }}
             value={nodeContent.fileType}>
-            <option value={'txt' satisfies DataSourceAzureNodeContent['fileType']}>txt</option>
-            <option value={'csv' satisfies DataSourceAzureNodeContent['fileType']}>csv</option>
-            <option value={'mp3' satisfies DataSourceAzureNodeContent['fileType']}>mp3</option>
-            <option value={'pdf' satisfies DataSourceAzureNodeContent['fileType']}>pdf</option>
+            <option value={'txt' satisfies DataSourceAPINodeContent['fileType']}>txt</option>
+            <option value={'csv' satisfies DataSourceAPINodeContent['fileType']}>csv</option>
+            <option value={'mp3' satisfies DataSourceAPINodeContent['fileType']}>mp3</option>
+            <option value={'pdf' satisfies DataSourceAPINodeContent['fileType']}>pdf</option>
           </select>
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Name</span>
+            <span className="label-text">URL</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountName}
+            value={nodeContent.url}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountName: newVal }))
+              setNodeContent(prev => ({ ...prev, url: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Key</span>
+            <span className="label-text">Request Method</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountKey}
+            value={nodeContent.method}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountKey: newVal }))
+              setNodeContent(prev => ({ ...prev, method: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Container Name</span>
+            <span className="label-text">Request Headers</span>
           </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.containerName}
+          <textarea
+            rows={3}
+            className="max-w-xs textarea w-full border-black py-2 overflow-y-scroll"
+            value={nodeContent.headers}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, containerName: newVal }))
+              setNodeContent(prev => ({ ...prev, headers: newVal }))
             }}
+            placeholder={`{
+"Authorization": "Bearer 111111111111111111111",
+}`}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="label-text">Request Body</span>
           </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.path}
+          <textarea
+            rows={3}
+            className="max-w-xs textarea w-full border-black py-2 overflow-y-scroll"
+            value={nodeContent.body}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, path: newVal }))
+              setNodeContent(prev => ({ ...prev, body: newVal }))
             }}
           />
         </div>

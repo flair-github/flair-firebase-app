@@ -4,30 +4,30 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoGoogle } from 'react-icons/bi'
 
-export interface DataSourceGCPNodeContent {
-  nodeType: 'data-source-gcp'
+export interface DataExporterGCPNodeContent {
+  nodeType: 'data-exporter-gcp'
   fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
   accountKey: string
   bucketName: string
   path: string
 }
 
-export const dataSourceGCPDefaultContent: DataSourceGCPNodeContent = {
-  nodeType: 'data-source-gcp',
+export const dataExporterGCPDefaultContent: DataExporterGCPNodeContent = {
+  nodeType: 'data-exporter-gcp',
   fileType: 'csv',
   accountKey: '',
   bucketName: '',
   path: '',
 }
 
-export const DataSourceGCPNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceGCPNodeContent>(
-    dataSourceGCPDefaultContent,
+export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
+  const [nodeContent, setNodeContent] = useState<DataExporterGCPNodeContent>(
+    dataExporterGCPDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-gcp') {
+    if (data.initialContents.nodeType === 'data-exporter-gcp') {
       setNodeContent({
         ...data.initialContents,
       })
@@ -36,7 +36,7 @@ export const DataSourceGCPNode = ({ data, noHandle }: { data: NodeData; noHandle
 
   // Copy node data to cache
   useEffect(() => {
-    const cache: DataSourceGCPNodeContent = {
+    const cache: DataExporterGCPNodeContent = {
       ...nodeContent,
     }
 
@@ -52,9 +52,9 @@ export const DataSourceGCPNode = ({ data, noHandle }: { data: NodeData; noHandle
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center bg-purple-200 px-5 py-3 rounded-t-md">
+      <header className="fw-bold mb-2 flex items-center bg-teal-200 px-5 py-3 rounded-t-md">
         <BiLogoGoogle className="w-7 h-7" />
-        <h4 className="grow ml-3">Data Source: Google Cloud Storage</h4>
+        <h4 className="grow ml-3">Data Exporter: Google Cloud Storage</h4>
       </header>
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
@@ -64,14 +64,14 @@ export const DataSourceGCPNode = ({ data, noHandle }: { data: NodeData; noHandle
           <select
             className="max-w-xs select w-full border-black "
             onChange={e => {
-              const newVal = e.target.value as DataSourceGCPNodeContent['fileType']
+              const newVal = e.target.value as DataExporterGCPNodeContent['fileType']
               setNodeContent(prev => ({ ...prev, fileType: newVal }))
             }}
             value={nodeContent.fileType}>
-            <option value={'txt' satisfies DataSourceGCPNodeContent['fileType']}>txt</option>
-            <option value={'csv' satisfies DataSourceGCPNodeContent['fileType']}>csv</option>
-            <option value={'mp3' satisfies DataSourceGCPNodeContent['fileType']}>mp3</option>
-            <option value={'pdf' satisfies DataSourceGCPNodeContent['fileType']}>pdf</option>
+            <option value={'txt' satisfies DataExporterGCPNodeContent['fileType']}>txt</option>
+            <option value={'csv' satisfies DataExporterGCPNodeContent['fileType']}>csv</option>
+            <option value={'mp3' satisfies DataExporterGCPNodeContent['fileType']}>mp3</option>
+            <option value={'pdf' satisfies DataExporterGCPNodeContent['fileType']}>pdf</option>
           </select>
         </div>
         <div className="mb-2 mt-1">
@@ -132,13 +132,13 @@ export const DataSourceGCPNode = ({ data, noHandle }: { data: NodeData; noHandle
       </section>
       {!noHandle && (
         <Handle
-          type="source"
-          position={Position.Right}
-          id="out"
+          type="target"
+          position={Position.Left}
+          id="in"
           style={{
             width: 16,
             height: 16,
-            right: -8,
+            left: -8,
           }}
         />
       )}

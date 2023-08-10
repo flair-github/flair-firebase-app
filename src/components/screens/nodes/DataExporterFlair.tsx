@@ -38,7 +38,6 @@ export const DataExporterFlairNode = ({
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
-        padding: '20px',
         width: 400,
       }}>
       {!noHandle && (
@@ -53,9 +52,11 @@ export const DataExporterFlairNode = ({
           }}
         />
       )}
-
-      <div>
-        <div className="fw-bold mb-2">Data Exporter: Flair Hosted</div>
+      <header className="mb-4 flex justify-between items-center bg-teal-200 px-5 py-3 rounded-t-md">
+        <div className="fw-bold">Data Exporter : Flair Hosted</div>
+        <img src="/images/powered-by-flair.png" width={133} height={24} />
+      </header>
+      <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <p className="mb-2">
             Workflow job results will be available in the <b>Results</b> page
@@ -64,7 +65,7 @@ export const DataExporterFlairNode = ({
             <HiDocumentReport /> Open Results
           </a> */}
         </div>
-      </div>
+      </section>
     </div>
   )
 }

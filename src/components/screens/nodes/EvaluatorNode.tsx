@@ -35,7 +35,6 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
-        padding: '20px',
         width: 400,
       }}>
       <Handle
@@ -60,11 +59,11 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
           left: -8,
         }}
       />
-      <div>
-        <div className="mb-4 flex justify-between">
-          <div className="fw-bold">Evaluator</div>
-          <img src="/images/powered-by-flair.png" width={133} height={24} />
-        </div>
+      <header className="mb-4 flex justify-between items-center bg-pink-200 px-5 py-3 rounded-t-md">
+        <div className="fw-bold">Evaluator</div>
+        <img src="/images/powered-by-flair.png" width={133} height={24} />
+      </header>
+      <section className="px-5 pb-5">
         <div className="mb-4 flex">
           <div className="flex-1">
             <div className="mb-2">LLM Generated Data</div>
@@ -92,7 +91,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
             <option value="similarity-measures">Similarity Measures</option>
           </select>
         </div>
-      </div>
+      </section>
       <Handle
         type="source"
         position={Position.Right}
