@@ -31,7 +31,7 @@ import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from '
 import { dataIndexerDefaultContent } from './nodes/DataIndexer'
 import { dataRetrieverDefaultContent } from './nodes/DataRetriever'
 import { v4 } from 'uuid'
-import { AwsUploaderNode, AwsUploaderNodeContent } from './nodes/AwsUploaderNode'
+
 import { DataExtractorNode, DataExtractorNodeContent } from './nodes/DataExtractorNode'
 import { DataSourceNode, DataSourceNodeContent } from './nodes/DataSourceNode'
 import { EvaluatorNode, EvaluatorNodeContent } from './nodes/EvaluatorNode'
@@ -48,6 +48,10 @@ import { DataSourceS3Node } from './nodes/DataSourceS3'
 import { DataSourceGCPNode } from './nodes/DataSourceGCP'
 import { DataSourceAPINode } from './nodes/DataSourceAPI'
 import { DataSourceAzureNode } from './nodes/DataSourceAzure'
+import { DataExporterS3Node } from './nodes/DataExporterS3'
+import { DataExporterGCPNode } from './nodes/DataExporterGCP'
+import { DataExporterAzureNode } from './nodes/DataExporterAzure'
+import { DataExporterAPINode } from './nodes/DataExporterAPI'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -56,7 +60,10 @@ export const nodeTypes = {
   DataSourceAPINode,
   DataSourceAzureNode,
   DataExtractorNode,
-  AwsUploaderNode,
+  DataExporterS3Node,
+  DataExporterGCPNode,
+  DataExporterAzureNode,
+  DataExporterAPINode,
   EvaluatorNode,
   LLMProcessorNode,
   DataIndexerNode,
@@ -489,37 +496,50 @@ export const FlowEditor: React.FC<{
                   <div className="collapse-title text-xl font-medium">Data Exporter</div>
                   <div className="collapse-content">
                     <button
-                      className="btn m-2 bg-secondary-content"
+                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
                       onClick={() => {
-                        setNodes(prev => {
-                          const nodeId = 'aws-uploader-' + String(Date.now())
-                          return [
-                            ...prev,
-                            {
-                              id: nodeId,
-                              type: 'AwsUploaderNode',
-                              data: { nodeId, initialContents: { nodeType: 'init' } },
-                              position: randPos(viewport.current),
-                            },
-                          ]
-                        })
+                        addNode('data-exporter-s3', 'DataExporterS3Node')
+                        // setNodes(prev => {
+                        //   const nodeId = 'aws-uploader-' + String(Date.now())
+                        //   return [
+                        //     ...prev,
+                        //     {
+                        //       id: nodeId,
+                        //       type: 'AwsUploaderNode',
+                        //       data: { nodeId, initialContents: { nodeType: 'init' } },
+                        //       position: randPos(viewport.current),
+                        //     },
+                        //   ]
+                        // })
                       }}>
                       AWS S3
                     </button>
-                    <button className="btn m-2 bg-secondary-content" onClick={() => {}}>
+                    <button
+                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
+                      onClick={() => {
+                        addNode('data-exporter-gcp', 'DataExporterGCPNode')
+                      }}>
                       Google Cloud Storage
                     </button>
-                    <button className="btn m-2 bg-secondary-content" onClick={() => {}}>
+                    <button
+                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
+                      onClick={() => {
+                        addNode('data-exporter-azure', 'DataExporterAzureNode')
+                      }}>
                       Azure Blob Storage
                     </button>
                     <button
-                      className="btn m-2 bg-secondary-content"
+                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
                       onClick={() => {
                         addNode('data-exporter-flair', 'DataExporterFlairNode')
                       }}>
                       Flair
                     </button>
-                    <button className="btn m-2 bg-secondary-content" onClick={() => {}}>
+                    <button
+                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
+                      onClick={() => {
+                        addNode('data-exporter-api', 'DataExporterAPINode')
+                      }}>
                       API
                     </button>
                   </div>
