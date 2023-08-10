@@ -4,8 +4,8 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoMicrosoft } from 'react-icons/bi'
 
-export interface DataSourceAzureNodeContent {
-  nodeType: 'data-source-azure'
+export interface DataExporterAzureNodeContent {
+  nodeType: 'data-exporter-azure'
   fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
   accountName: string
   accountKey: string
@@ -13,8 +13,8 @@ export interface DataSourceAzureNodeContent {
   path: string
 }
 
-export const dataSourceAzureDefaultContent: DataSourceAzureNodeContent = {
-  nodeType: 'data-source-azure',
+export const dataExporterAzureDefaultContent: DataExporterAzureNodeContent = {
+  nodeType: 'data-exporter-azure',
   fileType: 'csv',
   accountName: '',
   accountKey: '',
@@ -22,14 +22,20 @@ export const dataSourceAzureDefaultContent: DataSourceAzureNodeContent = {
   path: '',
 }
 
-export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceAzureNodeContent>(
-    dataSourceAzureDefaultContent,
+export const DataExporterAzureNode = ({
+  data,
+  noHandle,
+}: {
+  data: NodeData
+  noHandle?: boolean
+}) => {
+  const [nodeContent, setNodeContent] = useState<DataExporterAzureNodeContent>(
+    dataExporterAzureDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-azure') {
+    if (data.initialContents.nodeType === 'data-exporter-azure') {
       setNodeContent({
         ...data.initialContents,
       })
@@ -38,7 +44,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
 
   // Copy node data to cache
   useEffect(() => {
-    const cache: DataSourceAzureNodeContent = {
+    const cache: DataExporterAzureNodeContent = {
       ...nodeContent,
     }
 
@@ -54,9 +60,9 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center bg-purple-200 px-5 py-3 rounded-t-md">
+      <header className="fw-bold mb-2 flex items-center bg-teal-200 px-5 py-3 rounded-t-md">
         <BiLogoMicrosoft className="w-7 h-7" />
-        <h4 className="grow ml-3">Data Source: Azure Blob Storage</h4>
+        <h4 className="grow ml-3">Data Exporter: Azure Blob Storage</h4>
       </header>
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
@@ -66,14 +72,14 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
           <select
             className="max-w-xs select w-full border-black "
             onChange={e => {
-              const newVal = e.target.value as DataSourceAzureNodeContent['fileType']
+              const newVal = e.target.value as DataExporterAzureNodeContent['fileType']
               setNodeContent(prev => ({ ...prev, fileType: newVal }))
             }}
             value={nodeContent.fileType}>
-            <option value={'txt' satisfies DataSourceAzureNodeContent['fileType']}>txt</option>
-            <option value={'csv' satisfies DataSourceAzureNodeContent['fileType']}>csv</option>
-            <option value={'mp3' satisfies DataSourceAzureNodeContent['fileType']}>mp3</option>
-            <option value={'pdf' satisfies DataSourceAzureNodeContent['fileType']}>pdf</option>
+            <option value={'txt' satisfies DataExporterAzureNodeContent['fileType']}>txt</option>
+            <option value={'csv' satisfies DataExporterAzureNodeContent['fileType']}>csv</option>
+            <option value={'mp3' satisfies DataExporterAzureNodeContent['fileType']}>mp3</option>
+            <option value={'pdf' satisfies DataExporterAzureNodeContent['fileType']}>pdf</option>
           </select>
         </div>
         <div className="mb-2 mt-1">
@@ -131,13 +137,13 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
       </section>
       {!noHandle && (
         <Handle
-          type="source"
-          position={Position.Right}
-          id="out"
+          type="target"
+          position={Position.Left}
+          id="in"
           style={{
             width: 16,
             height: 16,
-            right: -8,
+            left: -8,
           }}
         />
       )}

@@ -2,34 +2,36 @@ import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
-import { BiLogoMicrosoft } from 'react-icons/bi'
+import { BiLogoAws } from 'react-icons/bi'
 
-export interface DataSourceAzureNodeContent {
-  nodeType: 'data-source-azure'
+export interface DataExporterS3NodeContent {
+  nodeType: 'data-exporter-s3'
   fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
-  accountName: string
-  accountKey: string
-  containerName: string
+  accessKey: string
   path: string
+  secretKey: string
+  bucketName: string
+  regionName: string
 }
 
-export const dataSourceAzureDefaultContent: DataSourceAzureNodeContent = {
-  nodeType: 'data-source-azure',
+export const dataExporterS3DefaultContent: DataExporterS3NodeContent = {
+  nodeType: 'data-exporter-s3',
   fileType: 'csv',
-  accountName: '',
-  accountKey: '',
-  containerName: '',
+  accessKey: '',
   path: '',
+  secretKey: '',
+  bucketName: '',
+  regionName: '',
 }
 
-export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceAzureNodeContent>(
-    dataSourceAzureDefaultContent,
+export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
+  const [nodeContent, setNodeContent] = useState<DataExporterS3NodeContent>(
+    dataExporterS3DefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-azure') {
+    if (data.initialContents.nodeType === 'data-exporter-s3') {
       setNodeContent({
         ...data.initialContents,
       })
@@ -38,7 +40,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
 
   // Copy node data to cache
   useEffect(() => {
-    const cache: DataSourceAzureNodeContent = {
+    const cache: DataExporterS3NodeContent = {
       ...nodeContent,
     }
 
@@ -54,9 +56,9 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center bg-purple-200 px-5 py-3 rounded-t-md">
-        <BiLogoMicrosoft className="w-7 h-7" />
-        <h4 className="grow ml-3">Data Source: Azure Blob Storage</h4>
+      <header className="fw-bold mb-2 flex items-center bg-teal-200 px-5 py-3 rounded-t-md">
+        <BiLogoAws className="w-7 h-7" />
+        <h4 className="grow ml-3">Data Exporter: S3</h4>
       </header>
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
@@ -66,52 +68,65 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
           <select
             className="max-w-xs select w-full border-black "
             onChange={e => {
-              const newVal = e.target.value as DataSourceAzureNodeContent['fileType']
+              const newVal = e.target.value as DataExporterS3NodeContent['fileType']
               setNodeContent(prev => ({ ...prev, fileType: newVal }))
             }}
             value={nodeContent.fileType}>
-            <option value={'txt' satisfies DataSourceAzureNodeContent['fileType']}>txt</option>
-            <option value={'csv' satisfies DataSourceAzureNodeContent['fileType']}>csv</option>
-            <option value={'mp3' satisfies DataSourceAzureNodeContent['fileType']}>mp3</option>
-            <option value={'pdf' satisfies DataSourceAzureNodeContent['fileType']}>pdf</option>
+            <option value={'txt' satisfies DataExporterS3NodeContent['fileType']}>txt</option>
+            <option value={'csv' satisfies DataExporterS3NodeContent['fileType']}>csv</option>
+            <option value={'mp3' satisfies DataExporterS3NodeContent['fileType']}>mp3</option>
+            <option value={'pdf' satisfies DataExporterS3NodeContent['fileType']}>pdf</option>
           </select>
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Name</span>
+            <span className="label-text">Secret Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountName}
+            value={nodeContent.secretKey}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountName: newVal }))
+              setNodeContent(prev => ({ ...prev, secretKey: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Key</span>
+            <span className="label-text">Access Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountKey}
+            value={nodeContent.accessKey}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountKey: newVal }))
+              setNodeContent(prev => ({ ...prev, accessKey: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Container Name</span>
+            <span className="label-text">Region Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.containerName}
+            value={nodeContent.regionName}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, containerName: newVal }))
+              setNodeContent(prev => ({ ...prev, regionName: newVal }))
+            }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Bucket Name</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            value={nodeContent.bucketName}
+            onChange={e => {
+              const newVal = e.target.value
+              setNodeContent(prev => ({ ...prev, bucketName: newVal }))
             }}
           />
         </div>
@@ -131,13 +146,13 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
       </section>
       {!noHandle && (
         <Handle
-          type="source"
-          position={Position.Right}
-          id="out"
+          type="target"
+          position={Position.Left}
+          id="in"
           style={{
             width: 16,
             height: 16,
-            right: -8,
+            left: -8,
           }}
         />
       )}

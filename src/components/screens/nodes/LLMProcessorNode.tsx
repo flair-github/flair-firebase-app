@@ -87,7 +87,6 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
-        padding: '20px',
         width: 800,
       }}>
       {!noHandle && (
@@ -103,11 +102,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         />
       )}
 
-      <div>
-        <div className="mb-4 flex justify-between">
-          <div className="fw-bold">LLM Processor</div>
-          <img src="/images/powered-by-flair.png" width={133} height={24} />
-        </div>
+      <header className="mb-4 flex justify-between items-center bg-blue-200 px-5 py-3 rounded-t-md">
+        <div className="fw-bold">LLM Processor</div>
+        <img src="/images/powered-by-flair.png" width={133} height={24} />
+      </header>
+      <section className="px-5 pb-5">
         <div className="mb-1 flex">
           {/* Col */}
           <div className="mr-2 flex w-14 items-center" />
@@ -513,8 +512,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
           }}>
           Add
         </button>
-      </div>
-
+      </section>
       {!noHandle && (
         <Handle
           type="source"
