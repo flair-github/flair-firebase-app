@@ -143,7 +143,6 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
             width: 16,
             height: 16,
             right: -8,
-            padding: '0px 20px 20px 20px;',
           }}
         />
       )}
