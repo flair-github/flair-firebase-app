@@ -17,9 +17,11 @@ import { DataExporterS3NodeContent } from './DataExporterS3'
 import { DataExporterGCPNodeContent } from './DataExporterGCP'
 import { DataExporterAzureNodeContent } from './DataExporterAzure'
 import { DataExporterAPINodeContent } from './DataExporterAPI'
+import { AwsUploaderNodeContent } from './AwsUploaderNode'
 
 export type NodeContent =
   | { nodeType: 'init' }
+  | AwsUploaderNodeContent
   | DataSourceNodeContent
   | DataSourceS3NodeContent
   | DataSourceGCPNodeContent
