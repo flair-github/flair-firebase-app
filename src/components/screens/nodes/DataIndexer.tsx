@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { Handle, Position } from 'reactflow'
 import { nodeContents, type NodeData } from './Registry'
+import { AiOutlineNodeIndex } from 'react-icons/ai'
 
 export interface DataIndexerNodeContent {
   nodeType: 'data-indexer'
@@ -45,11 +46,13 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
-        padding: '20px',
         width: 400,
       }}>
-      <div>
-        <div className="fw-bold mb-2">Data Indexer</div>
+      <header className="fw-bold mb-2 flex items-center bg-green-200 px-5 py-3 rounded-t-md">
+        <AiOutlineNodeIndex className="w-7 h-7" />
+        <h4 className="grow ml-3">Data Indexer</h4>
+      </header>
+      <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">Embedding Type</span>
@@ -103,7 +106,7 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
             <option value={'local' satisfies DataIndexerNodeContent['vectorStore']}>local</option>
           </select>
         </div>
-      </div>
+      </section>
       <Handle
         type="target"
         position={Position.Left}
@@ -114,7 +117,6 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
           left: -8,
         }}
       />
-
       <Handle
         type="source"
         position={Position.Right}
@@ -123,6 +125,7 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
           width: 16,
           height: 16,
           right: -8,
+          padding: '0px 20px 20px 20px;',
         }}
       />
     </div>

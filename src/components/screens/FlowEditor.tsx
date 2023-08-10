@@ -399,7 +399,7 @@ export const FlowEditor: React.FC<{
                   <div className="collapse-title text-xl font-medium">Data Indexer</div>
                   <div className="collapse-content">
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-green-200 hover:bg-green-300"
                       onClick={() => {
                         setNodes(prev => {
                           const nodeId = 'data-indexer-' + String(Date.now())
@@ -423,7 +423,7 @@ export const FlowEditor: React.FC<{
                   <div className="collapse-title text-xl font-medium">Data Retriever</div>
                   <div className="collapse-content">
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-orange-200 hover:bg-orange-300"
                       onClick={() => {
                         setNodes(prev => {
                           const nodeId = 'data-retriever-' + String(Date.now())
@@ -465,7 +465,7 @@ export const FlowEditor: React.FC<{
                       Data Extractor
                     </button>
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-blue-200 hover:bg-blue-300"
                       onClick={() => {
                         setNodes(prev => {
                           const nodeId = 'llm-processor-' + String(Date.now())
@@ -529,7 +529,7 @@ export const FlowEditor: React.FC<{
                   <div className="collapse-title text-xl font-medium">Evaluation</div>
                   <div className="collapse-content">
                     <button
-                      className="btn m-2"
+                      className="btn m-2 bg-pink-200 hover:bg-pink-300"
                       onClick={() => {
                         setNodes(prev => {
                           const nodeId = 'evaluator-' + String(Date.now())
@@ -552,7 +552,9 @@ export const FlowEditor: React.FC<{
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Custom Fine-Tuning</div>
                   <div className="collapse-content">
-                    <button className="btn m-2" onClick={() => {}}>
+                    <button
+                      className="btn m-2 bg-yellow-200 hover:bg-yellow-300"
+                      onClick={() => {}}>
                       Fine-Tuning
                     </button>
                   </div>
