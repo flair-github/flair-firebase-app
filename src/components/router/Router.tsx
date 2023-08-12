@@ -7,13 +7,14 @@ import LoginScreen from '../screens/Login'
 import PageLoader from '../screens/Loader'
 import { useAuth } from '~/lib/firebase'
 
-const Loading = () => <p className="h-full w-full p-4 text-center">Loading...</p>
+const Loading = () => <p className="w-full h-full p-4 text-center">Loading...</p>
 
 const IndexScreen = lazy(() => import('~/components/screens/Index'))
 const Page404Screen = lazy(() => import('~/components/screens/404'))
 const FlowEditorScreen = lazy(() => import('~/components/screens/FlowEditor'))
 const ResultsScreen = lazy(() => import('~/components/screens/Results'))
 const ResultDetailsScreen = lazy(() => import('~/components/screens/ResultDetails'))
+const LLMOutputsScreen = lazy(() => import('~/components/screens/LLMOutputs'))
 const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
 const TemplatesScreen = lazy(() => import('~/components/screens/Templates'))
 const TemplateWizardScreen = lazy(() => import('~/components/screens/TemplateWizard'))
@@ -30,16 +31,16 @@ function Layout() {
 
   return (
     <div className="min-h-screen">
-      <div className="navbar h-1 max-h-16 border-b bg-base-100">
+      <div className="h-1 border-b navbar max-h-16 bg-base-100">
         <div className="flex-1">
           <div
-            className="btn-ghost btn text-xl normal-case"
+            className="text-xl normal-case btn-ghost btn"
             onClick={() => {
               navigate('/')
             }}>
             <img src="/images/flair-ai.svg" width={120} height={2} className="" />
           </div>
-          <ul className="menu menu-horizontal px-1">
+          <ul className="px-1 menu menu-horizontal">
             <li
               onClick={() => {
                 navigate('/')
@@ -52,13 +53,19 @@ function Layout() {
               }}>
               <a>Results</a>
             </li>
+            <li
+              onClick={() => {
+                navigate('/llm-outputs')
+              }}>
+              <a>LLM Outputs</a>
+            </li>
           </ul>
         </div>
         <div className="flex-none">
           <div className="dropdown-end dropdown">
-            <label tabIndex={0} className="btn-ghost btn flex px-2 normal-case">
+            <label tabIndex={0} className="flex px-2 normal-case btn-ghost btn">
               <div>{userData?.userName || 'Flair User'}</div>
-              <div className="w-9 overflow-hidden rounded-full">
+              <div className="overflow-hidden rounded-full w-9">
                 <img src={userData?.userPhotoUrl} />
               </div>
             </label>
@@ -116,6 +123,10 @@ const InnerRouter = () => {
         {
           path: 'result-details',
           element: <ResultDetailsScreen />,
+        },
+        {
+          path: 'llm-outputs',
+          element: <LLMOutputsScreen />,
         },
         {
           path: 'settings',
