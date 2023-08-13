@@ -88,3 +88,24 @@ export interface DocWorkflowResult extends DocRoot {
   completionTimestamp: Timestamp
   resultData: any
 }
+
+type Answer = string[] | number | string
+type ColumnName = 'todos' | 'customer_age' | 'call_type' | 'customer_objections'
+
+export interface DocLLMOutput {
+  workflowId: string
+  workflowRequestId?: string
+  workflowResultId: string | null
+  id: string
+  columnName: ColumnName
+  columnPrompt: string
+  context: string
+  instruction: string
+  answer: Answer
+  input: string
+  output: string
+  docExists: boolean
+  latency: number
+  createdTimestamp: Timestamp
+  updatedTimestamp: Timestamp
+}
