@@ -7,7 +7,7 @@ import LoginScreen from '../screens/Login'
 import PageLoader from '../screens/Loader'
 import { useAuth } from '~/lib/firebase'
 
-const Loading = () => <p className="w-full h-full p-4 text-center">Loading...</p>
+const Loading = () => <p className="h-full w-full p-4 text-center">Loading...</p>
 
 const IndexScreen = lazy(() => import('~/components/screens/Index'))
 const Page404Screen = lazy(() => import('~/components/screens/404'))
@@ -31,16 +31,16 @@ function Layout() {
 
   return (
     <div className="min-h-screen">
-      <div className="h-1 border-b navbar max-h-16 bg-base-100">
+      <div className="navbar h-1 max-h-16 border-b bg-base-100">
         <div className="flex-1">
           <div
-            className="text-xl normal-case btn-ghost btn"
+            className="btn-ghost btn text-xl normal-case"
             onClick={() => {
               navigate('/')
             }}>
             <img src="/images/flair-ai.svg" width={120} height={2} className="" />
           </div>
-          <ul className="px-1 menu menu-horizontal">
+          <ul className="menu menu-horizontal px-1">
             <li
               onClick={() => {
                 navigate('/')
@@ -53,19 +53,30 @@ function Layout() {
               }}>
               <a>Results</a>
             </li>
-            <li
-              onClick={() => {
-                navigate('/llm-outputs')
-              }}>
-              <a>LLM Outputs</a>
-            </li>
           </ul>
         </div>
         <div className="flex-none">
           <div className="dropdown-end dropdown">
-            <label tabIndex={0} className="flex px-2 normal-case btn-ghost btn">
+            <label tabIndex={0} className="btn-ghost btn flex px-2 font-normal normal-case">
+              <div>Debug</div>
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu rounded-box menu-sm z-[1] mt-3 w-52 bg-base-100 p-2 shadow">
+              <li
+                onClick={() => {
+                  navigate('/llm-outputs')
+                }}>
+                <a>LLM Outputs</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="flex-none">
+          <div className="dropdown-end dropdown">
+            <label tabIndex={0} className="btn-ghost btn flex px-2 normal-case">
               <div>{userData?.userName || 'Flair User'}</div>
-              <div className="overflow-hidden rounded-full w-9">
+              <div className="w-9 overflow-hidden rounded-full">
                 <img src={userData?.userPhotoUrl} />
               </div>
             </label>
