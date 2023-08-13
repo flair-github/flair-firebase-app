@@ -1,27 +1,39 @@
-import React from 'react'
-import { Dialog } from '@headlessui/react'
-import { useRef, useState } from 'react'
-import { SignInButton } from '~/components/domain/auth/SignInButton'
-import { SignOutButton } from '~/components/domain/auth/SignOutButton'
-import { Head } from '~/components/shared/Head'
-import FlowEditor from './FlowEditor'
-import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
+import { useState } from 'react'
+// import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
 import { PiFileCsvFill } from 'react-icons/pi'
 import { CodeBlock } from 'react-code-blocks'
+import { useParams } from 'react-router-dom'
+import useFirestoreDoc from '~/lib/useFirestoreDoc'
+import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
+import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
+import { ImSpinner9 } from 'react-icons/im'
 
-const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
-const edges = JSON.parse(FLOW_SAMPLE_2).edges
+// const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
+// const edges = JSON.parse(FLOW_SAMPLE_2).edges
 
 function ResultDetails() {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
+  const { resultId } = useParams()
+  const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
+    'workflow_results',
+    resultId as string,
+  )
+  const {
+    items,
+    loading: outputLoading,
+    hasMore,
+    loadMore,
+  } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, [
+    ['workflowResultId', '==', resultId as string],
+  ])
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="mb-2 flex items-center ">
+    <div className="container p-4 mx-auto">
+      <div className="flex items-center mb-2 ">
         <h1 className="text-3xl font-bold">Customer Call Workflow #1831</h1>
         <div className="flex-1" />
-        <a className="btn-disabled btn mr-2 gap-1" href="#" onClick={() => {}}>
+        <a className="gap-1 mr-2 btn-disabled btn" href="#" onClick={() => {}}>
           <FaShare />
           <div>Share</div>
           <div className="text-xs">(soon)</div>
@@ -30,7 +42,7 @@ function ResultDetails() {
           <FaCloudDownloadAlt /> Download
         </a>
       </div>
-      <div className="stats mb-4 w-full grid-cols-4 shadow">
+      <div className="w-full grid-cols-4 mb-4 shadow stats">
         <div className="stat">
           <div className="stat-title">Model</div>
           <div className="stat-value">gpt-4</div>
@@ -51,31 +63,31 @@ function ResultDetails() {
           <div className="stat-desc">4% more than last run</div>
         </div>
       </div>
-      <div className="stats mb-4 w-full grid-cols-4 shadow">
+      <div className="w-full grid-cols-4 mb-4 shadow stats">
         <div className="stat">
           <div className="stat-title">Request Time</div>
           <div className="stat-value">
             <div className="text-3xl">2023/06/25</div>
-            <div className="stat-desc text-lg font-bold">10:45:30</div>
+            <div className="text-lg font-bold stat-desc">10:45:30</div>
           </div>
         </div>
         <div className="stat">
           <div className="stat-title">Total Time</div>
           <div className="stat-value">25 minutes</div>
-          <div className="stat-desc text-lg font-bold">Avg: 2.3 minutes</div>
+          <div className="text-lg font-bold stat-desc">Avg: 2.3 minutes</div>
         </div>
         <div className="stat">
           <div className="stat-title">Average Tokens</div>
           <div className="stat-value">192.3 tokens</div>
-          {/* <div className="stat-desc text-lg font-bold">Avg: 56 tokens</div> */}
+          {/* <div className="text-lg font-bold stat-desc">Avg: 56 tokens</div> */}
         </div>
         <div className="stat">
           <div className="stat-title">Average Latency</div>
           <div className="stat-value">211.2ms</div>
-          {/* <div className="stat-desc text-lg font-bold">Avg: 200ms</div> */}
+          {/* <div className="text-lg font-bold stat-desc">Avg: 200ms</div> */}
         </div>
       </div>
-      <div className="tabs tabs-boxed mb-2 w-full justify-center">
+      <div className="justify-center w-full mb-2 tabs tabs-boxed">
         <a
           className={`tab tab-lg font-bold ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('evaluation')}>
@@ -94,7 +106,7 @@ function ResultDetails() {
       </div>
       {activeTab === 'evaluation' && (
         <div>
-          <div className="mb-3 flex space-x-2">
+          <div className="flex mb-3 space-x-2">
             <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">LLM Output Column</span>
@@ -132,171 +144,44 @@ function ResultDetails() {
               </select>
             </div>
           </div>
+
+          {/* Table */}
           <table className="table w-full shadow">
             <thead>
               <tr>
                 <th>LLM Input</th>
                 <th>LLM Output</th>
-                <th>Ground Truth</th>
-                <th>Similarity Score</th>
-                <th>OpenAI Eval</th>
+                <th>Latency</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>"Can you help me with my account balance?"</td>
-                <td>
-                  "I can assist you with your account balance. Please provide me with your account
-                  details."
-                </td>
-                <td>
-                  "Sure, I can help you with that. Could you please provide your account details?"
-                </td>
-                <td>
-                  <span className="font-bold">0.98</span>
-                </td>
-                <td>
-                  <span className="font-bold">1</span>
-                </td>
-              </tr>
-              <tr>
-                <td>"I'm experiencing issues with my internet connection."</td>
-                <td>
-                  "Let's troubleshoot your internet connection. Have you tried restarting your
-                  modem?"
-                </td>
-                <td>
-                  "We can certainly help troubleshoot. Have you attempted to reset your modem?"
-                </td>
-                <td>
-                  <span className="font-bold">0.93</span>
-                </td>
-                <td>
-                  <span className="font-bold">2</span>
-                </td>
-              </tr>
-              <tr>
-                <td>"How can I cancel my subscription?"</td>
-                <td>
-                  "To cancel your subscription, please visit our website and go to the account
-                  settings."
-                </td>
-                <td>
-                  "If you wish to cancel your subscription, navigate to account settings on our
-                  site."
-                </td>
-                <td>
-                  <span className="font-bold text-red-500">0.65</span>
-                </td>
-                <td>
-                  <span className="font-bold">3</span>
-                </td>
-              </tr>
-              <tr>
-                <td>"What are your business hours?"</td>
-                <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
-                <td>"We operate from 9:00 AM to 6:00 PM, Monday through Friday."</td>
-                <td>
-                  <div className="font-bold">0.97</div>
-                </td>
-                <td>
-                  <span className="font-bold">2</span>
-                </td>
-              </tr>
-              <tr>
-                <td>"Do you offer a money-back guarantee?"</td>
-                <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
-                <td>"Absolutely, we provide a 30-day refund policy for all items."</td>
-                <td>
-                  <div className="font-bold">0.91</div>
-                </td>
-                <td>
-                  <span className="font-bold">1</span>
-                </td>
-              </tr>
-              <tr>
-                <td>"Can I change my shipping address?"</td>
-                <td>
-                  "Certainly! Please provide your new shipping address and we'll update it for you."
-                </td>
-                <td>
-                  "Of course! Please share your updated shipping address and we'll make the
-                  necessary changes."
-                </td>
-                <td>
-                  <span className="font-bold text-orange-500">0.75</span>
-                </td>
-                <td>
-                  <span className="font-bold">2</span>
-                </td>
-              </tr>
-              <tr>
-                <td>"What's the status of my order?"</td>
-                <td>
-                  "Let me check the status of your order. Can you please provide your order number?"
-                </td>
-                <td>"I can do that. Please share your order number so I can track it."</td>
-                <td>
-                  <span className="font-bold text-orange-500">0.78</span>
-                </td>
-                <td>
-                  <span className="font-bold">1</span>
-                </td>
-              </tr>
-              <tr>
-                <td>"How do I reset my password?"</td>
-                <td>
-                  "To reset your password, click on the 'Forgot Password' link and follow the
-                  instructions."
-                </td>
-                <td>
-                  "You can reset your password by clicking 'Forgot Password' and then adhering to
-                  the given steps."
-                </td>
-                <td>
-                  <div className="font-bold">0.95</div>
-                </td>
-                <td>
-                  <span className="font-bold">4</span>
-                </td>
-              </tr>
-              <tr>
-                <td>"Can I return an item for a refund?"</td>
-                <td>
-                  "Yes, we accept returns for a refund within 30 days of purchase. Please provide
-                  your order details."
-                </td>
-                <td>
-                  "Sure, you can return an item within 30 days of buying it for a refund. Could you
-                  share your order details?"
-                </td>
-                <td>
-                  <div className="font-bold">0.88</div>
-                </td>
-                <td>
-                  <span className="font-bold">3</span>
-                </td>
-              </tr>
-              <tr>
-                <td>"What's the best way to contact customer support?"</td>
-                <td>"You can contact our customer support team via phone, email, or live chat."</td>
-                <td>
-                  "Our customer support can be reached via phone, email, or through live chat."
-                </td>
-                <td>
-                  <div className="font-bold">0.92</div>
-                </td>
-                <td>
-                  <span className="font-bold">4</span>
-                </td>
-              </tr>
+              {items?.map(item => (
+                <tr key={item.id}>
+                  <td>
+                    <div className="w-96 line-clamp-3 h-14">{item.input}</div>
+                  </td>
+                  <td>
+                    <div className="w-96 line-clamp-3 h-14">{item.output}</div>
+                  </td>
+                  <td>{item.latency.toFixed(2) + ' seconds'}</td>
+                </tr>
+              ))}
             </tbody>
-          </table>{' '}
+          </table>
+          {hasMore ? (
+            <button className="block mx-auto my-3 btn w-36" onClick={loadMore}>
+              {outputLoading ? (
+                <ImSpinner9 className="w-5 h-5 mx-auto animate animate-spin" />
+              ) : (
+                'Load More'
+              )}
+            </button>
+          ) : null}
         </div>
       )}
       {activeTab === 'result' && (
         <div className="justify-left flex w-full border [height:720px]">
-          <div className="container max-w-200 p-5">
+          <div className="container p-5 max-w-200">
             <div className="px-4 sm:px-0">
               <h3 className="text-base font-semibold leading-7 text-gray-900">Workflow Result</h3>
               {/* <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">
@@ -338,13 +223,13 @@ function ResultDetails() {
                   <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                     <ul
                       role="list"
-                      className="divide-y divide-gray-100 rounded-md border border-gray-200">
+                      className="border border-gray-200 divide-y divide-gray-100 rounded-md">
                       <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                        <div className="flex w-0 flex-1 items-center">
-                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
-                            <span className="truncate font-medium">llm_result.csv</span>
-                            <span className="shrink-0 text-gray-400">2.5 MB</span>
+                        <div className="flex items-center flex-1 w-0">
+                          <PiFileCsvFill className="w-5 h-5 text-gray-400 shrink-0" />
+                          <div className="flex flex-1 min-w-0 gap-2 ml-4">
+                            <span className="font-medium truncate">llm_result.csv</span>
+                            <span className="text-gray-400 shrink-0">2.5 MB</span>
                           </div>
                         </div>
                         <div className="ml-4 shrink-0">
@@ -357,11 +242,11 @@ function ResultDetails() {
                         </div>
                       </li>
                       <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                        <div className="flex w-0 flex-1 items-center">
-                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
-                            <span className="truncate font-medium">evaluation_result.jsonl</span>
-                            <span className="shrink-0 text-gray-400">2.6 MB</span>
+                        <div className="flex items-center flex-1 w-0">
+                          <PiFileCsvFill className="w-5 h-5 text-gray-400 shrink-0" />
+                          <div className="flex flex-1 min-w-0 gap-2 ml-4">
+                            <span className="font-medium truncate">evaluation_result.jsonl</span>
+                            <span className="text-gray-400 shrink-0">2.6 MB</span>
                           </div>
                         </div>
                         <div className="ml-4 shrink-0">
@@ -382,7 +267,7 @@ function ResultDetails() {
         </div>
       )}
       {activeTab === 'config' && (
-        <div className="w-full overflow-y-auto border font-mono">
+        <div className="w-full overflow-y-auto font-mono border">
           <CodeBlock text={yaml} language="yaml" showLineNumbers={true} wrapLines />
         </div>
       )}
