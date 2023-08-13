@@ -4,7 +4,7 @@ import { SignOutButton } from '~/components/domain/auth/SignOutButton'
 import { Head } from '~/components/shared/Head'
 import FlowEditor from './FlowEditor'
 import { useNavigate } from 'react-router-dom'
-import { FaCloudDownloadAlt } from 'react-icons/fa'
+import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
 
 function PageResults() {
@@ -69,7 +69,7 @@ function PageResults() {
                     <HiDocumentReport /> Details
                   </a>
                   <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>
-                    <FaCloudDownloadAlt /> Download
+                    <FaRocket /> Deploy
                   </a>
                 </div>
               </td>
@@ -104,7 +104,7 @@ function PageResults() {
                     <HiDocumentReport /> Details
                   </a>
                   <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>
-                    <FaCloudDownloadAlt /> Download
+                    <FaRocket /> Deploy
                   </a>
                 </div>
               </td>
@@ -138,7 +138,7 @@ function PageResults() {
                     <HiDocumentReport /> Details
                   </a>
                   <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>
-                    <FaCloudDownloadAlt /> Download
+                    <FaRocket /> Deploy
                   </a>
                 </div>
               </td>
@@ -173,7 +173,7 @@ function PageResults() {
                     <HiDocumentReport /> Details
                   </a>
                   <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>
-                    <FaCloudDownloadAlt /> Download
+                    <FaRocket /> Deploy
                   </a>
                 </div>
               </td>
@@ -208,7 +208,7 @@ function PageResults() {
                     <HiDocumentReport /> Details
                   </a>
                   <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>
-                    <FaCloudDownloadAlt /> Download
+                    <FaRocket /> Deploy
                   </a>
                 </div>
               </td>

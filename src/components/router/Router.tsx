@@ -51,7 +51,13 @@ function Layout() {
               onClick={() => {
                 navigate('/results')
               }}>
-              <a>Results</a>
+              <a>Experiments</a>
+            </li>
+            <li
+              onClick={() => {
+                // navigate('/results')
+              }}>
+              <a>Deployments</a>
             </li>
           </ul>
         </div>
