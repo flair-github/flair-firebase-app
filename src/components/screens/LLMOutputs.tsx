@@ -62,7 +62,7 @@ function LLMOutputs() {
               <th />
               <th>Workflow</th>
               <th>Column Name</th>
-              <th>Column Prompt</th>
+              <th>Prompt</th>
               <th>Instruction</th>
               <th>Context</th>
               <th>Input</th>
