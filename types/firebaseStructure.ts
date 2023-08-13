@@ -93,19 +93,19 @@ type Answer = string[] | number | string
 type ColumnName = 'todos' | 'customer_age' | 'call_type' | 'customer_objections'
 
 export interface DocLLMOutput {
-  instruction: string
-  docExists: boolean
-  answer: Answer
-  updatedTimestamp: Timestamp
-  latency: number
-  columnPrompt: string
-  input: string
-  context: string
-  columnName: ColumnName
-  output: string
-  workflowResultId: string | null
-  createdTimestamp: Timestamp
-  id: string
   workflowId: string
   workflowRequestId?: string
+  workflowResultId: string | null
+  id: string
+  columnName: ColumnName
+  columnPrompt: string
+  context: string
+  instruction: string
+  answer: Answer
+  input: string
+  output: string
+  docExists: boolean
+  latency: number
+  createdTimestamp: Timestamp
+  updatedTimestamp: Timestamp
 }

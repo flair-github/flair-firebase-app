@@ -1,11 +1,12 @@
-import { FaCloudDownloadAlt } from 'react-icons/fa'
 import { DocLLMOutput } from 'Types/firebaseStructure'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { Timestamp } from 'firebase/firestore'
 import { ImSpinner9 } from 'react-icons/im'
-import { MdExpandCircleDown } from 'react-icons/md'
+import { AiOutlineExpand, AiOutlineDownload } from 'react-icons/ai'
+import { useState } from 'react'
+import DetailModal from '../shared/DetailModal'
 
-function timestampToLocaleString(
+export function timestampToLocaleString(
   ts: Timestamp,
   locale: string = 'en-US',
   options?: Intl.DateTimeFormatOptions,
@@ -22,11 +23,24 @@ function timestampToLocaleString(
   })
 }
 
+function downloadObjectAsJson(exportObj: any, fileName: string): void {
+  const dataStr =
+    'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj, null, 2))
+  const downloadAnchorNode = document.createElement('a')
+  downloadAnchorNode.setAttribute('href', dataStr)
+  downloadAnchorNode.setAttribute('download', fileName + '.json')
+  document.body.appendChild(downloadAnchorNode) // Required for Firefox
+  downloadAnchorNode.click()
+  downloadAnchorNode.remove()
+}
+
 function LLMOutputs() {
   const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocLLMOutput>(
     'llm_outputs',
     10,
   )
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
 
   return (
     <div className="container mx-auto mt-6 border-t border-b rounded-md mb-9 border-x">
@@ -45,7 +59,7 @@ function LLMOutputs() {
           <thead>
             <tr>
               <th />
-              <th>Ouput Id</th>
+              <th>Workflow</th>
               <th>Column</th>
               <th>Instruction</th>
               <th>Context</th>
@@ -67,7 +81,12 @@ function LLMOutputs() {
                     <input type="checkbox" className="checkbox" />
                   </div>
                 </td>
-                <td>{item.id}</td>
+                <td>
+                  <p className="mb-1 line-clamp-2">{item.workflowId}</p>
+                  <span className="text-xs badge badge-outline whitespace-nowrap">
+                    Request: {item.workflowRequestId}
+                  </span>
+                </td>
                 <td>
                   <p className="mb-1 line-clamp-2">{item.columnPrompt}</p>
                   <span className="text-xs badge badge-outline whitespace-nowrap">
@@ -107,11 +126,20 @@ function LLMOutputs() {
                 </td>
                 <td>
                   <div className="min-w-[15rem] flex justify-start items-center space-x-3">
-                    <button className="btn bg-slate-200" onClick={() => {}}>
-                      <MdExpandCircleDown /> Details
+                    <button
+                      className="btn bg-slate-200"
+                      onClick={() => {
+                        setSelectedRow(item)
+                        setIsOpen(true)
+                      }}>
+                      <AiOutlineExpand /> Details
                     </button>
-                    <button className="btn bg-slate-200" onClick={() => {}}>
-                      <FaCloudDownloadAlt /> Download
+                    <button
+                      className="btn bg-slate-200"
+                      onClick={() => {
+                        downloadObjectAsJson(item, item.id)
+                      }}>
+                      <AiOutlineDownload /> Download
                     </button>
                   </div>
                 </td>
@@ -124,6 +152,9 @@ function LLMOutputs() {
         <button className="block mx-auto my-3 btn w-36" onClick={loadMore}>
           {loading ? <ImSpinner9 className="w-5 h-5 mx-auto animate animate-spin" /> : 'Load More'}
         </button>
+      ) : null}
+      {selectedRow ? (
+        <DetailModal key={selectedRow?.id} open={isOpen} setOpen={setIsOpen} item={selectedRow} />
       ) : null}
     </div>
   )
