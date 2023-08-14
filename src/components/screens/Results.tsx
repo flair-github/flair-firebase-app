@@ -27,7 +27,6 @@ function PageResults() {
       unsub()
     }
   }, [])
-  console.log(results)
 
   return (
     <div className="container mx-auto border-x">
