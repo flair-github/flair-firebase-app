@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from 'react'
 // import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
@@ -46,11 +47,11 @@ function ResultDetails() {
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
 
   return (
-    <div className="container p-4 mx-auto">
-      <div className="flex items-center mb-2 ">
+    <div className="container mx-auto p-4">
+      <div className="mb-2 flex items-center ">
         <h1 className="text-3xl font-bold">Customer Call Workflow #1831</h1>
         <div className="flex-1" />
-        <a className="gap-1 mr-2 btn-disabled btn" href="#" onClick={() => {}}>
+        <a className="btn-disabled btn mr-2 gap-1" href="#" onClick={() => {}}>
           <FaShare />
           <div>Share</div>
           <div className="text-xs">(soon)</div>
@@ -59,7 +60,7 @@ function ResultDetails() {
           <FaCloudDownloadAlt /> Download
         </a>
       </div>
-      <div className="w-full grid-cols-4 mb-4 shadow stats">
+      <div className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat">
           <div className="stat-title">Model</div>
           <div className="stat-value">gpt-4</div>
@@ -80,18 +81,18 @@ function ResultDetails() {
           <div className="stat-desc">4% more than last run</div>
         </div>
       </div>
-      <div className="w-full grid-cols-4 mb-4 shadow stats">
+      <div className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat">
           <div className="stat-title">Request Time</div>
           <div className="stat-value">
             <div className="text-3xl">2023/06/25</div>
-            <div className="text-lg font-bold stat-desc">10:45:30</div>
+            <div className="stat-desc text-lg font-bold">10:45:30</div>
           </div>
         </div>
         <div className="stat">
           <div className="stat-title">Total Time</div>
           <div className="stat-value">25 minutes</div>
-          <div className="text-lg font-bold stat-desc">Avg: 2.3 minutes</div>
+          <div className="stat-desc text-lg font-bold">Avg: 2.3 minutes</div>
         </div>
         <div className="stat">
           <div className="stat-title">Average Tokens</div>
@@ -104,7 +105,7 @@ function ResultDetails() {
           {/* <div className="text-lg font-bold stat-desc">Avg: 200ms</div> */}
         </div>
       </div>
-      <div className="justify-center w-full mb-2 tabs tabs-boxed">
+      <div className="tabs tabs-boxed mb-2 w-full justify-center">
         <a
           className={`tab tab-lg font-bold ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('evaluation')}>
@@ -123,7 +124,7 @@ function ResultDetails() {
       </div>
       {activeTab === 'evaluation' && (
         <div>
-          <div className="flex mb-3 space-x-2">
+          <div className="mb-3 flex space-x-2">
             <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">LLM Output Column</span>
@@ -183,10 +184,10 @@ function ResultDetails() {
               {items?.map(item => (
                 <tr key={item.id}>
                   <td>
-                    <div className="w-96 line-clamp-3 h-14">{item.input}</div>
+                    <div className="line-clamp-3 h-14 w-96">{item.input}</div>
                   </td>
                   <td>
-                    <div className="w-96 line-clamp-3 h-14">{item.output}</div>
+                    <div className="line-clamp-3 h-14 w-96">{item.output}</div>
                   </td>
                   <td>{item.latency.toFixed(2) + ' seconds'}</td>
                   <td>
@@ -206,9 +207,9 @@ function ResultDetails() {
             </tbody>
           </table>
           {hasMore ? (
-            <button className="block mx-auto my-3 btn w-36" onClick={loadMore}>
+            <button className="btn mx-auto my-3 block w-36" onClick={loadMore}>
               {outputLoading ? (
-                <ImSpinner9 className="w-5 h-5 mx-auto animate animate-spin" />
+                <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
               ) : (
                 'Load More'
               )}
@@ -218,7 +219,7 @@ function ResultDetails() {
       )}
       {activeTab === 'result' && (
         <div className="justify-left flex w-full border [height:720px]">
-          <div className="container p-5 max-w-200">
+          <div className="container max-w-200 p-5">
             <div className="px-4 sm:px-0">
               <h3 className="text-base font-semibold leading-7 text-gray-900">Workflow Result</h3>
               {/* <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">
@@ -260,13 +261,13 @@ function ResultDetails() {
                   <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                     <ul
                       role="list"
-                      className="border border-gray-200 divide-y divide-gray-100 rounded-md">
+                      className="divide-y divide-gray-100 rounded-md border border-gray-200">
                       <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                        <div className="flex items-center flex-1 w-0">
-                          <PiFileCsvFill className="w-5 h-5 text-gray-400 shrink-0" />
-                          <div className="flex flex-1 min-w-0 gap-2 ml-4">
-                            <span className="font-medium truncate">llm_result.csv</span>
-                            <span className="text-gray-400 shrink-0">2.5 MB</span>
+                        <div className="flex w-0 flex-1 items-center">
+                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
+                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
+                            <span className="truncate font-medium">llm_result.csv</span>
+                            <span className="shrink-0 text-gray-400">2.5 MB</span>
                           </div>
                         </div>
                         <div className="ml-4 shrink-0">
@@ -279,11 +280,11 @@ function ResultDetails() {
                         </div>
                       </li>
                       <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                        <div className="flex items-center flex-1 w-0">
-                          <PiFileCsvFill className="w-5 h-5 text-gray-400 shrink-0" />
-                          <div className="flex flex-1 min-w-0 gap-2 ml-4">
-                            <span className="font-medium truncate">evaluation_result.jsonl</span>
-                            <span className="text-gray-400 shrink-0">2.6 MB</span>
+                        <div className="flex w-0 flex-1 items-center">
+                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
+                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
+                            <span className="truncate font-medium">evaluation_result.jsonl</span>
+                            <span className="shrink-0 text-gray-400">2.6 MB</span>
                           </div>
                         </div>
                         <div className="ml-4 shrink-0">
@@ -304,7 +305,7 @@ function ResultDetails() {
         </div>
       )}
       {activeTab === 'config' && (
-        <div className="w-full overflow-y-auto font-mono border">
+        <div className="w-full overflow-y-auto border font-mono">
           <CodeBlock text={yaml} language="yaml" showLineNumbers={true} wrapLines />
         </div>
       )}
