@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react'
 import { db } from './firebase' // Your Firestore config and initialization
 import { DocumentData, QueryDocumentSnapshot } from '@firebase/firestore-types'
+import { WhereFilterOp } from 'firebase/firestore'
 
-function usePaginatedFirestore<T extends DocumentData>(collectionName: string, pageSize: number) {
+function usePaginatedFirestore<T extends DocumentData>(
+  collectionName: string,
+  pageSize: number,
+  where: [string, WhereFilterOp, string][],
+) {
   const [items, setItems] = useState<T[]>([])
   const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot<T> | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
@@ -13,7 +18,11 @@ function usePaginatedFirestore<T extends DocumentData>(collectionName: string, p
 
     setLoading(true)
 
-    let query = db.collection(collectionName).orderBy('createdTimestamp').limit(pageSize)
+    let query = db.collection(collectionName).limit(pageSize)
+    for (const clause of where) {
+      query = query.where(...clause)
+    }
+    query = query.orderBy('createdTimestamp')
 
     if (lastVisible) {
       query = query.startAfter(lastVisible)

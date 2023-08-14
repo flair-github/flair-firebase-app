@@ -1,4 +1,3 @@
-import React from 'react'
 import { DocLLMOutput } from 'Types/firebaseStructure'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { Timestamp } from 'firebase/firestore'
@@ -39,12 +38,13 @@ function LLMOutputs() {
   const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocLLMOutput>(
     'llm_outputs',
     10,
+    [['workflowResultId', '==', 'XwRC2hEAUET4Em2GdCLz']],
   )
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
 
   return (
-    <div className="container mx-auto mb-9 mt-6 rounded-md border">
+    <div className="container mx-auto mt-6 border rounded-md mb-9">
       <div className="border-grayscaleDivider flex h-[3rem] border-b">
         <div className="flex-1" />
         <button
@@ -55,7 +55,7 @@ function LLMOutputs() {
         </button>
       </div>
       <div className="overflow-x-auto">
-        <table className="table-zebra table">
+        <table className="table table-zebra">
           {/* head */}
           <thead>
             <tr>
@@ -79,13 +79,13 @@ function LLMOutputs() {
             {items?.map(item => (
               <tr key={item.id}>
                 <td>
-                  <div className="flex h-full w-full items-center justify-center">
+                  <div className="flex items-center justify-center w-full h-full">
                     <input type="checkbox" className="checkbox" />
                   </div>
                 </td>
                 <td>
                   <p className="mb-1 line-clamp-2">{item.workflowId}</p>
-                  <span className="badge badge-outline whitespace-nowrap text-xs">
+                  <span className="text-xs badge badge-outline whitespace-nowrap">
                     Request: {item.workflowRequestId}
                   </span>
                 </td>
@@ -151,8 +151,8 @@ function LLMOutputs() {
         </table>
       </div>
       {hasMore ? (
-        <button className="btn mx-auto my-3 block w-36" onClick={loadMore}>
-          {loading ? <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" /> : 'Load More'}
+        <button className="block mx-auto my-3 btn w-36" onClick={loadMore}>
+          {loading ? <ImSpinner9 className="w-5 h-5 mx-auto animate animate-spin" /> : 'Load More'}
         </button>
       ) : null}
       {selectedRow ? (

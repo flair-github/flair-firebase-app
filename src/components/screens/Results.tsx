@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { SignInButton } from '~/components/domain/auth/SignInButton'
-import { SignOutButton } from '~/components/domain/auth/SignOutButton'
-import { Head } from '~/components/shared/Head'
-import FlowEditor from './FlowEditor'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
 import { db } from '~/lib/firebase'
 import { getAverage } from '~/lib/averager'
+import { timestampToLocaleString } from './LLMOutputs'
 
 function PageResults() {
-  const navigate = useNavigate()
-
   const [results, setResults] = useState<any[]>([])
 
   useEffect(() => {
@@ -32,6 +27,7 @@ function PageResults() {
       unsub()
     }
   }, [])
+  console.log(results)
 
   return (
     <div className="container mx-auto border-x">
@@ -45,7 +41,7 @@ function PageResults() {
         </button>
       </div>
       <div className="overflow-x-auto">
-        <table className="table-zebra table">
+        <table className="table table-zebra">
           {/* head */}
           <thead>
             <tr>
@@ -66,12 +62,14 @@ function PageResults() {
               return (
                 <tr key={el.workflowResultId}>
                   <td>
-                    <div className="flex h-full w-full items-center justify-center">
+                    <div className="flex items-center justify-center w-full h-full">
                       <input type="checkbox" className="checkbox" />
                     </div>
                   </td>
                   <td>{el.workflowResultId}</td>
-                  <td>{el.createdTimestamp?.toDate()?.toISOString()}</td>
+                  <td>
+                    <div className="w-32">{timestampToLocaleString(el.createdTimestamp)}</div>
+                  </td>
                   <td>15 minutes</td>
                   <td>gpt-4</td>
                   <td>98%</td>
@@ -83,13 +81,12 @@ function PageResults() {
                   </td>
                   <td>
                     <div style={{ minWidth: 250 }}>
-                      <a
-                        className="btn m-1 bg-slate-200"
-                        href="#"
-                        onClick={() => navigate('/result-details')}>
+                      <Link
+                        className="m-1 btn bg-slate-200"
+                        to={'/result-details/' + el.workflowResultId}>
                         <HiDocumentReport /> Details
-                      </a>
-                      <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>
+                      </Link>
+                      <a className="m-1 btn bg-slate-200" href="#" onClick={() => {}}>
                         <FaRocket /> Deploy
                       </a>
                     </div>

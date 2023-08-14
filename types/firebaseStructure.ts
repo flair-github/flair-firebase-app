@@ -77,17 +77,17 @@ export interface DocWorkflowRequest extends DocRoot {
   generatedConfig: string
 }
 
-export interface DocWorkflowResult extends DocRoot {
-  /** Document Id */
-  workflowResultId: string
+// export interface DocWorkflowResult extends DocRoot {
+//   /** Document Id */
+//   workflowResultId: string
 
-  workflowId: string
-  workflowRequestId: string
-  executorUserId: string
+//   workflowId: string
+//   workflowRequestId: string
+//   executorUserId: string
 
-  completionTimestamp: Timestamp
-  resultData: any
-}
+//   completionTimestamp: Timestamp
+//   resultData: any
+// }
 
 type Answer = string[] | number | string
 type ColumnName = 'todos' | 'customer_age' | 'call_type' | 'customer_objections'
@@ -108,4 +108,33 @@ export interface DocLLMOutput {
   latency: number
   createdTimestamp: Timestamp
   updatedTimestamp: Timestamp
+}
+
+export interface DocWorkflowResult {
+  completionTimestamp: Timestamp
+  updatedTimestamp: Timestamp
+  createdTimestamp: Timestamp
+  executorUserId: string
+  workflowRequestId: string
+  workflowResultId: string
+  workflowId: string
+  docExists: boolean
+  resultData: ResultDataUnion
+  evaluationData: EvaluationData
+  requestType?: null
+}
+
+interface EvaluationData {
+  call_type?: EvaluationData
+  faithfulness?: number
+  average_latency_per_request?: number
+  context_relevancy?: number
+  answer_relevancy?: number
+  average_tokens_per_request?: number
+}
+
+type ResultDataUnion = string[] | ResultDataClass
+
+interface ResultDataClass {
+  call_type: string
 }
