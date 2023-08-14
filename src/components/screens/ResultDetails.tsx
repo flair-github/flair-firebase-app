@@ -137,7 +137,8 @@ function ResultDetails() {
                 <option value={undefined}>All</option>
                 {(data?.evaluationData ? Object.keys(data.evaluationData) : []).map(item => (
                   <option key={item} value={item}>
-                    {snakeToTitle(item)}
+                    {/* {snakeToTitle(item)} */}
+                    {item}
                   </option>
                 ))}
               </select>
