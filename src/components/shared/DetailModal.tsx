@@ -4,6 +4,25 @@ import { DocLLMOutput } from 'Types/firebaseStructure'
 import { timestampToLocaleString } from '../screens/LLMOutputs'
 import { RiFileCopy2Line } from 'react-icons/ri'
 
+const makeTextReadable = (inputText: string): string => {
+  return inputText
+    .split('\n')
+    .map(line => {
+      // Check if line is a JSON string by looking for '{' at the start
+      if (line.trim().startsWith('{')) {
+        try {
+          // Try to parse and pretty print the JSON
+          const obj = JSON.parse(line)
+          return JSON.stringify(obj, null, 2)
+        } catch (error) {
+          return line
+        }
+      }
+      return line
+    })
+    .join('\n')
+}
+
 async function copyToClipboard(text: string): Promise<void> {
   try {
     await navigator.clipboard.writeText(text)
@@ -24,7 +43,7 @@ export default function DetailModal({
 }) {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+      <Dialog as="div" className="relative z-10" onClose={() => setOpen(false)}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -241,11 +260,9 @@ export default function DetailModal({
                         <RiFileCopy2Line />
                       </button>
                     </div>
-                    <textarea
-                      value={item.input}
-                      className="w-full h-64 textarea textarea-bordered"
-                      readOnly
-                    />
+                    <pre className="w-full h-64 textarea textarea-bordered overflow-scroll">
+                      {item.input}
+                    </pre>
                   </article>
                   <article className="w-full max-w-xs col-span-6 form-control">
                     <div className="label">
@@ -258,11 +275,9 @@ export default function DetailModal({
                         <RiFileCopy2Line />
                       </button>
                     </div>
-                    <textarea
-                      value={item.output}
-                      className="w-full h-64 textarea textarea-bordered"
-                      readOnly
-                    />
+                    <pre className="w-full h-64 textarea textarea-bordered overflow-scroll">
+                      {makeTextReadable(item.output)}
+                    </pre>
                   </article>
 
                   <h2 className="col-span-6 py-2 text-base font-semibold leading-7 text-gray-900 border-y">

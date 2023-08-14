@@ -8,9 +8,19 @@ import useFirestoreDoc from '~/lib/useFirestoreDoc'
 import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner9 } from 'react-icons/im'
+import { AiOutlineExpand } from 'react-icons/ai'
+import DetailModal from '../shared/DetailModal'
+import { WhereFilterOp } from 'firebase/firestore'
 
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
+
+const snakeToTitle = (input: string): string => {
+  return input
+    .split('_') // Split the string on underscores
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
+    .join(' ') // Join the words together with spaces
+}
 
 function ResultDetails() {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
@@ -19,6 +29,7 @@ function ResultDetails() {
     'workflow_results',
     resultId as string,
   )
+  const [columnName, setColumnName] = useState<string>()
   const {
     items,
     loading: outputLoading,
@@ -26,7 +37,13 @@ function ResultDetails() {
     loadMore,
   } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, [
     ['workflowResultId', '==', resultId as string],
+    ...(columnName
+      ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
+      : []),
   ])
+
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
 
   return (
     <div className="container p-4 mx-auto">
@@ -111,10 +128,17 @@ function ResultDetails() {
               <label className="label">
                 <span className="label-text">LLM Output Column</span>
               </label>
-              <select className="select-bordered select">
-                <option>Call Question</option>
-                <option>Answer</option>
-                <option>Score</option>
+              <select
+                className="select-bordered select"
+                onChange={({ target: { value } }) => {
+                  setColumnName(value)
+                }}>
+                <option value={undefined}>All</option>
+                {(data?.evaluationData ? Object.keys(data.evaluationData) : []).map(item => (
+                  <option key={item} value={item}>
+                    {snakeToTitle(item)}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="flex-1" />
@@ -152,6 +176,7 @@ function ResultDetails() {
                 <th>LLM Input</th>
                 <th>LLM Output</th>
                 <th>Latency</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -164,6 +189,18 @@ function ResultDetails() {
                     <div className="w-96 line-clamp-3 h-14">{item.output}</div>
                   </td>
                   <td>{item.latency.toFixed(2) + ' seconds'}</td>
+                  <td>
+                    <div className="">
+                      <button
+                        className="btn bg-slate-200"
+                        onClick={() => {
+                          setSelectedRow(item)
+                          setIsOpen(true)
+                        }}>
+                        <AiOutlineExpand /> Details
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -271,6 +308,9 @@ function ResultDetails() {
           <CodeBlock text={yaml} language="yaml" showLineNumbers={true} wrapLines />
         </div>
       )}
+      {selectedRow ? (
+        <DetailModal key={selectedRow?.id} open={isOpen} setOpen={setIsOpen} item={selectedRow} />
+      ) : null}
     </div>
   )
 }
