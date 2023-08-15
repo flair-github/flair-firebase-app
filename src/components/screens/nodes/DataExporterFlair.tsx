@@ -52,7 +52,7 @@ export const DataExporterFlairNode = ({
           }}
         />
       )}
-      <header className="mb-4 flex justify-between items-center bg-teal-200 px-5 py-3 rounded-t-md">
+      <header className="mb-4 flex items-center justify-between rounded-t-md bg-teal-200 px-5 py-3">
         <div className="fw-bold">Data Exporter : Flair Hosted</div>
         <img src="/images/powered-by-flair.png" width={133} height={24} />
       </header>

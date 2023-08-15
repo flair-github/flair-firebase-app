@@ -300,7 +300,7 @@ export const FlowEditor: React.FC<{
     <>
       <div className="h-[calc(100vh-4rem)]">
         <div className="border-grayscaleDivider flex h-[3rem] border-b">
-          <button className="btn-primary btn m-1 h-[2.5rem] min-h-[2.5rem]" onClick={saveFlow}>
+          <button className="btn btn-primary m-1 h-[2.5rem] min-h-[2.5rem]" onClick={saveFlow}>
             Save
           </button>
           <button
@@ -347,8 +347,8 @@ export const FlowEditor: React.FC<{
             {/* Data Connectors */}
             <div className="mb-3">
               <div className="my-2" />
-              <div className="join-vertical join w-full">
-                <div className="collapse-arrow join-item collapse border border-base-300">
+              <div className="join join-vertical w-full">
+                <div className="collapse join-item collapse-arrow border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Source</div>
                   <div className="collapse-content">
@@ -387,21 +387,21 @@ export const FlowEditor: React.FC<{
                       }}>
                       API
                     </button>
-                    <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
+                    <button className="btn btn-disabled m-2 gap-1" onClick={() => {}} disabled>
                       <div>Salesforce</div>
                       <div className="text-xs">(soon)</div>
                     </button>
-                    <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
+                    <button className="btn btn-disabled m-2 gap-1" onClick={() => {}} disabled>
                       <div>Zendesk</div>
                       <div className="text-xs">(soon)</div>
                     </button>
-                    <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
+                    <button className="btn btn-disabled m-2 gap-1" onClick={() => {}} disabled>
                       <div>Slack</div>
                       <div className="text-xs">(soon)</div>
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Indexer</div>
                   <div className="collapse-content">
@@ -425,7 +425,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Retriever</div>
                   <div className="collapse-content">
@@ -449,7 +449,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Extractor</div>
                   <div className="collapse-content">
@@ -491,7 +491,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Exporter</div>
                   <div className="collapse-content">
@@ -544,7 +544,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Evaluation</div>
                   <div className="collapse-content">
@@ -568,7 +568,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Custom Fine-Tuning</div>
                   <div className="collapse-content">
@@ -592,7 +592,7 @@ export const FlowEditor: React.FC<{
       <dialog ref={executeModalRef} className="modal">
         <form method="dialog" className="modal-box">
           <h3 className="mb-5 text-center text-lg font-bold">Deployment Options</h3>
-          <button className="btn-ghost btn-sm btn-circle btn absolute right-2 top-2">✕</button>
+          <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
           <div className="mb-2 mt-1">
             <label className="label">
               <span className="label-text">Frequency</span>
@@ -605,7 +605,7 @@ export const FlowEditor: React.FC<{
             </select>
             <div className="flex justify-start">
               <button
-                className="btn-primary btn"
+                className="btn btn-primary"
                 onClick={async () => {
                   executeFlow()
                   executeModalRef.current?.showModal()

@@ -59,7 +59,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
           left: -8,
         }}
       />
-      <header className="mb-4 flex justify-between items-center bg-pink-200 px-5 py-3 rounded-t-md">
+      <header className="mb-4 flex items-center justify-between rounded-t-md bg-pink-200 px-5 py-3">
         <div className="fw-bold">Evaluator</div>
         <img src="/images/powered-by-flair.png" width={133} height={24} />
       </header>

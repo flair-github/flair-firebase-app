@@ -267,7 +267,7 @@ function TemplateWizard() {
           />
           <div className="flex justify-center space-x-2">
             <button
-              className="btn-primary btn"
+              className="btn btn-primary"
               onClick={() => {
                 setPage(2)
               }}>
@@ -298,7 +298,7 @@ function TemplateWizard() {
               <FiArrowLeft size={18} /> Previous
             </button>
             <button
-              className="btn-primary btn"
+              className="btn btn-primary"
               onClick={() => {
                 setPage(3)
               }}>
@@ -324,7 +324,7 @@ function TemplateWizard() {
               <FiArrowLeft size={18} /> Previous
             </button>
             <button
-              className="btn-primary btn"
+              className="btn btn-primary"
               onClick={() => {
                 setShowNewFlowModal(true)
               }}>
@@ -345,7 +345,7 @@ function TemplateWizard() {
               type="text"
               placeholder="Flow Title"
               id="flow-title-field"
-              className="input-bordered input w-full"
+              className="input input-bordered w-full"
               onKeyDown={e => {
                 if (e.key === 'Enter') {
                   e.preventDefault()
@@ -364,7 +364,7 @@ function TemplateWizard() {
               Close
             </button>
             <button
-              className="btn-primary btn"
+              className="btn btn-primary"
               onClick={() => {
                 setShowNewFlowModal(false)
                 createNewFlow()

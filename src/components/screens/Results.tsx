@@ -1,3 +1,4 @@
+import React from 'react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
@@ -33,7 +34,7 @@ function PageResults() {
       <div className="border-grayscaleDivider flex h-[3rem] border-b">
         <div className="flex-1" />
         <button
-          className="btn-disabled btn m-1 h-[2.5rem] min-h-[2.5rem] gap-1"
+          className="btn btn-disabled m-1 h-[2.5rem] min-h-[2.5rem] gap-1"
           onClick={async () => {}}>
           <div>Compare Selections</div>
           <div className="text-xs">(soon)</div>
@@ -61,7 +62,7 @@ function PageResults() {
               return (
                 <tr key={el.workflowResultId}>
                   <td>
-                    <div className="flex items-center justify-center w-full h-full">
+                    <div className="flex h-full w-full items-center justify-center">
                       <input type="checkbox" className="checkbox" />
                     </div>
                   </td>
@@ -81,11 +82,11 @@ function PageResults() {
                   <td>
                     <div style={{ minWidth: 250 }}>
                       <Link
-                        className="m-1 btn bg-slate-200"
+                        className="btn m-1 bg-slate-200"
                         to={'/result-details/' + el.workflowResultId}>
                         <HiDocumentReport /> Details
                       </Link>
-                      <a className="m-1 btn bg-slate-200" href="#" onClick={() => {}}>
+                      <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>
                         <FaRocket /> Deploy
                       </a>
                     </div>

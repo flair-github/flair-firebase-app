@@ -6,7 +6,6 @@ import Main from '~/components/root/Main'
 import axios from 'axios'
 axios.defaults.withCredentials = true
 
-
 export const App = () => {
   return (
     <HelmetProvider>

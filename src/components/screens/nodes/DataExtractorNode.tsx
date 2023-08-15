@@ -98,7 +98,7 @@ export const DataExtractorNode = ({ data }: { data: NodeData }) => {
             {/* Key */}
             <div className="mr-2 w-28">
               <textarea
-                className="textarea-bordered textarea w-full"
+                className="textarea textarea-bordered w-full"
                 rows={2}
                 value={el.key}
                 onChange={e => {
@@ -127,7 +127,7 @@ export const DataExtractorNode = ({ data }: { data: NodeData }) => {
             {/* Prompt */}
             <div className="flex-1">
               <textarea
-                className="textarea-bordered textarea w-full"
+                className="textarea textarea-bordered w-full"
                 rows={2}
                 value={el.prompt}
                 onChange={e => {

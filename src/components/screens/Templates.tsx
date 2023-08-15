@@ -233,7 +233,7 @@ function Templates() {
                   minutes
                 </div>
                 <button
-                  className="btn-primary btn"
+                  className="btn btn-primary"
                   onClick={() => {
                     navigate('/template-wizard')
                   }}>

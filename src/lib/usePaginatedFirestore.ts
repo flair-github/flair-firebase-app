@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { db } from './firebase' // Your Firestore config and initialization
 import { DocumentData, QueryDocumentSnapshot } from '@firebase/firestore-types'
 import { WhereFilterOp } from 'firebase/firestore'
@@ -13,8 +13,10 @@ function usePaginatedFirestore<T extends DocumentData>(
   const [loading, setLoading] = useState<boolean>(false)
   const [hasMore, setHasMore] = useState<boolean>(true)
 
-  async function loadMore() {
-    if (!hasMore) return
+  const loadMore = useCallback(async () => {
+    if (!hasMore) {
+      return
+    }
 
     setLoading(true)
 
@@ -39,11 +41,31 @@ function usePaginatedFirestore<T extends DocumentData>(
     }
 
     setLoading(false)
-  }
+  }, [collectionName, hasMore, lastVisible, pageSize, where])
 
   useEffect(() => {
-    loadMore()
-  }, [])
+    ;(async () => {
+      setLoading(true)
+
+      let query = db.collection(collectionName).limit(pageSize)
+      for (const clause of where) {
+        query = query.where(...clause)
+      }
+      query = query.orderBy('createdTimestamp')
+
+      const snapshot = await query.get()
+
+      if (!snapshot.empty) {
+        const lastItem = snapshot.docs[snapshot.docs.length - 1] as QueryDocumentSnapshot<T>
+        setItems([...snapshot.docs.map((doc: any) => doc.data() as T)])
+        setLastVisible(lastItem)
+      } else {
+        setHasMore(false)
+      }
+
+      setLoading(false)
+    })()
+  }, [collectionName, pageSize, where])
 
   return {
     items,

@@ -3,7 +3,7 @@ import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { Timestamp } from 'firebase/firestore'
 import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineExpand, AiOutlineDownload } from 'react-icons/ai'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import DetailModal from '../shared/DetailModal'
 
 export function timestampToLocaleString(
@@ -44,11 +44,11 @@ function LLMOutputs() {
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
 
   return (
-    <div className="container mx-auto mt-6 border rounded-md mb-9">
+    <div className="container mx-auto mb-9 mt-6 rounded-md border">
       <div className="border-grayscaleDivider flex h-[3rem] border-b">
         <div className="flex-1" />
         <button
-          className="btn-disabled btn m-1 h-[2.5rem] min-h-[2.5rem] gap-1"
+          className="btn btn-disabled m-1 h-[2.5rem] min-h-[2.5rem] gap-1"
           onClick={async () => {}}>
           <div>Compare Selections</div>
           <div className="text-xs">(soon)</div>
@@ -79,13 +79,13 @@ function LLMOutputs() {
             {items?.map(item => (
               <tr key={item.id}>
                 <td>
-                  <div className="flex items-center justify-center w-full h-full">
+                  <div className="flex h-full w-full items-center justify-center">
                     <input type="checkbox" className="checkbox" />
                   </div>
                 </td>
                 <td>
                   <p className="mb-1 line-clamp-2">{item.workflowId}</p>
-                  <span className="text-xs badge badge-outline whitespace-nowrap">
+                  <span className="badge badge-outline whitespace-nowrap text-xs">
                     Request: {item.workflowRequestId}
                   </span>
                 </td>
@@ -151,8 +151,8 @@ function LLMOutputs() {
         </table>
       </div>
       {hasMore ? (
-        <button className="block mx-auto my-3 btn w-36" onClick={loadMore}>
-          {loading ? <ImSpinner9 className="w-5 h-5 mx-auto animate animate-spin" /> : 'Load More'}
+        <button className="btn mx-auto my-3 block w-36" onClick={loadMore}>
+          {loading ? <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" /> : 'Load More'}
         </button>
       ) : null}
       {selectedRow ? (
