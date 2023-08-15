@@ -1,9 +1,9 @@
 import { DocLLMOutput } from 'Types/firebaseStructure'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
-import { Timestamp } from 'firebase/firestore'
+import { Timestamp, WhereFilterOp } from 'firebase/firestore'
 import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineExpand, AiOutlineDownload } from 'react-icons/ai'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import DetailModal from '../shared/DetailModal'
 
 export function timestampToLocaleString(
@@ -35,10 +35,14 @@ function downloadObjectAsJson(exportObj: any, fileName: string): void {
 }
 
 function LLMOutputs() {
+  const where: [string, WhereFilterOp, string][] = useMemo(
+    () => [['workflowResultId', '==', 'XwRC2hEAUET4Em2GdCLz']],
+    [],
+  )
   const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocLLMOutput>(
     'llm_outputs',
     10,
-    [['workflowResultId', '==', 'XwRC2hEAUET4Em2GdCLz']],
+    where,
   )
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()

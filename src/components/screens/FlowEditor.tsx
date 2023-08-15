@@ -52,6 +52,7 @@ import { DataExporterS3Node } from './nodes/DataExporterS3'
 import { DataExporterGCPNode } from './nodes/DataExporterGCP'
 import { DataExporterAzureNode } from './nodes/DataExporterAzure'
 import { DataExporterAPINode } from './nodes/DataExporterAPI'
+import { ImCheckmark2, ImSpinner9, ImWarning } from 'react-icons/im'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -207,7 +208,8 @@ export const FlowEditor: React.FC<{
 
     return obj
   }
-
+  const [isDeploying, setIsDeploying] = useState(false)
+  const [deploymentStatus, setDeploymentStatus] = useState<['success' | 'error', string]>()
   async function executeFlow() {
     if (!userData?.userId) {
       return
@@ -216,29 +218,40 @@ export const FlowEditor: React.FC<{
     if (typeof workflowId !== 'string') {
       return
     }
-
-    const flowData = await saveFlow()
-    const ref = db.collection('workflow_requests').doc()
-    const newWorkflowRequest: DocWorkflowRequest = {
-      createdTimestamp: serverTimestamp() as Timestamp,
-      requestTimestamp: serverTimestamp() as Timestamp,
-      updatedTimestamp: serverTimestamp() as Timestamp,
-      executorUserId: userData.userId,
-      docExists: true,
-      workflowId,
-      frontendConfig: JSON.stringify(flowData),
-      workflowRequestId: ref.id,
-      generatedConfig: '',
-      status: 'requested',
+    try {
+      setIsDeploying(true)
+      const flowData = await saveFlow()
+      const ref = db.collection('workflow_requests').doc()
+      const newWorkflowRequest: DocWorkflowRequest = {
+        createdTimestamp: serverTimestamp() as Timestamp,
+        requestTimestamp: serverTimestamp() as Timestamp,
+        updatedTimestamp: serverTimestamp() as Timestamp,
+        executorUserId: userData.userId,
+        docExists: true,
+        workflowId,
+        frontendConfig: JSON.stringify(flowData),
+        workflowRequestId: ref.id,
+        generatedConfig: '',
+        status: 'requested',
+      }
+      await ref.set(newWorkflowRequest)
+      console.log('workflow_request_id = ' + ref.id)
+      const URL = `${CORE_API_URL}/api/flair-studio/flair-chain-runner`
+      await axios.post(
+        URL,
+        { workflow_request_id: ref.id },
+        { headers: { Authorization: AUTH_TOKEN } },
+      )
+      setDeploymentStatus(['success', 'Your workflow has been deployed!'])
+    } catch (error) {
+      console.log(error)
+      setDeploymentStatus(['error', 'Sorry, something went wrong.'])
+    } finally {
+      setIsDeploying(false)
+      setTimeout(() => {
+        setDeploymentStatus(undefined)
+      }, 3000)
     }
-    await ref.set(newWorkflowRequest)
-    console.log('workflow_request_id = ' + ref.id)
-    const URL = `${CORE_API_URL}/api/flair-studio/flair-chain-runner`
-    await axios.post(
-      URL,
-      { workflow_request_id: ref.id },
-      { headers: { Authorization: AUTH_TOKEN } },
-    )
   }
 
   const addNode = (
@@ -326,7 +339,7 @@ export const FlowEditor: React.FC<{
           <button
             className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
             onClick={async () => {
-              executeFlow()
+              // await executeFlow()
               executeModalRef.current?.showModal()
             }}>
             Deploy
@@ -603,16 +616,19 @@ export const FlowEditor: React.FC<{
               <option value={'7d'}>7d</option>
               <option value={'30d'}>30d</option>
             </select>
-            <div className="flex justify-start">
-              <button
-                className="btn btn-primary"
-                onClick={async () => {
-                  executeFlow()
-                  executeModalRef.current?.showModal()
-                }}>
-                Deploy
-              </button>
-            </div>
+            <button
+              className="btn btn-primary mx-auto block w-36"
+              onClick={async event => {
+                event.preventDefault()
+                await executeFlow()
+                executeModalRef.current?.close()
+              }}>
+              {isDeploying ? (
+                <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
+              ) : (
+                'Deploy'
+              )}
+            </button>
           </div>
         </form>
         <form method="dialog" className="modal-backdrop">
@@ -701,6 +717,23 @@ export const FlowEditor: React.FC<{
           <div className="flex-1" />
         </div>
       </Modal>
+
+      {/* Toast -> User Interaction Feedback */}
+      {deploymentStatus && (
+        <div className="toast">
+          <div
+            className={`alert ${
+              deploymentStatus[0] === 'success' ? 'alert-success' : 'alert-error'
+            }`}>
+            {deploymentStatus[0] === 'success' ? (
+              <ImCheckmark2 className="h-6 w-6" />
+            ) : (
+              <ImWarning className="h-6 w-6" />
+            )}
+            <span>{deploymentStatus[1]}</span>
+          </div>
+        </div>
+      )}
     </>
   )
 }
