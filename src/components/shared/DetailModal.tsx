@@ -1,4 +1,4 @@
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { DocLLMOutput } from 'Types/firebaseStructure'
 import { timestampToLocaleString } from '../screens/LLMOutputs'
@@ -52,11 +52,11 @@ export default function DetailModal({
           leave="ease-in duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0">
-          <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+          <div className="fixed inset-0 bg-gray-500 opacity-75 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -65,20 +65,20 @@ export default function DetailModal({
               leave="ease-in duration-200"
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-              <Dialog.Panel className="relative w-full p-6 px-4 pt-5 pb-4 my-8 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl max-w-160">
-                <header className="pb-3 text-base font-semibold leading-6 text-left text-gray-900 border-b">
+              <Dialog.Panel className="relative my-8 w-full max-w-160 overflow-hidden rounded-lg bg-white p-6 px-4 pb-4 pt-5 text-left shadow-xl transition-all">
+                <header className="border-b pb-3 text-left text-base font-semibold leading-6 text-gray-900">
                   LLM Output Detail
                 </header>
-                <section className="grid grid-cols-6 gap-3 my-6 overflow-y-scroll border-b pb-9 px-1 max-h-[30rem]">
-                  <h2 className="col-span-6 py-2 text-base font-semibold leading-7 text-gray-900 border-y">
+                <section className="my-6 grid max-h-[30rem] grid-cols-6 gap-3 overflow-y-scroll border-b px-1 pb-9">
+                  <h2 className="col-span-6 border-y py-2 text-base font-semibold leading-7 text-gray-900">
                     Meta
                   </h2>
 
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Workflow ID</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.workflowId)
                         }}>
@@ -88,15 +88,15 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.workflowId}
-                      className="w-full max-w-xs input input-bordered"
+                      className="max-w-xs input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Workflow Request ID</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.workflowRequestId ?? '')
                         }}>
@@ -106,15 +106,15 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.workflowRequestId}
-                      className="w-full max-w-xs input input-bordered"
+                      className="max-w-xs input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Workflow Result ID</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.workflowResultId ?? '')
                         }}>
@@ -124,15 +124,15 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.workflowResultId ?? ''}
-                      className="w-full max-w-xs input input-bordered"
+                      className="max-w-xs input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Output ID</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.id)
                         }}>
@@ -142,20 +142,20 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.id}
-                      className="w-full max-w-xs input input-bordered"
+                      className="max-w-xs input input-bordered w-full"
                       readOnly
                     />
                   </article>
 
-                  <h2 className="col-span-6 py-2 text-base font-semibold leading-7 text-gray-900 border-y">
+                  <h2 className="col-span-6 border-y py-2 text-base font-semibold leading-7 text-gray-900">
                     Content
                   </h2>
 
-                  <article className="w-full max-w-xs col-span-6 form-control">
+                  <article className="max-w-xs form-control col-span-6 w-full">
                     <div className="label">
                       <span className="label-text">Column Name</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.columnName)
                         }}>
@@ -165,15 +165,15 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.columnName}
-                      className="w-full max-w-xs input input-bordered"
+                      className="max-w-xs input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Column Prompt</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.columnPrompt)
                         }}>
@@ -182,15 +182,15 @@ export default function DetailModal({
                     </div>
                     <textarea
                       value={item.columnPrompt}
-                      className="w-full h-24 textarea textarea-bordered"
+                      className="textarea textarea-bordered h-24 w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Context</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.context)
                         }}>
@@ -199,15 +199,15 @@ export default function DetailModal({
                     </div>
                     <textarea
                       value={item.context}
-                      className="w-full h-24 textarea textarea-bordered"
+                      className="textarea textarea-bordered h-24 w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Instruction</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.instruction)
                         }}>
@@ -216,15 +216,15 @@ export default function DetailModal({
                     </div>
                     <textarea
                       value={item.instruction}
-                      className="w-full h-36 textarea textarea-bordered"
+                      className="textarea textarea-bordered h-36 w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Answer</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(
                             Array.isArray(item.answer)
@@ -245,50 +245,50 @@ export default function DetailModal({
                           ? item.answer.toString()
                           : item.answer
                       }
-                      className="w-full h-36 textarea textarea-bordered"
+                      className="textarea textarea-bordered h-36 w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-6 form-control">
+                  <article className="max-w-xs form-control col-span-6 w-full">
                     <div className="label">
                       <span className="label-text">Input</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.input)
                         }}>
                         <RiFileCopy2Line />
                       </button>
                     </div>
-                    <pre className="w-full h-64 textarea textarea-bordered overflow-scroll">
+                    <pre className="textarea textarea-bordered h-64 w-full overflow-scroll">
                       {item.input}
                     </pre>
                   </article>
-                  <article className="w-full max-w-xs col-span-6 form-control">
+                  <article className="max-w-xs form-control col-span-6 w-full">
                     <div className="label">
                       <span className="label-text">Output</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.output)
                         }}>
                         <RiFileCopy2Line />
                       </button>
                     </div>
-                    <pre className="w-full h-64 textarea textarea-bordered overflow-scroll">
+                    <pre className="textarea textarea-bordered h-64 w-full overflow-scroll">
                       {makeTextReadable(item.output)}
                     </pre>
                   </article>
 
-                  <h2 className="col-span-6 py-2 text-base font-semibold leading-7 text-gray-900 border-y">
+                  <h2 className="col-span-6 border-y py-2 text-base font-semibold leading-7 text-gray-900">
                     Other
                   </h2>
 
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Doc Exists</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.docExists.toString())
                         }}>
@@ -298,15 +298,15 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.docExists.toString()}
-                      className="w-full max-w-xs input input-bordered"
+                      className="max-w-xs input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Latency</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(item.latency.toString())
                         }}>
@@ -316,15 +316,15 @@ export default function DetailModal({
                     <input
                       type="number"
                       value={item.latency}
-                      className="w-full max-w-xs input input-bordered"
+                      className="max-w-xs input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Created Timestamp</span>
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(timestampToLocaleString(item.createdTimestamp))
                         }}>
@@ -334,15 +334,15 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={timestampToLocaleString(item.createdTimestamp)}
-                      className="w-full max-w-xs input input-bordered"
+                      className="max-w-xs input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="w-full max-w-xs col-span-3 form-control">
+                  <article className="max-w-xs form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Updated Timestamp</span>{' '}
                       <button
-                        className="cursor-pointer btn btn-square btn-xs"
+                        className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {
                           copyToClipboard(timestampToLocaleString(item.updatedTimestamp))
                         }}>
@@ -352,12 +352,12 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={timestampToLocaleString(item.updatedTimestamp)}
-                      className="w-full max-w-xs input input-bordered"
+                      className="max-w-xs input input-bordered w-full"
                       readOnly
                     />
                   </article>
                 </section>
-                <button type="button" className="block mx-auto btn" onClick={() => setOpen(false)}>
+                <button type="button" className="btn mx-auto block" onClick={() => setOpen(false)}>
                   Close
                 </button>
               </Dialog.Panel>

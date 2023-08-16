@@ -21,7 +21,7 @@ function ResultDetails() {
       <div className="mb-2 flex items-center ">
         <h1 className="text-3xl font-bold">Customer Call Workflow #1831</h1>
         <div className="flex-1" />
-        <a className="btn-disabled btn mr-2 gap-1" href="#" onClick={() => {}}>
+        <a className="btn btn-disabled mr-2 gap-1" href="#" onClick={() => {}}>
           <FaShare />
           <div>Share</div>
           <div className="text-xs">(soon)</div>
@@ -75,7 +75,7 @@ function ResultDetails() {
           {/* <div className="stat-desc text-lg font-bold">Avg: 200ms</div> */}
         </div>
       </div>
-      <div className="tabs tabs-boxed mb-2 w-full justify-center">
+      <div className="tabs-boxed tabs mb-2 w-full justify-center">
         <a
           className={`tab tab-lg font-bold ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('evaluation')}>
@@ -99,7 +99,7 @@ function ResultDetails() {
               <label className="label">
                 <span className="label-text">LLM Output Column</span>
               </label>
-              <select className="select-bordered select">
+              <select className="select select-bordered">
                 <option>Call Question</option>
                 <option>Answer</option>
                 <option>Score</option>
@@ -110,7 +110,7 @@ function ResultDetails() {
               <label className="label">
                 <span className="label-text">Similarity Score</span>
               </label>
-              <select className="select-bordered select">
+              <select className="select select-bordered">
                 <option>All</option>
                 <option>{'< 0.9'}</option>
                 <option>{'< 0.8'}</option>
@@ -123,7 +123,7 @@ function ResultDetails() {
               <label className="label">
                 <span className="label-text">OpenAI Eval</span>
               </label>
-              <select className="select-bordered select">
+              <select className="select select-bordered">
                 <option>All</option>
                 <option>1</option>
                 <option>2</option>

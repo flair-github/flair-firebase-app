@@ -54,9 +54,9 @@ export const DataSourceLocalFilesNode = ({
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center bg-purple-200 px-5 py-3 rounded-t-md">
-        <FaCloudUploadAlt className="w-7 h-7" />
-        <h4 className="grow ml-3">Data Source: Local Files</h4>
+      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-purple-200 px-5 py-3">
+        <FaCloudUploadAlt className="h-7 w-7" />
+        <h4 className="ml-3 grow">Data Source: Local Files</h4>
       </header>
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
@@ -91,9 +91,7 @@ export const DataSourceLocalFilesNode = ({
                   {acceptedFiles.map(file => (
                     <li key={file.name}>
                       <div className="flex space-x-2">
-                        <div className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-bold">
-                          {file.name}
-                        </div>
+                        <div className="flex-1 truncate font-bold">{file.name}</div>
                         <div>{Math.ceil(file.size / 1000) / 1000} MB</div>
                       </div>
                     </li>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useState } from 'react'
 // import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
@@ -31,17 +31,21 @@ function ResultDetails() {
     resultId as string,
   )
   const [columnName, setColumnName] = useState<string>()
+  const where: [string, WhereFilterOp, string][] = useMemo(() => {
+    return [
+      ['workflowResultId', '==', resultId as string],
+      ...(columnName
+        ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
+        : []),
+    ]
+  }, [resultId, columnName])
+
   const {
     items,
     loading: outputLoading,
     hasMore,
     loadMore,
-  } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, [
-    ['workflowResultId', '==', resultId as string],
-    ...(columnName
-      ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
-      : []),
-  ])
+  } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, where)
 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
@@ -51,7 +55,7 @@ function ResultDetails() {
       <div className="mb-2 flex items-center ">
         <h1 className="text-3xl font-bold">Customer Call Workflow #1831</h1>
         <div className="flex-1" />
-        <a className="btn-disabled btn mr-2 gap-1" href="#" onClick={() => {}}>
+        <a className="btn btn-disabled mr-2 gap-1" href="#" onClick={() => {}}>
           <FaShare />
           <div>Share</div>
           <div className="text-xs">(soon)</div>
@@ -105,7 +109,7 @@ function ResultDetails() {
           {/* <div className="text-lg font-bold stat-desc">Avg: 200ms</div> */}
         </div>
       </div>
-      <div className="tabs tabs-boxed mb-2 w-full justify-center">
+      <div className="tabs-boxed tabs mb-2 w-full justify-center">
         <a
           className={`tab tab-lg font-bold ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('evaluation')}>
@@ -130,7 +134,7 @@ function ResultDetails() {
                 <span className="label-text">LLM Output Column</span>
               </label>
               <select
-                className="select-bordered select"
+                className="select select-bordered"
                 onChange={({ target: { value } }) => {
                   setColumnName(value)
                 }}>
@@ -148,7 +152,7 @@ function ResultDetails() {
               <label className="label">
                 <span className="label-text">Similarity Score</span>
               </label>
-              <select className="select-bordered select">
+              <select className="select select-bordered">
                 <option>All</option>
                 <option>{'< 0.9'}</option>
                 <option>{'< 0.8'}</option>
@@ -161,7 +165,7 @@ function ResultDetails() {
               <label className="label">
                 <span className="label-text">OpenAI Eval</span>
               </label>
-              <select className="select-bordered select">
+              <select className="select select-bordered">
                 <option>All</option>
                 <option>1</option>
                 <option>2</option>

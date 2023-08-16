@@ -9,4 +9,7 @@
     "eslint.workingDirectories": [
         "functions/src"
     ],
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
 }
