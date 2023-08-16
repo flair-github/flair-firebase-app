@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { RefObject, useEffect } from 'react'
 import { Dialog } from '@headlessui/react'
 import { useRef, useState } from 'react'
 import { SignInButton } from '~/components/domain/auth/SignInButton'
@@ -11,6 +11,9 @@ import { DocWorkflow } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 import { MoonLoader, RingLoader } from 'react-spinners'
+import { TfiLayoutWidthDefault } from 'react-icons/tfi'
+import { BsArrowLeftShort } from 'react-icons/bs'
+import { ImFileEmpty } from 'react-icons/im'
 
 function Index() {
   const [isOpen, setIsOpen] = useState(true)
@@ -76,7 +79,10 @@ function Index() {
   const openWorkflow = (workflowId: string) => {
     navigate('editor', { state: { workflowId } })
   }
-
+  const onboardingModal = useRef() as RefObject<HTMLDialogElement>
+  useEffect(() => {
+    onboardingModal.current?.showModal()
+  }, [])
   return (
     <>
       <Head title="Home" />
@@ -192,6 +198,56 @@ function Index() {
           </form>
         </dialog>
       </div>
+
+      {/* Onboarding Modal */}
+      <dialog ref={onboardingModal} className="modal">
+        <form method="dialog" className="modal-box max-w-160 divide-y">
+          <header>
+            <h3 className="text-lg font-bold">Welcome to Flair AI!</h3>
+            <p className="mb-2">Get started using ready to go template below</p>
+          </header>
+          <section className="grid grid-cols-2 gap-3 pt-3">
+            <button
+              className="flex items-center space-x-6 rounded-lg border p-3"
+              onClick={event => {
+                event.preventDefault()
+              }}>
+              <span className="rounded-lg bg-primary p-3">
+                <TfiLayoutWidthDefault className="m-3 h-6 w-6 text-white" />
+              </span>
+              <article className="flex flex-col justify-center text-left">
+                <div className="flex items-center">
+                  <p className="font-semibold">Default template</p>
+                  <BsArrowLeftShort className="h-5 w-5 rotate-180" />
+                </div>
+                <p className="line-clamp-2">General purpose template for you</p>
+              </article>
+            </button>
+            <button
+              className="flex items-center space-x-6 rounded-lg border p-3"
+              onClick={event => {
+                event.preventDefault()
+              }}>
+              <span className="rounded-lg bg-secondary p-3">
+                <ImFileEmpty className="m-3 h-6 w-6 text-white" />
+              </span>
+              <article className="flex flex-col justify-center text-left">
+                <div className="flex items-center">
+                  <p className="font-semibold">Empty template</p>
+                  <BsArrowLeftShort className="h-5 w-5 rotate-180" />
+                </div>
+                <p className="line-clamp-2">Start with white blank canvas</p>
+              </article>
+            </button>
+          </section>
+          <div className="modal-action justify-start pt-2">
+            <button className="link-hover link-primary link">Or resume from previous work</button>
+          </div>
+        </form>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </>
   )
 }
