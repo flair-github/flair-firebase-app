@@ -1,54 +1,20 @@
-import React, { useMemo } from 'react'
-import { useState } from 'react'
-// import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
+import React from 'react'
+import { Dialog } from '@headlessui/react'
+import { useRef, useState } from 'react'
+import { SignInButton } from '~/components/domain/auth/SignInButton'
+import { SignOutButton } from '~/components/domain/auth/SignOutButton'
+import { Head } from '~/components/shared/Head'
+import FlowEditor from './FlowEditor'
+import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
 import { PiFileCsvFill } from 'react-icons/pi'
 import { CodeBlock } from 'react-code-blocks'
-import { useParams } from 'react-router-dom'
-import useFirestoreDoc from '~/lib/useFirestoreDoc'
-import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
-import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
-import { ImSpinner9 } from 'react-icons/im'
-import { AiOutlineExpand } from 'react-icons/ai'
-import DetailModal from '../shared/DetailModal'
-import { WhereFilterOp } from 'firebase/firestore'
 
-// const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
-// const edges = JSON.parse(FLOW_SAMPLE_2).edges
-
-const snakeToTitle = (input: string): string => {
-  return input
-    .split('_') // Split the string on underscores
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
-    .join(' ') // Join the words together with spaces
-}
+const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
+const edges = JSON.parse(FLOW_SAMPLE_2).edges
 
 function ResultDetails() {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
-  const { resultId } = useParams()
-  const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
-    'workflow_results',
-    resultId as string,
-  )
-  const [columnName, setColumnName] = useState<string>()
-  const where: [string, WhereFilterOp, string][] = useMemo(() => {
-    return [
-      ['workflowResultId', '==', resultId as string],
-      ...(columnName
-        ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
-        : []),
-    ]
-  }, [resultId, columnName])
-
-  const {
-    items,
-    loading: outputLoading,
-    hasMore,
-    loadMore,
-  } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, where)
-
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
 
   return (
     <div className="container mx-auto p-4">
@@ -101,12 +67,12 @@ function ResultDetails() {
         <div className="stat">
           <div className="stat-title">Average Tokens</div>
           <div className="stat-value">192.3 tokens</div>
-          {/* <div className="text-lg font-bold stat-desc">Avg: 56 tokens</div> */}
+          {/* <div className="stat-desc text-lg font-bold">Avg: 56 tokens</div> */}
         </div>
         <div className="stat">
           <div className="stat-title">Average Latency</div>
           <div className="stat-value">211.2ms</div>
-          {/* <div className="text-lg font-bold stat-desc">Avg: 200ms</div> */}
+          {/* <div className="stat-desc text-lg font-bold">Avg: 200ms</div> */}
         </div>
       </div>
       <div className="tabs-boxed tabs mb-2 w-full justify-center">
@@ -133,18 +99,10 @@ function ResultDetails() {
               <label className="label">
                 <span className="label-text">LLM Output Column</span>
               </label>
-              <select
-                className="select select-bordered"
-                onChange={({ target: { value } }) => {
-                  setColumnName(value)
-                }}>
-                <option value={undefined}>All</option>
-                {(data?.evaluationData ? Object.keys(data.evaluationData) : []).map(item => (
-                  <option key={item} value={item}>
-                    {/* {snakeToTitle(item)} */}
-                    {item}
-                  </option>
-                ))}
+              <select className="select select-bordered">
+                <option>Call Question</option>
+                <option>Answer</option>
+                <option>Score</option>
               </select>
             </div>
             <div className="flex-1" />
@@ -174,52 +132,166 @@ function ResultDetails() {
               </select>
             </div>
           </div>
-
-          {/* Table */}
           <table className="table w-full shadow">
             <thead>
               <tr>
                 <th>LLM Input</th>
                 <th>LLM Output</th>
-                <th>Latency</th>
-                <th>Actions</th>
+                <th>Ground Truth</th>
+                <th>Similarity Score</th>
+                <th>OpenAI Eval</th>
               </tr>
             </thead>
             <tbody>
-              {items?.map(item => (
-                <tr key={item.id}>
-                  <td>
-                    <div className="line-clamp-3 h-14 w-96">{item.input}</div>
-                  </td>
-                  <td>
-                    <div className="line-clamp-3 h-14 w-96">{item.output}</div>
-                  </td>
-                  <td>{item.latency.toFixed(2) + ' seconds'}</td>
-                  <td>
-                    <div className="">
-                      <button
-                        className="btn bg-slate-200"
-                        onClick={() => {
-                          setSelectedRow(item)
-                          setIsOpen(true)
-                        }}>
-                        <AiOutlineExpand /> Details
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+              <tr>
+                <td>"Can you help me with my account balance?"</td>
+                <td>
+                  "I can assist you with your account balance. Please provide me with your account
+                  details."
+                </td>
+                <td>
+                  "Sure, I can help you with that. Could you please provide your account details?"
+                </td>
+                <td>
+                  <span className="font-bold">0.98</span>
+                </td>
+                <td>
+                  <span className="font-bold">1</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"I'm experiencing issues with my internet connection."</td>
+                <td>
+                  "Let's troubleshoot your internet connection. Have you tried restarting your
+                  modem?"
+                </td>
+                <td>
+                  "We can certainly help troubleshoot. Have you attempted to reset your modem?"
+                </td>
+                <td>
+                  <span className="font-bold">0.93</span>
+                </td>
+                <td>
+                  <span className="font-bold">2</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"How can I cancel my subscription?"</td>
+                <td>
+                  "To cancel your subscription, please visit our website and go to the account
+                  settings."
+                </td>
+                <td>
+                  "If you wish to cancel your subscription, navigate to account settings on our
+                  site."
+                </td>
+                <td>
+                  <span className="font-bold text-red-500">0.65</span>
+                </td>
+                <td>
+                  <span className="font-bold">3</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"What are your business hours?"</td>
+                <td>"Our business hours are Monday to Friday, 9:00 AM to 6:00 PM."</td>
+                <td>"We operate from 9:00 AM to 6:00 PM, Monday through Friday."</td>
+                <td>
+                  <div className="font-bold">0.97</div>
+                </td>
+                <td>
+                  <span className="font-bold">2</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"Do you offer a money-back guarantee?"</td>
+                <td>"Yes, we offer a 30-day money-back guarantee for all our products."</td>
+                <td>"Absolutely, we provide a 30-day refund policy for all items."</td>
+                <td>
+                  <div className="font-bold">0.91</div>
+                </td>
+                <td>
+                  <span className="font-bold">1</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"Can I change my shipping address?"</td>
+                <td>
+                  "Certainly! Please provide your new shipping address and we'll update it for you."
+                </td>
+                <td>
+                  "Of course! Please share your updated shipping address and we'll make the
+                  necessary changes."
+                </td>
+                <td>
+                  <span className="font-bold text-orange-500">0.75</span>
+                </td>
+                <td>
+                  <span className="font-bold">2</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"What's the status of my order?"</td>
+                <td>
+                  "Let me check the status of your order. Can you please provide your order number?"
+                </td>
+                <td>"I can do that. Please share your order number so I can track it."</td>
+                <td>
+                  <span className="font-bold text-orange-500">0.78</span>
+                </td>
+                <td>
+                  <span className="font-bold">1</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"How do I reset my password?"</td>
+                <td>
+                  "To reset your password, click on the 'Forgot Password' link and follow the
+                  instructions."
+                </td>
+                <td>
+                  "You can reset your password by clicking 'Forgot Password' and then adhering to
+                  the given steps."
+                </td>
+                <td>
+                  <div className="font-bold">0.95</div>
+                </td>
+                <td>
+                  <span className="font-bold">4</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"Can I return an item for a refund?"</td>
+                <td>
+                  "Yes, we accept returns for a refund within 30 days of purchase. Please provide
+                  your order details."
+                </td>
+                <td>
+                  "Sure, you can return an item within 30 days of buying it for a refund. Could you
+                  share your order details?"
+                </td>
+                <td>
+                  <div className="font-bold">0.88</div>
+                </td>
+                <td>
+                  <span className="font-bold">3</span>
+                </td>
+              </tr>
+              <tr>
+                <td>"What's the best way to contact customer support?"</td>
+                <td>"You can contact our customer support team via phone, email, or live chat."</td>
+                <td>
+                  "Our customer support can be reached via phone, email, or through live chat."
+                </td>
+                <td>
+                  <div className="font-bold">0.92</div>
+                </td>
+                <td>
+                  <span className="font-bold">4</span>
+                </td>
+              </tr>
             </tbody>
-          </table>
-          {hasMore ? (
-            <button className="btn mx-auto my-3 block w-36" onClick={loadMore}>
-              {outputLoading ? (
-                <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
-              ) : (
-                'Load More'
-              )}
-            </button>
-          ) : null}
+          </table>{' '}
         </div>
       )}
       {activeTab === 'result' && (
@@ -314,9 +386,6 @@ function ResultDetails() {
           <CodeBlock text={yaml} language="yaml" showLineNumbers={true} wrapLines />
         </div>
       )}
-      {selectedRow ? (
-        <DetailModal key={selectedRow?.id} open={isOpen} setOpen={setIsOpen} item={selectedRow} />
-      ) : null}
     </div>
   )
 }

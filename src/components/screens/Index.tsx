@@ -83,7 +83,7 @@ function Index() {
       <div className="container mx-auto px-4 py-2">
         <div className="mb-5 mt-3">
           <button
-            className="btn-primary btn normal-case"
+            className="btn btn-primary normal-case"
             onClick={() => {
               setShowNewFlowModal(true)
             }}>
@@ -114,7 +114,7 @@ function Index() {
                     onClick={() => {
                       openWorkflow(myFlow.workflowId)
                     }}
-                    className="card-title overflow-hidden text-ellipsis whitespace-nowrap">
+                    className="card-title truncate">
                     {myFlow.workflowTitle}
                   </h2>
                   <img
@@ -128,7 +128,7 @@ function Index() {
                   />
                   <div className="card-actions flex justify-end">
                     <button
-                      className="btn-ghost btn"
+                      className="btn btn-ghost"
                       onClick={() => {
                         db.collection('workflows').doc(myFlow.workflowId).update({
                           docExists: false,
@@ -162,7 +162,7 @@ function Index() {
                 type="text"
                 placeholder="Flow Title"
                 id="flow-title-field"
-                className="input-bordered input w-full"
+                className="input input-bordered w-full"
                 onKeyDown={e => {
                   if (e.key === 'Enter') {
                     e.preventDefault()
@@ -181,7 +181,7 @@ function Index() {
                 Close
               </button>
               <button
-                className="btn-primary btn"
+                className="btn btn-primary"
                 onClick={() => {
                   setShowNewFlowModal(false)
                   createNewFlow()

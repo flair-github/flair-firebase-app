@@ -54,9 +54,9 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center bg-teal-200 px-5 py-3 rounded-t-md">
-        <AiFillApi className="w-7 h-7" />
-        <h4 className="grow ml-3">Data Exporter: API</h4>
+      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3">
+        <AiFillApi className="h-7 w-7" />
+        <h4 className="ml-3 grow">Data Exporter: API</h4>
       </header>
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
@@ -108,7 +108,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
           </label>
           <textarea
             rows={3}
-            className="max-w-xs textarea w-full border-black py-2 overflow-y-scroll"
+            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
             value={nodeContent.headers}
             onChange={e => {
               const newVal = e.target.value
@@ -125,7 +125,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
           </label>
           <textarea
             rows={3}
-            className="max-w-xs textarea w-full border-black py-2 overflow-y-scroll"
+            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
             value={nodeContent.body}
             onChange={e => {
               const newVal = e.target.value

@@ -102,7 +102,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         />
       )}
 
-      <header className="mb-4 flex justify-between items-center bg-blue-200 px-5 py-3 rounded-t-md">
+      <header className="mb-4 flex items-center justify-between rounded-t-md bg-blue-200 px-5 py-3">
         <div className="fw-bold">LLM Processor</div>
         <img src="/images/powered-by-flair.png" width={133} height={24} />
       </header>
@@ -221,7 +221,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                   <span className="label-text">Instruction</span>
                 </label>
                 <textarea
-                  className="textarea-bordered textarea mb-3 w-full"
+                  className="textarea textarea-bordered mb-3 w-full"
                   rows={2}
                   value={el.instruction}
                   onChange={e => {
@@ -245,7 +245,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                   <span className="label-text">Prompt</span>
                 </label>
                 <textarea
-                  className="textarea-bordered textarea mb-3 w-full"
+                  className="textarea textarea-bordered mb-3 w-full"
                   rows={2}
                   value={el.prompt}
                   onChange={e => {
@@ -374,7 +374,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                       <span className="label-text">Categories (comma seperated)</span>
                     </label>
                     <textarea
-                      className="textarea-bordered textarea mb-3 w-full"
+                      className="textarea textarea-bordered mb-3 w-full"
                       rows={2}
                       value={el.options}
                       onChange={e => {

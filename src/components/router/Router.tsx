@@ -1,6 +1,5 @@
-import React from 'react'
 import { useAtomValue } from 'jotai'
-import { lazy, Suspense } from 'react'
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Outlet, RouteObject, useNavigate, useRoutes } from 'react-router-dom'
 import { atomUser, atomUserData } from '~/jotai/jotai'
 import LoginScreen from '../screens/Login'
@@ -14,6 +13,7 @@ const Page404Screen = lazy(() => import('~/components/screens/404'))
 const FlowEditorScreen = lazy(() => import('~/components/screens/FlowEditor'))
 const ResultsScreen = lazy(() => import('~/components/screens/Results'))
 const ResultDetailsScreen = lazy(() => import('~/components/screens/ResultDetails'))
+const LLMOutputsScreen = lazy(() => import('~/components/screens/LLMOutputs'))
 const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
 const TemplatesScreen = lazy(() => import('~/components/screens/Templates'))
 const TemplateWizardScreen = lazy(() => import('~/components/screens/TemplateWizard'))
@@ -33,7 +33,7 @@ function Layout() {
       <div className="navbar h-1 max-h-16 border-b bg-base-100">
         <div className="flex-1">
           <div
-            className="btn-ghost btn text-xl normal-case"
+            className="btn btn-ghost text-xl normal-case"
             onClick={() => {
               navigate('/')
             }}>
@@ -50,13 +50,36 @@ function Layout() {
               onClick={() => {
                 navigate('/results')
               }}>
-              <a>Results</a>
+              <a>Experiments</a>
+            </li>
+            <li
+              onClick={() => {
+                // navigate('/results')
+              }}>
+              <a>Deployments</a>
             </li>
           </ul>
         </div>
         <div className="flex-none">
           <div className="dropdown-end dropdown">
-            <label tabIndex={0} className="btn-ghost btn flex px-2 normal-case">
+            <label tabIndex={0} className="btn btn-ghost flex px-2 font-normal normal-case">
+              <div>Debug</div>
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu dropdown-content rounded-box menu-sm z-[1] mt-3 w-52 bg-base-100 p-2 shadow">
+              <li
+                onClick={() => {
+                  navigate('/llm-outputs')
+                }}>
+                <a>LLM Outputs</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="flex-none">
+          <div className="dropdown-end dropdown">
+            <label tabIndex={0} className="btn btn-ghost flex px-2 normal-case">
               <div>{userData?.userName || 'Flair User'}</div>
               <div className="w-9 overflow-hidden rounded-full">
                 <img src={userData?.userPhotoUrl} />
@@ -64,7 +87,7 @@ function Layout() {
             </label>
             <ul
               tabIndex={0}
-              className="dropdown-content menu rounded-box menu-sm z-[1] mt-3 w-52 bg-base-100 p-2 shadow">
+              className="menu dropdown-content rounded-box menu-sm z-[1] mt-3 w-52 bg-base-100 p-2 shadow">
               {/* <li>
                 <a className="justify-between">
                   Profile
@@ -114,8 +137,12 @@ const InnerRouter = () => {
           element: <ResultsScreen />,
         },
         {
-          path: 'result-details',
+          path: 'result-details/:resultId',
           element: <ResultDetailsScreen />,
+        },
+        {
+          path: 'llm-outputs',
+          element: <LLMOutputsScreen />,
         },
         {
           path: 'settings',

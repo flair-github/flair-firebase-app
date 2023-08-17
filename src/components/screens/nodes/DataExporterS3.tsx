@@ -56,9 +56,9 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center bg-teal-200 px-5 py-3 rounded-t-md">
-        <BiLogoAws className="w-7 h-7" />
-        <h4 className="grow ml-3">Data Exporter: S3</h4>
+      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3">
+        <BiLogoAws className="h-7 w-7" />
+        <h4 className="ml-3 grow">Data Exporter: S3</h4>
       </header>
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">

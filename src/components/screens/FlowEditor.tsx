@@ -52,6 +52,7 @@ import { DataExporterS3Node } from './nodes/DataExporterS3'
 import { DataExporterGCPNode } from './nodes/DataExporterGCP'
 import { DataExporterAzureNode } from './nodes/DataExporterAzure'
 import { DataExporterAPINode } from './nodes/DataExporterAPI'
+import { ImCheckmark2, ImSpinner9, ImWarning } from 'react-icons/im'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -207,7 +208,8 @@ export const FlowEditor: React.FC<{
 
     return obj
   }
-
+  const [isDeploying, setIsDeploying] = useState(false)
+  const [deploymentStatus, setDeploymentStatus] = useState<['success' | 'error', string]>()
   async function executeFlow() {
     if (!userData?.userId) {
       return
@@ -216,29 +218,40 @@ export const FlowEditor: React.FC<{
     if (typeof workflowId !== 'string') {
       return
     }
-
-    const flowData = await saveFlow()
-    const ref = db.collection('workflow_requests').doc()
-    const newWorkflowRequest: DocWorkflowRequest = {
-      createdTimestamp: serverTimestamp() as Timestamp,
-      requestTimestamp: serverTimestamp() as Timestamp,
-      updatedTimestamp: serverTimestamp() as Timestamp,
-      executorUserId: userData.userId,
-      docExists: true,
-      workflowId,
-      frontendConfig: JSON.stringify(flowData),
-      workflowRequestId: ref.id,
-      generatedConfig: '',
-      status: 'requested',
+    try {
+      setIsDeploying(true)
+      const flowData = await saveFlow()
+      const ref = db.collection('workflow_requests').doc()
+      const newWorkflowRequest: DocWorkflowRequest = {
+        createdTimestamp: serverTimestamp() as Timestamp,
+        requestTimestamp: serverTimestamp() as Timestamp,
+        updatedTimestamp: serverTimestamp() as Timestamp,
+        executorUserId: userData.userId,
+        docExists: true,
+        workflowId,
+        frontendConfig: JSON.stringify(flowData),
+        workflowRequestId: ref.id,
+        generatedConfig: '',
+        status: 'requested',
+      }
+      await ref.set(newWorkflowRequest)
+      console.log('workflow_request_id = ' + ref.id)
+      const URL = `${CORE_API_URL}/api/flair-studio/flair-chain-runner`
+      await axios.post(
+        URL,
+        { workflow_request_id: ref.id },
+        { headers: { Authorization: AUTH_TOKEN } },
+      )
+      setDeploymentStatus(['success', 'Your workflow has been deployed!'])
+    } catch (error) {
+      console.log(error)
+      setDeploymentStatus(['error', 'Sorry, something went wrong.'])
+    } finally {
+      setIsDeploying(false)
+      setTimeout(() => {
+        setDeploymentStatus(undefined)
+      }, 3000)
     }
-    await ref.set(newWorkflowRequest)
-    console.log('workflow_request_id = ' + ref.id)
-    const URL = `${CORE_API_URL}/api/flair-studio/flair-chain-runner`
-    await axios.post(
-      URL,
-      { workflow_request_id: ref.id },
-      { headers: { Authorization: AUTH_TOKEN } },
-    )
   }
 
   const addNode = (
@@ -300,7 +313,7 @@ export const FlowEditor: React.FC<{
     <>
       <div className="h-[calc(100vh-4rem)]">
         <div className="border-grayscaleDivider flex h-[3rem] border-b">
-          <button className="btn-primary btn m-1 h-[2.5rem] min-h-[2.5rem]" onClick={saveFlow}>
+          <button className="btn btn-primary m-1 h-[2.5rem] min-h-[2.5rem]" onClick={saveFlow}>
             Save
           </button>
           <button
@@ -326,7 +339,7 @@ export const FlowEditor: React.FC<{
           <button
             className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
             onClick={async () => {
-              executeFlow()
+              // await executeFlow()
               executeModalRef.current?.showModal()
             }}>
             Deploy
@@ -347,8 +360,8 @@ export const FlowEditor: React.FC<{
             {/* Data Connectors */}
             <div className="mb-3">
               <div className="my-2" />
-              <div className="join-vertical join w-full">
-                <div className="collapse-arrow join-item collapse border border-base-300">
+              <div className="join join-vertical w-full">
+                <div className="collapse join-item collapse-arrow border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Source</div>
                   <div className="collapse-content">
@@ -387,21 +400,21 @@ export const FlowEditor: React.FC<{
                       }}>
                       API
                     </button>
-                    <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
+                    <button className="btn btn-disabled m-2 gap-1" onClick={() => {}} disabled>
                       <div>Salesforce</div>
                       <div className="text-xs">(soon)</div>
                     </button>
-                    <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
+                    <button className="btn btn-disabled m-2 gap-1" onClick={() => {}} disabled>
                       <div>Zendesk</div>
                       <div className="text-xs">(soon)</div>
                     </button>
-                    <button className="btn-disabled btn m-2 gap-1" onClick={() => {}} disabled>
+                    <button className="btn btn-disabled m-2 gap-1" onClick={() => {}} disabled>
                       <div>Slack</div>
                       <div className="text-xs">(soon)</div>
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Indexer</div>
                   <div className="collapse-content">
@@ -425,7 +438,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Retriever</div>
                   <div className="collapse-content">
@@ -449,7 +462,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Extractor</div>
                   <div className="collapse-content">
@@ -491,7 +504,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Exporter</div>
                   <div className="collapse-content">
@@ -544,7 +557,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Evaluation</div>
                   <div className="collapse-content">
@@ -568,7 +581,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow join-item collapse border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Custom Fine-Tuning</div>
                   <div className="collapse-content">
@@ -592,7 +605,7 @@ export const FlowEditor: React.FC<{
       <dialog ref={executeModalRef} className="modal">
         <form method="dialog" className="modal-box">
           <h3 className="mb-5 text-center text-lg font-bold">Deployment Options</h3>
-          <button className="btn-ghost btn-sm btn-circle btn absolute right-2 top-2">✕</button>
+          <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
           <div className="mb-2 mt-1">
             <label className="label">
               <span className="label-text">Frequency</span>
@@ -603,16 +616,19 @@ export const FlowEditor: React.FC<{
               <option value={'7d'}>7d</option>
               <option value={'30d'}>30d</option>
             </select>
-            <div className="flex justify-start">
-              <button
-                className="btn-primary btn"
-                onClick={async () => {
-                  executeFlow()
-                  executeModalRef.current?.showModal()
-                }}>
-                Deploy
-              </button>
-            </div>
+            <button
+              className="btn btn-primary mx-auto block w-36"
+              onClick={async event => {
+                event.preventDefault()
+                await executeFlow()
+                executeModalRef.current?.close()
+              }}>
+              {isDeploying ? (
+                <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
+              ) : (
+                'Deploy'
+              )}
+            </button>
           </div>
         </form>
         <form method="dialog" className="modal-backdrop">
@@ -701,6 +717,23 @@ export const FlowEditor: React.FC<{
           <div className="flex-1" />
         </div>
       </Modal>
+
+      {/* Toast -> User Interaction Feedback */}
+      {deploymentStatus && (
+        <div className="toast">
+          <div
+            className={`alert ${
+              deploymentStatus[0] === 'success' ? 'alert-success' : 'alert-error'
+            }`}>
+            {deploymentStatus[0] === 'success' ? (
+              <ImCheckmark2 className="h-6 w-6" />
+            ) : (
+              <ImWarning className="h-6 w-6" />
+            )}
+            <span>{deploymentStatus[1]}</span>
+          </div>
+        </div>
+      )}
     </>
   )
 }
