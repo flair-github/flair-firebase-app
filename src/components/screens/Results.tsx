@@ -49,10 +49,10 @@ function PageResults() {
               <th>Job Id</th>
               <th>Timestamp</th>
               <th>Model</th>
-              <th>Accuracy</th>
-              <th>Hallucination</th>
+              {/* <th>Accuracy</th>
+              <th>Hallucination</th> */}
               <th>Invalid Format</th>
-              <th>Latency</th>
+              <th>Latency Average</th>
               <th>Result</th>
             </tr>
           </thead>
@@ -70,9 +70,9 @@ function PageResults() {
                     <div className="w-32">{timestampToLocaleString(el.createdTimestamp)}</div>
                   </td>
                   <td>{el.model}</td>
-                  <td>98%</td>
-                  <td>1.2%</td>
-                  <td>0%</td>
+                  {/* <td>98%</td>
+                  <td>1.2%</td> */}
+                  <td>{el.averageEvaluationData.invalid_format_percentage}</td>
                   <td>{el.averageEvaluationData.average_latency_per_request}</td>
                   <td>
                     <div style={{ minWidth: 250 }}>
