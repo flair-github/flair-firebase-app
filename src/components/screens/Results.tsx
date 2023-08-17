@@ -52,7 +52,7 @@ function PageResults() {
               {/* <th>Accuracy</th>
               <th>Hallucination</th> */}
               <th>Invalid Format</th>
-              <th>Latency Average</th>
+              <th>Avg. Latency (s)</th>
               <th>Result</th>
             </tr>
           </thead>
@@ -72,8 +72,10 @@ function PageResults() {
                   <td>{el.model}</td>
                   {/* <td>98%</td>
                   <td>1.2%</td> */}
-                  <td>{el.averageEvaluationData.invalid_format_percentage}</td>
-                  <td>{el.averageEvaluationData.average_latency_per_request}</td>
+                  <td>{el.averageEvaluationData.invalid_format_percentage || 0}%</td>
+                  <td>
+                    {el.averageEvaluationData.average_latency_per_request?.toFixed?.(3) ?? '-'}
+                  </td>
                   <td>
                     <div style={{ minWidth: 250 }}>
                       <Link
