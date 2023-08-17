@@ -12,6 +12,7 @@ import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineExpand } from 'react-icons/ai'
 import DetailModal from '../shared/DetailModal'
 import { WhereFilterOp } from 'firebase/firestore'
+import { timestampToLocaleString } from './LLMOutputs'
 
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
@@ -26,10 +27,7 @@ const snakeToTitle = (input: string): string => {
 function ResultDetails() {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
   const { resultId } = useParams()
-  const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
-    'workflow_results',
-    resultId as string,
-  )
+  const [data, loading, error] = useFirestoreDoc<any>('workflow_results', resultId as string)
   const [columnName, setColumnName] = useState<string>()
   const where: [string, WhereFilterOp, string][] = useMemo(() => {
     return [
@@ -50,6 +48,10 @@ function ResultDetails() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
 
+  if (!data) {
+    return <></>
+  }
+
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
@@ -65,47 +67,53 @@ function ResultDetails() {
         </a>
       </div>
       <div className="stats mb-4 w-full grid-cols-4 shadow">
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Model</div>
-          <div className="stat-value">gpt-4</div>
+          <div className="stat-value">{data.model}</div>
         </div>
-        <div className="stat">
-          <div className="stat-title">Accuracy</div>
-          <div className="stat-value">98%</div>
-          <div className="stat-desc">5% more than last run</div>
+        <div className="stat overflow-hidden">
+          <div className="stat-title">Relevancy</div>
+          <div className="stat-value">
+            {data.averageEvaluationData.answer_relevancy?.toFixed?.(3)}
+          </div>
+          {/* <div className="stat-desc">5% more than last run</div> */}
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Hallucination</div>
-          <div className="stat-value">1.2%</div>
-          <div className="stat-desc">21% more than last run</div>
+          <div className="stat-value">-</div>
+          {/* <div className="stat-desc">21% more than last run</div> */}
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Invalid Format</div>
-          <div className="stat-value">3%</div>
-          <div className="stat-desc">4% more than last run</div>
+          <div className="stat-value">
+            {data.averageEvaluationData.invalid_format_percentage || 0}%
+          </div>
+          {/* <div className="stat-desc">4% more than last run</div> */}
         </div>
       </div>
       <div className="stats mb-4 w-full grid-cols-4 shadow">
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Request Time</div>
-          <div className="stat-value">
-            <div className="text-3xl">2023/06/25</div>
-            <div className="stat-desc text-lg font-bold">10:45:30</div>
+          <div className="stat-value text-sm">
+            {timestampToLocaleString(data.createdTimestamp)}
+            {/* <div className="text-3xl">2023/06/25</div>
+            <div className="stat-desc text-lg font-bold">10:45:30</div> */}
           </div>
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Total Time</div>
-          <div className="stat-value">25 minutes</div>
-          <div className="stat-desc text-lg font-bold">Avg: 2.3 minutes</div>
+          <div className="stat-value">-</div>
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Average Tokens</div>
-          <div className="stat-value">192.3 tokens</div>
+          <div className="stat-value">{data.average_tokens_per_request}</div>
           {/* <div className="text-lg font-bold stat-desc">Avg: 56 tokens</div> */}
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Average Latency</div>
-          <div className="stat-value">211.2ms</div>
+          <div className="stat-value">
+            {data.averageEvaluationData.average_latency_per_request?.toFixed?.(3) ?? '-'}
+          </div>
           {/* <div className="text-lg font-bold stat-desc">Avg: 200ms</div> */}
         </div>
       </div>
@@ -280,7 +288,7 @@ function ResultDetails() {
                           <div className="ml-4 shrink-0">
                             <a
                               target="_blank"
-                              href={url}
+                              href={url as string}
                               className="font-medium text-primary hover:text-primary/80">
                               Download
                             </a>
