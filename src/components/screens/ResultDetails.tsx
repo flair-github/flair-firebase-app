@@ -29,14 +29,15 @@ function ResultDetails() {
   const { resultId } = useParams()
   const [data, loading, error] = useFirestoreDoc<any>('workflow_results', resultId as string)
   const [columnName, setColumnName] = useState<string>()
-  const where: [string, WhereFilterOp, string][] = useMemo(() => {
-    return [
+  const where: [string, WhereFilterOp, string][] = useMemo(
+    () => [
       ['workflowResultId', '==', resultId as string],
       ...(columnName
         ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
         : []),
-    ]
-  }, [resultId, columnName])
+    ],
+    [resultId, columnName],
+  )
 
   const {
     items,
@@ -148,7 +149,7 @@ function ResultDetails() {
                 onChange={({ target: { value } }) => {
                   setColumnName(value)
                 }}>
-                <option value={undefined}>All</option>
+                <option value="">All</option>
                 {(data?.evaluationData ? Object.keys(data.evaluationData) : []).map(item => (
                   <option key={item} value={item}>
                     {/* {snakeToTitle(item)} */}
