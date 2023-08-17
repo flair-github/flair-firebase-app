@@ -148,7 +148,7 @@ function ResultDetails() {
               </select>
             </div>
             <div className="flex-1" />
-            <div className="form-control w-80">
+            {/* <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">Similarity Score</span>
               </label>
@@ -172,7 +172,7 @@ function ResultDetails() {
                 <option>3</option>
                 <option>4</option>
               </select>
-            </div>
+            </div> */}
           </div>
 
           {/* Table */}
@@ -267,40 +267,26 @@ function ResultDetails() {
                     <ul
                       role="list"
                       className="divide-y divide-gray-100 rounded-md border border-gray-200">
-                      <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                        <div className="flex w-0 flex-1 items-center">
-                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
-                            <span className="truncate font-medium">llm_result.csv</span>
-                            <span className="shrink-0 text-gray-400">2.5 MB</span>
+                      {Object.entries(data?.resultData || {}).map(([key, url]) => (
+                        <li
+                          key={key}
+                          className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                          <div className="flex w-0 flex-1 items-center">
+                            <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
+                            <div className="min-w-0 ml-4 flex flex-1 gap-2">
+                              <span className="truncate font-medium">{key}</span>
+                            </div>
                           </div>
-                        </div>
-                        <div className="ml-4 shrink-0">
-                          <a
-                            target="_blank"
-                            href="https://firebasestorage.googleapis.com/v0/b/flair-labs.appspot.com/o/llm_outputs%2Fuptrain_test_detect_live_connection%2Fuptrain_test_experiment%2Fuptrain_test.csv?alt=media&token=6be1bdc2-26db-42f9-875d-415ed6baf7a4"
-                            className="font-medium text-primary hover:text-primary/80">
-                            Download
-                          </a>
-                        </div>
-                      </li>
-                      <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                        <div className="flex w-0 flex-1 items-center">
-                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
-                            <span className="truncate font-medium">evaluation_result.jsonl</span>
-                            <span className="shrink-0 text-gray-400">2.6 MB</span>
+                          <div className="ml-4 shrink-0">
+                            <a
+                              target="_blank"
+                              href={url}
+                              className="font-medium text-primary hover:text-primary/80">
+                              Download
+                            </a>
                           </div>
-                        </div>
-                        <div className="ml-4 shrink-0">
-                          <a
-                            target="_blank"
-                            href="https://firebasestorage.googleapis.com/v0/b/flair-labs.appspot.com/o/evaluation_outputs%2Fuptrain_test_detect_live_connection%2Fuptrain_test_experiment_1%2Fuptrain_test.jsonl?alt=media&token=7d5c54ba-dbac-4efe-98d3-88abe791a089"
-                            className="font-medium text-primary hover:text-primary/80">
-                            Download
-                          </a>
-                        </div>
-                      </li>
+                        </li>
+                      ))}
                     </ul>
                   </dd>
                 </div>
