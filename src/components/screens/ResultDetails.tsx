@@ -12,6 +12,7 @@ import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineExpand } from 'react-icons/ai'
 import DetailModal from '../shared/DetailModal'
 import { WhereFilterOp } from 'firebase/firestore'
+import { timestampToLocaleString } from './LLMOutputs'
 
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
@@ -26,10 +27,7 @@ const snakeToTitle = (input: string): string => {
 function ResultDetails() {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
   const { resultId } = useParams()
-  const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
-    'workflow_results',
-    resultId as string,
-  )
+  const [data, loading, error] = useFirestoreDoc<any>('workflow_results', resultId as string)
   const [columnName, setColumnName] = useState<string>()
   const where: [string, WhereFilterOp, string][] = useMemo(() => {
     return [
@@ -50,6 +48,10 @@ function ResultDetails() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
 
+  if (!data) {
+    return <></>
+  }
+
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
@@ -65,47 +67,55 @@ function ResultDetails() {
         </a>
       </div>
       <div className="stats mb-4 w-full grid-cols-4 shadow">
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Model</div>
-          <div className="stat-value">gpt-4</div>
+          <div className="stat-value">{data.model}</div>
         </div>
-        <div className="stat">
-          <div className="stat-title">Accuracy</div>
-          <div className="stat-value">98%</div>
-          <div className="stat-desc">5% more than last run</div>
+        <div className="stat overflow-hidden">
+          <div className="stat-title">Relevancy</div>
+          <div className="stat-value">
+            {data.averageEvaluationData.answer_relevancy?.toFixed?.(3)}
+          </div>
+          {/* <div className="stat-desc">5% more than last run</div> */}
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Hallucination</div>
-          <div className="stat-value">1.2%</div>
-          <div className="stat-desc">21% more than last run</div>
+          <div className="stat-value">-</div>
+          {/* <div className="stat-desc">21% more than last run</div> */}
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Invalid Format</div>
-          <div className="stat-value">3%</div>
-          <div className="stat-desc">4% more than last run</div>
+          <div className="stat-value">
+            {data.averageEvaluationData.invalid_format_percentage || 0}%
+          </div>
+          {/* <div className="stat-desc">4% more than last run</div> */}
         </div>
       </div>
       <div className="stats mb-4 w-full grid-cols-4 shadow">
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Request Time</div>
-          <div className="stat-value">
-            <div className="text-3xl">2023/06/25</div>
-            <div className="stat-desc text-lg font-bold">10:45:30</div>
+          <div className="stat-value text-sm">
+            {timestampToLocaleString(data.createdTimestamp)}
+            {/* <div className="text-3xl">2023/06/25</div>
+            <div className="stat-desc text-lg font-bold">10:45:30</div> */}
           </div>
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Total Time</div>
-          <div className="stat-value">25 minutes</div>
-          <div className="stat-desc text-lg font-bold">Avg: 2.3 minutes</div>
+          <div className="stat-value">-</div>
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Average Tokens</div>
-          <div className="stat-value">192.3 tokens</div>
+          <div className="stat-value">
+            {data.averageEvaluationData.average_tokens_per_request || '-'}
+          </div>
           {/* <div className="text-lg font-bold stat-desc">Avg: 56 tokens</div> */}
         </div>
-        <div className="stat">
+        <div className="stat overflow-hidden">
           <div className="stat-title">Average Latency</div>
-          <div className="stat-value">211.2ms</div>
+          <div className="stat-value">
+            {data.averageEvaluationData.average_latency_per_request?.toFixed?.(3) ?? '-'}
+          </div>
           {/* <div className="text-lg font-bold stat-desc">Avg: 200ms</div> */}
         </div>
       </div>
@@ -148,7 +158,7 @@ function ResultDetails() {
               </select>
             </div>
             <div className="flex-1" />
-            <div className="form-control w-80">
+            {/* <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">Similarity Score</span>
               </label>
@@ -172,7 +182,7 @@ function ResultDetails() {
                 <option>3</option>
                 <option>4</option>
               </select>
-            </div>
+            </div> */}
           </div>
 
           {/* Table */}
@@ -267,40 +277,26 @@ function ResultDetails() {
                     <ul
                       role="list"
                       className="divide-y divide-gray-100 rounded-md border border-gray-200">
-                      <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                        <div className="flex w-0 flex-1 items-center">
-                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
-                            <span className="truncate font-medium">llm_result.csv</span>
-                            <span className="shrink-0 text-gray-400">2.5 MB</span>
+                      {Object.entries(data?.resultData || {}).map(([key, url]) => (
+                        <li
+                          key={key}
+                          className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                          <div className="flex w-0 flex-1 items-center">
+                            <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
+                            <div className="min-w-0 ml-4 flex flex-1 gap-2">
+                              <span className="truncate font-medium">{key}</span>
+                            </div>
                           </div>
-                        </div>
-                        <div className="ml-4 shrink-0">
-                          <a
-                            target="_blank"
-                            href="https://firebasestorage.googleapis.com/v0/b/flair-labs.appspot.com/o/llm_outputs%2Fuptrain_test_detect_live_connection%2Fuptrain_test_experiment%2Fuptrain_test.csv?alt=media&token=6be1bdc2-26db-42f9-875d-415ed6baf7a4"
-                            className="font-medium text-primary hover:text-primary/80">
-                            Download
-                          </a>
-                        </div>
-                      </li>
-                      <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                        <div className="flex w-0 flex-1 items-center">
-                          <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
-                            <span className="truncate font-medium">evaluation_result.jsonl</span>
-                            <span className="shrink-0 text-gray-400">2.6 MB</span>
+                          <div className="ml-4 shrink-0">
+                            <a
+                              target="_blank"
+                              href={url as string}
+                              className="font-medium text-primary hover:text-primary/80">
+                              Download
+                            </a>
                           </div>
-                        </div>
-                        <div className="ml-4 shrink-0">
-                          <a
-                            target="_blank"
-                            href="https://firebasestorage.googleapis.com/v0/b/flair-labs.appspot.com/o/evaluation_outputs%2Fuptrain_test_detect_live_connection%2Fuptrain_test_experiment_1%2Fuptrain_test.jsonl?alt=media&token=7d5c54ba-dbac-4efe-98d3-88abe791a089"
-                            className="font-medium text-primary hover:text-primary/80">
-                            Download
-                          </a>
-                        </div>
-                      </li>
+                        </li>
+                      ))}
                     </ul>
                   </dd>
                 </div>

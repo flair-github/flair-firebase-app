@@ -48,12 +48,11 @@ function PageResults() {
               <th />
               <th>Job Id</th>
               <th>Timestamp</th>
-              <th>Total Time Taken</th>
               <th>Model</th>
-              <th>Accuracy</th>
-              <th>Hallucination</th>
+              {/* <th>Accuracy</th>
+              <th>Hallucination</th> */}
               <th>Invalid Format</th>
-              <th>Latency</th>
+              <th>Avg. Latency (s)</th>
               <th>Result</th>
             </tr>
           </thead>
@@ -70,14 +69,12 @@ function PageResults() {
                   <td>
                     <div className="w-32">{timestampToLocaleString(el.createdTimestamp)}</div>
                   </td>
-                  <td>15 minutes</td>
-                  <td>gpt-4</td>
-                  <td>98%</td>
-                  <td>1.2%</td>
-                  <td>0%</td>
+                  <td>{el.model}</td>
+                  {/* <td>98%</td>
+                  <td>1.2%</td> */}
+                  <td>{el.averageEvaluationData.invalid_format_percentage || 0}%</td>
                   <td>
-                    {el.evaluationData?.average_latency_per_request ??
-                      getAverage(el.evaluationData).average_latency_per_request}
+                    {el.averageEvaluationData.average_latency_per_request?.toFixed?.(3) ?? '-'}
                   </td>
                   <td>
                     <div style={{ minWidth: 250 }}>
