@@ -106,7 +106,9 @@ function ResultDetails() {
         </div>
         <div className="stat overflow-hidden">
           <div className="stat-title">Average Tokens</div>
-          <div className="stat-value">{data.average_tokens_per_request}</div>
+          <div className="stat-value">
+            {data.averageEvaluationData.average_tokens_per_request || '-'}
+          </div>
           {/* <div className="text-lg font-bold stat-desc">Avg: 56 tokens</div> */}
         </div>
         <div className="stat overflow-hidden">
