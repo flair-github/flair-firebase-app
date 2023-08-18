@@ -3,6 +3,7 @@ import { useState } from 'react'
 // import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
 import { PiFileCsvFill } from 'react-icons/pi'
+import { ImFilesEmpty } from 'react-icons/im'
 import { CodeBlock } from 'react-code-blocks'
 import { useParams } from 'react-router-dom'
 import useFirestoreDoc from '~/lib/useFirestoreDoc'
@@ -190,43 +191,52 @@ function ResultDetails() {
 
           {/* Table */}
           <table className="table w-full shadow">
-            <thead>
-              <tr>
-                <th>LLM Input</th>
-                <th>LLM Output</th>
-                <th>Answer</th>
-                <th>Latency</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items?.map(item => (
-                <tr key={item.id}>
-                  <td>
-                    <div className="line-clamp-3 h-14 w-96">{item.input}</div>
-                  </td>
-                  <td>
-                    <div className="line-clamp-3 h-14 w-96">{item.output}</div>
-                  </td>
-                  <td>
-                    <div className="line-clamp-3 h-14 w-96">{item.answer}</div>
-                  </td>
-                  <td>{item.latency.toFixed(2) + ' seconds'}</td>
-                  <td>
-                    <div className="">
-                      <button
-                        className="btn bg-slate-200"
-                        onClick={() => {
-                          setSelectedRow(item)
-                          setIsOpen(true)
-                        }}>
-                        <AiOutlineExpand /> Details
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            {items?.length ? (
+              <>
+                <thead>
+                  <tr>
+                    <th>LLM Input</th>
+                    <th>LLM Output</th>
+                    <th>Answer</th>
+                    <th>Latency</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map(item => (
+                    <tr key={item.id}>
+                      <td>
+                        <div className="line-clamp-3 h-14 w-96">{item.input}</div>
+                      </td>
+                      <td>
+                        <div className="line-clamp-3 h-14 w-96">{item.output}</div>
+                      </td>
+                      <td>
+                        <div className="line-clamp-3 h-14 w-36 break-words">{item.answer}</div>
+                      </td>
+                      <td>{item.latency.toFixed(2) + ' seconds'}</td>
+                      <td>
+                        <div className="w-32">
+                          <button
+                            className="btn bg-slate-200"
+                            onClick={() => {
+                              setSelectedRow(item)
+                              setIsOpen(true)
+                            }}>
+                            <AiOutlineExpand /> Details
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </>
+            ) : (
+              <div className="my-36 flex w-full flex-col items-center justify-center space-y-6">
+                <ImFilesEmpty className="h-32 w-32" />
+                <h5 className="text-lg font-semibold">There is empty result for this query</h5>
+              </div>
+            )}
           </table>
           {hasMore ? (
             <button className="btn mx-auto my-3 block w-36" onClick={loadMore}>
