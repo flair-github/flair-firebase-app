@@ -1,39 +1,54 @@
-interface InnerObject {
-  [key: string]: number
-}
+import { AverageEvaluationData, EvaluationData } from 'Types/firebaseStructure'
 
-interface MainObject {
-  [key: string]: InnerObject
-}
+export function getAverage(evaluationData: EvaluationData): AverageEvaluationData {
+  const evaluationDataEntries = Object.values(evaluationData)
 
-export function getAverage(obj: MainObject): InnerObject {
-  const result: InnerObject = {} // This will hold the summed values
-  const counts: { [key: string]: number } = {} // This will hold the count of values for each key
+  // Initialize sum object
+  const sum: AverageEvaluationData = {
+    faithfulness: 0,
+    average_latency_per_request: 0,
+    context_relevancy: 0,
+    answer_relevancy: 0,
+    invalid_format_percentage: 0,
+    average_tokens_per_request: 0,
+  }
 
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const innerObj = obj[key]
+  // Count of valid entries for each field
+  const fieldCounts: Partial<AverageEvaluationData> = {}
 
-      for (const innerKey in innerObj) {
-        if (innerObj.hasOwnProperty(innerKey)) {
-          // If the result object doesn't have the key, initialize it
-          if (!result[innerKey]) {
-            result[innerKey] = 0
-            counts[innerKey] = 0
-          }
-
-          result[innerKey] += innerObj[innerKey]
-          counts[innerKey]++
-        }
+  // Iterate through each evaluation data
+  evaluationDataEntries.forEach(data => {
+    Object.keys(data).forEach(key => {
+      const fieldKey = key as keyof AverageEvaluationData
+      if (typeof data[fieldKey] === 'number') {
+        sum[fieldKey] += data[fieldKey]!
+        fieldCounts[fieldKey] = (fieldCounts[fieldKey] || 0) + 1
       }
-    }
+    })
+  })
+
+  const defaultAverage = undefined
+  // Compute averages
+  const average: AverageEvaluationData = {
+    faithfulness: sum.faithfulness
+      ? sum.faithfulness / (fieldCounts.faithfulness || 1)
+      : defaultAverage,
+    average_latency_per_request: sum.average_latency_per_request
+      ? sum.average_latency_per_request / (fieldCounts.average_latency_per_request || 1)
+      : defaultAverage,
+    context_relevancy: sum.context_relevancy
+      ? sum.context_relevancy / (fieldCounts.context_relevancy || 1)
+      : defaultAverage,
+    answer_relevancy: sum.answer_relevancy
+      ? sum.answer_relevancy / (fieldCounts.answer_relevancy || 1)
+      : defaultAverage,
+    invalid_format_percentage: sum.invalid_format_percentage
+      ? sum.invalid_format_percentage / (fieldCounts.invalid_format_percentage || 1)
+      : defaultAverage,
+    average_tokens_per_request: sum.average_tokens_per_request
+      ? sum.average_tokens_per_request / (fieldCounts.average_tokens_per_request || 1)
+      : defaultAverage,
   }
 
-  for (const key in result) {
-    if (result.hasOwnProperty(key)) {
-      result[key] /= counts[key]
-    }
-  }
-
-  return result
+  return average
 }
