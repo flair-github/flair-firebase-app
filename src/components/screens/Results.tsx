@@ -78,7 +78,7 @@ function PageResults() {
                     <div className="w-24 break-words">{el.workflowRequestId}</div>
                   </td>
                   <td>
-                    <div className="w-24 break-words">Completed</div>
+                    <div className="w-24 break-words">{(el as any).status || '-'}</div>
                   </td>
                   <td>
                     <div className="w-36">{timestampToLocaleString(el.createdTimestamp)}</div>
