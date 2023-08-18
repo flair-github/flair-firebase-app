@@ -56,7 +56,7 @@ function ResultDetails() {
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
-        <h1 className="text-3xl font-bold">Customer Call Workflow #1831</h1>
+        <h1 className="text-3xl font-bold">{data.workflowName || 'Workflow Result'}</h1>
         <div className="flex-1" />
         <a className="btn btn-disabled mr-2 gap-1" href="#" onClick={() => {}}>
           <FaShare />
