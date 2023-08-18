@@ -48,11 +48,12 @@ function PageResults() {
               <th />
               <th>Workflow Result Id</th>
               <th>Workflow Request Id</th>
+              <th>Status</th>
               <th>Created</th>
               <th>Model</th>
-              <th>Faithfulness</th>
+              {/* <th>Faithfulness</th> */}
               <th>Latency</th>
-              <th>Context Relevancy</th>
+              {/* <th>Context Relevancy</th> */}
               <th>Answer Relevancy</th>
               <th>Invalid Format (%)</th>
               <th>Tokens per Request</th>
@@ -77,14 +78,17 @@ function PageResults() {
                     <div className="w-24 break-words">{el.workflowRequestId}</div>
                   </td>
                   <td>
+                    <div className="w-24 break-words">{(el as any).status || 'completed'}</div>
+                  </td>
+                  <td>
                     <div className="w-36">{timestampToLocaleString(el.createdTimestamp)}</div>
                   </td>
                   <td>
                     <div className="w-24">{el.model}</div>
                   </td>
-                  <td>{averaged.faithfulness?.toFixed(3) ?? '-'}</td>
+                  {/* <td>{averaged.faithfulness?.toFixed(3) ?? '-'}</td> */}
                   <td>{averaged.average_latency_per_request?.toFixed(3) ?? '-'}</td>
-                  <td>{averaged.context_relevancy?.toFixed(3) ?? '-'}</td>
+                  {/* <td>{averaged.context_relevancy?.toFixed(3) ?? '-'}</td> */}
                   <td>{averaged.answer_relevancy?.toFixed(3) ?? '-'}</td>
                   <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td>
                   <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td>

@@ -56,7 +56,7 @@ function ResultDetails() {
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
-        <h1 className="text-3xl font-bold">Customer Call Workflow #1831</h1>
+        <h1 className="text-3xl font-bold">{data.workflowName || 'Workflow Result'}</h1>
         <div className="flex-1" />
         <a className="btn btn-disabled mr-2 gap-1" href="#" onClick={() => {}}>
           <FaShare />
@@ -254,24 +254,24 @@ function ResultDetails() {
                   <dt className="text-sm font-medium leading-6 text-gray-900">Storage Location</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">S3</dd>
                 </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                {/* <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">Region</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     us-west-2
                   </dd>
-                </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                </div> */}
+                {/* <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">Bucket</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     bn-complete-dev-test
                   </dd>
-                </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                </div> */}
+                {/* <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">Folder Path</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     llm/result/workflow1/*
                   </dd>
-                </div>
+                </div> */}
                 <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">Result Type</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
