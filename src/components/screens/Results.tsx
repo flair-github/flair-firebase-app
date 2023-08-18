@@ -48,6 +48,7 @@ function PageResults() {
               <th />
               <th>Workflow Result Id</th>
               <th>Workflow Request Id</th>
+              <th>Status</th>
               <th>Created</th>
               <th>Model</th>
               <th>Faithfulness</th>
@@ -75,6 +76,9 @@ function PageResults() {
                   </td>
                   <td>
                     <div className="w-24 break-words">{el.workflowRequestId}</div>
+                  </td>
+                  <td>
+                    <div className="w-24 break-words">Completed</div>
                   </td>
                   <td>
                     <div className="w-36">{timestampToLocaleString(el.createdTimestamp)}</div>
