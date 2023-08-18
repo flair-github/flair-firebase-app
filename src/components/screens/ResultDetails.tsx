@@ -108,7 +108,9 @@ function ResultDetails() {
         <div className="stat overflow-hidden">
           <div className="stat-title">Average Tokens</div>
           <div className="stat-value">
-            {data.averageEvaluationData.average_tokens_per_request || '-'}
+            {typeof data.averageEvaluationData.average_tokens_per_request === 'number'
+              ? Math.round(data.averageEvaluationData.average_tokens_per_request)
+              : '-'}
           </div>
           {/* <div className="text-lg font-bold stat-desc">Avg: 56 tokens</div> */}
         </div>

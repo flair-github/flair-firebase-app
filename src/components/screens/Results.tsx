@@ -87,7 +87,7 @@ function PageResults() {
                   <td>{averaged.context_relevancy?.toFixed(3) ?? '-'}</td>
                   <td>{averaged.answer_relevancy?.toFixed(3) ?? '-'}</td>
                   <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td>
-                  <td>{averaged.average_tokens_per_request?.toFixed(3) ?? '-'}</td>
+                  <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td>
                   <td>
                     <div style={{ minWidth: 250 }}>
                       <Link
