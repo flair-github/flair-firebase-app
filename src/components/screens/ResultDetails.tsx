@@ -192,6 +192,7 @@ function ResultDetails() {
               <tr>
                 <th>LLM Input</th>
                 <th>LLM Output</th>
+                <th>Answer</th>
                 <th>Latency</th>
                 <th>Actions</th>
               </tr>
@@ -204,6 +205,9 @@ function ResultDetails() {
                   </td>
                   <td>
                     <div className="line-clamp-3 h-14 w-96">{item.output}</div>
+                  </td>
+                  <td>
+                    <div className="line-clamp-3 h-14 w-96">{item.answer}</div>
                   </td>
                   <td>{item.latency.toFixed(2) + ' seconds'}</td>
                   <td>
@@ -234,7 +238,7 @@ function ResultDetails() {
         </div>
       )}
       {activeTab === 'result' && (
-        <div className="justify-left flex w-full border [height:720px]">
+        <div className="justify-left flex w-full overflow-y-scroll border [height:720px]">
           <div className="container max-w-200 p-5">
             <div className="px-4 sm:px-0">
               <h3 className="text-base font-semibold leading-7 text-gray-900">Workflow Result</h3>
