@@ -77,18 +77,6 @@ export interface DocWorkflowRequest extends DocRoot {
   generatedConfig: string
 }
 
-// export interface DocWorkflowResult extends DocRoot {
-//   /** Document Id */
-//   workflowResultId: string
-
-//   workflowId: string
-//   workflowRequestId: string
-//   executorUserId: string
-
-//   completionTimestamp: Timestamp
-//   resultData: any
-// }
-
 type Answer = string[] | number | string
 type ColumnName = 'todos' | 'customer_age' | 'call_type' | 'customer_objections'
 
@@ -111,30 +99,45 @@ export interface DocLLMOutput {
 }
 
 export interface DocWorkflowResult {
-  completionTimestamp: Timestamp
-  updatedTimestamp: Timestamp
-  createdTimestamp: Timestamp
+  workflowId: string
   executorUserId: string
   workflowRequestId: string
   workflowResultId: string
-  workflowId: string
+  userConfig: string
   docExists: boolean
-  resultData: ResultDataUnion
+  requestType: null
+  model: Model
+  averageEvaluationData: AverageEvaluationData
   evaluationData: EvaluationData
-  requestType?: null
+  resultData: ResultData
+  updatedTimestamp: Timestamp
+  createdTimestamp: Timestamp
+  completionTimestamp: Timestamp
 }
 
-interface EvaluationData {
-  call_type?: EvaluationData
+export interface AverageEvaluationData {
   faithfulness?: number
   average_latency_per_request?: number
   context_relevancy?: number
   answer_relevancy?: number
-  average_tokens_per_request?: number
+  invalid_format_percentage?: number
+  average_tokens_per_request?: number | null
 }
 
-type ResultDataUnion = string[] | ResultDataClass
+export interface EvaluationData {
+  name?: AverageEvaluationData
+  email?: AverageEvaluationData
+  address?: AverageEvaluationData
+  phone_number?: AverageEvaluationData
+  call_type?: AverageEvaluationData
+}
 
-interface ResultDataClass {
-  call_type: string
+type Model = 'llama-2-7b-chat' | 'gpt-3.5-turbo' | string
+
+interface ResultData {
+  phone_number?: string[]
+  email?: string[]
+  name?: string[]
+  address?: string[]
+  call_type?: string[]
 }

@@ -29,17 +29,17 @@ function usePaginatedFirestore<T extends DocumentData>(
     if (lastVisible) {
       query = query.startAfter(lastVisible)
     }
-
     const snapshot = await query.get()
 
     if (!snapshot.empty) {
       const lastItem = snapshot.docs[snapshot.docs.length - 1] as QueryDocumentSnapshot<T>
-      setItems(prevItems => [...prevItems, ...snapshot.docs.map((doc: any) => doc.data() as T)])
       setLastVisible(lastItem)
+      setHasMore(false)
     } else {
+      setLastVisible(null)
       setHasMore(false)
     }
-
+    setItems(prevItems => [...prevItems, ...snapshot.docs.map((doc: any) => doc.data() as T)])
     setLoading(false)
   }, [collectionName, hasMore, lastVisible, pageSize, where])
 
@@ -52,17 +52,17 @@ function usePaginatedFirestore<T extends DocumentData>(
         query = query.where(...clause)
       }
       query = query.orderBy('createdTimestamp')
-
       const snapshot = await query.get()
 
       if (!snapshot.empty) {
         const lastItem = snapshot.docs[snapshot.docs.length - 1] as QueryDocumentSnapshot<T>
-        setItems([...snapshot.docs.map((doc: any) => doc.data() as T)])
         setLastVisible(lastItem)
+        setHasMore(true)
       } else {
+        setLastVisible(null)
         setHasMore(false)
       }
-
+      setItems(snapshot.docs.map((doc: any) => doc.data() as T))
       setLoading(false)
     })()
   }, [collectionName, pageSize, where])
