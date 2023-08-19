@@ -361,7 +361,7 @@ export const FlowEditor: React.FC<{
             <div className="mb-3">
               <div className="my-2" />
               <div className="join join-vertical w-full">
-                <div className="collapse join-item collapse-arrow border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Data Source</div>
                   <div className="collapse-content">
@@ -544,6 +544,27 @@ export const FlowEditor: React.FC<{
                     <button
                       className="btn m-2 bg-teal-200 hover:bg-teal-300"
                       onClick={() => {
+                        // addNode('data-exporter-azure', 'DataExporterAzureNode')
+                      }}>
+                      Zendesk
+                    </button>
+                    <button
+                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
+                      onClick={() => {
+                        // addNode('data-exporter-azure', 'DataExporterAzureNode')
+                      }}>
+                      Gmail
+                    </button>
+                    <button
+                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
+                      onClick={() => {
+                        // addNode('data-exporter-azure', 'DataExporterAzureNode')
+                      }}>
+                      Salesforce
+                    </button>
+                    <button
+                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
+                      onClick={() => {
                         addNode('data-exporter-flair', 'DataExporterFlairNode')
                       }}>
                       Flair
@@ -581,7 +602,7 @@ export const FlowEditor: React.FC<{
                     </button>
                   </div>
                 </div>
-                <div className="collapse-arrow collapse join-item border border-base-300">
+                {/* <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">Custom Fine-Tuning</div>
                   <div className="collapse-content">
@@ -591,7 +612,7 @@ export const FlowEditor: React.FC<{
                       Fine-Tuning
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 

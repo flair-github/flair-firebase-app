@@ -54,7 +54,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3">
+      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3 font-bold">
         <AiFillApi className="h-7 w-7" />
         <h4 className="ml-3 grow">Data Exporter: API</h4>
       </header>

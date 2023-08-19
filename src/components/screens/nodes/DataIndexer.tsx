@@ -48,7 +48,7 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
         borderRadius: '5px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-green-200 px-5 py-3">
+      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-green-200 px-5 py-3 font-bold">
         <AiOutlineNodeIndex className="h-7 w-7" />
         <h4 className="ml-3 grow">Data Indexer</h4>
       </header>

@@ -102,7 +102,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         />
       )}
 
-      <header className="mb-4 flex items-center justify-between rounded-t-md bg-blue-200 px-5 py-3">
+      <header className="mb-4 flex items-center justify-between rounded-t-md bg-blue-200 px-5 py-3 font-bold">
         <div className="fw-bold">LLM Processor</div>
         <img src="/images/powered-by-flair.png" width={133} height={24} />
       </header>
