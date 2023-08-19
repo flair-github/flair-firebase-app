@@ -9,7 +9,7 @@ import { atomUser, atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { DocWorkflow } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { MoonLoader, RingLoader } from 'react-spinners'
 import { TfiLayoutWidthDefault } from 'react-icons/tfi'
 import { BsArrowLeftShort } from 'react-icons/bs'
@@ -204,29 +204,13 @@ function Index() {
         <form method="dialog" className="modal-box max-w-160 divide-y">
           <header>
             <h3 className="text-lg font-bold">Welcome to Flair AI!</h3>
-            <p className="mb-2">Get started using ready to go template below</p>
+            <p className="mb-2">Get started now to make powerful workflow</p>
           </header>
           <section className="grid grid-cols-2 gap-3 pt-3">
             <button
               className="flex items-center space-x-6 rounded-lg border p-3"
-              onClick={event => {
-                event.preventDefault()
-              }}>
-              <span className="rounded-lg bg-primary p-3">
-                <TfiLayoutWidthDefault className="m-3 h-6 w-6 text-white" />
-              </span>
-              <article className="flex flex-col justify-center text-left">
-                <div className="flex items-center">
-                  <p className="font-semibold">Default template</p>
-                  <BsArrowLeftShort className="h-5 w-5 rotate-180" />
-                </div>
-                <p className="line-clamp-2">General purpose template for you</p>
-              </article>
-            </button>
-            <button
-              className="flex items-center space-x-6 rounded-lg border p-3"
-              onClick={event => {
-                event.preventDefault()
+              onClick={() => {
+                setShowNewFlowModal(true)
               }}>
               <span className="rounded-lg bg-secondary p-3">
                 <ImFileEmpty className="m-3 h-6 w-6 text-white" />
@@ -239,6 +223,18 @@ function Index() {
                 <p className="line-clamp-2">Start with white blank canvas</p>
               </article>
             </button>
+            <Link className="flex items-center space-x-6 rounded-lg border p-3" to="/templates">
+              <span className="rounded-lg bg-primary p-3">
+                <TfiLayoutWidthDefault className="m-3 h-6 w-6 text-white" />
+              </span>
+              <article className="flex flex-col justify-center text-left">
+                <div className="flex items-center">
+                  <p className="font-semibold">Workflow template</p>
+                  <BsArrowLeftShort className="h-5 w-5 rotate-180" />
+                </div>
+                <p className="line-clamp-2">Ready to go template for you</p>
+              </article>
+            </Link>
           </section>
           <div className="modal-action justify-start pt-2">
             <button className="link-hover link-primary link">Or resume from previous work</button>

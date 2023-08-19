@@ -1,33 +1,27 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
-import { db } from '~/lib/firebase'
 import { getAverage } from '~/lib/averager'
 import { timestampToLocaleString } from './LLMOutputs'
 import { DocWorkflowResult } from 'Types/firebaseStructure'
+import { WhereFilterOp } from 'firebase/firestore'
+import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
+import { ImSpinner9 } from 'react-icons/im'
 
 function PageResults() {
-  const [results, setResults] = useState<DocWorkflowResult[]>([])
-  useEffect(() => {
-    const unsub = db
-      .collection('workflow_results')
-      .where('docExists', '==', true)
-      .where('executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82')
-      .orderBy('createdTimestamp', 'desc')
-      .limit(50)
-      .onSnapshot(snaps => {
-        const newResults = snaps.docs.map(
-          snap => ({ ...snap.data(), workflowResultId: snap.id } as DocWorkflowResult),
-        )
-        setResults(newResults)
-      })
-
-    return () => {
-      unsub()
-    }
-  }, [])
+  const where = useMemo(
+    () => [
+      ['docExists', '==', true],
+      ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
+    ],
+    [],
+  )
+  const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocWorkflowResult>(
+    'workflow_results',
+    10,
+    where as [string, WhereFilterOp, string][],
+  )
 
   return (
     <div className="container mx-auto mb-9 mt-6 rounded-md border">
@@ -61,7 +55,7 @@ function PageResults() {
             </tr>
           </thead>
           <tbody>
-            {results.map(el => {
+            {items.map(el => {
               const averaged = el.averageEvaluationData ?? getAverage(el.evaluationData)
 
               return (
@@ -109,6 +103,15 @@ function PageResults() {
             })}
           </tbody>
         </table>
+        {hasMore ? (
+          <button className="btn mx-auto my-3 block w-36" onClick={loadMore}>
+            {loading ? (
+              <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
+            ) : (
+              'Load More'
+            )}
+          </button>
+        ) : null}
       </div>
     </div>
   )
