@@ -369,7 +369,13 @@ export const FlowEditor: React.FC<{
               <div className="join join-vertical w-full">
                 <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">Data Source</div>
+                  <div className="collapse-title text-xl font-medium">
+                    Data Source
+                    <br />
+                    <div className="mt-1 text-sm font-normal text-gray-500">
+                      Origin of raw datasets.
+                    </div>
+                  </div>
                   <div className="collapse-content">
                     <button
                       className="btn m-2 bg-purple-200 hover:bg-purple-300"
@@ -422,7 +428,12 @@ export const FlowEditor: React.FC<{
                 </div>
                 <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">Data Indexer</div>
+                  <div className="collapse-title text-xl font-medium">
+                    Data Indexer <br />
+                    <div className="mt-1 text-sm font-normal text-gray-500">
+                      Organizes and categorizes data for quick retrieval.
+                    </div>
+                  </div>
                   <div className="collapse-content">
                     <button
                       className="btn m-2 bg-green-200 hover:bg-green-300"
@@ -446,7 +457,12 @@ export const FlowEditor: React.FC<{
                 </div>
                 <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">Data Retriever</div>
+                  <div className="collapse-title text-xl font-medium">
+                    Data Retriever <br />
+                    <div className="mt-1 text-sm font-normal text-gray-500">
+                      Fetches specific data subsets from the source or index.
+                    </div>
+                  </div>
                   <div className="collapse-content">
                     <button
                       className="btn m-2 bg-orange-200 hover:bg-orange-300"
@@ -470,7 +486,12 @@ export const FlowEditor: React.FC<{
                 </div>
                 <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">Data Extractor</div>
+                  <div className="collapse-title text-xl font-medium">
+                    Data Extractor <br />
+                    <div className="mt-1 text-sm font-normal text-gray-500">
+                      Extracts or transforms specific data elements.
+                    </div>
+                  </div>
                   <div className="collapse-content">
                     <button
                       className="btn m-2 hidden"
@@ -512,7 +533,12 @@ export const FlowEditor: React.FC<{
                 </div>
                 <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">Data Exporter</div>
+                  <div className="collapse-title text-xl font-medium">
+                    Data Exporter <br />
+                    <div className="mt-1 text-sm font-normal text-gray-500">
+                      Sends processed data to specified destinations.
+                    </div>
+                  </div>
                   <div className="collapse-content">
                     <button
                       className="btn m-2 bg-teal-200 hover:bg-teal-300"
@@ -586,7 +612,12 @@ export const FlowEditor: React.FC<{
                 </div>
                 <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">Evaluation</div>
+                  <div className="collapse-title text-xl font-medium">
+                    Evaluation <br />
+                    <div className="mt-1 text-sm font-normal text-gray-500">
+                      Assesses data quality and accuracy.
+                    </div>
+                  </div>
                   <div className="collapse-content">
                     <button
                       className="btn m-2 bg-pink-200 hover:bg-pink-300"
