@@ -42,12 +42,6 @@ function Layout() {
           <ul className="menu menu-horizontal px-1">
             <li
               onClick={() => {
-                navigate('/')
-              }}>
-              <a>Studio</a>
-            </li>
-            <li
-              onClick={() => {
                 navigate('/results')
               }}>
               <a>Experiments</a>

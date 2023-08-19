@@ -18,17 +18,46 @@ import { timestampToLocaleString } from './LLMOutputs'
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
 
-const snakeToTitle = (input: string): string => {
-  return input
-    .split('_') // Split the string on underscores
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
-    .join(' ') // Join the words together with spaces
+const downloadYAML = (yaml: string) => {
+  const blob = new Blob([yaml], { type: 'text/yaml' })
+  const href = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = 'config.yaml' // or any other filename you want
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
+
+function getFilenameFromURL(urlString: string, defaultName: string): string {
+  const url = new URL(urlString)
+  const pathname = url.pathname
+
+  const parts = pathname.split('/')
+  const filename = parts[parts.length - 1]
+
+  // Ensure the filename has an extension
+  if (/\.[a-z0-9]{2,4}$/i.test(filename)) {
+    return filename
+  }
+
+  return defaultName
+}
+
+// const snakeToTitle = (input: string): string => {
+//   return input
+//     .split('_') // Split the string on underscores
+//     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
+//     .join(' ') // Join the words together with spaces
+// }
 
 function ResultDetails() {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
   const { resultId } = useParams()
-  const [data, loading, error] = useFirestoreDoc<any>('workflow_results', resultId as string)
+  const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
+    'workflow_results',
+    resultId as string,
+  )
   const [columnName, setColumnName] = useState<string>()
   const where: [string, WhereFilterOp, string][] = useMemo(
     () => [
@@ -57,18 +86,15 @@ function ResultDetails() {
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
-        <h1 className="text-3xl font-bold">{data.workflowName || 'Workflow Result'}</h1>
+        <h1 className="text-3xl font-bold">{'Workflow Result'}</h1>
         <div className="flex-1" />
-        <a className="btn btn-disabled mr-2 gap-1" href="#" onClick={() => {}}>
+        <a className="btn btn-disabled  gap-1" href="#" onClick={() => {}}>
           <FaShare />
           <div>Share</div>
           <div className="text-xs">(soon)</div>
         </a>
-        <a className="btn" href="#" onClick={() => {}}>
-          <FaCloudDownloadAlt /> Download
-        </a>
       </div>
-      <div className="stats mb-4 w-full grid-cols-4 shadow">
+      <header className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat overflow-hidden">
           <div className="stat-title">Model</div>
           <div className="stat-value">{data.model}</div>
@@ -76,7 +102,7 @@ function ResultDetails() {
         <div className="stat overflow-hidden">
           <div className="stat-title">Relevancy</div>
           <div className="stat-value">
-            {data.averageEvaluationData.answer_relevancy?.toFixed?.(3)}
+            {data.averageEvaluationData.answer_relevancy?.toFixed(3)}
           </div>
           {/* <div className="stat-desc">5% more than last run</div> */}
         </div>
@@ -92,8 +118,8 @@ function ResultDetails() {
           </div>
           {/* <div className="stat-desc">4% more than last run</div> */}
         </div>
-      </div>
-      <div className="stats mb-4 w-full grid-cols-4 shadow">
+      </header>
+      <header className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat overflow-hidden">
           <div className="stat-title">Request Time</div>
           <div className="stat-value text-sm">
@@ -118,12 +144,12 @@ function ResultDetails() {
         <div className="stat overflow-hidden">
           <div className="stat-title">Average Latency</div>
           <div className="stat-value">
-            {data.averageEvaluationData.average_latency_per_request?.toFixed?.(3) ?? '-'}
+            {data.averageEvaluationData.average_latency_per_request?.toFixed(3) ?? '-'}
           </div>
           {/* <div className="text-lg font-bold stat-desc">Avg: 200ms</div> */}
         </div>
-      </div>
-      <div className="tabs-boxed tabs mb-2 w-full justify-center">
+      </header>
+      <nav className="tabs-boxed tabs mb-2 w-full justify-center">
         <a
           className={`tab tab-lg font-bold ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('evaluation')}>
@@ -139,7 +165,7 @@ function ResultDetails() {
           onClick={() => setActiveTab('config')}>
           Config
         </a>
-      </div>
+      </nav>
       {activeTab === 'evaluation' && (
         <div>
           <div className="mb-3 flex space-x-2">
@@ -264,67 +290,99 @@ function ResultDetails() {
                   <dt className="text-sm font-medium leading-6 text-gray-900">Storage Location</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">S3</dd>
                 </div>
-                {/* <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">Region</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    us-west-2
-                  </dd>
-                </div> */}
-                {/* <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">Bucket</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    bn-complete-dev-test
-                  </dd>
-                </div> */}
-                {/* <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">Folder Path</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    llm/result/workflow1/*
-                  </dd>
-                </div> */}
                 <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">Result Type</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     CSV
                   </dd>
                 </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">Files</dt>
+                {/* Output files */}
+                <section className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt className="text-sm font-medium leading-6 text-gray-900">Output Files</dt>
                   <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    <ul
-                      role="list"
-                      className="divide-y divide-gray-100 rounded-md border border-gray-200">
-                      {Object.entries(data?.resultData || {}).map(([key, url]) => (
-                        <li
-                          key={key}
-                          className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                          <div className="flex w-0 flex-1 items-center">
-                            <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                            <div className="min-w-0 ml-4 flex flex-1 gap-2">
-                              <span className="truncate font-medium">{key}</span>
+                    {data?.outputData && (
+                      <ul
+                        role="list"
+                        className="divide-y divide-gray-100 rounded-md border border-gray-200">
+                        {Object.entries(data.outputData).map(([key, url]) => (
+                          <li
+                            key={key}
+                            className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                            <div className="flex w-0 flex-1 items-center">
+                              <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
+                              <div
+                                className="min-w-0 ml-4 flex flex-1 gap-2 overflow-hidden"
+                                style={{ direction: 'rtl' }}>
+                                <p className="truncate font-medium">
+                                  {getFilenameFromURL(url, key)}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                          <div className="ml-4 shrink-0">
-                            <a
-                              target="_blank"
-                              href={url as string}
-                              className="font-medium text-primary hover:text-primary/80">
-                              Download
-                            </a>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
+                            <div className="ml-4 shrink-0">
+                              <a
+                                target="_blank"
+                                href={url as string}
+                                className="font-medium text-primary hover:text-primary/80">
+                                Download
+                              </a>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </dd>
-                </div>
+                </section>
+                {/* Result files */}
+                <section className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt className="text-sm font-medium leading-6 text-gray-900">Evaluation Files</dt>
+                  <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {data?.resultData && (
+                      <ul
+                        role="list"
+                        className="divide-y divide-gray-100 rounded-md border border-gray-200">
+                        {Object.entries(data.resultData).map(([key, url]) => (
+                          <li
+                            key={key}
+                            className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                            <div className="flex w-0 flex-1 items-center">
+                              <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
+                              <div
+                                className="min-w-0 ml-4 flex flex-1 gap-2 overflow-hidden"
+                                style={{ direction: 'rtl' }}>
+                                <p className="truncate font-medium">
+                                  {getFilenameFromURL(url, key)}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="ml-4 shrink-0">
+                              <a
+                                target="_blank"
+                                href={url as string}
+                                className="font-medium text-primary hover:text-primary/80">
+                                Download
+                              </a>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </dd>
+                </section>
               </dl>
             </div>
           </div>
         </div>
       )}
       {activeTab === 'config' && (
-        <div className="w-full overflow-y-auto border font-mono">
+        <div className="relative w-full overflow-y-auto border font-mono">
           <CodeBlock text={yaml} language="yaml" showLineNumbers={true} wrapLines />
+          <button
+            className="btn absolute right-3 top-3"
+            onClick={() => {
+              downloadYAML(yaml)
+            }}>
+            <FaCloudDownloadAlt /> Download
+          </button>
         </div>
       )}
       {selectedRow ? (

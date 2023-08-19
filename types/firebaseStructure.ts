@@ -110,6 +110,7 @@ export interface DocWorkflowResult {
   averageEvaluationData: AverageEvaluationData
   evaluationData: EvaluationData
   resultData: ResultData
+  outputData: ResultData
   updatedTimestamp: Timestamp
   createdTimestamp: Timestamp
   completionTimestamp: Timestamp
