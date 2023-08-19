@@ -18,6 +18,9 @@ import { DataExporterGCPNodeContent } from './DataExporterGCP'
 import { DataExporterAzureNodeContent } from './DataExporterAzure'
 import { DataExporterAPINodeContent } from './DataExporterAPI'
 import { AwsUploaderNodeContent } from './AwsUploaderNode'
+import { DataExporterSalesforceNodeContent } from './DataExporterSalesforce'
+import { DataExporterZendeskNodeContent } from './DataExporterZendesk'
+import { DataExporterGmailNodeContent } from './DataExporterGmail'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -38,6 +41,9 @@ export type NodeContent =
   | DataRetrieverNodeContent
   | DataSourceLocalFilesNodeContent
   | DataExporterFlairNodeContent
+  | DataExporterSalesforceNodeContent
+  | DataExporterZendeskNodeContent
+  | DataExporterGmailNodeContent
 
 export interface NodeData {
   nodeId: string

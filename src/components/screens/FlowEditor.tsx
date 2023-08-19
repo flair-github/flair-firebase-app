@@ -53,6 +53,9 @@ import { DataExporterGCPNode } from './nodes/DataExporterGCP'
 import { DataExporterAzureNode } from './nodes/DataExporterAzure'
 import { DataExporterAPINode } from './nodes/DataExporterAPI'
 import { ImCheckmark2, ImSpinner9, ImWarning } from 'react-icons/im'
+import { DataExporterSalesforceNode } from './nodes/DataExporterSalesforce'
+import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
+import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -71,6 +74,9 @@ export const nodeTypes = {
   DataRetrieverNode,
   DataSourceLocalFilesNode,
   DataExporterFlairNode,
+  DataExporterSalesforceNode,
+  DataExporterZendeskNode,
+  DataExporterGmailNode,
 }
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
@@ -544,21 +550,21 @@ export const FlowEditor: React.FC<{
                     <button
                       className="btn m-2 bg-teal-200 hover:bg-teal-300"
                       onClick={() => {
-                        // addNode('data-exporter-azure', 'DataExporterAzureNode')
+                        addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
                       }}>
                       Zendesk
                     </button>
                     <button
                       className="btn m-2 bg-teal-200 hover:bg-teal-300"
                       onClick={() => {
-                        // addNode('data-exporter-azure', 'DataExporterAzureNode')
+                        addNode('data-exporter-gmail', 'DataExporterGmailNode')
                       }}>
                       Gmail
                     </button>
                     <button
                       className="btn m-2 bg-teal-200 hover:bg-teal-300"
                       onClick={() => {
-                        // addNode('data-exporter-azure', 'DataExporterAzureNode')
+                        addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
                       }}>
                       Salesforce
                     </button>
