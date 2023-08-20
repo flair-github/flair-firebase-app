@@ -22,6 +22,7 @@ import { DataExporterSalesforceNodeContent } from './DataExporterSalesforce'
 import { DataExporterZendeskNodeContent } from './DataExporterZendesk'
 import { DataExporterGmailNodeContent } from './DataExporterGmail'
 import { DataRetrieverApiNodeContent } from './DataRetrieverAPI'
+import { ConditionalLogicNodeContent } from './ConditionalLogicNode'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -37,6 +38,7 @@ export type NodeContent =
   | DataExporterAzureNodeContent
   | DataExporterAPINodeContent
   | EvaluatorNodeContent
+  | ConditionalLogicNodeContent
   | LLMProcessorNodeContent
   | DataIndexerNodeContent
   | DataRetrieverNodeContent

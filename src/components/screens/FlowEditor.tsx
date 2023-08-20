@@ -57,6 +57,7 @@ import { DataExporterSalesforceNode } from './nodes/DataExporterSalesforce'
 import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
 import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
+import { ConditionalLogicNode } from './nodes/ConditionalLogicNode'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -79,6 +80,7 @@ export const nodeTypes = {
   DataExporterZendeskNode,
   DataExporterGmailNode,
   DataRetrieverApiNode,
+  ConditionalLogicNode,
 }
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
@@ -369,7 +371,7 @@ export const FlowEditor: React.FC<{
             <div className="mb-3">
               <div className="my-2" />
               <div className="join join-vertical w-full">
-                <div className="collapse-arrow collapse join-item border border-base-300">
+                <div className="collapse join-item collapse-arrow border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">
                     Data Source
@@ -616,6 +618,35 @@ export const FlowEditor: React.FC<{
                         addNode('data-exporter-api', 'DataExporterAPINode')
                       }}>
                       API
+                    </button>
+                  </div>
+                </div>
+                <div className="collapse-arrow collapse join-item border border-base-300">
+                  <input type="radio" name="my-accordion-4" />
+                  <div className="collapse-title text-xl font-medium">
+                    Router <br />
+                    <div className="mt-1 text-sm font-normal text-gray-500">
+                      Control flow and logical branching.
+                    </div>
+                  </div>
+                  <div className="collapse-content">
+                    <button
+                      className="btn m-2 bg-rose-200 hover:bg-rose-300"
+                      onClick={() => {
+                        setNodes(prev => {
+                          const nodeId = 'evaluator-' + String(Date.now())
+                          return [
+                            ...prev,
+                            {
+                              id: nodeId,
+                              type: 'ConditionalLogicNode',
+                              data: { nodeId, initialContents: { nodeType: 'init' } },
+                              position: randPos(viewport.current),
+                            },
+                          ]
+                        })
+                      }}>
+                      Conditional Logic
                     </button>
                   </div>
                 </div>
