@@ -21,6 +21,7 @@ import { AwsUploaderNodeContent } from './AwsUploaderNode'
 import { DataExporterSalesforceNodeContent } from './DataExporterSalesforce'
 import { DataExporterZendeskNodeContent } from './DataExporterZendesk'
 import { DataExporterGmailNodeContent } from './DataExporterGmail'
+import { DataRetrieverApiNodeContent } from './DataRetrieverAPI'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -44,6 +45,7 @@ export type NodeContent =
   | DataExporterSalesforceNodeContent
   | DataExporterZendeskNodeContent
   | DataExporterGmailNodeContent
+  | DataRetrieverApiNodeContent
 
 export interface NodeData {
   nodeId: string

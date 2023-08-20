@@ -56,6 +56,7 @@ import { ImCheckmark2, ImSpinner9, ImWarning } from 'react-icons/im'
 import { DataExporterSalesforceNode } from './nodes/DataExporterSalesforce'
 import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
 import { DataExporterGmailNode } from './nodes/DataExporterGmail'
+import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -77,6 +78,7 @@ export const nodeTypes = {
   DataExporterSalesforceNode,
   DataExporterZendeskNode,
   DataExporterGmailNode,
+  DataRetrieverApiNode,
 }
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
@@ -481,6 +483,13 @@ export const FlowEditor: React.FC<{
                         })
                       }}>
                       Data Retriever
+                    </button>
+                    <button
+                      className="btn m-2 bg-orange-200 hover:bg-orange-300"
+                      onClick={() => {
+                        addNode('data-retriever-api', 'DataRetrieverApiNode')
+                      }}>
+                      Data Retriever API
                     </button>
                   </div>
                 </div>
