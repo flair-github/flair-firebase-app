@@ -24,7 +24,7 @@ function usePaginatedFirestore<T extends DocumentData>(
     for (const clause of where) {
       query = query.where(...clause)
     }
-    query = query.orderBy('createdTimestamp')
+    query = query.orderBy('createdTimestamp', 'desc')
 
     if (lastVisible) {
       query = query.startAfter(lastVisible)
@@ -34,7 +34,7 @@ function usePaginatedFirestore<T extends DocumentData>(
     if (!snapshot.empty) {
       const lastItem = snapshot.docs[snapshot.docs.length - 1] as QueryDocumentSnapshot<T>
       setLastVisible(lastItem)
-      setHasMore(false)
+      setHasMore(true)
     } else {
       setLastVisible(null)
       setHasMore(false)
@@ -51,7 +51,7 @@ function usePaginatedFirestore<T extends DocumentData>(
       for (const clause of where) {
         query = query.where(...clause)
       }
-      query = query.orderBy('createdTimestamp')
+      query = query.orderBy('createdTimestamp', 'desc')
       const snapshot = await query.get()
 
       if (!snapshot.empty) {
