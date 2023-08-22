@@ -53,11 +53,8 @@ export interface DocUser extends DocRoot {
 export interface DocWorkflow extends DocRoot {
   /** Document Id */
   workflowId: string
-
   ownerUserId: string
-
   lastSaveTimestamp: Timestamp
-
   workflowTitle: string
   frontendConfig: string
 }
