@@ -6,20 +6,20 @@ import { FaSalesforce } from 'react-icons/fa'
 
 export interface DataExporterSalesforceNodeContent {
   nodeType: 'data-exporter-salesforce'
-  fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
-  accountName: string
-  accountKey: string
-  containerName: string
-  path: string
+  username: string
+  password: string
+  securityToken: string
+  loginUrl: string
+  salesforceObject: string
 }
 
 export const dataExporterSalesforceDefaultContent: DataExporterSalesforceNodeContent = {
   nodeType: 'data-exporter-salesforce',
-  fileType: 'csv',
-  accountName: '',
-  accountKey: '',
-  containerName: '',
-  path: '',
+  username: '',
+  password: '',
+  securityToken: '',
+  loginUrl: '',
+  salesforceObject: '',
 }
 
 export const DataExporterSalesforceNode = ({
@@ -67,78 +67,66 @@ export const DataExporterSalesforceNode = ({
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">File Type</span>
-          </label>
-          <select
-            className="max-w-xs select w-full border-black "
-            onChange={e => {
-              const newVal = e.target.value as DataExporterSalesforceNodeContent['fileType']
-              setNodeContent(prev => ({ ...prev, fileType: newVal }))
-            }}
-            value={nodeContent.fileType}>
-            <option value={'txt' satisfies DataExporterSalesforceNodeContent['fileType']}>
-              txt
-            </option>
-            <option value={'csv' satisfies DataExporterSalesforceNodeContent['fileType']}>
-              csv
-            </option>
-            <option value={'mp3' satisfies DataExporterSalesforceNodeContent['fileType']}>
-              mp3
-            </option>
-            <option value={'pdf' satisfies DataExporterSalesforceNodeContent['fileType']}>
-              pdf
-            </option>
-          </select>
-        </div>
-        <div className="mb-2 mt-1">
-          <label className="label">
-            <span className="label-text">Account Name</span>
+            <span className="label-text">Username</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountName}
+            value={nodeContent.username}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountName: newVal }))
+              setNodeContent(prev => ({ ...prev, username: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Key</span>
+            <span className="label-text">Password</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountKey}
+            value={nodeContent.password}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountKey: newVal }))
+              setNodeContent(prev => ({ ...prev, password: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Container Name</span>
+            <span className="label-text">Security Token</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.containerName}
+            value={nodeContent.securityToken}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, containerName: newVal }))
+              setNodeContent(prev => ({ ...prev, securityToken: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="label-text">Login URL</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.path}
+            value={nodeContent.loginUrl}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, path: newVal }))
+              setNodeContent(prev => ({ ...prev, loginUrl: newVal }))
+            }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Salesforce Object</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            value={nodeContent.salesforceObject}
+            onChange={e => {
+              const newVal = e.target.value
+              setNodeContent(prev => ({ ...prev, salesforceObject: newVal }))
             }}
           />
         </div>
