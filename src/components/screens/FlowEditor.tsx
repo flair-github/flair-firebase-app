@@ -31,6 +31,7 @@ import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from '
 import { dataIndexerDefaultContent } from './nodes/DataIndexer'
 import { dataRetrieverDefaultContent } from './nodes/DataRetriever'
 import { v4 } from 'uuid'
+import { BiSave } from 'react-icons/bi'
 
 import { DataExtractorNode, DataExtractorNodeContent } from './nodes/DataExtractorNode'
 import { DataSourceNode, DataSourceNodeContent } from './nodes/DataSourceNode'
@@ -101,11 +102,13 @@ export const FlowEditor: React.FC<{
   viewerOnly?: boolean
   initialNodes?: Nodes
   initialEdges?: Edges
-}> = ({ viewerOnly, initialNodes, initialEdges }) => {
+  initialTitle?: string
+}> = ({ viewerOnly, initialNodes, initialEdges, initialTitle }) => {
   const userData = useAtomValue(atomUserData)
 
   const [nodes, setNodes] = useState<Nodes>(initialNodes || [])
   const [edges, setEdges] = useState<Edges>(initialEdges || [])
+  const [title, setTitle] = useState<string>(initialTitle || '')
 
   const navigate = useNavigate()
   const { state } = useLocation()
@@ -120,9 +123,9 @@ export const FlowEditor: React.FC<{
 
       const snap = await db.collection('workflows').doc(workflowId).get()
       const data = snap.data() as DocWorkflow
+      setTitle(data.workflowTitle)
 
       const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
-
       setNodes(newNodes)
       setEdges(newEdges)
     })()
@@ -322,7 +325,7 @@ export const FlowEditor: React.FC<{
   return (
     <>
       <div className="h-[calc(100vh-4rem)]">
-        <div className="border-grayscaleDivider flex h-[3rem] border-b">
+        <div className="border-grayscaleDivider mx-3 flex h-[3rem] border-b">
           <button className="btn btn-primary m-1 h-[2.5rem] min-h-[2.5rem]" onClick={saveFlow}>
             Save
           </button>
@@ -344,7 +347,32 @@ export const FlowEditor: React.FC<{
             }}>
             Sample
           </button>
-          <div className="flex-1" />
+          <div className="relative my-1 h-[2.5rem] grow px-4">
+            <input
+              type="text"
+              placeholder="Workflow Title"
+              value={title}
+              onChange={event => {
+                setTitle(event.target.value)
+              }}
+              className="input input-ghost h-full w-full"
+            />
+            <button
+              className="btn btn-circle btn-sm absolute right-6 top-1"
+              onClick={async () => {
+                if (typeof workflowId !== 'string') {
+                  return
+                }
+
+                const docUpdate: Partial<DocWorkflow> = {
+                  lastSaveTimestamp: serverTimestamp() as Timestamp,
+                  workflowTitle: title,
+                }
+                await db.collection('workflows').doc(workflowId).update(docUpdate)
+              }}>
+              <BiSave />
+            </button>
+          </div>
 
           <button
             className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
@@ -371,7 +399,7 @@ export const FlowEditor: React.FC<{
             <div className="mb-3">
               <div className="my-2" />
               <div className="join join-vertical w-full">
-                <div className="collapse join-item collapse-arrow border border-base-300">
+                <div className="collapse-arrow collapse join-item border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">
                     Data Source

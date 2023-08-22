@@ -12,7 +12,7 @@ import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { Link, useNavigate } from 'react-router-dom'
 import { MoonLoader, RingLoader } from 'react-spinners'
 import { TfiLayoutWidthDefault } from 'react-icons/tfi'
-import { BsArrowLeftShort } from 'react-icons/bs'
+import { BsArrowLeftShort, BsThreeDots } from 'react-icons/bs'
 import { ImFileEmpty } from 'react-icons/im'
 
 function Index() {
@@ -114,43 +114,42 @@ function Index() {
         <div className="-m-4 flex flex-wrap">
           {myFlows &&
             myFlows.map(myFlow => (
-              <div key={myFlow.workflowId} className="card m-4 w-96 border bg-base-100 shadow-xl">
+              <div
+                key={myFlow.workflowId}
+                className="card m-4 w-96 cursor-pointer border bg-base-100 shadow-md transition-shadow hover:shadow-xl"
+                onClick={() => {
+                  openWorkflow(myFlow.workflowId)
+                }}>
                 <div className="card-body">
-                  <h2
-                    onClick={() => {
-                      openWorkflow(myFlow.workflowId)
-                    }}
-                    className="card-title truncate">
-                    {myFlow.workflowTitle}
-                  </h2>
-                  <img
-                    onClick={() => {
-                      openWorkflow(myFlow.workflowId)
-                    }}
-                    src="/images/flow-artwork.svg"
-                    width={330}
-                    height={180}
-                    className="border"
-                  />
-                  <div className="card-actions flex justify-end">
-                    <button
-                      className="btn btn-ghost"
-                      onClick={() => {
-                        db.collection('workflows').doc(myFlow.workflowId).update({
-                          docExists: false,
-                        })
+                  <header className="flex justify-between">
+                    <h2 className="card-title truncate">{myFlow.workflowTitle}</h2>
+                    <div
+                      className="dropdown"
+                      onClick={event => {
+                        event.stopPropagation()
                       }}>
-                      Delete
-                    </button>
-                    <div className="flex-1" />
-                    <button
-                      className="btn"
-                      onClick={() => {
-                        openWorkflow(myFlow.workflowId)
-                      }}>
-                      Open
-                    </button>
-                  </div>
+                      <label tabIndex={0} className="btn btn-circle btn-ghost btn-sm m-1">
+                        <BsThreeDots />
+                      </label>
+                      <ul
+                        tabIndex={0}
+                        className="menu dropdown-content rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
+                        <li>
+                          <button
+                            className=""
+                            onClick={event => {
+                              event.stopPropagation()
+                              db.collection('workflows').doc(myFlow.workflowId).update({
+                                docExists: false,
+                              })
+                            }}>
+                            Delete
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </header>
+                  <img src="/images/flow-artwork.svg" width={330} height={180} className="border" />
                 </div>
               </div>
             ))}
