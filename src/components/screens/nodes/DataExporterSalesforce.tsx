@@ -123,7 +123,6 @@ export const DataExporterSalesforceNode = ({
           <textarea
             rows={3}
             className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
-            value={''}
             onChange={e => {}}
             placeholder={''}
           />

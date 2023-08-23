@@ -80,7 +80,7 @@ export const DataExporterGmailNode = ({
             value={nodeContent.to}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountName: newVal }))
+              setNodeContent(prev => ({ ...prev, to: newVal }))
             }}
           />
         </div>
@@ -93,7 +93,7 @@ export const DataExporterGmailNode = ({
             value={nodeContent.subject}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountKey: newVal }))
+              setNodeContent(prev => ({ ...prev, subject: newVal }))
             }}
           />
         </div>
@@ -106,7 +106,7 @@ export const DataExporterGmailNode = ({
             value={nodeContent.from}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, containerName: newVal }))
+              setNodeContent(prev => ({ ...prev, from: newVal }))
             }}
           />
         </div>
@@ -120,7 +120,7 @@ export const DataExporterGmailNode = ({
             value={nodeContent.prompt}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountKey: newVal }))
+              setNodeContent(prev => ({ ...prev, prompt: newVal }))
             }}
             placeholder={''}
           />
@@ -129,25 +129,25 @@ export const DataExporterGmailNode = ({
           <label className="label">
             <span className="label-text">SMTP Mail Server</span>
           </label>
-          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
+          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">User Name</span>
           </label>
-          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
+          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">Password</span>
           </label>
-          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
+          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">SMTP Port</span>
           </label>
-          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
+          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
         </div>
       </section>
       {!noHandle && (

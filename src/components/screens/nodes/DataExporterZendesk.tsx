@@ -108,7 +108,7 @@ export const DataExporterZendeskNode = ({
           <label className="label">
             <span className="label-text">Title</span>
           </label>
-          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
+          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
@@ -117,7 +117,6 @@ export const DataExporterZendeskNode = ({
           <textarea
             rows={3}
             className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
-            value={''}
             onChange={e => {}}
             placeholder={''}
           />
@@ -126,14 +125,14 @@ export const DataExporterZendeskNode = ({
           <label className="label">
             <span className="label-text">Priority</span>
           </label>
-          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
+          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
         </div>
 
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">Type</span>
           </label>
-          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
+          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
         </div>
       </section>
       {!noHandle && (
