@@ -108,14 +108,13 @@ export const DataExporterSalesforceNode = ({
           <label className="label">
             <span className="label-text">Salesforce Object</span>
           </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.salesforceObject}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, salesforceObject: newVal }))
-            }}
-          />
+          <select
+            className="max-w-xs select w-full border-black "
+            onChange={e => {}}
+            value={'leads'}>
+            <option value={'leads'}>leads</option>
+            <option value={'accounts'}>accounts</option>
+          </select>
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
