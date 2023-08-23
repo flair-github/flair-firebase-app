@@ -6,20 +6,26 @@ import { BiLogoGmail } from 'react-icons/bi'
 
 export interface DataExporterGmailNodeContent {
   nodeType: 'data-exporter-gmail'
-  fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
-  accountName: string
-  accountKey: string
-  containerName: string
-  path: string
+  to: string
+  subject: string
+  from: string
+  prompt: string
+  clientId: string
+  clientSecret: string
+  refreshToken: string
+  accessToken: string
 }
 
 export const dataExporterGmailDefaultContent: DataExporterGmailNodeContent = {
   nodeType: 'data-exporter-gmail',
-  fileType: 'csv',
-  accountName: '',
-  accountKey: '',
-  containerName: '',
-  path: '',
+  to: '',
+  subject: '',
+  from: '',
+  prompt: '',
+  clientId: '',
+  clientSecret: '',
+  refreshToken: '',
+  accessToken: '',
 }
 
 export const DataExporterGmailNode = ({
@@ -67,28 +73,11 @@ export const DataExporterGmailNode = ({
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">File Type</span>
-          </label>
-          <select
-            className="max-w-xs select w-full border-black "
-            onChange={e => {
-              const newVal = e.target.value as DataExporterGmailNodeContent['fileType']
-              setNodeContent(prev => ({ ...prev, fileType: newVal }))
-            }}
-            value={nodeContent.fileType}>
-            <option value={'txt' satisfies DataExporterGmailNodeContent['fileType']}>txt</option>
-            <option value={'csv' satisfies DataExporterGmailNodeContent['fileType']}>csv</option>
-            <option value={'mp3' satisfies DataExporterGmailNodeContent['fileType']}>mp3</option>
-            <option value={'pdf' satisfies DataExporterGmailNodeContent['fileType']}>pdf</option>
-          </select>
-        </div>
-        <div className="mb-2 mt-1">
-          <label className="label">
-            <span className="label-text">Account Name</span>
+            <span className="label-text">To</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountName}
+            value={nodeContent.to}
             onChange={e => {
               const newVal = e.target.value
               setNodeContent(prev => ({ ...prev, accountName: newVal }))
@@ -97,11 +86,11 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Key</span>
+            <span className="label-text">Subject</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountKey}
+            value={nodeContent.subject}
             onChange={e => {
               const newVal = e.target.value
               setNodeContent(prev => ({ ...prev, accountKey: newVal }))
@@ -110,11 +99,11 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Container Name</span>
+            <span className="label-text">From</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.containerName}
+            value={nodeContent.from}
             onChange={e => {
               const newVal = e.target.value
               setNodeContent(prev => ({ ...prev, containerName: newVal }))
@@ -123,11 +112,65 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="label-text">Prompt</span>
+          </label>
+          <textarea
+            rows={6}
+            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            value={nodeContent.prompt}
+            onChange={e => {
+              const newVal = e.target.value
+              setNodeContent(prev => ({ ...prev, accountKey: newVal }))
+            }}
+            placeholder={''}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Client ID</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.path}
+            value={nodeContent.clientId}
+            onChange={e => {
+              const newVal = e.target.value
+              setNodeContent(prev => ({ ...prev, path: newVal }))
+            }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Client Secret</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            value={nodeContent.clientSecret}
+            onChange={e => {
+              const newVal = e.target.value
+              setNodeContent(prev => ({ ...prev, path: newVal }))
+            }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Refresh Token</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            value={nodeContent.refreshToken}
+            onChange={e => {
+              const newVal = e.target.value
+              setNodeContent(prev => ({ ...prev, path: newVal }))
+            }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Access Token</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            value={nodeContent.accessToken}
             onChange={e => {
               const newVal = e.target.value
               setNodeContent(prev => ({ ...prev, path: newVal }))

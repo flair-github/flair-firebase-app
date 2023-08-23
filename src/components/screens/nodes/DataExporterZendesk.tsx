@@ -6,20 +6,20 @@ import { SiZendesk } from 'react-icons/si'
 
 export interface DataExporterZendeskNodeContent {
   nodeType: 'data-exporter-zendesk'
-  fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
-  accountName: string
-  accountKey: string
-  containerName: string
-  path: string
+  subdomain: string
+  email: string
+  apiToken: string
+  endpoint: string
+  headers: string
 }
 
 export const dataExporterZendeskDefaultContent: DataExporterZendeskNodeContent = {
   nodeType: 'data-exporter-zendesk',
-  fileType: 'csv',
-  accountName: '',
-  accountKey: '',
-  containerName: '',
-  path: '',
+  subdomain: '',
+  email: '',
+  apiToken: '',
+  endpoint: '',
+  headers: '',
 }
 
 export const DataExporterZendeskNode = ({
@@ -67,71 +67,71 @@ export const DataExporterZendeskNode = ({
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">File Type</span>
-          </label>
-          <select
-            className="max-w-xs select w-full border-black "
-            onChange={e => {
-              const newVal = e.target.value as DataExporterZendeskNodeContent['fileType']
-              setNodeContent(prev => ({ ...prev, fileType: newVal }))
-            }}
-            value={nodeContent.fileType}>
-            <option value={'txt' satisfies DataExporterZendeskNodeContent['fileType']}>txt</option>
-            <option value={'csv' satisfies DataExporterZendeskNodeContent['fileType']}>csv</option>
-            <option value={'mp3' satisfies DataExporterZendeskNodeContent['fileType']}>mp3</option>
-            <option value={'pdf' satisfies DataExporterZendeskNodeContent['fileType']}>pdf</option>
-          </select>
-        </div>
-        <div className="mb-2 mt-1">
-          <label className="label">
-            <span className="label-text">Account Name</span>
+            <span className="label-text">Subdomain</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountName}
+            value={nodeContent.subdomain}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountName: newVal }))
+              setNodeContent(prev => ({ ...prev, subdomain: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Key</span>
+            <span className="label-text">Email</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.accountKey}
+            value={nodeContent.email}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, accountKey: newVal }))
+              setNodeContent(prev => ({ ...prev, email: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Container Name</span>
+            <span className="label-text">API Token</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.containerName}
+            value={nodeContent.apiToken}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, containerName: newVal }))
+              setNodeContent(prev => ({ ...prev, apiToken: newVal }))
             }}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="label-text">Endpoint</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            value={nodeContent.path}
+            value={nodeContent.endpoint}
             onChange={e => {
               const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, path: newVal }))
+              setNodeContent(prev => ({ ...prev, endpoint: newVal }))
             }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Request Headers</span>
+          </label>
+          <textarea
+            rows={3}
+            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            value={nodeContent.headers}
+            onChange={e => {
+              const newVal = e.target.value
+              setNodeContent(prev => ({ ...prev, headers: newVal }))
+            }}
+            placeholder={`{
+"Authorization": "Bearer 111111111111111111111",
+}`}
           />
         </div>
       </section>
