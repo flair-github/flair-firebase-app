@@ -106,19 +106,6 @@ export const DataExporterSalesforceNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Login URL</span>
-          </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.loginUrl}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, loginUrl: newVal }))
-            }}
-          />
-        </div>
-        <div className="mb-2 mt-1">
-          <label className="label">
             <span className="label-text">Salesforce Object</span>
           </label>
           <input
@@ -128,6 +115,18 @@ export const DataExporterSalesforceNode = ({
               const newVal = e.target.value
               setNodeContent(prev => ({ ...prev, salesforceObject: newVal }))
             }}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Insert Statement</span>
+          </label>
+          <textarea
+            rows={3}
+            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            value={''}
+            onChange={e => {}}
+            placeholder={''}
           />
         </div>
       </section>

@@ -127,55 +127,27 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Client ID</span>
+            <span className="label-text">SMTP Mail Server</span>
           </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.clientId}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, path: newVal }))
-            }}
-          />
+          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Client Secret</span>
+            <span className="label-text">User Name</span>
           </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.clientSecret}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, path: newVal }))
-            }}
-          />
+          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Refresh Token</span>
+            <span className="label-text">Password</span>
           </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.refreshToken}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, path: newVal }))
-            }}
-          />
+          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Access Token</span>
+            <span className="label-text">SMTP Port</span>
           </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.accessToken}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, path: newVal }))
-            }}
-          />
+          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
         </div>
       </section>
       {!noHandle && (

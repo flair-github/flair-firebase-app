@@ -106,33 +106,34 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Endpoint</span>
+            <span className="label-text">Title</span>
           </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            value={nodeContent.endpoint}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, endpoint: newVal }))
-            }}
-          />
+          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Request Headers</span>
+            <span className="label-text">Comment</span>
           </label>
           <textarea
             rows={3}
             className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
-            value={nodeContent.headers}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, headers: newVal }))
-            }}
-            placeholder={`{
-"Authorization": "Bearer 111111111111111111111",
-}`}
+            value={''}
+            onChange={e => {}}
+            placeholder={''}
           />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Priority</span>
+          </label>
+          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
+        </div>
+
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Type</span>
+          </label>
+          <input className="max-w-xs input w-full border-black" value={''} onChange={e => {}} />
         </div>
       </section>
       {!noHandle && (
