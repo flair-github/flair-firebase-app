@@ -9,8 +9,8 @@ export interface DataExporterSalesforceNodeContent {
   username: string
   password: string
   securityToken: string
-  loginUrl: string
   salesforceObject: string
+  statement: string
 }
 
 export const dataExporterSalesforceDefaultContent: DataExporterSalesforceNodeContent = {
@@ -18,8 +18,8 @@ export const dataExporterSalesforceDefaultContent: DataExporterSalesforceNodeCon
   username: '',
   password: '',
   securityToken: '',
-  loginUrl: '',
-  salesforceObject: '',
+  salesforceObject: 'leads',
+  statement: '',
 }
 
 export const DataExporterSalesforceNode = ({
@@ -51,6 +51,12 @@ export const DataExporterSalesforceNode = ({
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
+    setNodeContent(prev => ({ ...prev, [event.target.name]: event.target.value }))
+  }
+
   return (
     <div
       style={{
@@ -71,11 +77,9 @@ export const DataExporterSalesforceNode = ({
           </label>
           <input
             className="max-w-xs input w-full border-black"
+            name={'username'}
             value={nodeContent.username}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, username: newVal }))
-            }}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
@@ -84,11 +88,9 @@ export const DataExporterSalesforceNode = ({
           </label>
           <input
             className="max-w-xs input w-full border-black"
+            name={'password'}
             value={nodeContent.password}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, password: newVal }))
-            }}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
@@ -97,11 +99,9 @@ export const DataExporterSalesforceNode = ({
           </label>
           <input
             className="max-w-xs input w-full border-black"
+            name={'securityToken'}
             value={nodeContent.securityToken}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, securityToken: newVal }))
-            }}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
@@ -110,8 +110,9 @@ export const DataExporterSalesforceNode = ({
           </label>
           <select
             className="max-w-xs select w-full border-black "
-            onChange={e => {}}
-            value={'leads'}>
+            name={'salesforceObject'}
+            value={nodeContent.salesforceObject}
+            onChange={handleChange}>
             <option value={'leads'}>leads</option>
             <option value={'accounts'}>accounts</option>
           </select>
@@ -123,7 +124,9 @@ export const DataExporterSalesforceNode = ({
           <textarea
             rows={3}
             className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
-            onChange={e => {}}
+            name={'statement'}
+            value={nodeContent.statement}
+            onChange={handleChange}
             placeholder={''}
           />
         </div>

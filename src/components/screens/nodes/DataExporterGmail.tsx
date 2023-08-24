@@ -10,10 +10,10 @@ export interface DataExporterGmailNodeContent {
   subject: string
   from: string
   prompt: string
-  clientId: string
-  clientSecret: string
-  refreshToken: string
-  accessToken: string
+  mailServer: string
+  port: string
+  username: string
+  password: string
 }
 
 export const dataExporterGmailDefaultContent: DataExporterGmailNodeContent = {
@@ -22,10 +22,10 @@ export const dataExporterGmailDefaultContent: DataExporterGmailNodeContent = {
   subject: '',
   from: '',
   prompt: '',
-  clientId: '',
-  clientSecret: '',
-  refreshToken: '',
-  accessToken: '',
+  mailServer: '',
+  port: '',
+  username: '',
+  password: '',
 }
 
 export const DataExporterGmailNode = ({
@@ -57,6 +57,12 @@ export const DataExporterGmailNode = ({
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
+    setNodeContent(prev => ({ ...prev, [event.target.name]: event.target.value }))
+  }
+
   return (
     <div
       style={{
@@ -77,11 +83,9 @@ export const DataExporterGmailNode = ({
           </label>
           <input
             className="max-w-xs input w-full border-black"
+            name={'to'}
             value={nodeContent.to}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, to: newVal }))
-            }}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
@@ -90,11 +94,9 @@ export const DataExporterGmailNode = ({
           </label>
           <input
             className="max-w-xs input w-full border-black"
+            name={'subject'}
             value={nodeContent.subject}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, subject: newVal }))
-            }}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
@@ -103,11 +105,9 @@ export const DataExporterGmailNode = ({
           </label>
           <input
             className="max-w-xs input w-full border-black"
+            name={'from'}
             value={nodeContent.from}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, from: newVal }))
-            }}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
@@ -117,11 +117,9 @@ export const DataExporterGmailNode = ({
           <textarea
             rows={6}
             className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            name={'prompt'}
             value={nodeContent.prompt}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, prompt: newVal }))
-            }}
+            onChange={handleChange}
             placeholder={''}
           />
         </div>
@@ -129,25 +127,45 @@ export const DataExporterGmailNode = ({
           <label className="label">
             <span className="label-text">SMTP Mail Server</span>
           </label>
-          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
-        </div>
-        <div className="mb-2 mt-1">
-          <label className="label">
-            <span className="label-text">User Name</span>
-          </label>
-          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
-        </div>
-        <div className="mb-2 mt-1">
-          <label className="label">
-            <span className="label-text">Password</span>
-          </label>
-          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
+          <input
+            className="max-w-xs input w-full border-black"
+            name={'mailServer'}
+            value={nodeContent.mailServer}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">SMTP Port</span>
           </label>
-          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
+          <input
+            className="max-w-xs input w-full border-black"
+            name={'port'}
+            value={nodeContent.port}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">User Name</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            name={'username'}
+            value={nodeContent.username}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="label-text">Password</span>
+          </label>
+          <input
+            className="max-w-xs input w-full border-black"
+            name={'password'}
+            value={nodeContent.password}
+            onChange={handleChange}
+          />
         </div>
       </section>
       {!noHandle && (
