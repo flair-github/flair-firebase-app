@@ -23,6 +23,7 @@ import { DataExporterZendeskNodeContent } from './DataExporterZendesk'
 import { DataExporterGmailNodeContent } from './DataExporterGmail'
 import { DataRetrieverApiNodeContent } from './DataRetrieverAPI'
 import { ConditionalLogicNodeContent } from './ConditionalLogicNode'
+import { DataExtractorAggregatorNodeContent } from './DataExtractorAggregatorNode'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -48,6 +49,7 @@ export type NodeContent =
   | DataExporterZendeskNodeContent
   | DataExporterGmailNodeContent
   | DataRetrieverApiNodeContent
+  | DataExtractorAggregatorNodeContent
 
 export interface NodeData {
   nodeId: string

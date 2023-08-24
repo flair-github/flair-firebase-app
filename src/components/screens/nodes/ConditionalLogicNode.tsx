@@ -37,25 +37,14 @@ export const ConditionalLogicNode = ({ data }: { data: NodeData }) => {
         borderRadius: '5px',
         width: 400,
       }}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="in-ai-data"
-        style={{
-          top: 82,
-          width: 16,
-          height: 16,
-          left: -8,
-        }}
-      />
       <header className="mb-4 flex items-center justify-between rounded-t-md bg-rose-200 px-5 py-3 font-bold">
         <div className="fw-bold">Conditional Logic</div>
         <img src="/images/powered-by-flair.png" width={133} height={24} />
       </header>
       <section className="px-5 pb-5">
-        <div className="mb-4 flex">
+        <div className="mb-2 flex">
           <div className="flex-1">
-            <div className="mb-2">Props</div>
+            <div className="mb-2">props</div>
           </div>
           <div className="flex-1 text-right">
             <div className="mb-2">true</div>
@@ -74,21 +63,32 @@ export const ConditionalLogicNode = ({ data }: { data: NodeData }) => {
               const newVal = e.target.value
               setFormula(newVal)
             }}
-            placeholder={`if(if(if(Props("Tags") == "Work", true, false),
-            dateBetween(Props("Due"), 
-                Props("Today"), "days") <= 14, 
+            placeholder={`if(if(if(props("Tags") == "Work", true, false),
+            dateBetween(props("Due"), 
+                props("Today"), "days") <= 14, 
                 true),
-Props("Hours Allotted") > 2, true)
+props("Hours Allotted") > 2, true)
             `}
           />
         </div>
       </section>
       <Handle
+        type="target"
+        position={Position.Left}
+        id="in-ai-data"
+        style={{
+          top: 78,
+          width: 16,
+          height: 16,
+          left: -8,
+        }}
+      />
+      <Handle
         type="source"
         position={Position.Right}
         id="out-true"
         style={{
-          top: 82,
+          top: 78,
           width: 16,
           height: 16,
           right: -8,
@@ -99,7 +99,7 @@ Props("Hours Allotted") > 2, true)
         position={Position.Right}
         id="out-false"
         style={{
-          top: 115,
+          top: 110,
           width: 16,
           height: 16,
           right: -8,

@@ -59,6 +59,7 @@ import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
 import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
 import { ConditionalLogicNode } from './nodes/ConditionalLogicNode'
+import { DataExtractorAggregatorNode } from './nodes/DataExtractorAggregatorNode'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -82,6 +83,7 @@ export const nodeTypes = {
   DataExporterGmailNode,
   DataRetrieverApiNode,
   ConditionalLogicNode,
+  DataExtractorAggregatorNode,
 }
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
@@ -399,7 +401,7 @@ export const FlowEditor: React.FC<{
             <div className="mb-3">
               <div className="my-2" />
               <div className="join join-vertical w-full">
-                <div className="collapse-arrow collapse join-item border border-base-300">
+                <div className="collapse join-item collapse-arrow border border-base-300">
                   <input type="radio" name="my-accordion-4" />
                   <div className="collapse-title text-xl font-medium">
                     Data Source
@@ -567,6 +569,24 @@ export const FlowEditor: React.FC<{
                         })
                       }}>
                       LLM Processor
+                    </button>
+                    <button
+                      className="btn m-2 bg-blue-200 hover:bg-blue-300"
+                      onClick={() => {
+                        setNodes(prev => {
+                          const nodeId = 'aggregator-' + String(Date.now())
+                          return [
+                            ...prev,
+                            {
+                              id: nodeId,
+                              type: 'DataExtractorAggregatorNode',
+                              data: { nodeId, initialContents: { nodeType: 'init' } },
+                              position: randPos(viewport.current),
+                            },
+                          ]
+                        })
+                      }}>
+                      Aggregator
                     </button>
                   </div>
                 </div>
