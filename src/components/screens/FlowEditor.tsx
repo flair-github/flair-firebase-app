@@ -53,6 +53,7 @@ import { DataExporterS3Node } from './nodes/DataExporterS3'
 import { DataExporterGCPNode } from './nodes/DataExporterGCP'
 import { DataExporterAzureNode } from './nodes/DataExporterAzure'
 import { DataExporterAPINode } from './nodes/DataExporterAPI'
+import { DataExporterPowerBINode } from './nodes/DataExporterPowerBI'
 import { ImCheckmark2, ImSpinner9, ImWarning } from 'react-icons/im'
 import { DataExporterSalesforceNode } from './nodes/DataExporterSalesforce'
 import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
@@ -72,6 +73,7 @@ export const nodeTypes = {
   DataExporterGCPNode,
   DataExporterAzureNode,
   DataExporterAPINode,
+  DataExporterPowerBINode,
   EvaluatorNode,
   LLMProcessorNode,
   DataIndexerNode,
@@ -652,6 +654,13 @@ export const FlowEditor: React.FC<{
                         addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
                       }}>
                       Salesforce
+                    </button>
+                    <button
+                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
+                      onClick={() => {
+                        addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
+                      }}>
+                      Power BI
                     </button>
                     <button
                       className="btn m-2 bg-teal-200 hover:bg-teal-300"

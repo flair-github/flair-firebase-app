@@ -17,6 +17,7 @@ import { DataExporterS3NodeContent } from './DataExporterS3'
 import { DataExporterGCPNodeContent } from './DataExporterGCP'
 import { DataExporterAzureNodeContent } from './DataExporterAzure'
 import { DataExporterAPINodeContent } from './DataExporterAPI'
+import { DataExporterPowerBINodeContent } from './DataExporterPowerBI'
 import { AwsUploaderNodeContent } from './AwsUploaderNode'
 import { DataExporterSalesforceNodeContent } from './DataExporterSalesforce'
 import { DataExporterZendeskNodeContent } from './DataExporterZendesk'
@@ -38,6 +39,7 @@ export type NodeContent =
   | DataExporterGCPNodeContent
   | DataExporterAzureNodeContent
   | DataExporterAPINodeContent
+  | DataExporterPowerBINodeContent
   | EvaluatorNodeContent
   | ConditionalLogicNodeContent
   | LLMProcessorNodeContent
