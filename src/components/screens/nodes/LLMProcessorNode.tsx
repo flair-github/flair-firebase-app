@@ -320,11 +320,9 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                   className="max-w-xs select mb-3 w-full border-black"
                   onChange={e => {
                     const newValue = e.target.value
-
                     if (typeof newValue !== 'string') {
                       return
                     }
-
                     setColumns(prev => {
                       const newColumns = [...prev]
                       newColumns[index].model = newValue as ColumnContent['model']

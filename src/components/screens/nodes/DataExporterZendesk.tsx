@@ -9,8 +9,10 @@ export interface DataExporterZendeskNodeContent {
   subdomain: string
   email: string
   apiToken: string
-  endpoint: string
-  headers: string
+  title: string
+  comment: string
+  priority: string
+  type: string
 }
 
 export const dataExporterZendeskDefaultContent: DataExporterZendeskNodeContent = {
@@ -18,8 +20,10 @@ export const dataExporterZendeskDefaultContent: DataExporterZendeskNodeContent =
   subdomain: '',
   email: '',
   apiToken: '',
-  endpoint: '',
-  headers: '',
+  title: '',
+  comment: '',
+  priority: '',
+  type: '',
 }
 
 export const DataExporterZendeskNode = ({
@@ -51,6 +55,12 @@ export const DataExporterZendeskNode = ({
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
+    setNodeContent(prev => ({ ...prev, [event.target.name]: event.target.value }))
+  }
+
   return (
     <div
       style={{
@@ -71,11 +81,9 @@ export const DataExporterZendeskNode = ({
           </label>
           <input
             className="max-w-xs input w-full border-black"
+            name={'subdomain'}
             value={nodeContent.subdomain}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, subdomain: newVal }))
-            }}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
@@ -84,11 +92,9 @@ export const DataExporterZendeskNode = ({
           </label>
           <input
             className="max-w-xs input w-full border-black"
+            name={'email'}
             value={nodeContent.email}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, email: newVal }))
-            }}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
@@ -97,18 +103,21 @@ export const DataExporterZendeskNode = ({
           </label>
           <input
             className="max-w-xs input w-full border-black"
+            name={'apiToken'}
             value={nodeContent.apiToken}
-            onChange={e => {
-              const newVal = e.target.value
-              setNodeContent(prev => ({ ...prev, apiToken: newVal }))
-            }}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">Title</span>
           </label>
-          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
+          <input
+            className="max-w-xs input w-full border-black"
+            name={'title'}
+            value={nodeContent.title}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
@@ -117,7 +126,9 @@ export const DataExporterZendeskNode = ({
           <textarea
             rows={3}
             className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
-            onChange={e => {}}
+            name={'comment'}
+            value={nodeContent.comment}
+            onChange={handleChange}
             placeholder={''}
           />
         </div>
@@ -125,14 +136,24 @@ export const DataExporterZendeskNode = ({
           <label className="label">
             <span className="label-text">Priority</span>
           </label>
-          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
+          <input
+            className="max-w-xs input w-full border-black"
+            name={'priority'}
+            value={nodeContent.priority}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="label-text">Type</span>
           </label>
-          <input className="max-w-xs input w-full border-black" onChange={e => {}} />
+          <input
+            className="max-w-xs input w-full border-black"
+            name={'type'}
+            value={nodeContent.type}
+            onChange={handleChange}
+          />
         </div>
       </section>
       {!noHandle && (
