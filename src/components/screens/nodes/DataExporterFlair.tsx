@@ -41,7 +41,7 @@ export const DataExporterFlairNode = ({
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader title="Exporter: Flair Hosted" color="teal" withFlair />
+      <NodeHeader title="Flair Hosted" color="teal" nodeId={data.nodeId} withFlair />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <p className="mb-2">

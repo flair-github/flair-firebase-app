@@ -73,7 +73,7 @@ export const DataExporterGmailNode = ({
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={BiLogoGmail} title="Exporter: Gmail" color="teal" />
+      <NodeHeader Icon={BiLogoGmail} title="Exporter: Gmail" color="teal" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

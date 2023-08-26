@@ -55,7 +55,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={AiFillApi} title="Exporter: API" color="teal" />
+      <NodeHeader Icon={AiFillApi} title="Exporter: API" color="teal" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

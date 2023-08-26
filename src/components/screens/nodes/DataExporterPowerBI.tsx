@@ -74,7 +74,7 @@ export const DataExporterPowerBINode = ({
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={SiPowerbi} title="Exporter: PowerBI" color="teal" />
+      <NodeHeader Icon={SiPowerbi} title="Exporter: PowerBI" color="teal" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

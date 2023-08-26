@@ -53,7 +53,12 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={BiLogoGoogle} title="Exporter: Google Cloud Storage" color="teal" />
+      <NodeHeader
+        Icon={BiLogoGoogle}
+        title="Google Cloud Storage"
+        color="teal"
+        nodeId={data.nodeId}
+      />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

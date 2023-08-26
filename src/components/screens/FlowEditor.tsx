@@ -18,7 +18,7 @@ import 'reactflow/dist/style.css'
 // import './style/override.css'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
-import { atom, useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue } from 'jotai'
 import { CodeBlock } from 'react-code-blocks'
 import { AiOutlineCheckCircle } from 'react-icons/ai'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -102,6 +102,9 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   }
 }
 
+export const nodesAtom = atom<Nodes>([])
+export const edgesAtom = atom<Edges>([])
+
 export const FlowEditor: React.FC<{
   viewerOnly?: boolean
   initialNodes?: Nodes
@@ -110,8 +113,8 @@ export const FlowEditor: React.FC<{
 }> = ({ viewerOnly, initialNodes, initialEdges, initialTitle }) => {
   const userData = useAtomValue(atomUserData)
 
-  const [nodes, setNodes] = useState<Nodes>(initialNodes || [])
-  const [edges, setEdges] = useState<Edges>(initialEdges || [])
+  const [nodes, setNodes] = useAtom(nodesAtom)
+  const [edges, setEdges] = useAtom(edgesAtom)
   const [title, setTitle] = useState<string>(initialTitle || '')
 
   const navigate = useNavigate()
@@ -133,7 +136,7 @@ export const FlowEditor: React.FC<{
       setNodes(newNodes)
       setEdges(newEdges)
     })()
-  }, [workflowId])
+  }, [workflowId, setEdges, setNodes])
 
   // const [rflow, setRflow] = useState<ReactFlowInstance>()
 
@@ -143,13 +146,19 @@ export const FlowEditor: React.FC<{
   //   console.log('rflow', rflow)
   // }, [rflow])
 
-  const onNodesChange = useCallback((changes: NodeChange[]) => {
-    setNodes(nds => applyNodeChanges(changes, nds))
-  }, [])
-  const onEdgesChange = useCallback((changes: EdgeChange[]) => {
-    console.log(changes)
-    setEdges(eds => applyEdgeChanges(changes, eds))
-  }, [])
+  const onNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      setNodes(nds => applyNodeChanges(changes, nds))
+    },
+    [setNodes],
+  )
+  const onEdgesChange = useCallback(
+    (changes: EdgeChange[]) => {
+      console.log(changes)
+      setEdges(eds => applyEdgeChanges(changes, eds))
+    },
+    [setEdges],
+  )
 
   // const connectablesMap: Record<string, string[]> = {
   //   // TODO: Add "NodeType:handle"
@@ -188,7 +197,7 @@ export const FlowEditor: React.FC<{
       // But for now, allow all connections
       setEdges(eds => addEdge(connection, eds))
     },
-    [nodes],
+    [nodes, setEdges],
   )
 
   // useref of { x, y}

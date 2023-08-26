@@ -57,7 +57,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={BiLogoAws} title="Exporter: S3" color="teal" />
+      <NodeHeader Icon={BiLogoAws} title="Exporter: S3" color="teal" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
