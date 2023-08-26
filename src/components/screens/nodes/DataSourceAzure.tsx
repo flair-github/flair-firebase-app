@@ -49,17 +49,17 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
+      }}
+      className="bg-purple-50">
       <NodeHeader Icon={BiLogoMicrosoft} title="Source: Azure Blob Storage" color="purple" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">File Type</span>
+            <span className="font-semibold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -76,7 +76,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Name</span>
+            <span className="font-semibold">Account Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -89,7 +89,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Key</span>
+            <span className="font-semibold">Account Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -102,7 +102,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Container Name</span>
+            <span className="font-semibold">Container Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -115,7 +115,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="font-semibold">Path</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

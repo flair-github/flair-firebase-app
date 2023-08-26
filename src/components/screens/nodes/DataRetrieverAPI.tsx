@@ -47,17 +47,17 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
         width: 400,
-      }}>
+      }}
+      className="bg-orange-50">
       <NodeHeader Icon={AiFillApi} title="Data Retriever API" color="orange" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">URL</span>
+            <span className="font-semibold">URL</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -70,7 +70,7 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Request Method</span>
+            <span className="font-semibold">Request Method</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -83,7 +83,7 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Request Headers</span>
+            <span className="font-semibold">Request Headers</span>
           </label>
           <textarea
             rows={3}
@@ -100,7 +100,7 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Request Body</span>
+            <span className="font-semibold">Request Body</span>
           </label>
           <textarea
             rows={3}

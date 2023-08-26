@@ -43,17 +43,17 @@ export const DataRetrieverNode = ({ data }: { data: NodeData }) => {
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
         width: 400,
-      }}>
+      }}
+      className="bg-orange-50">
       <NodeHeader Icon={GiConvergenceTarget} title="Data Retriever" color="orange" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Embedding Type</span>
+            <span className="font-semibold">Embedding Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -71,7 +71,7 @@ export const DataRetrieverNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Retrieve Strategy</span>
+            <span className="font-semibold">Retrieve Strategy</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "

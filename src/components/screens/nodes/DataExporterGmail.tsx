@@ -67,17 +67,17 @@ export const DataExporterGmailNode = ({
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
+      }}
+      className="bg-teal-50">
       <NodeHeader Icon={BiLogoGmail} title="Exporter: Gmail" color="teal" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">To</span>
+            <span className="font-semibold">To</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -88,7 +88,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Subject</span>
+            <span className="font-semibold">Subject</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -99,7 +99,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">From</span>
+            <span className="font-semibold">From</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -110,7 +110,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Prompt</span>
+            <span className="font-semibold">Prompt</span>
           </label>
           <textarea
             rows={6}
@@ -123,7 +123,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">SMTP Mail Server</span>
+            <span className="font-semibold">SMTP Mail Server</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -134,7 +134,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">SMTP Port</span>
+            <span className="font-semibold">SMTP Port</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -145,7 +145,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">User Name</span>
+            <span className="font-semibold">User Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -156,7 +156,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Password</span>
+            <span className="font-semibold">Password</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

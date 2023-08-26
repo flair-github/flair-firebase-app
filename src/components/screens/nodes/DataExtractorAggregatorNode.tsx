@@ -57,12 +57,12 @@ export const DataExtractorAggregatorNode = ({
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
+      }}
+      className="bg-blue-50">
       <NodeHeader Icon={GrAggregate} title="Aggregator" color="blue" />
       <section className="px-5 pb-5">
         <div className="mb-2 flex">
@@ -76,7 +76,7 @@ export const DataExtractorAggregatorNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Column</span>
+            <span className="font-semibold">Column</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -87,7 +87,7 @@ export const DataExtractorAggregatorNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Method</span>
+            <span className="font-semibold">Method</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -100,7 +100,7 @@ export const DataExtractorAggregatorNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Model</span>
+            <span className="font-semibold">Model</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "

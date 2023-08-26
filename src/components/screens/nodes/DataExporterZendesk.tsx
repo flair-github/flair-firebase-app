@@ -65,17 +65,17 @@ export const DataExporterZendeskNode = ({
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
+      }}
+      className="bg-teal-50">
       <NodeHeader Icon={SiZendesk} title="Exporter: Zendesk" color="teal" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Subdomain</span>
+            <span className="font-semibold">Subdomain</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -86,7 +86,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Email</span>
+            <span className="font-semibold">Email</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -97,7 +97,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">API Token</span>
+            <span className="font-semibold">API Token</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -108,7 +108,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Title</span>
+            <span className="font-semibold">Title</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -119,7 +119,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Comment</span>
+            <span className="font-semibold">Comment</span>
           </label>
           <textarea
             rows={3}
@@ -132,7 +132,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Priority</span>
+            <span className="font-semibold">Priority</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -144,7 +144,7 @@ export const DataExporterZendeskNode = ({
 
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Type</span>
+            <span className="font-semibold">Type</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

@@ -61,17 +61,17 @@ export const DataExporterSalesforceNode = ({
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
+      }}
+      className="bg-teal-50">
       <NodeHeader Icon={FaSalesforce} title="Exporter: Salesforce" color="teal" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Username</span>
+            <span className="font-semibold">Username</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -82,7 +82,7 @@ export const DataExporterSalesforceNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Password</span>
+            <span className="font-semibold">Password</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -93,7 +93,7 @@ export const DataExporterSalesforceNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Security Token</span>
+            <span className="font-semibold">Security Token</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -104,7 +104,7 @@ export const DataExporterSalesforceNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Salesforce Object</span>
+            <span className="font-semibold">Salesforce Object</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -117,7 +117,7 @@ export const DataExporterSalesforceNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Insert Statement</span>
+            <span className="font-semibold">Insert Statement</span>
           </label>
           <textarea
             rows={3}

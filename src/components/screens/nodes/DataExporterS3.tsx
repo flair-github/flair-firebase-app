@@ -51,17 +51,17 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
+      }}
+      className="bg-teal-50">
       <NodeHeader Icon={BiLogoAws} title="Exporter: S3" color="teal" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">File Type</span>
+            <span className="font-semibold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -78,7 +78,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Secret Key</span>
+            <span className="font-semibold">Secret Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -91,7 +91,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Access Key</span>
+            <span className="font-semibold">Access Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -104,7 +104,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Region Name</span>
+            <span className="font-semibold">Region Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -117,7 +117,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Bucket Name</span>
+            <span className="font-semibold">Bucket Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -130,7 +130,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="font-semibold">Path</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

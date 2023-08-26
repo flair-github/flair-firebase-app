@@ -35,12 +35,23 @@ export const DataExporterFlairNode = ({
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
         width: 400,
-      }}>
+      }}
+      className="bg-teal-50">
+      <NodeHeader title="Exporter: Flair Hosted" color="teal" withFlair />
+      <section className="px-5 pb-5">
+        <div className="mb-2 mt-1">
+          <p className="mb-2">
+            Workflow job results will be available in the <b>Results</b> page
+          </p>
+          {/* <a className="btn" href="#" onClick={() => {}}>
+            <HiDocumentReport /> Open Results
+          </a> */}
+        </div>
+      </section>
       {!noHandle && (
         <Handle
           type="target"
@@ -53,17 +64,6 @@ export const DataExporterFlairNode = ({
           }}
         />
       )}
-      <NodeHeader title="Exporter: Flair Hosted" color="teal" withFlair />
-      <section className="px-5 pb-5">
-        <div className="mb-2 mt-1">
-          <p className="mb-2">
-            Workflow job results will be available in the <b>Results</b> page
-          </p>
-          {/* <a className="btn" href="#" onClick={() => {}}>
-            <HiDocumentReport /> Open Results
-          </a> */}
-        </div>
-      </section>
     </div>
   )
 }

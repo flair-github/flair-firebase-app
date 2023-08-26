@@ -32,12 +32,12 @@ export const ConditionalLogicNode = ({ data }: { data: NodeData }) => {
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
         width: 400,
-      }}>
+      }}
+      className="bg-rose-50">
       <NodeHeader title="Conditional Logic" color="rose" withFlair />
       <section className="px-5 pb-5">
         <div className="mb-2 flex">
@@ -51,7 +51,7 @@ export const ConditionalLogicNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Formula</span>
+            <span className="font-semibold">Formula</span>
           </label>
           <textarea
             rows={6}

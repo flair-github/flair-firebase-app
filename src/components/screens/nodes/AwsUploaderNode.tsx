@@ -65,7 +65,7 @@ export const AwsUploaderNode = ({ data }: { data: NodeData }) => {
         <div className="fw-bold mb-2">S3 Uploader</div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">API Key</span>
+            <span className="font-semibold">API Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -79,7 +79,7 @@ export const AwsUploaderNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="font-semibold">Path</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -93,7 +93,7 @@ export const AwsUploaderNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Period</span>
+            <span className="font-semibold">Period</span>
           </label>
 
           <select
