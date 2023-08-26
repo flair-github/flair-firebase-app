@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoMicrosoft } from 'react-icons/bi'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExporterAzureNodeContent {
   nodeType: 'data-exporter-azure'
@@ -59,15 +60,18 @@ export const DataExporterAzureNode = ({
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3 font-bold">
-        <BiLogoMicrosoft className="h-7 w-7" />
-        <h4 className="ml-3 grow">Data Exporter: Azure Blob Storage</h4>
-      </header>
+      }}
+      className="bg-teal-50">
+      <NodeHeader
+        Icon={BiLogoMicrosoft}
+        title="Exporter: Azure Blob Storage"
+        color="teal"
+        nodeId={data.nodeId}
+      />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">File Type</span>
+            <span className="font-semibold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -84,7 +88,7 @@ export const DataExporterAzureNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Name</span>
+            <span className="font-semibold">Account Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -97,7 +101,7 @@ export const DataExporterAzureNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Account Key</span>
+            <span className="font-semibold">Account Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -110,7 +114,7 @@ export const DataExporterAzureNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Container Name</span>
+            <span className="font-semibold">Container Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -123,7 +127,7 @@ export const DataExporterAzureNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="font-semibold">Path</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

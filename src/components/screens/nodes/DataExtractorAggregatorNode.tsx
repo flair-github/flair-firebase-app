@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { GrAggregate } from 'react-icons/gr'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExtractorAggregatorNodeContent {
   nodeType: 'data-extractor-aggregator'
@@ -56,16 +57,13 @@ export const DataExtractorAggregatorNode = ({
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-blue-200 px-5 py-3 font-bold">
-        <GrAggregate className="h-7 w-7" />
-        <h4 className="ml-3 grow">Aggregator</h4>
-      </header>
+      }}
+      className="bg-blue-50">
+      <NodeHeader Icon={GrAggregate} title="Aggregator" color="blue" />
       <section className="px-5 pb-5">
         <div className="mb-2 flex">
           <div className="flex-1">
@@ -78,7 +76,7 @@ export const DataExtractorAggregatorNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Column</span>
+            <span className="font-semibold">Column</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -89,7 +87,7 @@ export const DataExtractorAggregatorNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Method</span>
+            <span className="font-semibold">Method</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -102,7 +100,7 @@ export const DataExtractorAggregatorNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Model</span>
+            <span className="font-semibold">Model</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "

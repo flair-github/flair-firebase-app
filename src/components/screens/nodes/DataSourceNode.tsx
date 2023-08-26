@@ -67,18 +67,18 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
         padding: '20px',
         width: 400,
-      }}>
+      }}
+      className="bg-purple-50">
       <div>
         <div className="fw-bold mb-2">Data Source</div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Source</span>
+            <span className="font-semibold">Source</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -93,7 +93,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Data Type</span>
+            <span className="font-semibold">Data Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black"
@@ -109,7 +109,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">API Key</span>
+            <span className="font-semibold">API Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -122,7 +122,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Secret Key</span>
+            <span className="font-semibold">Secret Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -135,7 +135,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Bucket Name</span>
+            <span className="font-semibold">Bucket Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -148,7 +148,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Region Name</span>
+            <span className="font-semibold">Region Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -161,7 +161,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="font-semibold">Path</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

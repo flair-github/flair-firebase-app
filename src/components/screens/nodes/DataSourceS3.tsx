@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoAws } from 'react-icons/bi'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataSourceS3NodeContent {
   nodeType: 'data-source-s3'
@@ -50,20 +51,17 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-purple-200 px-5 py-3 font-bold">
-        <BiLogoAws className="h-7 w-7" />
-        <h4 className="ml-3 grow">Data Source: S3</h4>
-      </header>
+      }}
+      className="bg-purple-50">
+      <NodeHeader Icon={BiLogoAws} title="Source: S3" color="purple" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">File Type</span>
+            <span className="font-semibold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -80,7 +78,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Secret Key</span>
+            <span className="font-semibold">Secret Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -93,7 +91,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Access Key</span>
+            <span className="font-semibold">Access Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -106,7 +104,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Region Name</span>
+            <span className="font-semibold">Region Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -119,7 +117,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Bucket Name</span>
+            <span className="font-semibold">Bucket Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -132,7 +130,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Path</span>
+            <span className="font-semibold">Path</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

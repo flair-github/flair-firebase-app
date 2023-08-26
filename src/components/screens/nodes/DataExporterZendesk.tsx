@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { SiZendesk } from 'react-icons/si'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExporterZendeskNodeContent {
   nodeType: 'data-exporter-zendesk'
@@ -64,20 +65,17 @@ export const DataExporterZendeskNode = ({
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3 font-bold">
-        <SiZendesk className="h-7 w-7" />
-        <h4 className="ml-3 grow">Zendesk</h4>
-      </header>
+      }}
+      className="bg-teal-50">
+      <NodeHeader Icon={SiZendesk} title="Exporter: Zendesk" color="teal" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Subdomain</span>
+            <span className="font-semibold">Subdomain</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -88,7 +86,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Email</span>
+            <span className="font-semibold">Email</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -99,7 +97,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">API Token</span>
+            <span className="font-semibold">API Token</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -110,7 +108,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Title</span>
+            <span className="font-semibold">Title</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -121,7 +119,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Comment</span>
+            <span className="font-semibold">Comment</span>
           </label>
           <textarea
             rows={3}
@@ -134,7 +132,7 @@ export const DataExporterZendeskNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Priority</span>
+            <span className="font-semibold">Priority</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -146,7 +144,7 @@ export const DataExporterZendeskNode = ({
 
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Type</span>
+            <span className="font-semibold">Type</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

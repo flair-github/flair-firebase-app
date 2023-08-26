@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoGmail } from 'react-icons/bi'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExporterGmailNodeContent {
   nodeType: 'data-exporter-gmail'
@@ -66,20 +67,17 @@ export const DataExporterGmailNode = ({
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3 font-bold">
-        <BiLogoGmail className="h-7 w-7" />
-        <h4 className="ml-3 grow">Gmail</h4>
-      </header>
+      }}
+      className="bg-teal-50">
+      <NodeHeader Icon={BiLogoGmail} title="Exporter: Gmail" color="teal" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">To</span>
+            <span className="font-semibold">To</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -90,7 +88,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Subject</span>
+            <span className="font-semibold">Subject</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -101,7 +99,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">From</span>
+            <span className="font-semibold">From</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -112,7 +110,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Prompt</span>
+            <span className="font-semibold">Prompt</span>
           </label>
           <textarea
             rows={6}
@@ -125,7 +123,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">SMTP Mail Server</span>
+            <span className="font-semibold">SMTP Mail Server</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -136,7 +134,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">SMTP Port</span>
+            <span className="font-semibold">SMTP Port</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -147,7 +145,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">User Name</span>
+            <span className="font-semibold">User Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -158,7 +156,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Password</span>
+            <span className="font-semibold">Password</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

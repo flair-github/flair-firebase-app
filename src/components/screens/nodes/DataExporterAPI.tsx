@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { AiFillApi } from 'react-icons/ai'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExporterAPINodeContent {
   nodeType: 'data-exporter-api'
@@ -48,20 +49,17 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3 font-bold">
-        <AiFillApi className="h-7 w-7" />
-        <h4 className="ml-3 grow">Data Exporter: API</h4>
-      </header>
+      }}
+      className="bg-teal-50">
+      <NodeHeader Icon={AiFillApi} title="Exporter: API" color="teal" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">File Type</span>
+            <span className="font-semibold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -78,7 +76,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">URL</span>
+            <span className="font-semibold">URL</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -91,7 +89,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Request Method</span>
+            <span className="font-semibold">Request Method</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -104,7 +102,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Request Headers</span>
+            <span className="font-semibold">Request Headers</span>
           </label>
           <textarea
             rows={3}
@@ -121,7 +119,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Request Body</span>
+            <span className="font-semibold">Request Body</span>
           </label>
           <textarea
             rows={3}
