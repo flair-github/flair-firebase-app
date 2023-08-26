@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Handle, Position } from 'reactflow'
 import { nodeContents, type NodeData } from './Registry'
 import { GiConvergenceTarget } from 'react-icons/gi'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataRetrieverNodeContent {
   nodeType: 'data-retriever'
@@ -48,10 +49,7 @@ export const DataRetrieverNode = ({ data }: { data: NodeData }) => {
         borderRadius: '5px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-orange-200 px-5 py-3 font-bold">
-        <GiConvergenceTarget className="h-7 w-7" />
-        <h4 className="ml-3 grow">Data Retriever</h4>
-      </header>
+      <NodeHeader Icon={GiConvergenceTarget} title="Data Retriever" color="orange" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

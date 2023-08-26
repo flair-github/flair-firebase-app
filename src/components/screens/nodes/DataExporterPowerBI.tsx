@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { SiPowerbi } from 'react-icons/si'
 import { AiOutlineBarChart, AiOutlineLineChart, AiOutlinePieChart } from 'react-icons/ai'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExporterPowerBINodeContent {
   nodeType: 'data-exporter-power-bi'
@@ -73,10 +74,7 @@ export const DataExporterPowerBINode = ({
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3 font-bold">
-        <SiPowerbi className="h-7 w-7" />
-        <h4 className="ml-3 grow">PowerBI</h4>
-      </header>
+      <NodeHeader Icon={SiPowerbi} title="Exporter: PowerBI" color="teal" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

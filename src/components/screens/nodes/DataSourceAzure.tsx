@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoMicrosoft } from 'react-icons/bi'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataSourceAzureNodeContent {
   nodeType: 'data-source-azure'
@@ -54,10 +55,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-purple-200 px-5 py-3 font-bold">
-        <BiLogoMicrosoft className="h-7 w-7" />
-        <h4 className="ml-3 grow">Data Source: Azure Blob Storage</h4>
-      </header>
+      <NodeHeader Icon={BiLogoMicrosoft} title="Source: Azure Blob Storage" color="purple" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

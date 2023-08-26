@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { SiZendesk } from 'react-icons/si'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExporterZendeskNodeContent {
   nodeType: 'data-exporter-zendesk'
@@ -70,10 +71,7 @@ export const DataExporterZendeskNode = ({
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3 font-bold">
-        <SiZendesk className="h-7 w-7" />
-        <h4 className="ml-3 grow">Zendesk</h4>
-      </header>
+      <NodeHeader Icon={SiZendesk} title="Exporter: Zendesk" color="teal" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

@@ -2,6 +2,7 @@ import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExtractorNodeContent {
   nodeType: 'data-extractor'
@@ -72,10 +73,7 @@ export const DataExtractorNode = ({ data }: { data: NodeData }) => {
       />
 
       <div>
-        <div className="mb-4 flex justify-between">
-          <div className="fw-bold">Data Extractor</div>
-          <img src="/images/powered-by-flair.png" width={133} height={24} />
-        </div>
+        <NodeHeader title="Data Extractor" color="blue" withFlair />
         <div className="mb-1 flex">
           {/* Col */}
           <div className="mr-2 flex w-14 items-center" />

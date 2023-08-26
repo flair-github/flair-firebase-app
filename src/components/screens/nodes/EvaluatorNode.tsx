@@ -2,6 +2,7 @@ import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface EvaluatorNodeContent {
   nodeType: 'evaluator'
@@ -59,10 +60,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
           left: -8,
         }}
       />
-      <header className="mb-4 flex items-center justify-between rounded-t-md bg-pink-200 px-5 py-3 font-bold">
-        <div className="fw-bold">Evaluator</div>
-        <img src="/images/powered-by-flair.png" width={133} height={24} />
-      </header>
+      <NodeHeader title="Evaluator" color="pink" withFlair />
       <section className="px-5 pb-5">
         <div className="mb-4 flex">
           <div className="flex-1">

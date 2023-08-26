@@ -2,6 +2,7 @@ import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface ConditionalLogicNodeContent {
   nodeType: 'conditional-logic'
@@ -37,10 +38,7 @@ export const ConditionalLogicNode = ({ data }: { data: NodeData }) => {
         borderRadius: '5px',
         width: 400,
       }}>
-      <header className="mb-4 flex items-center justify-between rounded-t-md bg-rose-200 px-5 py-3 font-bold">
-        <div className="fw-bold">Conditional Logic</div>
-        <img src="/images/powered-by-flair.png" width={133} height={24} />
-      </header>
+      <NodeHeader title="Conditional Logic" color="rose" withFlair />
       <section className="px-5 pb-5">
         <div className="mb-2 flex">
           <div className="flex-1">

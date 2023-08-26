@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents, jotaiAllowInteraction } from './Registry'
 import { v4 } from 'uuid'
 import { useSetAtom } from 'jotai'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 type ColumnContent =
   | {
@@ -101,11 +102,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
           }}
         />
       )}
-
-      <header className="mb-4 flex items-center justify-between rounded-t-md bg-blue-200 px-5 py-3 font-bold">
-        <div className="fw-bold">LLM Processor</div>
-        <img src="/images/powered-by-flair.png" width={133} height={24} />
-      </header>
+      <NodeHeader title="LLM Processor" color="blue" withFlair />
       <section className="px-5 pb-5">
         <div className="mb-1 flex">
           {/* Col */}

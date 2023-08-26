@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { NodeData, nodeContents } from './Registry'
 import { HiDocumentReport } from 'react-icons/hi'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExporterFlairNodeContent {
   nodeType: 'data-exporter-flair'
@@ -52,10 +53,7 @@ export const DataExporterFlairNode = ({
           }}
         />
       )}
-      <header className="mb-4 flex items-center justify-between rounded-t-md bg-teal-200 px-5 py-3 font-bold">
-        <div className="fw-bold">Data Exporter : Flair Hosted</div>
-        <img src="/images/powered-by-flair.png" width={133} height={24} />
-      </header>
+      <NodeHeader title="Exporter: Flair Hosted" color="teal" withFlair />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <p className="mb-2">

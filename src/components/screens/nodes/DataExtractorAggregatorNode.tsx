@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { GrAggregate } from 'react-icons/gr'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExtractorAggregatorNodeContent {
   nodeType: 'data-extractor-aggregator'
@@ -62,10 +63,7 @@ export const DataExtractorAggregatorNode = ({
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-blue-200 px-5 py-3 font-bold">
-        <GrAggregate className="h-7 w-7" />
-        <h4 className="ml-3 grow">Aggregator</h4>
-      </header>
+      <NodeHeader Icon={GrAggregate} title="Aggregator" color="blue" />
       <section className="px-5 pb-5">
         <div className="mb-2 flex">
           <div className="flex-1">

@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoGoogle } from 'react-icons/bi'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataExporterGCPNodeContent {
   nodeType: 'data-exporter-gcp'
@@ -52,10 +53,7 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
         borderRadius: '6px',
         width: 400,
       }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-teal-200 px-5 py-3 font-bold">
-        <BiLogoGoogle className="h-7 w-7" />
-        <h4 className="ml-3 grow">Data Exporter: Google Cloud Storage</h4>
-      </header>
+      <NodeHeader Icon={BiLogoGoogle} title="Exporter: Google Cloud Storage" color="teal" />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
