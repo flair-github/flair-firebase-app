@@ -1,4 +1,3 @@
-import { Dialog } from '@headlessui/react'
 import axios from 'axios'
 import React, { LegacyRef, useCallback, useEffect, useRef, useState } from 'react'
 import ReactFlow, {
@@ -19,14 +18,11 @@ import 'reactflow/dist/style.css'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { atom, useAtom, useAtomValue } from 'jotai'
-import { CodeBlock } from 'react-code-blocks'
-import { AiOutlineCheckCircle } from 'react-icons/ai'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
-import Modal from '../ui/modal'
 import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from './nodes/Registry'
 import { dataIndexerDefaultContent } from './nodes/DataIndexer'
 import { dataRetrieverDefaultContent } from './nodes/DataRetriever'
@@ -61,6 +57,10 @@ import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
 import { ConditionalLogicNode } from './nodes/ConditionalLogicNode'
 import { DataExtractorAggregatorNode } from './nodes/DataExtractorAggregatorNode'
+import ExecuteModal from './overlays/ExecuteModal'
+import JSONImporterModal from './overlays/JSONImporterModal'
+import JSONConfigModal from './overlays/JSONConfigModal'
+import DeploymentToast from './overlays/DeploymentToast'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -234,8 +234,10 @@ export const FlowEditor: React.FC<{
 
     return obj
   }
+
   const [isDeploying, setIsDeploying] = useState(false)
   const [deploymentStatus, setDeploymentStatus] = useState<['success' | 'error', string]>()
+
   async function executeFlow() {
     if (!userData?.userId) {
       return
@@ -327,7 +329,7 @@ export const FlowEditor: React.FC<{
         viewport.current = newViewport
       }}>
       <Background />
-      <Controls />
+      <Controls position="bottom-right" />
     </ReactFlow>
   )
 
@@ -765,139 +767,19 @@ export const FlowEditor: React.FC<{
         </div>
       </div>
 
-      {/* Execute modal */}
-      <dialog ref={executeModalRef} className="modal">
-        <form method="dialog" className="modal-box">
-          <h3 className="mb-5 text-center text-lg font-bold">Deployment Options</h3>
-          <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
-          <div className="mb-2 mt-1">
-            <label className="label">
-              <span className="label-text">Frequency</span>
-            </label>
-            <select className="max-w-xs select mb-3 w-full border-black">
-              <option value={'one-time'}>One time</option>
-              <option value={'1d'}>1d</option>
-              <option value={'7d'}>7d</option>
-              <option value={'30d'}>30d</option>
-            </select>
-            <button
-              className="btn btn-primary mx-auto block w-36"
-              onClick={async event => {
-                event.preventDefault()
-                await executeFlow()
-                executeModalRef.current?.close()
-              }}>
-              {isDeploying ? (
-                <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
-              ) : (
-                'Deploy'
-              )}
-            </button>
-          </div>
-        </form>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
-
-      {/* JSON Importer */}
-      <Modal
-        isOpen={isJsonImportModalShown}
-        onClose={() => {
-          setIsJsonImportModalShown(false)
-        }}>
-        <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-          Import JSON Configuration File
-        </Dialog.Title>
-
-        <div>
-          {/* <Form.Control
-            as="textarea"
-            rows={8}
-            value={jsonConfigImport}
-            onChange={e => {
-              const text = e.target.value
-              setJsonConfigImport(text)
-            }}
-            style={{ borderColor: 'black' }}
-          /> */}
-        </div>
-
-        <div className="mt-4 flex">
-          <button
-            type="button"
-            className="t-border inline-flex justify-center rounded-md border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-            onClick={() => {
-              setJsonConfigImport('')
-              setIsJsonImportModalShown(false)
-            }}>
-            Close
-          </button>
-          <div className="flex-1" />
-          <button
-            type="button"
-            className="t-border mr-1 inline-flex justify-center rounded-md border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-            onClick={() => {
-              const { nodes: newNodes, edges: newEdges } = JSON.parse(jsonConfigImport)
-
-              setNodes(newNodes)
-              setEdges(newEdges)
-
-              setJsonConfigImport('')
-              setIsJsonImportModalShown(false)
-            }}>
-            Import
-          </button>
-        </div>
-      </Modal>
-
-      {/* Show JSON Config */}
-      <Modal
-        isOpen={isJsonModalShown}
-        onClose={() => {
-          setIsJsonModalShown(false)
-        }}>
-        <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-          JSON Configuration File
-        </Dialog.Title>
-        <div className="mt-2">
-          <p className="text-sm text-gray-500">
-            Here is the config file based on the current flow.
-          </p>
-        </div>
-        <div className="t-border mt-2 h-96 overflow-y-auto font-mono">
-          <CodeBlock text={jsonConfig} language="json" showLineNumbers={true} wrapLines />
-        </div>
-
-        <div className="mt-4 flex">
-          <button
-            type="button"
-            className="t-border inline-flex justify-center rounded-md border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-            onClick={() => {
-              setIsJsonModalShown(false)
-            }}>
-            Close
-          </button>
-          <div className="flex-1" />
-        </div>
-      </Modal>
-
-      {/* Toast -> User Interaction Feedback */}
-      {deploymentStatus && (
-        <div className="toast">
-          <div
-            className={`alert ${
-              deploymentStatus[0] === 'success' ? 'alert-success' : 'alert-error'
-            }`}>
-            {deploymentStatus[0] === 'success' ? (
-              <ImCheckmark2 className="h-6 w-6" />
-            ) : (
-              <ImWarning className="h-6 w-6" />
-            )}
-            <span>{deploymentStatus[1]}</span>
-          </div>
-        </div>
-      )}
+      <ExecuteModal executeFlow={executeFlow} isDeploying={isDeploying} ref={executeModalRef} />
+      <JSONImporterModal
+        isJsonImportModalShown={isJsonImportModalShown}
+        setIsJsonImportModalShown={setIsJsonImportModalShown}
+        jsonConfigImport={jsonConfigImport}
+        setJsonConfigImport={setJsonConfigImport}
+      />
+      <JSONConfigModal
+        isJsonModalShown={isJsonModalShown}
+        setIsJsonModalShown={setIsJsonModalShown}
+        jsonConfig={jsonConfig}
+      />
+      <DeploymentToast deploymentStatus={deploymentStatus} />
     </>
   )
 }
