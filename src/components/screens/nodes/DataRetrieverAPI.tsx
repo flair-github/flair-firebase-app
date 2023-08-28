@@ -53,7 +53,7 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
         width: 400,
       }}
       className="bg-orange-50">
-      <NodeHeader Icon={AiFillApi} title="Data Retriever API" color="orange" />
+      <NodeHeader Icon={AiFillApi} title="Data Retriever API" color="orange" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

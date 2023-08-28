@@ -49,7 +49,12 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
         width: 400,
       }}
       className="bg-green-50">
-      <NodeHeader Icon={AiOutlineNodeIndex} title="Data Indexer" color="green" />
+      <NodeHeader
+        Icon={AiOutlineNodeIndex}
+        title="Data Indexer"
+        color="green"
+        nodeId={data.nodeId}
+      />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

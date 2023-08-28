@@ -57,7 +57,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         width: 400,
       }}
       className="bg-purple-50">
-      <NodeHeader Icon={BiLogoAws} title="Source: S3" color="purple" />
+      <NodeHeader Icon={BiLogoAws} title="Source: S3" color="purple" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

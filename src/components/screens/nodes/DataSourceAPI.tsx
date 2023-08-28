@@ -55,7 +55,7 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
         width: 400,
       }}
       className="bg-purple-50">
-      <NodeHeader Icon={AiFillApi} title="Source: API" color="purple" />
+      <NodeHeader Icon={AiFillApi} title="Source: API" color="purple" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">

@@ -63,7 +63,7 @@ export const DataExtractorAggregatorNode = ({
         width: 400,
       }}
       className="bg-blue-50">
-      <NodeHeader Icon={GrAggregate} title="Aggregator" color="blue" />
+      <NodeHeader Icon={GrAggregate} title="Aggregator" color="blue" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 flex">
           <div className="flex-1">
@@ -123,7 +123,7 @@ export const DataExtractorAggregatorNode = ({
             position={Position.Left}
             id="in"
             style={{
-              top: 75,
+              top: 95,
               width: 16,
               height: 16,
               left: -8,
@@ -134,7 +134,7 @@ export const DataExtractorAggregatorNode = ({
             position={Position.Right}
             id="out-description"
             style={{
-              top: 75,
+              top: 95,
               width: 16,
               height: 16,
               right: -8,
@@ -145,7 +145,7 @@ export const DataExtractorAggregatorNode = ({
             position={Position.Right}
             id="out-data"
             style={{
-              top: 108,
+              top: 128,
               width: 16,
               height: 16,
               right: -8,

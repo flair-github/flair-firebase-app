@@ -90,7 +90,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         width: 800,
       }}
       className="bg-blue-50">
-      <NodeHeader title="LLM Processor" color="blue" withFlair />
+      <NodeHeader title="LLM Processor" color="blue" withFlair nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-1 flex">
           {/* Col */}
