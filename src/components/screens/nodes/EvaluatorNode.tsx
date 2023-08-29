@@ -38,7 +38,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
         width: 400,
       }}
       className="bg-pink-50">
-      <NodeHeader title="Evaluator" color="pink" withFlair />
+      <NodeHeader title="Evaluator" color="pink" withFlair nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-4 flex">
           <div className="flex-1">
@@ -73,7 +73,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
         position={Position.Left}
         id="in-ai-data"
         style={{
-          top: 82,
+          top: 94,
           width: 16,
           height: 16,
           left: -8,
@@ -84,7 +84,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
         position={Position.Left}
         id="in-truth-data"
         style={{
-          top: 115,
+          top: 126,
           width: 16,
           height: 16,
           left: -8,
@@ -95,7 +95,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
         position={Position.Right}
         id="out"
         style={{
-          top: 82,
+          top: 94,
           width: 16,
           height: 16,
           right: -8,

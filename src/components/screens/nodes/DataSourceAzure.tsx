@@ -55,7 +55,12 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
         width: 400,
       }}
       className="bg-purple-50">
-      <NodeHeader Icon={BiLogoMicrosoft} title="Source: Azure Blob Storage" color="purple" />
+      <NodeHeader
+        Icon={BiLogoMicrosoft}
+        title="Source: Azure Blob Storage"
+        color="purple"
+        nodeId={data.nodeId}
+      />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
