@@ -637,28 +637,31 @@ export const FlowEditor: React.FC<{
                   <div
                     key={classification.title}
                     className={'collapse-arrow collapse' + ' join-item border border-base-300'}>
-                    <input type="radio" name="my-accordion-4" />
+                    <input type="checkbox" name="my-accordion-4" />
                     <div className="collapse-title text-xl font-medium">
                       {classification.title} <br />
                       <div className="mt-1 text-sm font-normal text-gray-500">
                         {classification.subtitle}
                       </div>
                     </div>
-                    <div className="collapse-content">
-                      {classification.members.map(member => {
-                        return (
-                          <button
-                            key={member.title}
-                            disabled={member.disabled}
-                            className={
-                              'btn m-2' + (member.disabled ? ' gap-1 btn-disabled ' : colorClasses)
-                            }
-                            onClick={member.handleOnClick}>
-                            <p>{member.title}</p>
-                            {member.disabled && <div className="text-xs">(soon)</div>}
-                          </button>
-                        )
-                      })}
+                    <div className="collapse-content rounded-none border-t bg-gray-50 shadow-inner">
+                      <div className="mt-4">
+                        {classification.members.map(member => {
+                          return (
+                            <button
+                              key={member.title}
+                              disabled={member.disabled}
+                              className={
+                                'btn m-2' +
+                                (member.disabled ? ' gap-1 btn-disabled ' : colorClasses)
+                              }
+                              onClick={member.handleOnClick}>
+                              <p>{member.title}</p>
+                              {member.disabled && <div className="text-xs">(soon)</div>}
+                            </button>
+                          )
+                        })}
+                      </div>
                     </div>
                   </div>
                 )
