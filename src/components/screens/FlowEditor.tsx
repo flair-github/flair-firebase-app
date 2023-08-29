@@ -24,23 +24,17 @@ import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
 import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from './nodes/Registry'
-import { dataIndexerDefaultContent } from './nodes/DataIndexer'
-import { dataRetrieverDefaultContent } from './nodes/DataRetriever'
 import { v4 } from 'uuid'
 import { BiSave } from 'react-icons/bi'
 
-import { DataExtractorNode, DataExtractorNodeContent } from './nodes/DataExtractorNode'
-import { DataSourceNode, DataSourceNodeContent } from './nodes/DataSourceNode'
-import { EvaluatorNode, EvaluatorNodeContent } from './nodes/EvaluatorNode'
-import { LLMProcessorNode, LLMProcessorNodeContent } from './nodes/LLMProcessorNode'
-import { Edge, type Node } from 'reactflow'
-import { DataIndexerNode, DataIndexerNodeContent } from './nodes/DataIndexer'
-import { DataRetrieverNode, DataRetrieverNodeContent } from './nodes/DataRetriever'
-import {
-  DataSourceLocalFilesNode,
-  DataSourceLocalFilesNodeContent,
-} from './nodes/DataSourceLocalFiles'
-import { DataExporterFlairNode, DataExporterFlairNodeContent } from './nodes/DataExporterFlair'
+import { DataExtractorNode } from './nodes/DataExtractorNode'
+import { DataSourceNode } from './nodes/DataSourceNode'
+import { EvaluatorNode } from './nodes/EvaluatorNode'
+import { LLMProcessorNode } from './nodes/LLMProcessorNode'
+import { DataIndexerNode } from './nodes/DataIndexer'
+import { DataRetrieverNode } from './nodes/DataRetriever'
+import { DataSourceLocalFilesNode } from './nodes/DataSourceLocalFiles'
+import { DataExporterFlairNode } from './nodes/DataExporterFlair'
 import { DataSourceS3Node } from './nodes/DataSourceS3'
 import { DataSourceGCPNode } from './nodes/DataSourceGCP'
 import { DataSourceAPINode } from './nodes/DataSourceAPI'
@@ -50,7 +44,6 @@ import { DataExporterGCPNode } from './nodes/DataExporterGCP'
 import { DataExporterAzureNode } from './nodes/DataExporterAzure'
 import { DataExporterAPINode } from './nodes/DataExporterAPI'
 import { DataExporterPowerBINode } from './nodes/DataExporterPowerBI'
-import { ImCheckmark2, ImSpinner9, ImWarning } from 'react-icons/im'
 import { DataExporterSalesforceNode } from './nodes/DataExporterSalesforce'
 import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
 import { DataExporterGmailNode } from './nodes/DataExporterGmail'
@@ -61,6 +54,7 @@ import ExecuteModal from './overlays/ExecuteModal'
 import JSONImporterModal from './overlays/JSONImporterModal'
 import JSONConfigModal from './overlays/JSONConfigModal'
 import DeploymentToast from './overlays/DeploymentToast'
+import Controller from './editor/Controller'
 
 export const nodeTypes = {
   DataSourceNode,
@@ -87,6 +81,9 @@ export const nodeTypes = {
   ConditionalLogicNode,
   DataExtractorAggregatorNode,
 }
+import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
+import { RiListSettingsLine } from 'react-icons/ri'
+import { AiOutlineClear, AiOutlineDeploymentUnit } from 'react-icons/ai'
 
 const classificationColor2colorClasses = (classificationColor: string): string => {
   let colorClasses = ''
@@ -250,24 +247,38 @@ export const FlowEditor: React.FC<{
     return obj
   }
 
-  const saveFlow = async () => {
-    if (typeof workflowId !== 'string') {
-      return
-    }
-
-    const obj = getFrontendConfig()
-
-    const docUpdate: Partial<DocWorkflow> = {
-      lastSaveTimestamp: serverTimestamp() as Timestamp,
-      frontendConfig: JSON.stringify(obj),
-    }
-    await db.collection('workflows').doc(workflowId).update(docUpdate)
-
-    return obj
-  }
-
   const [isDeploying, setIsDeploying] = useState(false)
   const [deploymentStatus, setDeploymentStatus] = useState<['success' | 'error', string]>()
+
+  const saveFlow = async (withToast = false) => {
+    try {
+      if (typeof workflowId !== 'string') {
+        return
+      }
+
+      const obj = getFrontendConfig()
+
+      const docUpdate: Partial<DocWorkflow> = {
+        lastSaveTimestamp: serverTimestamp() as Timestamp,
+        frontendConfig: JSON.stringify(obj),
+      }
+      await db.collection('workflows').doc(workflowId).update(docUpdate)
+
+      if (withToast) {
+        setDeploymentStatus(['success', 'Saved successfully'])
+      }
+      return obj
+    } catch (error) {
+      console.log(error)
+      if (withToast) {
+        setDeploymentStatus(['error', 'Failed to save'])
+      }
+    } finally {
+      setTimeout(() => {
+        setDeploymentStatus(undefined)
+      }, 3000)
+    }
+  }
 
   async function executeFlow() {
     if (!userData?.userId) {
@@ -335,31 +346,6 @@ export const FlowEditor: React.FC<{
   const executeModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
 
   const allowInteraction = useAtomValue(jotaiAllowInteraction)
-
-  const ReactFlowComp = (
-    <ReactFlow
-      elementsSelectable={allowInteraction}
-      nodesConnectable={allowInteraction}
-      nodesDraggable={allowInteraction}
-      zoomOnScroll={allowInteraction}
-      panOnScroll={allowInteraction}
-      zoomOnDoubleClick={allowInteraction}
-      panOnDrag={allowInteraction}
-      selectionOnDrag={allowInteraction}
-      nodes={nodes}
-      onNodesChange={onNodesChange}
-      edges={edges}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-      selectionMode={SelectionMode.Partial}
-      onMove={(_, newViewport) => {
-        viewport.current = newViewport
-      }}>
-      <Background />
-      <Controls position="bottom-right" />
-    </ReactFlow>
-  )
 
   const nodeClassifications = [
     {
@@ -554,13 +540,83 @@ export const FlowEditor: React.FC<{
     },
   ]
 
+  const controls = [
+    {
+      title: 'Sample',
+      Icon: LuLayoutTemplate,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
+        setNodes(newNodes)
+        setEdges(newEdges)
+      },
+    },
+    {
+      title: 'Config',
+      Icon: RiListSettingsLine,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
+        setIsJsonModalShown(true)
+      },
+    },
+    {
+      title: 'Clear',
+      Icon: AiOutlineClear,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        setNodes([])
+        setEdges([])
+      },
+    },
+    {
+      title: 'Save',
+      Icon: LuSaveAll,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        saveFlow(true)
+      },
+    },
+    {
+      title: 'Deploy',
+      Icon: AiOutlineDeploymentUnit,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        executeModalRef.current?.showModal()
+      },
+    },
+  ]
+
   return viewerOnly ? (
-    ReactFlowComp
+    <ReactFlow
+      elementsSelectable={allowInteraction}
+      nodesConnectable={allowInteraction}
+      nodesDraggable={allowInteraction}
+      zoomOnScroll={allowInteraction}
+      panOnScroll={allowInteraction}
+      zoomOnDoubleClick={allowInteraction}
+      panOnDrag={allowInteraction}
+      selectionOnDrag={allowInteraction}
+      nodes={nodes}
+      onNodesChange={onNodesChange}
+      edges={edges}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      nodeTypes={nodeTypes}
+      selectionMode={SelectionMode.Partial}
+      onMove={(_, newViewport) => {
+        viewport.current = newViewport
+      }}>
+      <Background />
+      <Controls position="bottom-right" />
+    </ReactFlow>
   ) : (
     <>
       <main className="h-[calc(100vh-4rem)]">
-        <header className="border-grayscaleDivider mx-3 flex h-[3rem] border-b">
-          <button className="btn btn-primary m-1 h-[2.5rem] min-h-[2.5rem]" onClick={saveFlow}>
+        {/* <header className="border-grayscaleDivider mx-3 flex h-[3rem] border-b">
+          <button
+            className="btn btn-primary m-1 h-[2.5rem] min-h-[2.5rem]"
+            onClick={() => saveFlow(true)}>
             Save
           </button>
           <button
@@ -624,8 +680,8 @@ export const FlowEditor: React.FC<{
             }}>
             Show Config
           </button>
-        </header>
-        <section className="flex h-[calc(100vh-4rem-3rem)]">
+        </header> */}
+        <section className="flex h-[calc(100vh-4rem)]">
           <aside
             style={{ width: 400 }}
             className="border-r-grayscaleDivider flex flex-col overflow-y-auto border-r p-3">
@@ -668,7 +724,31 @@ export const FlowEditor: React.FC<{
               })}
             </div>
           </aside>
-          <div className="flex-1">{ReactFlowComp}</div>
+          <div className="relative flex-1">
+            <Controller controls={controls} />
+            <ReactFlow
+              elementsSelectable={allowInteraction}
+              nodesConnectable={allowInteraction}
+              nodesDraggable={allowInteraction}
+              zoomOnScroll={allowInteraction}
+              panOnScroll={allowInteraction}
+              zoomOnDoubleClick={allowInteraction}
+              panOnDrag={allowInteraction}
+              selectionOnDrag={allowInteraction}
+              nodes={nodes}
+              onNodesChange={onNodesChange}
+              edges={edges}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              nodeTypes={nodeTypes}
+              selectionMode={SelectionMode.Partial}
+              onMove={(_, newViewport) => {
+                viewport.current = newViewport
+              }}>
+              <Background />
+              <Controls position="bottom-right" />
+            </ReactFlow>
+          </div>
         </section>
       </main>
 

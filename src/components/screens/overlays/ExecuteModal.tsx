@@ -31,7 +31,7 @@ function ExecuteModal(
             onClick={async event => {
               event.preventDefault()
               await executeFlow()
-              executeModalRef.current?.close()
+              ref.current?.close()
             }}>
             {isDeploying ? (
               <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
