@@ -725,7 +725,32 @@ export const FlowEditor: React.FC<{
             </div>
           </aside>
           <div className="relative flex-1">
-            <Controller controls={controls} />
+            <Controller
+              controls={controls}
+              title={title}
+              setTitle={setTitle}
+              saveTitle={async () => {
+                try {
+                  if (typeof workflowId !== 'string') {
+                    return
+                  }
+
+                  const docUpdate: Partial<DocWorkflow> = {
+                    lastSaveTimestamp: serverTimestamp() as Timestamp,
+                    workflowTitle: title,
+                  }
+                  await db.collection('workflows').doc(workflowId).update(docUpdate)
+                  setDeploymentStatus(['success', 'New name saved successfully'])
+                } catch (error) {
+                  console.log(error)
+                  setDeploymentStatus(['error', 'Failed to save new name'])
+                } finally {
+                  setTimeout(() => {
+                    setDeploymentStatus(undefined)
+                  }, 3000)
+                }
+              }}
+            />
             <ReactFlow
               elementsSelectable={allowInteraction}
               nodesConnectable={allowInteraction}
