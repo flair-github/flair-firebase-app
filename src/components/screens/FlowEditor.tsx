@@ -88,6 +88,37 @@ export const nodeTypes = {
   DataExtractorAggregatorNode,
 }
 
+const classificationColor2colorClasses = (classificationColor: string): string => {
+  let colorClasses = ''
+  switch (classificationColor) {
+    case 'purple':
+      colorClasses = ' bg-purple-200 hover:bg-purple-300 '
+      break
+    case 'green':
+      colorClasses = ' bg-green-200 hover:bg-green-300 '
+      break
+    case 'orange':
+      colorClasses = ' bg-orange-200 hover:bg-orange-300 '
+      break
+    case 'blue':
+      colorClasses = ' bg-blue-200 hover:bg-blue-300 '
+      break
+    case 'teal':
+      colorClasses = ' bg-teal-200 hover:bg-teal-300 '
+      break
+    case 'rose':
+      colorClasses = ' bg-rose-200 hover:bg-rose-300 '
+      break
+    case 'pink':
+      colorClasses = ' bg-pink-200 hover:bg-pink-300 '
+      break
+    default:
+      colorClasses = ' bg-green-200 hover:bg-green-300 '
+      break
+  }
+  return colorClasses
+}
+
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
   const minValue = 20
@@ -110,12 +141,12 @@ export const FlowEditor: React.FC<{
   initialNodes?: Nodes
   initialEdges?: Edges
   initialTitle?: string
-}> = ({ viewerOnly, initialNodes, initialEdges, initialTitle }) => {
+}> = ({ viewerOnly }) => {
   const userData = useAtomValue(atomUserData)
 
   const [nodes, setNodes] = useAtom(nodesAtom)
   const [edges, setEdges] = useAtom(edgesAtom)
-  const [title, setTitle] = useState<string>(initialTitle || '')
+  const [title, setTitle] = useState<string>('')
 
   const navigate = useNavigate()
   const { state } = useLocation()
@@ -315,15 +346,12 @@ export const FlowEditor: React.FC<{
       zoomOnDoubleClick={allowInteraction}
       panOnDrag={allowInteraction}
       selectionOnDrag={allowInteraction}
-      // onInit={onInit}
       nodes={nodes}
       onNodesChange={onNodesChange}
       edges={edges}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       nodeTypes={nodeTypes}
-      // panOnScroll
-      // selectionOnDrag
       selectionMode={SelectionMode.Partial}
       onMove={(_, newViewport) => {
         viewport.current = newViewport
@@ -333,14 +361,205 @@ export const FlowEditor: React.FC<{
     </ReactFlow>
   )
 
-  if (viewerOnly) {
-    return ReactFlowComp
-  }
+  const nodeClassifications = [
+    {
+      title: 'Data Source',
+      subtitle: 'Origin of raw datasets.',
+      color: 'purple',
+      members: [
+        {
+          title: 'AWS S3',
+          handleOnClick: () => {
+            addNode('data-source-s3', 'DataSourceS3Node')
+          },
+        },
+        {
+          title: 'Google Cloud Storage',
+          handleOnClick: () => {
+            addNode('data-source-gcp', 'DataSourceGCPNode')
+          },
+        },
+        {
+          title: 'Azure Blob Storage',
+          handleOnClick: () => {
+            addNode('data-source-azure', 'DataSourceAzureNode')
+          },
+        },
+        {
+          title: 'Local Files',
+          handleOnClick: () => {
+            addNode('data-source-local-files', 'DataSourceLocalFilesNode')
+          },
+        },
+        {
+          title: 'API',
+          handleOnClick: () => {
+            addNode('data-source-api', 'DataSourceAPINode')
+          },
+        },
+        {
+          title: 'Salesforce',
+          handleOnClick: () => {},
+          disabled: true,
+        },
+        {
+          title: 'Zendesk',
+          handleOnClick: () => {},
+          disabled: true,
+        },
+        {
+          title: 'Slack',
+          handleOnClick: () => {},
+          disabled: true,
+        },
+      ],
+    },
+    {
+      title: 'Data Indexer',
+      subtitle: 'Organizes and categorizes data for quick retrieval.',
+      color: 'green',
+      members: [
+        {
+          title: 'Data Indexer',
+          handleOnClick: () => {
+            addNode('data-indexer', 'DataIndexerNode')
+          },
+        },
+      ],
+    },
+    {
+      title: 'Data Retriever',
+      subtitle: 'Fetches specific data subsets from the source or index.',
+      color: 'orange',
+      members: [
+        {
+          title: 'Data Retriever',
+          handleOnClick: () => {
+            addNode('data-retriever', 'DataRetrieverNode')
+          },
+        },
+        {
+          title: 'Data Retriever API',
+          handleOnClick: () => {
+            addNode('data-retriever-api', 'DataRetrieverApiNode')
+          },
+        },
+      ],
+    },
+    {
+      title: 'Data Extractor',
+      subtitle: 'Extracts or transforms specific data elements..',
+      color: 'blue',
+      members: [
+        {
+          title: 'LLM Processor',
+          handleOnClick: () => {
+            addNode('llm-processor', 'LLMProcessorNode')
+          },
+        },
+        {
+          title: 'Aggregator',
+          handleOnClick: () => {
+            addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
+          },
+        },
+      ],
+    },
+    {
+      title: 'Data Exporter',
+      subtitle: 'Sends processed data to specified destinations.',
+      color: 'teal',
+      members: [
+        {
+          title: 'AWS S3',
+          handleOnClick: () => {
+            addNode('data-exporter-s3', 'DataExporterS3Node')
+          },
+        },
+        {
+          title: 'Google Cloud Storage',
+          handleOnClick: () => {
+            addNode('data-exporter-gcp', 'DataExporterGCPNode')
+          },
+        },
+        {
+          title: 'Azure Blob Storage',
+          handleOnClick: () => {
+            addNode('data-exporter-azure', 'DataExporterAzureNode')
+          },
+        },
+        {
+          title: 'Zendesk',
+          handleOnClick: () => {
+            addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
+          },
+        },
+        {
+          title: 'Gmail',
+          handleOnClick: () => {
+            addNode('data-exporter-gmail', 'DataExporterGmailNode')
+          },
+        },
+        {
+          title: 'Salesforce',
+          handleOnClick: () => {
+            addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
+          },
+        },
+        {
+          title: 'Power BI',
+          handleOnClick: () => {
+            addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
+          },
+        },
+        {
+          title: 'Flair',
+          handleOnClick: () => {
+            addNode('data-exporter-flair', 'DataExporterFlairNode')
+          },
+        },
+        {
+          title: 'API',
+          handleOnClick: () => {
+            addNode('data-exporter-api', 'DataExporterAPINode')
+          },
+        },
+      ],
+    },
+    {
+      title: 'Router',
+      subtitle: 'Control flow and logical branching.',
+      color: 'rose',
+      members: [
+        {
+          title: 'Conditional Logic',
+          handleOnClick: () => {
+            addNode('conditional-logic', 'ConditionalLogicNode')
+          },
+        },
+      ],
+    },
+    {
+      title: 'Evaluation',
+      subtitle: 'Assesses data quality and accuracy.',
+      color: 'pink',
+      members: [
+        {
+          title: 'Evaluator',
+          handleOnClick: () => {
+            addNode('evaluator', 'EvaluatorNode')
+          },
+        },
+      ],
+    },
+  ]
 
-  return (
+  return viewerOnly ? (
+    ReactFlowComp
+  ) : (
     <>
-      <div className="h-[calc(100vh-4rem)]">
-        <div className="border-grayscaleDivider mx-3 flex h-[3rem] border-b">
+      <main className="h-[calc(100vh-4rem)]">
+        <header className="border-grayscaleDivider mx-3 flex h-[3rem] border-b">
           <button className="btn btn-primary m-1 h-[2.5rem] min-h-[2.5rem]" onClick={saveFlow}>
             Save
           </button>
@@ -405,367 +624,50 @@ export const FlowEditor: React.FC<{
             }}>
             Show Config
           </button>
-        </div>
-        <div className="flex h-[calc(100vh-4rem-3rem)]">
-          <div
+        </header>
+        <section className="flex h-[calc(100vh-4rem-3rem)]">
+          <aside
             style={{ width: 400 }}
             className="border-r-grayscaleDivider flex flex-col overflow-y-auto border-r p-3">
             {/* Data Connectors */}
-            <div className="mb-3">
-              <div className="my-2" />
-              <div className="join join-vertical w-full">
-                <div className="collapse join-item collapse-arrow border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">
-                    Data Source
-                    <br />
-                    <div className="mt-1 text-sm font-normal text-gray-500">
-                      Origin of raw datasets.
+            <div className="join join-vertical my-3 w-full">
+              {nodeClassifications.map(classification => {
+                const colorClasses = classificationColor2colorClasses(classification.color)
+                return (
+                  <div
+                    key={classification.title}
+                    className={'collapse-arrow collapse' + ' join-item border border-base-300'}>
+                    <input type="radio" name="my-accordion-4" />
+                    <div className="collapse-title text-xl font-medium">
+                      {classification.title} <br />
+                      <div className="mt-1 text-sm font-normal text-gray-500">
+                        {classification.subtitle}
+                      </div>
+                    </div>
+                    <div className="collapse-content">
+                      {classification.members.map(member => {
+                        return (
+                          <button
+                            key={member.title}
+                            disabled={member.disabled}
+                            className={
+                              'btn m-2' + (member.disabled ? ' gap-1 btn-disabled ' : colorClasses)
+                            }
+                            onClick={member.handleOnClick}>
+                            <p>{member.title}</p>
+                            {member.disabled && <div className="text-xs">(soon)</div>}
+                          </button>
+                        )
+                      })}
                     </div>
                   </div>
-                  <div className="collapse-content">
-                    <button
-                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
-                      onClick={() => {
-                        addNode('data-source-s3', 'DataSourceS3Node')
-                      }}>
-                      AWS S3
-                    </button>
-                    <button
-                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
-                      onClick={() => {
-                        addNode('data-source-gcp', 'DataSourceGCPNode')
-                      }}>
-                      Google Cloud Storage
-                    </button>
-                    <button
-                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
-                      onClick={() => {
-                        addNode('data-source-azure', 'DataSourceAzureNode')
-                      }}>
-                      Azure Blob Storage
-                    </button>
-                    <button
-                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
-                      onClick={() => {
-                        addNode('data-source-local-files', 'DataSourceLocalFilesNode')
-                      }}>
-                      Local Files
-                    </button>
-                    <button
-                      className="btn m-2 bg-purple-200 hover:bg-purple-300"
-                      onClick={() => {
-                        addNode('data-source-api', 'DataSourceAPINode')
-                      }}>
-                      API
-                    </button>
-                    <button className="btn btn-disabled m-2 gap-1" onClick={() => {}} disabled>
-                      <div>Salesforce</div>
-                      <div className="text-xs">(soon)</div>
-                    </button>
-                    <button className="btn btn-disabled m-2 gap-1" onClick={() => {}} disabled>
-                      <div>Zendesk</div>
-                      <div className="text-xs">(soon)</div>
-                    </button>
-                    <button className="btn btn-disabled m-2 gap-1" onClick={() => {}} disabled>
-                      <div>Slack</div>
-                      <div className="text-xs">(soon)</div>
-                    </button>
-                  </div>
-                </div>
-                <div className="collapse-arrow collapse join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">
-                    Data Indexer <br />
-                    <div className="mt-1 text-sm font-normal text-gray-500">
-                      Organizes and categorizes data for quick retrieval.
-                    </div>
-                  </div>
-                  <div className="collapse-content">
-                    <button
-                      className="btn m-2 bg-green-200 hover:bg-green-300"
-                      onClick={() => {
-                        setNodes(prev => {
-                          const nodeId = 'data-indexer-' + String(Date.now())
-                          return [
-                            ...prev,
-                            {
-                              id: nodeId,
-                              type: 'DataIndexerNode',
-                              data: { nodeId, initialContents: dataIndexerDefaultContent },
-                              position: randPos(viewport.current),
-                            },
-                          ]
-                        })
-                      }}>
-                      Data Indexer
-                    </button>
-                  </div>
-                </div>
-                <div className="collapse-arrow collapse join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">
-                    Data Retriever <br />
-                    <div className="mt-1 text-sm font-normal text-gray-500">
-                      Fetches specific data subsets from the source or index.
-                    </div>
-                  </div>
-                  <div className="collapse-content">
-                    <button
-                      className="btn m-2 bg-orange-200 hover:bg-orange-300"
-                      onClick={() => {
-                        setNodes(prev => {
-                          const nodeId = 'data-retriever-' + String(Date.now())
-                          return [
-                            ...prev,
-                            {
-                              id: nodeId,
-                              type: 'DataRetrieverNode',
-                              data: { nodeId, initialContents: dataRetrieverDefaultContent },
-                              position: randPos(viewport.current),
-                            },
-                          ]
-                        })
-                      }}>
-                      Data Retriever
-                    </button>
-                    <button
-                      className="btn m-2 bg-orange-200 hover:bg-orange-300"
-                      onClick={() => {
-                        addNode('data-retriever-api', 'DataRetrieverApiNode')
-                      }}>
-                      Data Retriever API
-                    </button>
-                  </div>
-                </div>
-                <div className="collapse-arrow collapse join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">
-                    Data Extractor <br />
-                    <div className="mt-1 text-sm font-normal text-gray-500">
-                      Extracts or transforms specific data elements.
-                    </div>
-                  </div>
-                  <div className="collapse-content">
-                    <button
-                      className="btn m-2 hidden"
-                      onClick={() => {
-                        setNodes(prev => {
-                          const nodeId = 'data-extractor-' + String(Date.now())
-                          return [
-                            ...prev,
-                            {
-                              id: nodeId,
-                              type: 'DataExtractorNode',
-                              data: { nodeId, initialContents: { nodeType: 'init' } },
-                              position: randPos(viewport.current),
-                            },
-                          ]
-                        })
-                      }}>
-                      Data Extractor
-                    </button>
-                    <button
-                      className="btn m-2 bg-blue-200 hover:bg-blue-300"
-                      onClick={() => {
-                        setNodes(prev => {
-                          const nodeId = 'llm-processor-' + String(Date.now())
-                          return [
-                            ...prev,
-                            {
-                              id: nodeId,
-                              type: 'LLMProcessorNode',
-                              data: { nodeId, initialContents: { nodeType: 'init' } },
-                              position: randPos(viewport.current),
-                            },
-                          ]
-                        })
-                      }}>
-                      LLM Processor
-                    </button>
-                    <button
-                      className="btn m-2 bg-blue-200 hover:bg-blue-300"
-                      onClick={() => {
-                        setNodes(prev => {
-                          const nodeId = 'aggregator-' + String(Date.now())
-                          return [
-                            ...prev,
-                            {
-                              id: nodeId,
-                              type: 'DataExtractorAggregatorNode',
-                              data: { nodeId, initialContents: { nodeType: 'init' } },
-                              position: randPos(viewport.current),
-                            },
-                          ]
-                        })
-                      }}>
-                      Aggregator
-                    </button>
-                  </div>
-                </div>
-                <div className="collapse-arrow collapse join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">
-                    Data Exporter <br />
-                    <div className="mt-1 text-sm font-normal text-gray-500">
-                      Sends processed data to specified destinations.
-                    </div>
-                  </div>
-                  <div className="collapse-content">
-                    <button
-                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
-                      onClick={() => {
-                        addNode('data-exporter-s3', 'DataExporterS3Node')
-                        // setNodes(prev => {
-                        //   const nodeId = 'aws-uploader-' + String(Date.now())
-                        //   return [
-                        //     ...prev,
-                        //     {
-                        //       id: nodeId,
-                        //       type: 'AwsUploaderNode',
-                        //       data: { nodeId, initialContents: { nodeType: 'init' } },
-                        //       position: randPos(viewport.current),
-                        //     },
-                        //   ]
-                        // })
-                      }}>
-                      AWS S3
-                    </button>
-                    <button
-                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
-                      onClick={() => {
-                        addNode('data-exporter-gcp', 'DataExporterGCPNode')
-                      }}>
-                      Google Cloud Storage
-                    </button>
-                    <button
-                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
-                      onClick={() => {
-                        addNode('data-exporter-azure', 'DataExporterAzureNode')
-                      }}>
-                      Azure Blob Storage
-                    </button>
-                    <button
-                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
-                      onClick={() => {
-                        addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
-                      }}>
-                      Zendesk
-                    </button>
-                    <button
-                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
-                      onClick={() => {
-                        addNode('data-exporter-gmail', 'DataExporterGmailNode')
-                      }}>
-                      Gmail
-                    </button>
-                    <button
-                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
-                      onClick={() => {
-                        addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
-                      }}>
-                      Salesforce
-                    </button>
-                    <button
-                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
-                      onClick={() => {
-                        addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
-                      }}>
-                      Power BI
-                    </button>
-                    <button
-                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
-                      onClick={() => {
-                        addNode('data-exporter-flair', 'DataExporterFlairNode')
-                      }}>
-                      Flair
-                    </button>
-                    <button
-                      className="btn m-2 bg-teal-200 hover:bg-teal-300"
-                      onClick={() => {
-                        addNode('data-exporter-api', 'DataExporterAPINode')
-                      }}>
-                      API
-                    </button>
-                  </div>
-                </div>
-                <div className="collapse-arrow collapse join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">
-                    Router <br />
-                    <div className="mt-1 text-sm font-normal text-gray-500">
-                      Control flow and logical branching.
-                    </div>
-                  </div>
-                  <div className="collapse-content">
-                    <button
-                      className="btn m-2 bg-rose-200 hover:bg-rose-300"
-                      onClick={() => {
-                        setNodes(prev => {
-                          const nodeId = 'evaluator-' + String(Date.now())
-                          return [
-                            ...prev,
-                            {
-                              id: nodeId,
-                              type: 'ConditionalLogicNode',
-                              data: { nodeId, initialContents: { nodeType: 'init' } },
-                              position: randPos(viewport.current),
-                            },
-                          ]
-                        })
-                      }}>
-                      Conditional Logic
-                    </button>
-                  </div>
-                </div>
-                <div className="collapse-arrow collapse join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">
-                    Evaluation <br />
-                    <div className="mt-1 text-sm font-normal text-gray-500">
-                      Assesses data quality and accuracy.
-                    </div>
-                  </div>
-                  <div className="collapse-content">
-                    <button
-                      className="btn m-2 bg-pink-200 hover:bg-pink-300"
-                      onClick={() => {
-                        setNodes(prev => {
-                          const nodeId = 'evaluator-' + String(Date.now())
-                          return [
-                            ...prev,
-                            {
-                              id: nodeId,
-                              type: 'EvaluatorNode',
-                              data: { nodeId, initialContents: { nodeType: 'init' } },
-                              position: randPos(viewport.current),
-                            },
-                          ]
-                        })
-                      }}>
-                      Evaluator
-                    </button>
-                  </div>
-                </div>
-                {/* <div className="collapse-arrow collapse join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <div className="collapse-title text-xl font-medium">Custom Fine-Tuning</div>
-                  <div className="collapse-content">
-                    <button
-                      className="btn m-2 bg-yellow-200 hover:bg-yellow-300"
-                      onClick={() => {}}>
-                      Fine-Tuning
-                    </button>
-                  </div>
-                </div> */}
-              </div>
+                )
+              })}
             </div>
-
-            <div className="flex-1" />
-          </div>
+          </aside>
           <div className="flex-1">{ReactFlowComp}</div>
-        </div>
-      </div>
+        </section>
+      </main>
 
       <ExecuteModal executeFlow={executeFlow} isDeploying={isDeploying} ref={executeModalRef} />
       <JSONImporterModal
