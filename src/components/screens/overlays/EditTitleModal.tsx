@@ -1,43 +1,37 @@
-import React, { forwardRef } from 'react'
+import React, { ForwardedRef, MutableRefObject, Ref, RefObject, forwardRef, useState } from 'react'
 import { ImSpinner9 } from 'react-icons/im'
 
 function ExecuteModal(
   {
-    executeFlow,
+    title,
+    saveTitle,
     isDeploying,
-  }: {
-    executeFlow: () => Promise<void>
-    isDeploying: boolean
-  },
+  }: { title: string; saveTitle: (newTitle: string) => Promise<void>; isDeploying: boolean },
   ref: any,
 ) {
+  const [newTitle, setNewTitle] = useState(title)
   return (
     <dialog ref={ref} className="modal">
       <form method="dialog" className="modal-box">
-        <h3 className="mb-5 text-center text-lg font-bold">Deployment Options</h3>
+        <h3 className="mb-5 text-center text-lg font-bold">Edit Form</h3>
         <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Frequency</span>
+            <span className="label-text">Workflow Name</span>
           </label>
-          <select className="max-w-xs select mb-3 w-full border-black">
-            <option value={'one-time'}>One time</option>
-            <option value={'1d'}>1d</option>
-            <option value={'7d'}>7d</option>
-            <option value={'30d'}>30d</option>
-          </select>
+          <input
+            className="max-w-xs input mb-3 w-full border-black"
+            value={newTitle}
+            onChange={event => setNewTitle(event.target.value)}
+          />
           <button
             className="btn btn-primary mx-auto block w-36"
             onClick={async event => {
               event.preventDefault()
-              await executeFlow()
+              await saveTitle(newTitle)
               ref?.current?.close()
             }}>
-            {isDeploying ? (
-              <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
-            ) : (
-              'Deploy'
-            )}
+            {isDeploying ? <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" /> : 'Save'}
           </button>
         </div>
       </form>

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { LegacyRef, useCallback, useEffect, useRef, useState } from 'react'
+import React, { LegacyRef, RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import ReactFlow, {
   Background,
   Controls,
@@ -25,7 +25,6 @@ import { db } from '~/lib/firebase'
 import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
 import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from './nodes/Registry'
 import { v4 } from 'uuid'
-import { BiSave } from 'react-icons/bi'
 
 import { DataExtractorNode } from './nodes/DataExtractorNode'
 import { DataSourceNode } from './nodes/DataSourceNode'
@@ -83,38 +82,10 @@ export const nodeTypes = {
 }
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
 import { RiListSettingsLine } from 'react-icons/ri'
-import { AiOutlineClear, AiOutlineDeploymentUnit } from 'react-icons/ai'
-
-const classificationColor2colorClasses = (classificationColor: string): string => {
-  let colorClasses = ''
-  switch (classificationColor) {
-    case 'purple':
-      colorClasses = ' bg-purple-200 hover:bg-purple-300 '
-      break
-    case 'green':
-      colorClasses = ' bg-green-200 hover:bg-green-300 '
-      break
-    case 'orange':
-      colorClasses = ' bg-orange-200 hover:bg-orange-300 '
-      break
-    case 'blue':
-      colorClasses = ' bg-blue-200 hover:bg-blue-300 '
-      break
-    case 'teal':
-      colorClasses = ' bg-teal-200 hover:bg-teal-300 '
-      break
-    case 'rose':
-      colorClasses = ' bg-rose-200 hover:bg-rose-300 '
-      break
-    case 'pink':
-      colorClasses = ' bg-pink-200 hover:bg-pink-300 '
-      break
-    default:
-      colorClasses = ' bg-green-200 hover:bg-green-300 '
-      break
-  }
-  return colorClasses
-}
+import { AiOutlineClear, AiOutlineDeploymentUnit, AiOutlineEdit } from 'react-icons/ai'
+import Menu from './editor/Menu'
+import { PiCaretDoubleLeft, PiCaretDoubleRight } from 'react-icons/pi'
+import EditTitleModal from './overlays/EditTitleModal'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -434,7 +405,7 @@ export const FlowEditor: React.FC<{
     },
     {
       title: 'Data Extractor',
-      subtitle: 'Extracts or transforms specific data elements..',
+      subtitle: 'Extracts or transforms specific data elements.',
       color: 'blue',
       members: [
         {
@@ -587,6 +558,34 @@ export const FlowEditor: React.FC<{
     },
   ]
 
+  const editTitleModal = useRef<HTMLDialogElement>()
+  const saveTitle = async (newTitle: string) => {
+    try {
+      if (typeof workflowId !== 'string') {
+        return
+      }
+      setIsDeploying(true)
+
+      const docUpdate: Partial<DocWorkflow> = {
+        lastSaveTimestamp: serverTimestamp() as Timestamp,
+        workflowTitle: newTitle,
+      }
+      await db.collection('workflows').doc(workflowId).update(docUpdate)
+      setDeploymentStatus(['success', 'New name saved successfully'])
+      setTitle(newTitle)
+    } catch (error) {
+      console.log(error)
+      setDeploymentStatus(['error', 'Failed to save new name'])
+    } finally {
+      setIsDeploying(false)
+      setTimeout(() => {
+        setDeploymentStatus(undefined)
+      }, 3000)
+    }
+  }
+
+  const [expanded, setExpanded] = useState(true)
+
   return viewerOnly ? (
     <ReactFlow
       elementsSelectable={allowInteraction}
@@ -613,171 +612,70 @@ export const FlowEditor: React.FC<{
   ) : (
     <>
       <main className="h-[calc(100vh-4rem)]">
-        {/* <header className="border-grayscaleDivider mx-3 flex h-[3rem] border-b">
-          <button
-            className="btn btn-primary m-1 h-[2.5rem] min-h-[2.5rem]"
-            onClick={() => saveFlow(true)}>
-            Save
-          </button>
-          <button
-            className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
-            onClick={() => {
-              setNodes([])
-              setEdges([])
-            }}>
-            Clear
-          </button>
-          <button
-            className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
-            onClick={() => {
-              const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
-
-              setNodes(newNodes)
-              setEdges(newEdges)
-            }}>
-            Sample
-          </button>
-          <div className="relative my-1 h-[2.5rem] grow px-4">
-            <input
-              type="text"
-              placeholder="Workflow Title"
-              value={title}
-              onChange={event => {
-                setTitle(event.target.value)
-              }}
-              className="input input-ghost h-full w-full"
-            />
-            <button
-              className="btn btn-circle btn-sm absolute right-6 top-1"
-              onClick={async () => {
-                if (typeof workflowId !== 'string') {
-                  return
-                }
-
-                const docUpdate: Partial<DocWorkflow> = {
-                  lastSaveTimestamp: serverTimestamp() as Timestamp,
-                  workflowTitle: title,
-                }
-                await db.collection('workflows').doc(workflowId).update(docUpdate)
-              }}>
-              <BiSave />
-            </button>
-          </div>
-
-          <button
-            className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
-            onClick={async () => {
-              // await executeFlow()
-              executeModalRef.current?.showModal()
-            }}>
-            Deploy
-          </button>
-          <button
-            className="btn m-1 h-[2.5rem] min-h-[2.5rem]"
-            onClick={async () => {
-              setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
-              setIsJsonModalShown(true)
-            }}>
-            Show Config
-          </button>
-        </header> */}
-        <section className="flex h-[calc(100vh-4rem)]">
+        <section className="relative h-[calc(100vh-4rem)] w-full">
           <aside
-            style={{ width: 400 }}
-            className="border-r-grayscaleDivider flex flex-col overflow-y-auto border-r p-3">
-            {/* Data Connectors */}
-            <div className="join join-vertical my-3 w-full">
-              {nodeClassifications.map(classification => {
-                const colorClasses = classificationColor2colorClasses(classification.color)
-                return (
-                  <div
-                    key={classification.title}
-                    className={'collapse-arrow collapse' + ' join-item border border-base-300'}>
-                    <input type="checkbox" name="my-accordion-4" />
-                    <div className="collapse-title text-xl font-medium">
-                      {classification.title} <br />
-                      <div className="mt-1 text-sm font-normal text-gray-500">
-                        {classification.subtitle}
-                      </div>
-                    </div>
-                    <div className="collapse-content rounded-none border-t bg-gray-50 shadow-inner">
-                      <div className="mt-4">
-                        {classification.members.map(member => {
-                          return (
-                            <button
-                              key={member.title}
-                              disabled={member.disabled}
-                              className={
-                                'btn m-2' +
-                                (member.disabled ? ' gap-1 btn-disabled ' : colorClasses)
-                              }
-                              onClick={member.handleOnClick}>
-                              <p>{member.title}</p>
-                              {member.disabled && <div className="text-xs">(soon)</div>}
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
+            className={`absolute -left-1 top-0 z-10 flex h-full w-96 ${
+              expanded ? 'translate-x-0' : '-translate-x-full'
+            } transform-gpu flex-col space-y-3 py-3 pl-4 transition-transform`}>
+            <div className="join relative w-full bg-white shadow outline outline-1">
+              <span className="join-item flex grow items-center">
+                <h5 className="pl-3 text-xl font-semibold">{title}</h5>
+              </span>
+              <button
+                className="btn btn-outline join-item border-y-0 border-r-0"
+                onClick={() => {
+                  editTitleModal.current?.showModal()
+                }}>
+                <AiOutlineEdit className="h-6 w-6" />
+              </button>
+              <button
+                className="btn btn-circle btn-outline btn-sm absolute -right-12 top-2 bg-white"
+                onClick={() => {
+                  setExpanded(!expanded)
+                }}>
+                {expanded ? (
+                  <PiCaretDoubleLeft className="h-4 w-4" />
+                ) : (
+                  <PiCaretDoubleRight className="h-4 w-4" />
+                )}
+              </button>
             </div>
+            <Menu nodeClassifications={nodeClassifications} />
           </aside>
-          <div className="relative flex-1">
-            <Controller
-              controls={controls}
-              title={title}
-              setTitle={setTitle}
-              saveTitle={async () => {
-                try {
-                  if (typeof workflowId !== 'string') {
-                    return
-                  }
-
-                  const docUpdate: Partial<DocWorkflow> = {
-                    lastSaveTimestamp: serverTimestamp() as Timestamp,
-                    workflowTitle: title,
-                  }
-                  await db.collection('workflows').doc(workflowId).update(docUpdate)
-                  setDeploymentStatus(['success', 'New name saved successfully'])
-                } catch (error) {
-                  console.log(error)
-                  setDeploymentStatus(['error', 'Failed to save new name'])
-                } finally {
-                  setTimeout(() => {
-                    setDeploymentStatus(undefined)
-                  }, 3000)
-                }
-              }}
-            />
-            <ReactFlow
-              elementsSelectable={allowInteraction}
-              nodesConnectable={allowInteraction}
-              nodesDraggable={allowInteraction}
-              zoomOnScroll={allowInteraction}
-              panOnScroll={allowInteraction}
-              zoomOnDoubleClick={allowInteraction}
-              panOnDrag={allowInteraction}
-              selectionOnDrag={allowInteraction}
-              nodes={nodes}
-              onNodesChange={onNodesChange}
-              edges={edges}
-              onEdgesChange={onEdgesChange}
-              onConnect={onConnect}
-              nodeTypes={nodeTypes}
-              selectionMode={SelectionMode.Partial}
-              onMove={(_, newViewport) => {
-                viewport.current = newViewport
-              }}>
-              <Background />
-              <Controls position="bottom-right" />
-            </ReactFlow>
-          </div>
+          <Controller controls={controls} />
+          <ReactFlow
+            elementsSelectable={allowInteraction}
+            nodesConnectable={allowInteraction}
+            nodesDraggable={allowInteraction}
+            zoomOnScroll={allowInteraction}
+            panOnScroll={allowInteraction}
+            zoomOnDoubleClick={allowInteraction}
+            panOnDrag={allowInteraction}
+            selectionOnDrag={allowInteraction}
+            nodes={nodes}
+            onNodesChange={onNodesChange}
+            edges={edges}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            nodeTypes={nodeTypes}
+            selectionMode={SelectionMode.Partial}
+            onMove={(_, newViewport) => {
+              viewport.current = newViewport
+            }}>
+            <Background />
+            <Controls position="bottom-right" />
+          </ReactFlow>
         </section>
       </main>
 
       <ExecuteModal executeFlow={executeFlow} isDeploying={isDeploying} ref={executeModalRef} />
+      <EditTitleModal
+        key={title}
+        isDeploying={isDeploying}
+        title={title}
+        saveTitle={saveTitle}
+        ref={editTitleModal}
+      />
       <JSONImporterModal
         isJsonImportModalShown={isJsonImportModalShown}
         setIsJsonImportModalShown={setIsJsonImportModalShown}
