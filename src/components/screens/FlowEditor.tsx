@@ -96,7 +96,7 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   const randomY = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue
 
   return {
-    x: -viewport.x * (1 / viewport.zoom) + randomX,
+    x: -viewport.x * (1 / viewport.zoom) + randomX + 460 * (1 / viewport.zoom),
     y: -viewport.y * (1 / viewport.zoom) + randomY,
   }
 }
