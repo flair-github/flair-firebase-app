@@ -177,7 +177,7 @@ export const DataExporterPowerBINode = ({
             onChange={handleChange}
           />
         </div> */}
-        <div className="mb-2 mt-1">
+        {/* <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-semibold">Y Axis</span>
           </label>
@@ -187,7 +187,7 @@ export const DataExporterPowerBINode = ({
             name={'yAxis'}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
       </section>
       {!noHandle && (
         <Handle
