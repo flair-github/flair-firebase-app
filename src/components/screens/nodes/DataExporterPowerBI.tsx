@@ -13,8 +13,8 @@ export interface DataExporterPowerBINodeContent {
   tenantId: string
   username: string
   password: string
-  chartType: string
-  xAxis: string
+  // chartType: string
+  // xAxis: string
   yAxis: string
 }
 
@@ -25,8 +25,8 @@ export const dataExporterPowerBIDefaultContent: DataExporterPowerBINodeContent =
   tenantId: '',
   username: '',
   password: '',
-  chartType: '',
-  xAxis: '',
+  // chartType: '',
+  // xAxis: '',
   yAxis: '',
 }
 
@@ -132,11 +132,11 @@ export const DataExporterPowerBINode = ({
             placeholder={''}
           />
         </div>
-        <div className="mb-2 mt-1">
+        {/* <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-semibold">Chart Type</span>
           </label>
-          {/* <select
+          <select
             className="max-w-xs select w-full border-black "
             value={nodeContent.chartType}
             name={'chartType'}
@@ -144,7 +144,7 @@ export const DataExporterPowerBINode = ({
             <option value={'bar'}>bar</option>
             <option value={'line'}>line</option>
             <option value={'pie'}>pie</option>
-          </select> */}
+          </select>
           <div className="mb-2 flex items-center justify-between">
             <button
               className={'btn btn-outline ' + (nodeContent.chartType === 'bar' && 'btn-active')}
@@ -165,8 +165,8 @@ export const DataExporterPowerBINode = ({
               Pie
             </button>
           </div>
-        </div>
-        <div className="mb-2 mt-1">
+        </div> */}
+        {/* <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-semibold">X Axis</span>
           </label>
@@ -176,7 +176,7 @@ export const DataExporterPowerBINode = ({
             name={'xAxis'}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-semibold">Y Axis</span>

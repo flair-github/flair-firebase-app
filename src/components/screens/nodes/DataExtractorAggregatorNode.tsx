@@ -8,15 +8,15 @@ import { NodeHeader } from '~/components/shared/NodeHeader'
 export interface DataExtractorAggregatorNodeContent {
   nodeType: 'data-extractor-aggregator'
   column: string
-  method: string
-  model: string
+  // method: string
+  // model: string
 }
 
 export const dataExporterSalesforceDefaultContent: DataExtractorAggregatorNodeContent = {
   nodeType: 'data-extractor-aggregator',
   column: '',
-  method: '',
-  model: '',
+  // method: '',
+  // model: '',
 }
 
 export const DataExtractorAggregatorNode = ({
@@ -85,7 +85,7 @@ export const DataExtractorAggregatorNode = ({
             onChange={handleChange}
           />
         </div>
-        <div className="mb-2 mt-1">
+        {/* <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-semibold">Method</span>
           </label>
@@ -114,7 +114,7 @@ export const DataExtractorAggregatorNode = ({
             <option value={'claude'}>Claude</option>
             <option value={'bard'}>Bard</option>
           </select>
-        </div>
+        </div> */}
       </section>
       {!noHandle && (
         <>
