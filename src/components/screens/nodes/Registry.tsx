@@ -1,4 +1,5 @@
 import { MutableRefObject } from 'react'
+import { atom } from 'jotai'
 import { Edge, type Node } from 'reactflow'
 import { DataExporterFlairNodeContent } from './DataExporterFlair'
 import { DataExtractorNodeContent } from './DataExtractorNode'
@@ -8,7 +9,6 @@ import { DataSourceLocalFilesNodeContent } from './DataSourceLocalFiles'
 import { DataSourceNodeContent } from './DataSourceNode'
 import { EvaluatorNodeContent } from './EvaluatorNode'
 import { LLMProcessorNodeContent } from './LLMProcessorNode'
-import { atom } from 'jotai'
 import { DataSourceS3NodeContent } from './DataSourceS3'
 import { DataSourceGCPNodeContent } from './DataSourceGCP'
 import { DataSourceAzureNodeContent } from './DataSourceAzure'
@@ -21,6 +21,7 @@ import { DataExporterPowerBINodeContent } from './DataExporterPowerBI'
 import { AwsUploaderNodeContent } from './AwsUploaderNode'
 import { DataExporterSalesforceNodeContent } from './DataExporterSalesforce'
 import { DataExporterZendeskNodeContent } from './DataExporterZendesk'
+import { DataExporterPostgresNodeContent } from './DataExporterPostgres'
 import { DataExporterGmailNodeContent } from './DataExporterGmail'
 import { DataRetrieverApiNodeContent } from './DataRetrieverAPI'
 import { ConditionalLogicNodeContent } from './ConditionalLogicNode'
@@ -40,6 +41,7 @@ export type NodeContent =
   | DataExporterAzureNodeContent
   | DataExporterAPINodeContent
   | DataExporterPowerBINodeContent
+  | DataExporterPostgresNodeContent
   | EvaluatorNodeContent
   | ConditionalLogicNodeContent
   | LLMProcessorNodeContent

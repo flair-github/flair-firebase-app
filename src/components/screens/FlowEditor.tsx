@@ -45,6 +45,7 @@ import { DataExporterAPINode } from './nodes/DataExporterAPI'
 import { DataExporterPowerBINode } from './nodes/DataExporterPowerBI'
 import { DataExporterSalesforceNode } from './nodes/DataExporterSalesforce'
 import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
+import { DataExporterPostgresNode } from './nodes/DataExporterPostgres'
 import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
 import { ConditionalLogicNode } from './nodes/ConditionalLogicNode'
@@ -67,6 +68,7 @@ export const nodeTypes = {
   DataExporterAzureNode,
   DataExporterAPINode,
   DataExporterPowerBINode,
+  DataExporterPostgresNode,
   EvaluatorNode,
   LLMProcessorNode,
   DataIndexerNode,
@@ -467,6 +469,12 @@ export const FlowEditor: React.FC<{
           title: 'Power BI',
           handleOnClick: () => {
             addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
+          },
+        },
+        {
+          title: 'Postgres',
+          handleOnClick: () => {
+            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
           },
         },
         {
