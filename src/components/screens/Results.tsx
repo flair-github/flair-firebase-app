@@ -40,7 +40,7 @@ function PageResults() {
           <thead>
             <tr>
               <th />
-              <th>Workflow Result Id</th>
+              <th>Workflow Name</th>
               <th>Workflow Request Id</th>
               <th>Status</th>
               <th>Created</th>
@@ -66,7 +66,7 @@ function PageResults() {
                     </div>
                   </td>
                   <td>
-                    <div className="w-24 break-words">{el.workflowResultId}</div>
+                    <div className="w-24 break-words">{el.workflowName}</div>
                   </td>
                   <td>
                     <div className="w-24 break-words">{el.workflowRequestId}</div>

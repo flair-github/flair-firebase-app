@@ -97,6 +97,7 @@ export interface DocLLMOutput {
 
 export interface DocWorkflowResult {
   workflowId: string
+  workflowName: string
   executorUserId: string
   workflowRequestId: string
   workflowResultId: string
