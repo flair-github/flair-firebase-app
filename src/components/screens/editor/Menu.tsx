@@ -1,31 +1,41 @@
 import React from 'react'
+import { IconType } from 'react-icons'
 
-const classificationColor2colorClasses = (classificationColor: string): string => {
-  let colorClasses = ''
+const classificationColor2colorClasses = (classificationColor: string): string[] => {
+  let colorClasses
   switch (classificationColor) {
     case 'purple':
-      colorClasses = ' bg-purple-200 hover:bg-purple-300 '
+      colorClasses = [
+        ' bg-purple-200 hover:bg-purple-300 ',
+        ' bg-purple-100 group-hover:bg-purple-200 ',
+      ]
       break
     case 'green':
-      colorClasses = ' bg-green-200 hover:bg-green-300 '
+      colorClasses = [
+        ' bg-green-200 hover:bg-green-300 ',
+        ' bg-green-100 group-hover:bg-green-200 ',
+      ]
       break
     case 'orange':
-      colorClasses = ' bg-orange-200 hover:bg-orange-300 '
+      colorClasses = [
+        ' bg-orange-200 hover:bg-orange-300 ',
+        ' bg-orange-100 group-hover:bg-orange-200 ',
+      ]
       break
     case 'blue':
-      colorClasses = ' bg-blue-200 hover:bg-blue-300 '
+      colorClasses = [' bg-blue-200 hover:bg-blue-300 ', ' bg-blue-100 group-hover:bg-blue-200 ']
       break
     case 'teal':
-      colorClasses = ' bg-teal-200 hover:bg-teal-300 '
+      colorClasses = [' bg-teal-200 hover:bg-teal-300 ', ' bg-teal-100 group-hover:bg-teal-200 ']
       break
     case 'rose':
-      colorClasses = ' bg-rose-200 hover:bg-rose-300 '
+      colorClasses = [' bg-rose-200 hover:bg-rose-300 ', ' bg-rose-100 group-hover:bg-rose-200 ']
       break
     case 'pink':
-      colorClasses = ' bg-pink-200 hover:bg-pink-300 '
+      colorClasses = [' bg-pink-200 hover:bg-pink-300 ', ' bg-pink-100 group-hover:bg-pink-200 ']
       break
     default:
-      colorClasses = ' bg-green-200 hover:bg-green-300 '
+      colorClasses = [' bg-gray-200 hover:bg-gray-300 ', ' bg-gray-100 group-hover:bg-gray-200 ']
       break
   }
   return colorClasses
@@ -41,11 +51,13 @@ export interface IAsideProps {
           title: string
           handleOnClick: () => void
           disabled?: undefined
+          icon: IconType
         }
       | {
           title: string
           handleOnClick: () => void
           disabled: boolean
+          icon: IconType
         }
     )[]
   }[]
@@ -70,18 +82,27 @@ export default function Menu({ nodeClassifications }: IAsideProps) {
                 </div>
               </div>
               <div className="collapse-content rounded-none border-t bg-gray-50 shadow-inner">
-                <div className="mt-4">
+                <div className="mt-4 grid grid-cols-2 gap-2">
                   {classification.members.map(member => {
                     return (
                       <button
                         key={member.title}
                         disabled={member.disabled}
                         className={
-                          'btn m-2' + (member.disabled ? ' gap-1 btn-disabled ' : colorClasses)
+                          'btn flex-col gap-0 h-28 p-0 shadow hover:shadow-md group transition-colors ' +
+                          (member.disabled ? ' btn-disabled ' : colorClasses[0])
                         }
                         onClick={member.handleOnClick}>
-                        <p>{member.title}</p>
-                        {member.disabled && <div className="text-xs">(soon)</div>}
+                        <div
+                          className={
+                            'flex h-16 w-full items-center justify-center rounded-none transition-colors ' +
+                            colorClasses[1]
+                          }>
+                          <member.icon className="h-12 w-12" />
+                        </div>
+                        <div className="line-clamp-2 flex grow items-center justify-center">
+                          <p> {member.title + (member.disabled ? ' (soon)' : '')}</p>
+                        </div>
                       </button>
                     )
                   })}

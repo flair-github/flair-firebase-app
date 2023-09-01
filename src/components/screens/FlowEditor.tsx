@@ -83,11 +83,31 @@ export const nodeTypes = {
   DataExtractorAggregatorNode,
 }
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
-import { RiListSettingsLine } from 'react-icons/ri'
-import { AiOutlineClear, AiOutlineDeploymentUnit, AiOutlineEdit } from 'react-icons/ai'
+import { RiListSettingsLine, RiRobotLine } from 'react-icons/ri'
+import {
+  AiFillApi,
+  AiOutlineClear,
+  AiOutlineDeploymentUnit,
+  AiOutlineEdit,
+  AiOutlineNodeIndex,
+} from 'react-icons/ai'
 import Menu from './editor/Menu'
 import { PiCaretDoubleLeft, PiCaretDoubleRight } from 'react-icons/pi'
 import EditTitleModal from './overlays/EditTitleModal'
+import {
+  BiGitBranch,
+  BiLogoAws,
+  BiLogoGmail,
+  BiLogoGoogle,
+  BiLogoMicrosoft,
+  BiLogoPostgresql,
+  BiLogoSlack,
+} from 'react-icons/bi'
+import { FaCloudUploadAlt, FaSalesforce } from 'react-icons/fa'
+import { SiPowerbi, SiZendesk } from 'react-icons/si'
+import { GiConvergenceTarget } from 'react-icons/gi'
+import { GrAggregate, GrFormClose } from 'react-icons/gr'
+import { BsArrowsAngleContract, BsFillCloudHaze2Fill } from 'react-icons/bs'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -331,45 +351,53 @@ export const FlowEditor: React.FC<{
           handleOnClick: () => {
             addNode('data-source-s3', 'DataSourceS3Node')
           },
+          icon: BiLogoAws,
         },
         {
           title: 'Google Cloud Storage',
           handleOnClick: () => {
             addNode('data-source-gcp', 'DataSourceGCPNode')
           },
+          icon: BiLogoGoogle,
         },
         {
           title: 'Azure Blob Storage',
           handleOnClick: () => {
             addNode('data-source-azure', 'DataSourceAzureNode')
           },
+          icon: BiLogoMicrosoft,
         },
         {
           title: 'Local Files',
           handleOnClick: () => {
             addNode('data-source-local-files', 'DataSourceLocalFilesNode')
           },
+          icon: FaCloudUploadAlt,
         },
         {
           title: 'API',
           handleOnClick: () => {
             addNode('data-source-api', 'DataSourceAPINode')
           },
+          icon: AiFillApi,
         },
         {
           title: 'Salesforce',
           handleOnClick: () => {},
           disabled: true,
+          icon: FaSalesforce,
         },
         {
           title: 'Zendesk',
           handleOnClick: () => {},
           disabled: true,
+          icon: SiZendesk,
         },
         {
           title: 'Slack',
           handleOnClick: () => {},
           disabled: true,
+          icon: BiLogoSlack,
         },
       ],
     },
@@ -383,6 +411,7 @@ export const FlowEditor: React.FC<{
           handleOnClick: () => {
             addNode('data-indexer', 'DataIndexerNode')
           },
+          icon: AiOutlineNodeIndex,
         },
       ],
     },
@@ -396,12 +425,14 @@ export const FlowEditor: React.FC<{
           handleOnClick: () => {
             addNode('data-retriever', 'DataRetrieverNode')
           },
+          icon: GiConvergenceTarget,
         },
         {
           title: 'Data Retriever API',
           handleOnClick: () => {
             addNode('data-retriever-api', 'DataRetrieverApiNode')
           },
+          icon: AiFillApi,
         },
       ],
     },
@@ -415,12 +446,14 @@ export const FlowEditor: React.FC<{
           handleOnClick: () => {
             addNode('llm-processor', 'LLMProcessorNode')
           },
+          icon: RiRobotLine,
         },
         {
           title: 'Aggregator',
           handleOnClick: () => {
             addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
           },
+          icon: GrAggregate,
         },
       ],
     },
@@ -434,60 +467,70 @@ export const FlowEditor: React.FC<{
           handleOnClick: () => {
             addNode('data-exporter-s3', 'DataExporterS3Node')
           },
+          icon: BiLogoAws,
         },
         {
           title: 'Google Cloud Storage',
           handleOnClick: () => {
             addNode('data-exporter-gcp', 'DataExporterGCPNode')
           },
+          icon: BiLogoGoogle,
         },
         {
           title: 'Azure Blob Storage',
           handleOnClick: () => {
             addNode('data-exporter-azure', 'DataExporterAzureNode')
           },
+          icon: BiLogoMicrosoft,
         },
         {
           title: 'Zendesk',
           handleOnClick: () => {
             addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
           },
+          icon: SiZendesk,
         },
         {
           title: 'Gmail',
           handleOnClick: () => {
             addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
+          icon: BiLogoGmail,
         },
         {
           title: 'Salesforce',
           handleOnClick: () => {
             addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
           },
+          icon: FaSalesforce,
         },
         {
           title: 'Power BI',
           handleOnClick: () => {
             addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
           },
+          icon: SiPowerbi,
         },
         {
           title: 'Postgres',
           handleOnClick: () => {
             addNode('data-exporter-postgres', 'DataExporterPostgresNode')
           },
+          icon: BiLogoPostgresql,
         },
         {
           title: 'Flair',
           handleOnClick: () => {
             addNode('data-exporter-flair', 'DataExporterFlairNode')
           },
+          icon: BsFillCloudHaze2Fill,
         },
         {
           title: 'API',
           handleOnClick: () => {
             addNode('data-exporter-api', 'DataExporterAPINode')
           },
+          icon: AiFillApi,
         },
       ],
     },
@@ -501,6 +544,7 @@ export const FlowEditor: React.FC<{
           handleOnClick: () => {
             addNode('conditional-logic', 'ConditionalLogicNode')
           },
+          icon: BiGitBranch,
         },
       ],
     },
@@ -514,6 +558,7 @@ export const FlowEditor: React.FC<{
           handleOnClick: () => {
             addNode('evaluator', 'EvaluatorNode')
           },
+          icon: BsArrowsAngleContract,
         },
       ],
     },
