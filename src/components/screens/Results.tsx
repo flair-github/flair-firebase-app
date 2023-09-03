@@ -1,35 +1,75 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
 import { getAverage } from '~/lib/averager'
 import { timestampToLocaleString } from './LLMOutputs'
 import { DocWorkflowResult } from 'Types/firebaseStructure'
-import { WhereFilterOp } from 'firebase/firestore'
+import { OrderByDirection, WhereFilterOp } from 'firebase/firestore'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner9 } from 'react-icons/im'
+import { useDebounce } from 'react-use'
 
 function PageResults() {
-  const where = useMemo(
-    () => [
+  const [column, setColumn] = useState('')
+  const [substring, setSubstring] = useState('')
+  const [debouncedSubstring, setDebouncedSubstring] = useState('')
+  const [, cancel] = useDebounce(
+    () => {
+      setDebouncedSubstring(substring)
+    },
+    750,
+    [substring],
+  )
+
+  const where = useMemo(() => {
+    let queryFilter = [
       ['docExists', '==', true],
       ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
-    ],
-    [],
-  )
+    ]
+    if (column && debouncedSubstring) {
+      queryFilter.push([column, '>=', debouncedSubstring])
+      queryFilter.push([column, '<=', debouncedSubstring + '\uf8ff'])
+    }
+    return queryFilter
+  }, [column, debouncedSubstring])
+
+  const orders = useMemo(() => {
+    return [[column, 'desc'] as [string, OrderByDirection | undefined]]
+  }, [column])
+
   const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocWorkflowResult>(
     'workflow_results',
     10,
     where as [string, WhereFilterOp, string][],
+    orders,
   )
 
   return (
     <div className="container mx-auto mb-9 mt-6 rounded-md border">
-      <div className="border-grayscaleDivider flex h-[3rem] border-b">
+      <div className="flex items-center border-b p-3">
+        <div className="join">
+          <select
+            className={' join-item ' + 'select select-bordered '}
+            value={column}
+            onChange={event => setColumn(event.target.value)}>
+            <option disabled value="">
+              Column
+            </option>
+            <option value="model">Model</option>
+            <option value="status">Status</option>
+            {/* <option value="model and status">Model and Status</option> */}
+            <option value="workflowRequestId">Request Id</option>
+          </select>
+          <input
+            className="input join-item input-bordered"
+            value={substring}
+            onChange={event => setSubstring(event.target.value)}
+            placeholder="Filter"
+          />
+        </div>
         <div className="flex-1" />
-        <button
-          className="btn btn-disabled m-1 h-[2.5rem] min-h-[2.5rem] gap-1"
-          onClick={async () => {}}>
+        <button className="btn btn-disabled gap-1" onClick={async () => {}}>
           <div>Compare Selections</div>
           <div className="text-xs">(soon)</div>
         </button>
