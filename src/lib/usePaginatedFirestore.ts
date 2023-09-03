@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { db } from './firebase' // Your Firestore config and initialization
 import { DocumentData, QueryDocumentSnapshot } from '@firebase/firestore-types'
-import { WhereFilterOp } from 'firebase/firestore'
+import { FieldPath, OrderByDirection, WhereFilterOp } from 'firebase/firestore'
 
 function usePaginatedFirestore<T extends DocumentData>(
   collectionName: string,
   pageSize: number,
   where: [string, WhereFilterOp, string][],
+  orders?: [FieldPath | string, OrderByDirection | undefined][],
 ) {
   const [items, setItems] = useState<T[]>([])
   const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot<T> | null>(null)
@@ -23,6 +24,13 @@ function usePaginatedFirestore<T extends DocumentData>(
     let query = db.collection(collectionName).limit(pageSize)
     for (const clause of where) {
       query = query.where(...clause)
+    }
+    if (orders) {
+      for (const order of orders) {
+        if (order[0]) {
+          query = query.orderBy(...order)
+        }
+      }
     }
     query = query.orderBy('createdTimestamp', 'desc')
 
@@ -41,7 +49,7 @@ function usePaginatedFirestore<T extends DocumentData>(
     }
     setItems(prevItems => [...prevItems, ...snapshot.docs.map((doc: any) => doc.data() as T)])
     setLoading(false)
-  }, [collectionName, hasMore, lastVisible, pageSize, where])
+  }, [collectionName, hasMore, lastVisible, pageSize, where, orders])
 
   useEffect(() => {
     ;(async () => {
@@ -50,6 +58,13 @@ function usePaginatedFirestore<T extends DocumentData>(
       let query = db.collection(collectionName).limit(pageSize)
       for (const clause of where) {
         query = query.where(...clause)
+      }
+      if (orders) {
+        for (const order of orders) {
+          if (order[0]) {
+            query = query.orderBy(...order)
+          }
+        }
       }
       query = query.orderBy('createdTimestamp', 'desc')
       const snapshot = await query.get()
@@ -65,7 +80,7 @@ function usePaginatedFirestore<T extends DocumentData>(
       setItems(snapshot.docs.map((doc: any) => doc.data() as T))
       setLoading(false)
     })()
-  }, [collectionName, pageSize, where])
+  }, [collectionName, pageSize, where, orders])
 
   return {
     items,
