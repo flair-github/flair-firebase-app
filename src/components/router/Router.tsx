@@ -17,8 +17,9 @@ const LLMOutputsScreen = lazy(() => import('~/components/screens/LLMOutputs'))
 const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
 const TemplatesScreen = lazy(() => import('~/components/screens/Templates'))
 const TemplateWizardScreen = lazy(() => import('~/components/screens/TemplateWizard'))
+const TranscriptionScreen = lazy(() => import('~/components/screens/Transcription'))
 
-function Layout() {
+const Layout = () => {
   const userData = useAtomValue(atomUserData)
   const auth = useAuth()
 
@@ -51,6 +52,12 @@ function Layout() {
                 // navigate('/results')
               }}>
               <a>Deployments</a>
+            </li>
+            <li
+              onClick={() => {
+                navigate('/transcription')
+              }}>
+              <a>Transcription</a>
             </li>
           </ul>
         </div>
@@ -106,14 +113,6 @@ function Layout() {
   )
 }
 
-export const Router = () => {
-  return (
-    <BrowserRouter>
-      <InnerRouter />
-    </BrowserRouter>
-  )
-}
-
 const InnerRouter = () => {
   const user = useAtomValue(atomUser)
 
@@ -158,6 +157,10 @@ const InnerRouter = () => {
           path: 'template-wizard',
           element: <TemplateWizardScreen />,
         },
+        {
+          path: 'transcription',
+          element: <TranscriptionScreen />,
+        },
       ],
     },
   ]
@@ -171,9 +174,13 @@ const InnerRouter = () => {
     return <LoginScreen />
   }
 
+  return <Suspense fallback={<Loading />}>{element}</Suspense>
+}
+
+export const Router = () => {
   return (
-    <div>
-      <Suspense fallback={<Loading />}>{element}</Suspense>
-    </div>
+    <BrowserRouter>
+      <InnerRouter />
+    </BrowserRouter>
   )
 }
