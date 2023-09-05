@@ -36,7 +36,7 @@ function Transcription() {
   const [detailId, setDetailId] = useState<number>()
   return (
     <>
-      <Head title="Transcription" />
+      <Head title="Scripts" />
       <div className="container mx-auto px-4 py-2">
         <div className="mb-5 mt-3">
           <button
@@ -46,7 +46,7 @@ function Transcription() {
               setIsLoading(false)
               newTranscriptModal.current?.showModal()
             }}>
-            New Transcript
+            Generate Script
           </button>
         </div>
 
@@ -68,7 +68,7 @@ function Transcription() {
               }}>
               <div className="card-body">
                 <header className="flex justify-between">
-                  <h2 className="card-title truncate">{'Transcript ' + (idx + 1)}</h2>
+                  <h2 className="card-title truncate">{'Script ' + (idx + 1)}</h2>
                   <div
                     className="dropdown"
                     onClick={event => {
@@ -211,7 +211,7 @@ function Transcription() {
       <dialog ref={detailModal} className="modal">
         <form method="dialog" className="modal-box max-w-160">
           <header className="flex items-center justify-between">
-            <h3 className="text-lg font-bold">Transcript {detailId}</h3>
+            <h3 className="text-lg font-bold">Script {detailId}</h3>
             <button
               className="btn btn-square btn-sm cursor-pointer"
               onClick={event => {

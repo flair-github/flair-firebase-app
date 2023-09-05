@@ -57,7 +57,7 @@ const Layout = () => {
               onClick={() => {
                 navigate('/transcription')
               }}>
-              <a>Transcription</a>
+              <a>Scripts</a>
             </li>
           </ul>
         </div>
