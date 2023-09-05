@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { useAtom } from 'jotai'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { atomClient } from '~/jotai/jotai'
 
 function usePaginatedSupabase<T>(
@@ -11,7 +11,7 @@ function usePaginatedSupabase<T>(
 ) {
   const [supabase] = useAtom(atomClient)
   const [items, setItems] = useState<T[]>([])
-  const [lastId, setLastId] = useState<number | null>(null)
+  const [lastIdx, setLastIdx] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(false)
   const [hasMore, setHasMore] = useState<boolean>(true)
 
@@ -22,16 +22,29 @@ function usePaginatedSupabase<T>(
 
     setLoading(true)
 
-    let query = supabase!.from(tableName).select().limit(pageSize)
-    // for (const condition of conditions) {
-    //   query = query[condition.operator](condition.column, condition.value)
-    // }
+    let query = supabase!
+      .from(tableName)
+      .select()
+      .range(lastIdx, lastIdx + pageSize - 1)
+    for (const condition of conditions) {
+      switch (condition.operator) {
+        case 'eq':
+          query = query.eq(condition.column, condition.value)
+          break
+        case 'gte':
+          query = query.gte(condition.column, condition.value)
+          break
+        case 'lte':
+          query = query.lte(condition.column, condition.value)
+          break
+        case 'ilike':
+          query = query.ilike(condition.column, condition.value)
+          break
+      }
+    }
     for (const order of orders) {
       query = query.order(order.column, { ascending: order.direction === 'asc' })
     }
-    // if (lastId) {
-    //   query = query.gt('id', lastId)
-    // }
 
     const { data, error } = await query
 
@@ -42,31 +55,46 @@ function usePaginatedSupabase<T>(
     }
 
     if (data && data.length) {
-      const lastItem = data[data.length - 1]
-      setLastId(lastItem.id)
+      setLastIdx(lastIdx + data.length)
       setItems(prevItems => [...prevItems, ...data])
     } else {
       setHasMore(false)
     }
 
     setLoading(false)
-  }, [hasMore, supabase, tableName, pageSize, orders])
+  }, [hasMore, supabase, tableName, pageSize, lastIdx, conditions, orders])
 
   useEffect(() => {
+    const ac = new AbortController()
+
     ;(async () => {
       setLoading(true)
 
-      let query = supabase!.from(tableName).select().limit(pageSize)
-      // for (const condition of conditions) {
-      //   query = query[condition.operator](condition.column, condition.value)
-      // }
+      let query = supabase!
+        .from(tableName)
+        .select()
+        .range(0, pageSize - 1)
+      console.log(conditions)
+      for (const condition of conditions) {
+        switch (condition.operator) {
+          case 'eq':
+            query = query.eq(condition.column, condition.value)
+            break
+          case 'gte':
+            query = query.gte(condition.column, condition.value)
+            break
+          case 'lte':
+            query = query.lte(condition.column, condition.value)
+            break
+          case 'ilike':
+            query = query.ilike(condition.column, condition.value)
+            break
+        }
+      }
       for (const order of orders) {
         query = query.order(order.column, { ascending: order.direction === 'asc' })
       }
-      // if (lastId) {
-      //   query = query.gt('id', lastId)
-      // }
-
+      query.abortSignal(ac.signal)
       const { data, error } = await query
 
       if (error) {
@@ -76,8 +104,7 @@ function usePaginatedSupabase<T>(
       }
 
       if (data && data.length) {
-        const lastItem = data[data.length - 1]
-        setLastId(lastItem.id)
+        setLastIdx(pageSize)
         setItems(prevItems => [...prevItems, ...data])
       } else {
         setHasMore(false)
@@ -85,7 +112,12 @@ function usePaginatedSupabase<T>(
 
       setLoading(false)
     })()
-  }, [orders, pageSize, supabase, tableName])
+
+    return () => {
+      ac.abort()
+      setItems([])
+    }
+  }, [conditions, orders, pageSize, supabase, tableName])
 
   return {
     items,

@@ -39,8 +39,15 @@ const useSupabaseResults = (column: string, substring: string) => {
   )
 
   const where = useMemo(() => {
-    return []
-  }, [])
+    let queryFilter = [
+      { column: 'docExists', operator: 'eq', value: true },
+      { column: 'executorUserId', operator: 'eq', value: 'IVqAyQJR4ugRGR8qL9UuB809OX82' },
+    ]
+    if (column && debouncedSubstring) {
+      queryFilter.push({ column: column, operator: 'ilike', value: '%' + debouncedSubstring + '%' })
+    }
+    return queryFilter
+  }, [column, debouncedSubstring])
 
   const orders = useMemo(() => {
     return []
@@ -49,7 +56,7 @@ const useSupabaseResults = (column: string, substring: string) => {
   const { items, loading, hasMore, loadMore } = usePaginatedSupabase<Tables<'workflow_results'>>(
     'workflow_results',
     10,
-    where,
+    where as { column: string; operator: 'eq' | 'ilike' | 'gte' | 'lte'; value: any }[],
     orders,
   )
 
@@ -115,7 +122,6 @@ function PageResults() {
               const averaged =
                 (el.averageEvaluationData as AverageEvaluationData | null) ??
                 getAverage(el.evaluationData as EvaluationData)
-              console.log(el.createdTimestamp)
 
               return (
                 <tr key={el.workflowResultId}>
