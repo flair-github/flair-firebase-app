@@ -3,14 +3,32 @@ import { Link } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
 import { getAverage } from '~/lib/averager'
-import { timestampToLocaleString } from './LLMOutputs'
-import { DocWorkflowResult } from 'Types/firebaseStructure'
-import { OrderByDirection, WhereFilterOp } from 'firebase/firestore'
-import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
+import { AverageEvaluationData, DocWorkflowResult, EvaluationData } from 'Types/firebaseStructure'
 import { ImSpinner9 } from 'react-icons/im'
 import { useDebounce } from 'react-use'
+import usePaginatedSupabase from '~/lib/usePaginatedSupabase'
+import { Json, Tables } from '~/supabase'
 
-const useFirestoreResults = (column: string, substring: string) => {
+function timestampToLocaleString(
+  ts: { _seconds: number; _nanoseconds: number },
+  locale: string = 'en-US',
+  options?: Intl.DateTimeFormatOptions,
+): string {
+  // const date = ts.toDate()
+  const date = new Date(ts._seconds * 1000 + ts._nanoseconds / 1000000)
+
+  return date.toLocaleString(locale, {
+    weekday: 'long', // e.g., "Sunday"
+    year: 'numeric', // e.g., "2023"
+    month: 'long', // e.g., "August"
+    day: 'numeric', // e.g., "1"
+    hour: '2-digit', // e.g., "02"
+    minute: '2-digit', // e.g., "15"
+    ...options, // Allow custom options
+  })
+}
+
+const useSupabaseResults = (column: string, substring: string) => {
   const [debouncedSubstring, setDebouncedSubstring] = useState('')
   const [, cancel] = useDebounce(
     () => {
@@ -21,25 +39,17 @@ const useFirestoreResults = (column: string, substring: string) => {
   )
 
   const where = useMemo(() => {
-    let queryFilter = [
-      ['docExists', '==', true],
-      ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
-    ]
-    if (column && debouncedSubstring) {
-      queryFilter.push([column, '>=', debouncedSubstring])
-      queryFilter.push([column, '<=', debouncedSubstring + '\uf8ff'])
-    }
-    return queryFilter
-  }, [column, debouncedSubstring])
+    return []
+  }, [])
 
   const orders = useMemo(() => {
-    return [[column, 'desc'] as [string, OrderByDirection | undefined]]
-  }, [column])
+    return []
+  }, [])
 
-  const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocWorkflowResult>(
+  const { items, loading, hasMore, loadMore } = usePaginatedSupabase<Tables<'workflow_results'>>(
     'workflow_results',
     10,
-    where as [string, WhereFilterOp, string][],
+    where,
     orders,
   )
 
@@ -49,7 +59,7 @@ const useFirestoreResults = (column: string, substring: string) => {
 function PageResults() {
   const [column, setColumn] = useState('')
   const [substring, setSubstring] = useState('')
-  const { items, loading, hasMore, loadMore } = useFirestoreResults(column, substring)
+  const { items, hasMore, loadMore, loading } = useSupabaseResults(column, substring)
 
   return (
     <div className="container mx-auto mb-9 mt-6 rounded-md border">
@@ -102,7 +112,10 @@ function PageResults() {
           </thead>
           <tbody>
             {items.map(el => {
-              const averaged = el.averageEvaluationData ?? getAverage(el.evaluationData)
+              const averaged =
+                (el.averageEvaluationData as AverageEvaluationData | null) ??
+                getAverage(el.evaluationData as EvaluationData)
+              console.log(el.createdTimestamp)
 
               return (
                 <tr key={el.workflowResultId}>
@@ -121,7 +134,9 @@ function PageResults() {
                     <div className="w-24 break-words">{(el as any).status || 'completed'}</div>
                   </td>
                   <td>
-                    <div className="w-36">{timestampToLocaleString(el.createdTimestamp)}</div>
+                    <div className="w-36">
+                      {timestampToLocaleString(el.createdTimestamp as any)}
+                    </div>
                   </td>
                   <td>
                     <div className="w-24">{el.model}</div>
