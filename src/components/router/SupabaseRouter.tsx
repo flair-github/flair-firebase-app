@@ -55,7 +55,7 @@ function Layout() {
           </ul> */}
         </div>
         <div className="flex-none">
-          <div className="dropdown-end dropdown">
+          <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost flex px-2 font-normal normal-case">
               <div>Debug</div>
             </label>
