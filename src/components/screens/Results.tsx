@@ -33,8 +33,12 @@ const useFirestoreResults = (column: string, substring: string) => {
   }, [column, debouncedSubstring])
 
   const orders = useMemo(() => {
-    return [[column, 'desc'] as [string, OrderByDirection | undefined]]
-  }, [column])
+    if (!debouncedSubstring) {
+      return []
+    } else {
+      return [[column, 'desc'] as [string, OrderByDirection | undefined]]
+    }
+  }, [column, debouncedSubstring])
 
   const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocWorkflowResult>(
     'workflow_results',
@@ -58,7 +62,10 @@ function PageResults() {
           <select
             className={' join-item ' + 'select select-bordered '}
             value={column}
-            onChange={event => setColumn(event.target.value)}>
+            onChange={event => {
+              setSubstring('')
+              setColumn(event.target.value)
+            }}>
             <option disabled value="">
               Column
             </option>
@@ -66,6 +73,7 @@ function PageResults() {
             <option value="status">Status</option>
             {/* <option value="model and status">Model and Status</option> */}
             <option value="workflowRequestId">Request Id</option>
+            <option value="workflowName">Workflow Name</option>
           </select>
           <input
             className="input join-item input-bordered"
