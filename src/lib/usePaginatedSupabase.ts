@@ -74,7 +74,6 @@ function usePaginatedSupabase<T>(
         .from(tableName)
         .select()
         .range(0, pageSize - 1)
-      console.log(conditions)
       for (const condition of conditions) {
         switch (condition.operator) {
           case 'eq':

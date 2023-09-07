@@ -3,29 +3,53 @@ import { Link } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
 import { getAverage } from '~/lib/averager'
-import { AverageEvaluationData, DocWorkflowResult, EvaluationData } from 'Types/firebaseStructure'
+import { AverageEvaluationData, EvaluationData } from 'Types/firebaseStructure'
 import { ImSpinner9 } from 'react-icons/im'
 import { useDebounce } from 'react-use'
 import usePaginatedSupabase from '~/lib/usePaginatedSupabase'
-import { Json, Tables } from '~/supabase'
+import { Tables } from '~/supabase'
 
-function timestampToLocaleString(
-  ts: { _seconds: number; _nanoseconds: number },
-  locale: string = 'en-US',
-  options?: Intl.DateTimeFormatOptions,
-): string {
-  // const date = ts.toDate()
-  const date = new Date(ts._seconds * 1000 + ts._nanoseconds / 1000000)
+export function transformDateString(inputDate: string): string {
+  try {
+    // Split the input date string into parts
+    const [datePart, timePart] = inputDate.split('T')
+    const [year, month, day] = datePart.split('-')
+    const [time, timeZone] = timePart.split('+')[0].split('.')
+    const [hour, minute, second] = time.split(':')
 
-  return date.toLocaleString(locale, {
-    weekday: 'long', // e.g., "Sunday"
-    year: 'numeric', // e.g., "2023"
-    month: 'long', // e.g., "August"
-    day: 'numeric', // e.g., "1"
-    hour: '2-digit', // e.g., "02"
-    minute: '2-digit', // e.g., "15"
-    ...options, // Allow custom options
-  })
+    // Convert month from numeric to its full name
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+    const monthName = months[parseInt(month, 10) - 1]
+
+    // Convert the 24-hour time to 12-hour format
+    const ampm = parseInt(hour, 10) < 12 ? 'AM' : 'PM'
+    const formattedHour = (parseInt(hour, 10) % 12).toString().padStart(2, '0')
+
+    // Assemble the transformed date string
+    const transformedDate = `${monthName} ${parseInt(
+      day,
+      10,
+    )}, ${year} at ${formattedHour}:${minute} ${ampm}`
+
+    return transformedDate
+  } catch (error) {
+    // Handle invalid date format or other errors
+    console.error('Error transforming date:', error)
+    return 'Invalid Date'
+  }
 }
 
 const useSupabaseResults = (column: string, substring: string) => {
@@ -39,25 +63,28 @@ const useSupabaseResults = (column: string, substring: string) => {
   )
 
   const where = useMemo(() => {
-    let queryFilter = [
+    const queryFilter = [
       { column: 'docExists', operator: 'eq', value: true },
       { column: 'executorUserId', operator: 'eq', value: 'IVqAyQJR4ugRGR8qL9UuB809OX82' },
     ]
     if (column && debouncedSubstring) {
       queryFilter.push({ column: column, operator: 'ilike', value: '%' + debouncedSubstring + '%' })
+      return queryFilter
+    } else {
+      return queryFilter
     }
-    return queryFilter
-  }, [column, debouncedSubstring])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSubstring])
 
   const orders = useMemo(() => {
-    return []
+    return [{ column: 'createdTimestamp', direction: 'desc' }]
   }, [])
 
   const { items, loading, hasMore, loadMore } = usePaginatedSupabase<Tables<'workflow_results'>>(
     'workflow_results',
     10,
     where as { column: string; operator: 'eq' | 'ilike' | 'gte' | 'lte'; value: any }[],
-    orders,
+    orders as { column: string; direction: 'asc' | 'desc' }[],
   )
 
   return { items, hasMore, loadMore, loading }
@@ -141,7 +168,7 @@ function PageResults() {
                   </td>
                   <td>
                     <div className="w-36">
-                      {timestampToLocaleString(el.createdTimestamp as any)}
+                      {el.createdTimestamp ? transformDateString(el.createdTimestamp) : '-'}
                     </div>
                   </td>
                   <td>

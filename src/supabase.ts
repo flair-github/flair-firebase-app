@@ -9,7 +9,7 @@ export interface Database {
           averageEvaluationData: Json | null
           columnModel: Json | null
           completionTimestamp: Json | null
-          createdTimestamp: Json | null
+          createdTimestamp: string | null
           dagRunId: string | null
           docExists: boolean | null
           errorException: Json | null
@@ -17,7 +17,6 @@ export interface Database {
           evaluationData: Json | null
           executorUserId: string | null
           firestore_id: string | null
-          id: string
           model: string | null
           outputData: Json | null
           requestType: string | null
@@ -36,7 +35,7 @@ export interface Database {
           averageEvaluationData?: Json | null
           columnModel?: Json | null
           completionTimestamp?: Json | null
-          createdTimestamp?: Json | null
+          createdTimestamp?: string | null
           dagRunId?: string | null
           docExists?: boolean | null
           errorException?: Json | null
@@ -44,7 +43,6 @@ export interface Database {
           evaluationData?: Json | null
           executorUserId?: string | null
           firestore_id?: string | null
-          id: string
           model?: string | null
           outputData?: Json | null
           requestType?: string | null
@@ -63,7 +61,7 @@ export interface Database {
           averageEvaluationData?: Json | null
           columnModel?: Json | null
           completionTimestamp?: Json | null
-          createdTimestamp?: Json | null
+          createdTimestamp?: string | null
           dagRunId?: string | null
           docExists?: boolean | null
           errorException?: Json | null
@@ -71,7 +69,6 @@ export interface Database {
           evaluationData?: Json | null
           executorUserId?: string | null
           firestore_id?: string | null
-          id?: string
           model?: string | null
           outputData?: Json | null
           requestType?: string | null
