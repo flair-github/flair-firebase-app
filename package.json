@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
+    "@supabase/supabase-js": "^2.33.1",
     "axios": "^1.4.0",
     "daisyui": "^3.1.6",
     "firebase": "^9.23.0",

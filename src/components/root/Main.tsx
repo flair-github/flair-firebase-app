@@ -7,6 +7,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { atomUser, atomUserData } from '~/jotai/jotai'
 import { DocUser } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
+import SupabaseRouter from '../router/SupabaseRouter'
 
 function Main() {
   const [user, setUser] = useAtom(atomUser)
@@ -73,7 +74,11 @@ function Main() {
 
   return (
     <main>
-      <Router />
+      {import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_KEY ? (
+        <SupabaseRouter />
+      ) : (
+        <Router />
+      )}
     </main>
   )
 }
