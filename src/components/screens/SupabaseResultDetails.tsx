@@ -7,13 +7,15 @@ import { ImFilesEmpty } from 'react-icons/im'
 import { CodeBlock } from 'react-code-blocks'
 import { useParams } from 'react-router-dom'
 import useFirestoreDoc from '~/lib/useFirestoreDoc'
-import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
+import { AverageEvaluationData, DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineExpand } from 'react-icons/ai'
 import DetailModal from '../shared/DetailModal'
 import { WhereFilterOp } from 'firebase/firestore'
-import { timestampToLocaleString } from './LLMOutputs'
+import useSupabaseDoc from '~/lib/useSupabaseDoc'
+import { Json, Tables } from '~/supabase'
+import { transformDateString } from './SupabaseResults'
 
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
@@ -54,7 +56,7 @@ function getFilenameFromURL(urlString: string, defaultName: string): string {
 function ResultDetails() {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
   const { resultId } = useParams()
-  const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
+  const [data, loading, error] = useSupabaseDoc<Tables<'workflow_results'>>(
     'workflow_results',
     resultId as string,
   )
@@ -83,12 +85,12 @@ function ResultDetails() {
     return <></>
   }
 
-  const averageEval = data.averageEvaluationData
+  const averageEval = data.averageEvaluationData as AverageEvaluationData
 
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
-        <h1 className="text-3xl font-bold">{'Workflow Result'}</h1>
+        <h1 className="text-3xl font-bold">{'Workflow Result (Supabase)'}</h1>
         <div className="flex-1" />
         <a className="btn btn-disabled  gap-1" href="#" onClick={() => {}}>
           <FaShare />
@@ -121,7 +123,7 @@ function ResultDetails() {
         <div className="stat overflow-hidden">
           <div className="stat-title">Request Time</div>
           <div className="stat-value text-sm">
-            {timestampToLocaleString(data.createdTimestamp)}
+            {transformDateString(data.createdTimestamp as string)}
             {/* <div className="text-3xl">2023/06/25</div>
             <div className="stat-desc text-lg font-bold">10:45:30</div> */}
           </div>
