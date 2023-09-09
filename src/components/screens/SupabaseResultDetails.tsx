@@ -6,16 +6,15 @@ import { PiFileCsvFill } from 'react-icons/pi'
 import { ImFilesEmpty } from 'react-icons/im'
 import { CodeBlock } from 'react-code-blocks'
 import { useParams } from 'react-router-dom'
-import useFirestoreDoc from '~/lib/useFirestoreDoc'
-import { AverageEvaluationData, DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
-import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
+import { AverageEvaluationData, DocLLMOutput } from 'Types/firebaseStructure'
 import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineExpand } from 'react-icons/ai'
 import DetailModal from '../shared/DetailModal'
-import { WhereFilterOp } from 'firebase/firestore'
 import useSupabaseDoc from '~/lib/useSupabaseDoc'
-import { Json, Tables } from '~/supabase'
+import { Tables } from '~/supabase'
 import { transformDateString } from './SupabaseResults'
+import usePaginatedSupabase from '~/lib/usePaginatedSupabase'
+import { Timestamp } from 'firebase/firestore'
 
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
@@ -61,31 +60,39 @@ function ResultDetails() {
     resultId as string,
   )
   const [columnName, setColumnName] = useState<string>()
-  const where: [string, WhereFilterOp, string][] = useMemo(
+  const where = useMemo(
     () => [
-      ['workflowResultId', '==', resultId as string],
-      ...(columnName
-        ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
-        : []),
+      { column: 'workflowResultId', operator: 'eq', value: resultId },
+      ...(columnName ? [{ column: 'columnName', operator: 'eq', value: columnName }] : []),
     ],
     [resultId, columnName],
   )
+
+  const orders = useMemo(() => {
+    return [{ column: 'createdTimestamp', direction: 'desc' }]
+  }, [])
 
   const {
     items,
     loading: outputLoading,
     hasMore,
     loadMore,
-  } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, where)
+  } = usePaginatedSupabase<Tables<'llm_outputs'>>(
+    'llm_outputs',
+    10,
+    where as { column: string; operator: 'eq' | 'ilike' | 'gte' | 'lte'; value: any }[],
+    orders as { column: string; direction: 'asc' | 'desc' }[],
+  )
 
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
+  const [selectedRow, setSelectedRow] = useState<Tables<'llm_outputs'>>()
 
   if (!data) {
     return <></>
   }
 
   const averageEval = data.averageEvaluationData as AverageEvaluationData
+  console.log(data)
 
   return (
     <div className="container mx-auto p-4">
@@ -238,9 +245,11 @@ function ResultDetails() {
                         <div className="line-clamp-3 h-14 w-96">{item.output}</div>
                       </td>
                       <td>
-                        <div className="line-clamp-3 h-14 w-36 break-words">{item.answer}</div>
+                        <div className="line-clamp-3 h-14 w-36 break-words">
+                          {item.answer?.toString()}
+                        </div>
                       </td>
-                      <td>{item.latency.toFixed(2) + ' seconds'}</td>
+                      <td>{item.latency!.toFixed(2) + ' seconds'}</td>
                       <td>
                         <div className="w-32">
                           <button
@@ -386,7 +395,23 @@ function ResultDetails() {
         </div>
       )}
       {selectedRow ? (
-        <DetailModal key={selectedRow?.id} open={isOpen} setOpen={setIsOpen} item={selectedRow} />
+        <DetailModal
+          key={selectedRow?.id}
+          open={isOpen}
+          setOpen={setIsOpen}
+          item={
+            {
+              ...selectedRow,
+              createdTimestamp: Timestamp.fromDate(new Date(selectedRow.createdTimestamp!)),
+              updatedTimestamp: selectedRow.updatedTimestamp
+                ? new Timestamp(
+                    (selectedRow.updatedTimestamp as any)._seconds,
+                    (selectedRow.updatedTimestamp as any)._nanoseconds,
+                  )
+                : null,
+            } as DocLLMOutput
+          }
+        />
       ) : null}
     </div>
   )

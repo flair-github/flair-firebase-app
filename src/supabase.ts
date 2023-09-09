@@ -3,6 +3,69 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export interface Database {
   public: {
     Tables: {
+      llm_outputs: {
+        Row: {
+          answer: Json | null
+          columnName: string | null
+          columnPrompt: string | null
+          context: string | null
+          createdTimestamp: string | null
+          dataSourceName: string | null
+          docExists: boolean | null
+          executorUserId: string | null
+          firestore_id: string | null
+          id: string | null
+          input: string | null
+          instruction: string | null
+          latency: number | null
+          output: string | null
+          updatedTimestamp: Json | null
+          workflowId: string | null
+          workflowRequestId: string | null
+          workflowResultId: string | null
+        }
+        Insert: {
+          answer?: Json | null
+          columnName?: string | null
+          columnPrompt?: string | null
+          context?: string | null
+          createdTimestamp?: string | null
+          dataSourceName?: string | null
+          docExists?: boolean | null
+          executorUserId?: string | null
+          firestore_id?: string | null
+          id?: string | null
+          input?: string | null
+          instruction?: string | null
+          latency?: number | null
+          output?: string | null
+          updatedTimestamp?: Json | null
+          workflowId?: string | null
+          workflowRequestId?: string | null
+          workflowResultId?: string | null
+        }
+        Update: {
+          answer?: Json | null
+          columnName?: string | null
+          columnPrompt?: string | null
+          context?: string | null
+          createdTimestamp?: string | null
+          dataSourceName?: string | null
+          docExists?: boolean | null
+          executorUserId?: string | null
+          firestore_id?: string | null
+          id?: string | null
+          input?: string | null
+          instruction?: string | null
+          latency?: number | null
+          output?: string | null
+          updatedTimestamp?: Json | null
+          workflowId?: string | null
+          workflowRequestId?: string | null
+          workflowResultId?: string | null
+        }
+        Relationships: []
+      }
       workflow_results: {
         Row: {
           added_by: string | null
@@ -17,6 +80,7 @@ export interface Database {
           evaluationData: Json | null
           executorUserId: string | null
           firestore_id: string | null
+          id: string
           model: string | null
           outputData: Json | null
           requestType: string | null
@@ -43,6 +107,7 @@ export interface Database {
           evaluationData?: Json | null
           executorUserId?: string | null
           firestore_id?: string | null
+          id: string
           model?: string | null
           outputData?: Json | null
           requestType?: string | null
@@ -69,6 +134,7 @@ export interface Database {
           evaluationData?: Json | null
           executorUserId?: string | null
           firestore_id?: string | null
+          id?: string
           model?: string | null
           outputData?: Json | null
           requestType?: string | null
