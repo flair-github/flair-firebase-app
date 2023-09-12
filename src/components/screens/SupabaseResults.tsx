@@ -110,6 +110,7 @@ function PageResults() {
             <option value="status">Status</option>
             {/* <option value="model and status">Model and Status</option> */}
             <option value="workflowRequestId">Request Id</option>
+            <option value="workflowName">Workflow Name</option>
           </select>
           <input
             className="input join-item input-bordered"

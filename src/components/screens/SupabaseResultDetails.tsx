@@ -1,4 +1,4 @@
-import React, { useMemo, SyntheticEvent, useEffect } from 'react'
+import React, { useMemo } from 'react'
 import { useState } from 'react'
 // import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
@@ -6,16 +6,15 @@ import { PiFileCsvFill } from 'react-icons/pi'
 import { ImFilesEmpty } from 'react-icons/im'
 import { CodeBlock } from 'react-code-blocks'
 import { useParams } from 'react-router-dom'
-import useFirestoreDoc from '~/lib/useFirestoreDoc'
-import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
-import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
+import { AverageEvaluationData, DocLLMOutput } from 'Types/firebaseStructure'
 import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineExpand } from 'react-icons/ai'
 import DetailModal from '../shared/DetailModal'
-import { Firestore, Timestamp, WhereFilterOp } from 'firebase/firestore'
-import { timestampToLocaleString } from './LLMOutputs'
-import { v4 as uuidv4 } from 'uuid'
-import { db } from '../../lib/firebase'
+import useSupabaseDoc from '~/lib/useSupabaseDoc'
+import { Tables } from '~/supabase'
+import { transformDateString } from './SupabaseResults'
+import usePaginatedSupabase from '~/lib/usePaginatedSupabase'
+import { Timestamp } from 'firebase/firestore'
 
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
@@ -53,80 +52,58 @@ function getFilenameFromURL(urlString: string, defaultName: string): string {
 //     .join(' ') // Join the words together with spaces
 // }
 
-function ResultDetails({ id }: { id?: string }) {
+function ResultDetails() {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
-  const resultId =
-    id ?? window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
-
-  const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
+  const { resultId } = useParams()
+  const [data, loading, error] = useSupabaseDoc<Tables<'workflow_results'>>(
     'workflow_results',
     resultId as string,
   )
   const [columnName, setColumnName] = useState<string>()
-  const where: [string, WhereFilterOp, string][] = useMemo(
+  const where = useMemo(
     () => [
-      ['workflowResultId', '==', resultId as string],
-      ...(columnName
-        ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
-        : []),
+      { column: 'workflowResultId', operator: 'eq', value: resultId },
+      ...(columnName ? [{ column: 'columnName', operator: 'eq', value: columnName }] : []),
     ],
     [resultId, columnName],
   )
+
+  const orders = useMemo(() => {
+    return [{ column: 'createdTimestamp', direction: 'desc' }]
+  }, [])
 
   const {
     items,
     loading: outputLoading,
     hasMore,
     loadMore,
-  } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, where)
+  } = usePaginatedSupabase<Tables<'llm_outputs'>>(
+    'llm_outputs',
+    10,
+    where as { column: string; operator: 'eq' | 'ilike' | 'gte' | 'lte'; value: any }[],
+    orders as { column: string; direction: 'asc' | 'desc' }[],
+  )
 
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
-  const [shared, setShared] = useState(false)
-  useEffect(() => {
-    setShared(Boolean(data?.shared_token))
-  }, [data])
-  console.log({ resultId, data })
+  const [selectedRow, setSelectedRow] = useState<Tables<'llm_outputs'>>()
 
   if (!data) {
     return <></>
   }
 
-  const averageEval = data.averageEvaluationData
-
-  const shareHandler = async (event: SyntheticEvent<HTMLButtonElement, MouseEvent>) => {
-    try {
-      event.preventDefault()
-      // Generate a UUID as shared_token
-      const sharedToken = uuidv4()
-      // Calculate the expiration timestamp (3 days from now)
-      const expirationTimestamp = new Date()
-      expirationTimestamp.setDate(expirationTimestamp.getDate() + 3)
-
-      const documentRef = db.collection('workflow_results').doc(resultId as string)
-      await documentRef.update({
-        shared_token: sharedToken,
-        shared_expiry: Timestamp.fromDate(expirationTimestamp),
-      })
-      console.log('Document updated successfully.')
-      setShared(true)
-    } catch (err) {
-      console.error('Error updating document:', err)
-    }
-  }
+  const averageEval = data.averageEvaluationData as AverageEvaluationData
+  console.log(data)
 
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
-        <h1 className="text-3xl font-bold">{'Workflow Result'}</h1>
+        <h1 className="text-3xl font-bold">{'Workflow Result (Supabase)'}</h1>
         <div className="flex-1" />
-        <button
-          disabled={shared}
-          className={'btn gap-1 ' + (shared ? 'btn-disabled' : '')}
-          onClick={shareHandler}>
+        <a className="btn btn-disabled  gap-1" href="#" onClick={() => {}}>
           <FaShare />
-          <div>{shared ? 'Shared' : 'Share'}</div>
-        </button>
+          <div>Share</div>
+          <div className="text-xs">(soon)</div>
+        </a>
       </div>
       <header className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat overflow-hidden">
@@ -153,7 +130,7 @@ function ResultDetails({ id }: { id?: string }) {
         <div className="stat overflow-hidden">
           <div className="stat-title">Request Time</div>
           <div className="stat-value text-sm">
-            {timestampToLocaleString(data.createdTimestamp)}
+            {transformDateString(data.createdTimestamp as string)}
             {/* <div className="text-3xl">2023/06/25</div>
             <div className="stat-desc text-lg font-bold">10:45:30</div> */}
           </div>
@@ -268,9 +245,11 @@ function ResultDetails({ id }: { id?: string }) {
                         <div className="line-clamp-3 h-14 w-96">{item.output}</div>
                       </td>
                       <td>
-                        <div className="line-clamp-3 h-14 w-36 break-words">{item.answer}</div>
+                        <div className="line-clamp-3 h-14 w-36 break-words">
+                          {item.answer?.toString()}
+                        </div>
                       </td>
-                      <td>{item.latency.toFixed(2) + ' seconds'}</td>
+                      <td>{item.latency!.toFixed(2) + ' seconds'}</td>
                       <td>
                         <div className="w-32">
                           <button
@@ -416,7 +395,23 @@ function ResultDetails({ id }: { id?: string }) {
         </div>
       )}
       {selectedRow ? (
-        <DetailModal key={selectedRow?.id} open={isOpen} setOpen={setIsOpen} item={selectedRow} />
+        <DetailModal
+          key={selectedRow?.id}
+          open={isOpen}
+          setOpen={setIsOpen}
+          item={
+            {
+              ...selectedRow,
+              createdTimestamp: Timestamp.fromDate(new Date(selectedRow.createdTimestamp!)),
+              updatedTimestamp: selectedRow.updatedTimestamp
+                ? new Timestamp(
+                    (selectedRow.updatedTimestamp as any)._seconds,
+                    (selectedRow.updatedTimestamp as any)._nanoseconds,
+                  )
+                : null,
+            } as DocLLMOutput
+          }
+        />
       ) : null}
     </div>
   )

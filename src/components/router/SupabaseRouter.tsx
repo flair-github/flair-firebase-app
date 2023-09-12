@@ -12,7 +12,7 @@ const IndexScreen = lazy(() => import('~/components/screens/Index'))
 const Page404Screen = lazy(() => import('~/components/screens/404'))
 const FlowEditorScreen = lazy(() => import('~/components/screens/FlowEditor'))
 const ResultsScreen = lazy(() => import('~/components/screens/SupabaseResults'))
-const ResultDetailsScreen = lazy(() => import('~/components/screens/ResultDetails'))
+const ResultDetailsScreen = lazy(() => import('~/components/screens/SupabaseResultDetails'))
 const LLMOutputsScreen = lazy(() => import('~/components/screens/LLMOutputs'))
 const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
 const TemplatesScreen = lazy(() => import('~/components/screens/Templates'))
@@ -117,6 +117,10 @@ const InnerRouter = () => {
         {
           index: true,
           element: <ResultsScreen />,
+        },
+        {
+          path: 'result-details/:resultId',
+          element: <ResultDetailsScreen />,
         },
       ],
     },
