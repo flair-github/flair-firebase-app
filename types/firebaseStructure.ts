@@ -102,6 +102,8 @@ export interface DocWorkflowResult {
   workflowRequestId: string
   workflowResultId: string
   userConfig: string
+  shared_token: string
+  shared_expiry: string
   docExists: boolean
   requestType: null
   model: Model

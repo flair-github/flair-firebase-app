@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, SyntheticEvent, useEffect } from 'react'
 import { useState } from 'react'
 // import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
@@ -12,8 +12,10 @@ import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineExpand } from 'react-icons/ai'
 import DetailModal from '../shared/DetailModal'
-import { WhereFilterOp } from 'firebase/firestore'
+import { Firestore, Timestamp, WhereFilterOp } from 'firebase/firestore'
 import { timestampToLocaleString } from './LLMOutputs'
+import { v4 as uuidv4 } from 'uuid'
+import { db } from '../../lib/firebase'
 
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
@@ -51,9 +53,11 @@ function getFilenameFromURL(urlString: string, defaultName: string): string {
 //     .join(' ') // Join the words together with spaces
 // }
 
-function ResultDetails() {
+function ResultDetails({ id }: { id?: string }) {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
-  const { resultId } = useParams()
+  const resultId =
+    id ?? window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
+
   const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
     'workflow_results',
     resultId as string,
@@ -78,6 +82,11 @@ function ResultDetails() {
 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
+  const [shared, setShared] = useState(false)
+  useEffect(() => {
+    setShared(Boolean(data?.shared_token))
+  }, [data])
+  console.log({ resultId, data })
 
   if (!data) {
     return <></>
@@ -85,16 +94,39 @@ function ResultDetails() {
 
   const averageEval = data.averageEvaluationData
 
+  const shareHandler = async (event: SyntheticEvent<HTMLButtonElement, MouseEvent>) => {
+    try {
+      event.preventDefault()
+      // Generate a UUID as shared_token
+      const sharedToken = uuidv4()
+      // Calculate the expiration timestamp (3 days from now)
+      const expirationTimestamp = new Date()
+      expirationTimestamp.setDate(expirationTimestamp.getDate() + 3)
+
+      const documentRef = db.collection('workflow_results').doc(resultId as string)
+      await documentRef.update({
+        shared_token: sharedToken,
+        shared_expiry: Timestamp.fromDate(expirationTimestamp),
+      })
+      console.log('Document updated successfully.')
+      setShared(true)
+    } catch (err) {
+      console.error('Error updating document:', err)
+    }
+  }
+
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
         <h1 className="text-3xl font-bold">{'Workflow Result'}</h1>
         <div className="flex-1" />
-        <a className="btn btn-disabled  gap-1" href="#" onClick={() => {}}>
+        <button
+          disabled={shared}
+          className={'btn gap-1 ' + (shared ? 'btn-disabled' : '')}
+          onClick={shareHandler}>
           <FaShare />
-          <div>Share</div>
-          <div className="text-xs">(soon)</div>
-        </a>
+          <div>{shared ? 'Shared' : 'Share'}</div>
+        </button>
       </div>
       <header className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat overflow-hidden">

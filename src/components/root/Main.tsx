@@ -8,6 +8,7 @@ import { atomUser, atomUserData } from '~/jotai/jotai'
 import { DocUser } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import SupabaseRouter from '../router/SupabaseRouter'
+import SharedResult from '../screens/SharedResult'
 
 function Main() {
   const [user, setUser] = useAtom(atomUser)
@@ -71,6 +72,11 @@ function Main() {
       unsub()
     }
   }, [setUserData, userId])
+
+  const shared_token = new URLSearchParams(window.location.search).get('shared_token')
+  if (shared_token) {
+    return <SharedResult shared_token={shared_token} />
+  }
 
   return (
     <main>
