@@ -1,22 +1,13 @@
 import { useAtomValue } from 'jotai'
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Outlet, RouteObject, useNavigate, useRoutes } from 'react-router-dom'
-import { atomUser, atomUserData } from '~/jotai/jotai'
-import LoginScreen from '../screens/Login'
-import PageLoader from '../screens/Loader'
+import { atomUserData } from '~/jotai/jotai'
 import { useAuth } from '~/lib/firebase'
 
 const Loading = () => <p className="h-full w-full p-4 text-center">Loading...</p>
 
-const IndexScreen = lazy(() => import('~/components/screens/Index'))
-const Page404Screen = lazy(() => import('~/components/screens/404'))
-const FlowEditorScreen = lazy(() => import('~/components/screens/FlowEditor'))
 const ResultsScreen = lazy(() => import('~/components/screens/SupabaseResults'))
 const ResultDetailsScreen = lazy(() => import('~/components/screens/SupabaseResultDetails'))
-const LLMOutputsScreen = lazy(() => import('~/components/screens/LLMOutputs'))
-const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
-const TemplatesScreen = lazy(() => import('~/components/screens/Templates'))
-const TemplateWizardScreen = lazy(() => import('~/components/screens/TemplateWizard'))
 
 function Layout() {
   const userData = useAtomValue(atomUserData)
@@ -55,7 +46,7 @@ function Layout() {
           </ul> */}
         </div>
         <div className="flex-none">
-          <div className="dropdown dropdown-end">
+          <div className="dropdown-end dropdown">
             <label tabIndex={0} className="btn btn-ghost flex px-2 font-normal normal-case">
               <div>Debug</div>
             </label>
@@ -107,8 +98,6 @@ function Layout() {
 }
 
 const InnerRouter = () => {
-  const user = useAtomValue(atomUser)
-
   const routes: RouteObject[] = [
     {
       path: '/',
@@ -126,14 +115,6 @@ const InnerRouter = () => {
     },
   ]
   const element = useRoutes(routes)
-
-  if (user === undefined) {
-    return <PageLoader />
-  }
-
-  if (user === null) {
-    return <LoginScreen />
-  }
 
   return (
     <div>
