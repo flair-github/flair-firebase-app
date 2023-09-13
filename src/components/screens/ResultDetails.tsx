@@ -10,12 +10,13 @@ import useFirestoreDoc from '~/lib/useFirestoreDoc'
 import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner9 } from 'react-icons/im'
-import { AiOutlineExpand } from 'react-icons/ai'
-import DetailModal from '../shared/DetailModal'
+import { AiOutlineCopy, AiOutlineEdit, AiOutlineExpand } from 'react-icons/ai'
 import { Firestore, Timestamp, WhereFilterOp } from 'firebase/firestore'
 import { timestampToLocaleString } from './LLMOutputs'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '../../lib/firebase'
+import { useCopyToClipboard } from 'react-use'
+import DetailModal from '../shared/DetailModal'
 
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
@@ -82,11 +83,12 @@ function ResultDetails({ id }: { id?: string }) {
 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
-  const [shared, setShared] = useState(false)
+  const [sharedToken, setSharedToken] = useState('')
   useEffect(() => {
-    setShared(Boolean(data?.shared_token))
+    setSharedToken(data?.shared_token ?? '')
   }, [data])
-  console.log({ resultId, data })
+
+  const [_state, copyToClipboard] = useCopyToClipboard()
 
   if (!data) {
     return <></>
@@ -98,18 +100,18 @@ function ResultDetails({ id }: { id?: string }) {
     try {
       event.preventDefault()
       // Generate a UUID as shared_token
-      const sharedToken = uuidv4()
+      const newSharedToken = uuidv4()
       // Calculate the expiration timestamp (3 days from now)
       const expirationTimestamp = new Date()
       expirationTimestamp.setDate(expirationTimestamp.getDate() + 3)
 
       const documentRef = db.collection('workflow_results').doc(resultId as string)
       await documentRef.update({
-        shared_token: sharedToken,
+        shared_token: newSharedToken,
         shared_expiry: Timestamp.fromDate(expirationTimestamp),
       })
       console.log('Document updated successfully.')
-      setShared(true)
+      setSharedToken(newSharedToken)
     } catch (err) {
       console.error('Error updating document:', err)
     }
@@ -120,15 +122,27 @@ function ResultDetails({ id }: { id?: string }) {
       <div className="mb-2 flex items-center ">
         <h1 className="text-3xl font-bold">{'Workflow Result'}</h1>
         <div className="flex-1" />
-        <button
-          disabled={shared}
-          className={'btn gap-1 ' + (shared ? 'btn-disabled' : '')}
-          onClick={shareHandler}>
-          <FaShare />
-          <div>{shared ? 'Shared' : 'Share'}</div>
-        </button>
+        {sharedToken ? (
+          <div className="join flex w-96 items-center divide-x divide-gray-300 border bg-white shadow-sm">
+            <h5 className="truncate px-3">
+              {window.location.origin + '?shared_token=' + sharedToken}
+            </h5>
+            <button
+              className="btn btn-outline join-item border-0"
+              onClick={() =>
+                copyToClipboard(window.location.origin + '?shared_token=' + sharedToken)
+              }>
+              <AiOutlineCopy className="h-6 w-6" />
+            </button>
+          </div>
+        ) : (
+          <button className="btn gap-1" onClick={shareHandler}>
+            <FaShare />
+            <div>{'Share'}</div>
+          </button>
+        )}
       </div>
-      <header className="stats mb-4 w-full grid-cols-4 shadow">
+      <header className="stats mb-4 w-full grid-cols-4 border shadow">
         <div className="stat overflow-hidden">
           <div className="stat-title">Model</div>
           <div className="stat-value">{data.model}</div>
@@ -149,7 +163,7 @@ function ResultDetails({ id }: { id?: string }) {
           {/* <div className="stat-desc">4% more than last run</div> */}
         </div>
       </header>
-      <header className="stats mb-4 w-full grid-cols-4 shadow">
+      <header className="stats mb-4 w-full grid-cols-4 border shadow">
         <div className="stat overflow-hidden">
           <div className="stat-title">Request Time</div>
           <div className="stat-value text-sm">
