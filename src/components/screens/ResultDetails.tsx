@@ -59,6 +59,8 @@ function ResultDetails({ id }: { id?: string }) {
   const resultId =
     id ?? window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
 
+  const [sharedToken, setSharedToken] = useState('')
+
   const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
     'workflow_results',
     resultId as string,
@@ -66,7 +68,9 @@ function ResultDetails({ id }: { id?: string }) {
   const [columnName, setColumnName] = useState<string>()
   const where: [string, WhereFilterOp, string][] = useMemo(
     () => [
-      ['workflowResultId', '==', resultId as string],
+      .../* sharedToken
+        ? ([['shared_token', '==', sharedToken]] as [string, WhereFilterOp, string][])
+        : */ ([['workflowResultId', '==', resultId]] as [string, WhereFilterOp, string][]),
       ...(columnName
         ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
         : []),
@@ -83,39 +87,53 @@ function ResultDetails({ id }: { id?: string }) {
 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
-  const [sharedToken, setSharedToken] = useState('')
+
+  const [_state, copyToClipboard] = useCopyToClipboard()
+  const [sharing, setSharing] = useState(false)
+
   useEffect(() => {
     setSharedToken(data?.shared_token ?? '')
   }, [data])
-
-  const [_state, copyToClipboard] = useCopyToClipboard()
 
   if (!data) {
     return <></>
   }
 
   const averageEval = data.averageEvaluationData
-
   const shareHandler = async (event: SyntheticEvent<HTMLButtonElement, MouseEvent>) => {
     try {
+      setSharing(true)
       event.preventDefault()
       // Generate a UUID as shared_token
       const newSharedToken = uuidv4()
-      // Calculate the expiration timestamp (3 days from now)
-      const expirationTimestamp = new Date()
-      expirationTimestamp.setDate(expirationTimestamp.getDate() + 3)
 
+      // Query preparation
       const documentRef = db.collection('workflow_results').doc(resultId as string)
+      const llmOutputsQuerySnapshot = await db
+        .collection('llm_outputs')
+        .where('workflowResultId', '==', resultId)
+        .get()
+      const batch = db.batch()
+      llmOutputsQuerySnapshot.forEach(doc => {
+        batch.update(doc.ref, { shared_token: sharedToken })
+      })
+
+      // Commit
       await documentRef.update({
         shared_token: newSharedToken,
-        shared_expiry: Timestamp.fromDate(expirationTimestamp),
       })
+      await batch.commit()
+
       console.log('Document updated successfully.')
       setSharedToken(newSharedToken)
     } catch (err) {
       console.error('Error updating document:', err)
+    } finally {
+      setSharing(false)
     }
   }
+
+  console.log(items)
 
   return (
     <div className="container mx-auto p-4">
@@ -136,9 +154,12 @@ function ResultDetails({ id }: { id?: string }) {
             </button>
           </div>
         ) : (
-          <button className="btn gap-1" onClick={shareHandler}>
-            <FaShare />
-            <div>{'Share'}</div>
+          <button
+            disabled={sharing}
+            className={'btn gap-2 ' + (sharing && 'btn-disabled')}
+            onClick={shareHandler}>
+            {sharing ? <ImSpinner9 className="animate-spin" /> : <FaShare />}
+            <div>{sharing ? 'Preparing..' : 'Share'}</div>
           </button>
         )}
       </div>
