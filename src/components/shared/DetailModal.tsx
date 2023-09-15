@@ -23,7 +23,7 @@ const makeTextReadable = (inputText: string): string => {
     .join('\n')
 }
 
-async function copyToClipboard(text: string): Promise<void> {
+export async function copyToClipboard(text: string): Promise<void> {
   try {
     await navigator.clipboard.writeText(text)
     console.log('Text copied to clipboard')

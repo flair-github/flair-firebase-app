@@ -1,36 +1,34 @@
-import React, { type MutableRefObject, useEffect, useState } from 'react'
-import { GrFormClose } from 'react-icons/gr'
+import React from 'react'
+import { useEffect, useState } from 'react'
 import { Handle, Position } from 'reactflow'
-import { type NodeData, nodeContents } from './Registry'
+import { nodeContents, type NodeData } from './Registry'
 import { AiFillApi } from 'react-icons/ai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
 
-export interface DataSourceAPINodeContent {
-  nodeType: 'data-source-api'
-  fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
+export interface DataRetrieverApiNodeContent {
+  nodeType: 'data-retriever-api'
   url: string
   method: string
   headers: string
   body: string
 }
 
-export const dataSourceAPIDefaultContent: DataSourceAPINodeContent = {
-  nodeType: 'data-source-api',
-  fileType: 'csv',
+export const dataRetrieverDefaultContent: DataRetrieverApiNodeContent = {
+  nodeType: 'data-retriever-api',
   url: '',
   method: 'GET',
   headers: '',
   body: '',
 }
 
-export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceAPINodeContent>(
-    dataSourceAPIDefaultContent,
+export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
+  const [nodeContent, setNodeContent] = useState<DataRetrieverApiNodeContent>(
+    dataRetrieverDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-api') {
+    if (data.initialContents.nodeType === 'data-retriever-api') {
       setNodeContent({
         ...data.initialContents,
       })
@@ -39,7 +37,7 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
 
   // Copy node data to cache
   useEffect(() => {
-    const cache: DataSourceAPINodeContent = {
+    const cache: DataRetrieverApiNodeContent = {
       ...nodeContent,
     }
 
@@ -51,29 +49,12 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
       style={{
         borderWidth: '1px',
         borderColor: 'black',
-        borderRadius: '6px',
+        borderRadius: '5px',
         width: 400,
       }}
-      className="bg-purple-50">
-      <NodeHeader Icon={AiFillApi} title="Source: API" color="purple" nodeId={data.nodeId} />
+      className="bg-orange-50">
+      <NodeHeader Icon={AiFillApi} title="Data Retriever API" color="orange" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
-        <div className="mb-2 mt-1">
-          <label className="label">
-            <span className="font-semibold">File Type</span>
-          </label>
-          <select
-            className="max-w-xs select w-full border-black "
-            onChange={e => {
-              const newVal = e.target.value as DataSourceAPINodeContent['fileType']
-              setNodeContent(prev => ({ ...prev, fileType: newVal }))
-            }}
-            value={nodeContent.fileType}>
-            <option value={'txt' satisfies DataSourceAPINodeContent['fileType']}>txt</option>
-            <option value={'csv' satisfies DataSourceAPINodeContent['fileType']}>csv</option>
-            <option value={'mp3' satisfies DataSourceAPINodeContent['fileType']}>mp3</option>
-            <option value={'pdf' satisfies DataSourceAPINodeContent['fileType']}>pdf</option>
-          </select>
-        </div>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-semibold">URL</span>
@@ -132,18 +113,26 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
           />
         </div>
       </section>
-      {!noHandle && (
-        <Handle
-          type="source"
-          position={Position.Right}
-          id="out"
-          style={{
-            width: 16,
-            height: 16,
-            right: -8,
-          }}
-        />
-      )}
+      <Handle
+        type="target"
+        position={Position.Left}
+        id="in"
+        style={{
+          width: 16,
+          height: 16,
+          left: -8,
+        }}
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="out"
+        style={{
+          width: 16,
+          height: 16,
+          right: -8,
+        }}
+      />
     </div>
   )
 }

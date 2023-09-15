@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { nodeContents, type NodeData } from './Registry'
 import { FaCloudUploadAlt } from 'react-icons/fa'
 import { useDropzone } from 'react-dropzone'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataSourceLocalFilesNodeContent {
   nodeType: 'data-source-local-files'
@@ -48,20 +49,22 @@ export const DataSourceLocalFilesNode = ({
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
         width: 400,
-      }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-purple-200 px-5 py-3">
-        <FaCloudUploadAlt className="h-7 w-7" />
-        <h4 className="ml-3 grow">Data Source: Local Files</h4>
-      </header>
+      }}
+      className="bg-purple-50">
+      <NodeHeader
+        Icon={FaCloudUploadAlt}
+        title="Source: Local Files"
+        color="purple"
+        nodeId={data.nodeId}
+      />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">File Type</span>
+            <span className="font-semibold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -78,7 +81,7 @@ export const DataSourceLocalFilesNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Files</span>
+            <span className="font-semibold">Files</span>
           </label>
           <section className="container">
             <div {...getRootProps()} className="mb-2 border-2 border-dashed bg-slate-100 p-4">

@@ -2,6 +2,7 @@ import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface EvaluatorNodeContent {
   nodeType: 'evaluator'
@@ -31,38 +32,13 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
         width: 400,
-      }}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="in-ai-data"
-        style={{
-          top: 82,
-          width: 16,
-          height: 16,
-          left: -8,
-        }}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="in-truth-data"
-        style={{
-          top: 115,
-          width: 16,
-          height: 16,
-          left: -8,
-        }}
-      />
-      <header className="mb-4 flex items-center justify-between rounded-t-md bg-pink-200 px-5 py-3">
-        <div className="fw-bold">Evaluator</div>
-        <img src="/images/powered-by-flair.png" width={133} height={24} />
-      </header>
+      }}
+      className="bg-pink-50">
+      <NodeHeader title="Evaluator" color="pink" withFlair nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-4 flex">
           <div className="flex-1">
@@ -75,7 +51,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="my-1">
           <label className="label">
-            <span className="label-text">Strategy</span>
+            <span className="font-semibold">Strategy</span>
           </label>
           <select
             className="max-w-xs select w-full border-black"
@@ -93,11 +69,33 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
         </div>
       </section>
       <Handle
+        type="target"
+        position={Position.Left}
+        id="in-ai-data"
+        style={{
+          top: 94,
+          width: 16,
+          height: 16,
+          left: -8,
+        }}
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+        id="in-truth-data"
+        style={{
+          top: 126,
+          width: 16,
+          height: 16,
+          left: -8,
+        }}
+      />
+      <Handle
         type="source"
         position={Position.Right}
         id="out"
         style={{
-          top: 82,
+          top: 94,
           width: 16,
           height: 16,
           right: -8,

@@ -53,11 +53,8 @@ export interface DocUser extends DocRoot {
 export interface DocWorkflow extends DocRoot {
   /** Document Id */
   workflowId: string
-
   ownerUserId: string
-
   lastSaveTimestamp: Timestamp
-
   workflowTitle: string
   frontendConfig: string
 }
@@ -100,16 +97,20 @@ export interface DocLLMOutput {
 
 export interface DocWorkflowResult {
   workflowId: string
+  workflowName: string
   executorUserId: string
   workflowRequestId: string
   workflowResultId: string
   userConfig: string
+  shared_token: string
+  shared_expiry: string
   docExists: boolean
   requestType: null
   model: Model
   averageEvaluationData: AverageEvaluationData
   evaluationData: EvaluationData
   resultData: ResultData
+  outputData: ResultData
   updatedTimestamp: Timestamp
   createdTimestamp: Timestamp
   completionTimestamp: Timestamp

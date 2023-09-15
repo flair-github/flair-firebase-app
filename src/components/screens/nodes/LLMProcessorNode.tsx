@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents, jotaiAllowInteraction } from './Registry'
 import { v4 } from 'uuid'
 import { useSetAtom } from 'jotai'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 type ColumnContent =
   | {
@@ -83,29 +84,13 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
         width: 800,
-      }}>
-      {!noHandle && (
-        <Handle
-          type="target"
-          position={Position.Left}
-          id="in"
-          style={{
-            width: 16,
-            height: 16,
-            left: -8,
-          }}
-        />
-      )}
-
-      <header className="mb-4 flex items-center justify-between rounded-t-md bg-blue-200 px-5 py-3">
-        <div className="fw-bold">LLM Processor</div>
-        <img src="/images/powered-by-flair.png" width={133} height={24} />
-      </header>
+      }}
+      className="bg-blue-50">
+      <NodeHeader title="LLM Processor" color="blue" withFlair nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-1 flex">
           {/* Col */}
@@ -194,7 +179,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Column Name */}
                 <label className="label">
-                  <span className="label-text">Column Name</span>
+                  <span className="font-semibold">Column Name</span>
                 </label>
                 <input
                   type="text"
@@ -218,7 +203,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Instruction */}
                 <label className="label">
-                  <span className="label-text">Instruction</span>
+                  <span className="font-semibold">Instruction</span>
                 </label>
                 <textarea
                   className="textarea textarea-bordered mb-3 w-full"
@@ -242,7 +227,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Prompt */}
                 <label className="label">
-                  <span className="label-text">Prompt</span>
+                  <span className="font-semibold">Prompt</span>
                 </label>
                 <textarea
                   className="textarea textarea-bordered mb-3 w-full"
@@ -266,7 +251,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Prompt Strategy */}
                 <label className="label">
-                  <span className="label-text">Prompt Strategy</span>
+                  <span className="font-semibold">Prompt Strategy</span>
                 </label>
                 <select
                   value={el.promptStrategy}
@@ -313,18 +298,16 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Model */}
                 <label className="label">
-                  <span className="label-text">Model</span>
+                  <span className="font-semibold">Model</span>
                 </label>
                 <select
                   value={el.model}
                   className="max-w-xs select mb-3 w-full border-black"
                   onChange={e => {
                     const newValue = e.target.value
-
                     if (typeof newValue !== 'string') {
                       return
                     }
-
                     setColumns(prev => {
                       const newColumns = [...prev]
                       newColumns[index].model = newValue as ColumnContent['model']
@@ -343,7 +326,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Column Type */}
                 <label className="label">
-                  <span className="label-text">Column Type</span>
+                  <span className="font-semibold">Column Type</span>
                 </label>
                 <select
                   value={el.type}
@@ -371,7 +354,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                   <>
                     {/* Categories */}
                     <label className="label">
-                      <span className="label-text">Categories (comma seperated)</span>
+                      <span className="font-semibold">Categories (comma seperated)</span>
                     </label>
                     <textarea
                       className="textarea textarea-bordered mb-3 w-full"
@@ -405,7 +388,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                     <div className="flex">
                       <div className="mr-1 flex-1">
                         <label className="label">
-                          <span className="label-text">Min</span>
+                          <span className="font-semibold">Min</span>
                         </label>
                         <input
                           type="text"
@@ -436,7 +419,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                       </div>
                       <div className="ml-1 flex-1">
                         <label className="label">
-                          <span className="label-text">Max</span>
+                          <span className="font-semibold">Max</span>
                         </label>
                         <input
                           type="text"
@@ -514,16 +497,28 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         </button>
       </section>
       {!noHandle && (
-        <Handle
-          type="source"
-          position={Position.Right}
-          id="out"
-          style={{
-            width: 16,
-            height: 16,
-            right: -8,
-          }}
-        />
+        <>
+          <Handle
+            type="target"
+            position={Position.Left}
+            id="in"
+            style={{
+              width: 16,
+              height: 16,
+              left: -8,
+            }}
+          />
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="out"
+            style={{
+              width: 16,
+              height: 16,
+              right: -8,
+            }}
+          />
+        </>
       )}
     </div>
   )

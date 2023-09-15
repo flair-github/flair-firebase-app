@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { db } from './firebase' // Your Firestore config and initialization
 import { DocumentData, QueryDocumentSnapshot } from '@firebase/firestore-types'
-import { WhereFilterOp } from 'firebase/firestore'
+import { FieldPath, OrderByDirection, WhereFilterOp } from 'firebase/firestore'
 
 function usePaginatedFirestore<T extends DocumentData>(
   collectionName: string,
   pageSize: number,
   where: [string, WhereFilterOp, string][],
+  orders?: [FieldPath | string, OrderByDirection | undefined][],
 ) {
   const [items, setItems] = useState<T[]>([])
   const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot<T> | null>(null)
@@ -24,7 +25,14 @@ function usePaginatedFirestore<T extends DocumentData>(
     for (const clause of where) {
       query = query.where(...clause)
     }
-    query = query.orderBy('createdTimestamp')
+    if (orders) {
+      for (const order of orders) {
+        if (order[0]) {
+          query = query.orderBy(...order)
+        }
+      }
+    }
+    query = query.orderBy('createdTimestamp', 'desc')
 
     if (lastVisible) {
       query = query.startAfter(lastVisible)
@@ -34,14 +42,14 @@ function usePaginatedFirestore<T extends DocumentData>(
     if (!snapshot.empty) {
       const lastItem = snapshot.docs[snapshot.docs.length - 1] as QueryDocumentSnapshot<T>
       setLastVisible(lastItem)
-      setHasMore(false)
+      setHasMore(true)
     } else {
       setLastVisible(null)
       setHasMore(false)
     }
     setItems(prevItems => [...prevItems, ...snapshot.docs.map((doc: any) => doc.data() as T)])
     setLoading(false)
-  }, [collectionName, hasMore, lastVisible, pageSize, where])
+  }, [collectionName, hasMore, lastVisible, pageSize, where, orders])
 
   useEffect(() => {
     ;(async () => {
@@ -51,7 +59,14 @@ function usePaginatedFirestore<T extends DocumentData>(
       for (const clause of where) {
         query = query.where(...clause)
       }
-      query = query.orderBy('createdTimestamp')
+      if (orders) {
+        for (const order of orders) {
+          if (order[0]) {
+            query = query.orderBy(...order)
+          }
+        }
+      }
+      query = query.orderBy('createdTimestamp', 'desc')
       const snapshot = await query.get()
 
       if (!snapshot.empty) {
@@ -65,7 +80,7 @@ function usePaginatedFirestore<T extends DocumentData>(
       setItems(snapshot.docs.map((doc: any) => doc.data() as T))
       setLoading(false)
     })()
-  }, [collectionName, pageSize, where])
+  }, [collectionName, pageSize, where, orders])
 
   return {
     items,

@@ -1,4 +1,4 @@
-import React, { useMemo, SyntheticEvent, useEffect } from 'react'
+import React, { useMemo } from 'react'
 import { useState } from 'react'
 // import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
@@ -6,17 +6,15 @@ import { PiFileCsvFill } from 'react-icons/pi'
 import { ImFilesEmpty } from 'react-icons/im'
 import { CodeBlock } from 'react-code-blocks'
 import { useParams } from 'react-router-dom'
-import useFirestoreDoc from '~/lib/useFirestoreDoc'
-import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
-import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
+import { AverageEvaluationData, DocLLMOutput } from 'Types/firebaseStructure'
 import { ImSpinner9 } from 'react-icons/im'
-import { AiOutlineCopy, AiOutlineEdit, AiOutlineExpand } from 'react-icons/ai'
-import { Firestore, Timestamp, WhereFilterOp } from 'firebase/firestore'
-import { timestampToLocaleString } from './LLMOutputs'
-import { v4 as uuidv4 } from 'uuid'
-import { db } from '../../lib/firebase'
-import { useCopyToClipboard } from 'react-use'
+import { AiOutlineExpand } from 'react-icons/ai'
 import DetailModal from '../shared/DetailModal'
+import useSupabaseDoc from '~/lib/useSupabaseDoc'
+import { Tables } from '~/supabase'
+import { transformDateString } from './SupabaseResults'
+import usePaginatedSupabase from '~/lib/usePaginatedSupabase'
+import { Timestamp } from 'firebase/firestore'
 
 // const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
 // const edges = JSON.parse(FLOW_SAMPLE_2).edges
@@ -54,116 +52,60 @@ function getFilenameFromURL(urlString: string, defaultName: string): string {
 //     .join(' ') // Join the words together with spaces
 // }
 
-function ResultDetails({ id }: { id?: string }) {
+function ResultDetails() {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
-  const resultId =
-    id ?? window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
-
-  const [sharedToken, setSharedToken] = useState('')
-
-  const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
+  const { resultId } = useParams()
+  const [data, loading, error] = useSupabaseDoc<Tables<'workflow_results'>>(
     'workflow_results',
     resultId as string,
   )
   const [columnName, setColumnName] = useState<string>()
-  const where: [string, WhereFilterOp, string][] = useMemo(
+  const where = useMemo(
     () => [
-      .../* sharedToken
-        ? ([['shared_token', '==', sharedToken]] as [string, WhereFilterOp, string][])
-        : */ ([['workflowResultId', '==', resultId]] as [string, WhereFilterOp, string][]),
-      ...(columnName
-        ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
-        : []),
+      { column: 'workflowResultId', operator: 'eq', value: resultId },
+      ...(columnName ? [{ column: 'columnName', operator: 'eq', value: columnName }] : []),
     ],
     [resultId, columnName],
   )
+
+  const orders = useMemo(() => {
+    return [{ column: 'createdTimestamp', direction: 'desc' }]
+  }, [])
 
   const {
     items,
     loading: outputLoading,
     hasMore,
     loadMore,
-  } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, where)
+  } = usePaginatedSupabase<Tables<'llm_outputs'>>(
+    'llm_outputs',
+    10,
+    where as { column: string; operator: 'eq' | 'ilike' | 'gte' | 'lte'; value: any }[],
+    orders as { column: string; direction: 'asc' | 'desc' }[],
+  )
 
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
-
-  const [_state, copyToClipboard] = useCopyToClipboard()
-  const [sharing, setSharing] = useState(false)
-
-  useEffect(() => {
-    setSharedToken(data?.shared_token ?? '')
-  }, [data])
+  const [selectedRow, setSelectedRow] = useState<Tables<'llm_outputs'>>()
 
   if (!data) {
     return <></>
   }
 
-  const averageEval = data.averageEvaluationData
-  const shareHandler = async (event: SyntheticEvent<HTMLButtonElement, MouseEvent>) => {
-    try {
-      setSharing(true)
-      event.preventDefault()
-      // Generate a UUID as shared_token
-      const newSharedToken = uuidv4()
-
-      // Query preparation
-      const documentRef = db.collection('workflow_results').doc(resultId as string)
-      const llmOutputsQuerySnapshot = await db
-        .collection('llm_outputs')
-        .where('workflowResultId', '==', resultId)
-        .get()
-      const batch = db.batch()
-      llmOutputsQuerySnapshot.forEach(doc => {
-        batch.update(doc.ref, { shared_token: sharedToken })
-      })
-
-      // Commit
-      await documentRef.update({
-        shared_token: newSharedToken,
-      })
-      await batch.commit()
-
-      console.log('Document updated successfully.')
-      setSharedToken(newSharedToken)
-    } catch (err) {
-      console.error('Error updating document:', err)
-    } finally {
-      setSharing(false)
-    }
-  }
-
-  console.log(items)
+  const averageEval = data.averageEvaluationData as AverageEvaluationData
+  console.log(data)
 
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
-        <h1 className="text-3xl font-bold">{'Workflow Result'}</h1>
+        <h1 className="text-3xl font-bold">{'Workflow Result (Supabase)'}</h1>
         <div className="flex-1" />
-        {sharedToken ? (
-          <div className="join flex w-96 items-center divide-x divide-gray-300 border bg-white shadow-sm">
-            <h5 className="truncate px-3">
-              {window.location.origin + '?shared_token=' + sharedToken}
-            </h5>
-            <button
-              className="btn btn-outline join-item border-0"
-              onClick={() =>
-                copyToClipboard(window.location.origin + '?shared_token=' + sharedToken)
-              }>
-              <AiOutlineCopy className="h-6 w-6" />
-            </button>
-          </div>
-        ) : (
-          <button
-            disabled={sharing}
-            className={'btn gap-2 ' + (sharing && 'btn-disabled')}
-            onClick={shareHandler}>
-            {sharing ? <ImSpinner9 className="animate-spin" /> : <FaShare />}
-            <div>{sharing ? 'Preparing..' : 'Share'}</div>
-          </button>
-        )}
+        <a className="btn btn-disabled  gap-1" href="#" onClick={() => {}}>
+          <FaShare />
+          <div>Share</div>
+          <div className="text-xs">(soon)</div>
+        </a>
       </div>
-      <header className="stats mb-4 w-full grid-cols-4 border shadow">
+      <header className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat overflow-hidden">
           <div className="stat-title">Model</div>
           <div className="stat-value">{data.model}</div>
@@ -184,11 +126,11 @@ function ResultDetails({ id }: { id?: string }) {
           {/* <div className="stat-desc">4% more than last run</div> */}
         </div>
       </header>
-      <header className="stats mb-4 w-full grid-cols-4 border shadow">
+      <header className="stats mb-4 w-full grid-cols-4 shadow">
         <div className="stat overflow-hidden">
           <div className="stat-title">Request Time</div>
           <div className="stat-value text-sm">
-            {timestampToLocaleString(data.createdTimestamp)}
+            {transformDateString(data.createdTimestamp as string)}
             {/* <div className="text-3xl">2023/06/25</div>
             <div className="stat-desc text-lg font-bold">10:45:30</div> */}
           </div>
@@ -303,9 +245,11 @@ function ResultDetails({ id }: { id?: string }) {
                         <div className="line-clamp-3 h-14 w-96">{item.output}</div>
                       </td>
                       <td>
-                        <div className="line-clamp-3 h-14 w-36 break-words">{item.answer}</div>
+                        <div className="line-clamp-3 h-14 w-36 break-words">
+                          {item.answer?.toString()}
+                        </div>
                       </td>
-                      <td>{item.latency.toFixed(2) + ' seconds'}</td>
+                      <td>{item.latency!.toFixed(2) + ' seconds'}</td>
                       <td>
                         <div className="w-32">
                           <button
@@ -451,7 +395,23 @@ function ResultDetails({ id }: { id?: string }) {
         </div>
       )}
       {selectedRow ? (
-        <DetailModal key={selectedRow?.id} open={isOpen} setOpen={setIsOpen} item={selectedRow} />
+        <DetailModal
+          key={selectedRow?.id}
+          open={isOpen}
+          setOpen={setIsOpen}
+          item={
+            {
+              ...selectedRow,
+              createdTimestamp: Timestamp.fromDate(new Date(selectedRow.createdTimestamp!)),
+              updatedTimestamp: selectedRow.updatedTimestamp
+                ? new Timestamp(
+                    (selectedRow.updatedTimestamp as any)._seconds,
+                    (selectedRow.updatedTimestamp as any)._nanoseconds,
+                  )
+                : null,
+            } as DocLLMOutput
+          }
+        />
       ) : null}
     </div>
   )

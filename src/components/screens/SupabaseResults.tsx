@@ -3,14 +3,56 @@ import { Link } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
 import { getAverage } from '~/lib/averager'
-import { timestampToLocaleString } from './LLMOutputs'
-import { DocWorkflowResult } from 'Types/firebaseStructure'
-import { OrderByDirection, WhereFilterOp } from 'firebase/firestore'
-import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
+import { AverageEvaluationData, EvaluationData } from 'Types/firebaseStructure'
 import { ImSpinner9 } from 'react-icons/im'
 import { useDebounce } from 'react-use'
+import usePaginatedSupabase from '~/lib/usePaginatedSupabase'
+import { Tables } from '~/supabase'
 
-const useFirestoreResults = (column: string, substring: string) => {
+export function transformDateString(inputDate: string): string {
+  try {
+    // Split the input date string into parts
+    const [datePart, timePart] = inputDate.split('T')
+    const [year, month, day] = datePart.split('-')
+    const [time, timeZone] = timePart.split('+')[0].split('.')
+    const [hour, minute, second] = time.split(':')
+
+    // Convert month from numeric to its full name
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+    const monthName = months[parseInt(month, 10) - 1]
+
+    // Convert the 24-hour time to 12-hour format
+    const ampm = parseInt(hour, 10) < 12 ? 'AM' : 'PM'
+    const formattedHour = (parseInt(hour, 10) % 12).toString().padStart(2, '0')
+
+    // Assemble the transformed date string
+    const transformedDate = `${monthName} ${parseInt(
+      day,
+      10,
+    )}, ${year} at ${formattedHour}:${minute} ${ampm}`
+
+    return transformedDate
+  } catch (error) {
+    // Handle invalid date format or other errors
+    console.error('Error transforming date:', error)
+    return 'Invalid Date'
+  }
+}
+
+const useSupabaseResults = (column: string, substring: string) => {
   const [debouncedSubstring, setDebouncedSubstring] = useState('')
   const [, cancel] = useDebounce(
     () => {
@@ -21,30 +63,28 @@ const useFirestoreResults = (column: string, substring: string) => {
   )
 
   const where = useMemo(() => {
-    let queryFilter = [
-      ['docExists', '==', true],
-      ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
+    const queryFilter = [
+      { column: 'docExists', operator: 'eq', value: true },
+      { column: 'executorUserId', operator: 'eq', value: 'IVqAyQJR4ugRGR8qL9UuB809OX82' },
     ]
     if (column && debouncedSubstring) {
-      queryFilter.push([column, '>=', debouncedSubstring])
-      queryFilter.push([column, '<=', debouncedSubstring + '\uf8ff'])
+      queryFilter.push({ column: column, operator: 'ilike', value: '%' + debouncedSubstring + '%' })
+      return queryFilter
+    } else {
+      return queryFilter
     }
-    return queryFilter
-  }, [column, debouncedSubstring])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSubstring])
 
   const orders = useMemo(() => {
-    if (!debouncedSubstring) {
-      return []
-    } else {
-      return [[column, 'desc'] as [string, OrderByDirection | undefined]]
-    }
-  }, [column, debouncedSubstring])
+    return [{ column: 'createdTimestamp', direction: 'desc' }]
+  }, [])
 
-  const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocWorkflowResult>(
+  const { items, loading, hasMore, loadMore } = usePaginatedSupabase<Tables<'workflow_results'>>(
     'workflow_results',
     10,
-    where as [string, WhereFilterOp, string][],
-    orders,
+    where as { column: string; operator: 'eq' | 'ilike' | 'gte' | 'lte'; value: any }[],
+    orders as { column: string; direction: 'asc' | 'desc' }[],
   )
 
   return { items, hasMore, loadMore, loading }
@@ -53,7 +93,7 @@ const useFirestoreResults = (column: string, substring: string) => {
 function PageResults() {
   const [column, setColumn] = useState('')
   const [substring, setSubstring] = useState('')
-  const { items, loading, hasMore, loadMore } = useFirestoreResults(column, substring)
+  const { items, hasMore, loadMore, loading } = useSupabaseResults(column, substring)
 
   return (
     <div className="container mx-auto mb-9 mt-6 rounded-md border">
@@ -62,10 +102,7 @@ function PageResults() {
           <select
             className={' join-item ' + 'select select-bordered '}
             value={column}
-            onChange={event => {
-              setSubstring('')
-              setColumn(event.target.value)
-            }}>
+            onChange={event => setColumn(event.target.value)}>
             <option disabled value="">
               Column
             </option>
@@ -110,7 +147,9 @@ function PageResults() {
           </thead>
           <tbody>
             {items.map(el => {
-              const averaged = el.averageEvaluationData ?? getAverage(el.evaluationData)
+              const averaged =
+                (el.averageEvaluationData as AverageEvaluationData | null) ??
+                getAverage(el.evaluationData as EvaluationData)
 
               return (
                 <tr key={el.workflowResultId}>
@@ -129,7 +168,9 @@ function PageResults() {
                     <div className="w-24 break-words">{(el as any).status || 'completed'}</div>
                   </td>
                   <td>
-                    <div className="w-36">{timestampToLocaleString(el.createdTimestamp)}</div>
+                    <div className="w-36">
+                      {el.createdTimestamp ? transformDateString(el.createdTimestamp) : '-'}
+                    </div>
                   </td>
                   <td>
                     <div className="w-24">{el.model}</div>

@@ -1,25 +1,15 @@
 import { useAtomValue } from 'jotai'
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Outlet, RouteObject, useNavigate, useRoutes } from 'react-router-dom'
-import { atomUser, atomUserData } from '~/jotai/jotai'
-import LoginScreen from '../screens/Login'
-import PageLoader from '../screens/Loader'
+import { atomUserData } from '~/jotai/jotai'
 import { useAuth } from '~/lib/firebase'
 
 const Loading = () => <p className="h-full w-full p-4 text-center">Loading...</p>
 
-const IndexScreen = lazy(() => import('~/components/screens/Index'))
-const Page404Screen = lazy(() => import('~/components/screens/404'))
-const FlowEditorScreen = lazy(() => import('~/components/screens/FlowEditor'))
-const ResultsScreen = lazy(() => import('~/components/screens/Results'))
-const ResultDetailsScreen = lazy(() => import('~/components/screens/ResultDetails'))
-const LLMOutputsScreen = lazy(() => import('~/components/screens/LLMOutputs'))
-const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
-const TemplatesScreen = lazy(() => import('~/components/screens/Templates'))
-const TemplateWizardScreen = lazy(() => import('~/components/screens/TemplateWizard'))
-const TranscriptionScreen = lazy(() => import('~/components/screens/Transcription'))
+const ResultsScreen = lazy(() => import('~/components/screens/SupabaseResults'))
+const ResultDetailsScreen = lazy(() => import('~/components/screens/SupabaseResultDetails'))
 
-const Layout = () => {
+function Layout() {
   const userData = useAtomValue(atomUserData)
   const auth = useAuth()
 
@@ -40,7 +30,7 @@ const Layout = () => {
             }}>
             <img src="/images/flair-ai.svg" width={120} height={2} className="" />
           </div>
-          <ul className="menu menu-horizontal px-1">
+          {/* <ul className="menu menu-horizontal px-1">
             <li
               onClick={() => {
                 navigate('/results')
@@ -53,13 +43,7 @@ const Layout = () => {
               }}>
               <a>Deployments</a>
             </li>
-            <li
-              onClick={() => {
-                navigate('/transcription')
-              }}>
-              <a>Scripts</a>
-            </li>
-          </ul>
+          </ul> */}
         </div>
         <div className="flex-none">
           <div className="dropdown-end dropdown">
@@ -114,8 +98,6 @@ const Layout = () => {
 }
 
 const InnerRouter = () => {
-  const user = useAtomValue(atomUser)
-
   const routes: RouteObject[] = [
     {
       path: '/',
@@ -123,64 +105,30 @@ const InnerRouter = () => {
       children: [
         {
           index: true,
-          element: <IndexScreen />,
-        },
-        {
-          path: 'results',
           element: <ResultsScreen />,
         },
         {
           path: 'result-details/:resultId',
           element: <ResultDetailsScreen />,
         },
-        {
-          path: 'llm-outputs',
-          element: <LLMOutputsScreen />,
-        },
-        {
-          path: 'settings',
-          element: <SettingsScreen />,
-        },
-        {
-          path: 'editor',
-          element: <FlowEditorScreen />,
-        },
-        {
-          path: '*',
-          element: <Page404Screen />,
-        },
-        {
-          path: 'templates',
-          element: <TemplatesScreen />,
-        },
-        {
-          path: 'template-wizard',
-          element: <TemplateWizardScreen />,
-        },
-        {
-          path: 'transcription',
-          element: <TranscriptionScreen />,
-        },
       ],
     },
   ]
   const element = useRoutes(routes)
 
-  if (user === undefined) {
-    return <PageLoader />
-  }
-
-  if (user === null) {
-    return <LoginScreen />
-  }
-
-  return <Suspense fallback={<Loading />}>{element}</Suspense>
+  return (
+    <div>
+      <Suspense fallback={<Loading />}>{element}</Suspense>
+    </div>
+  )
 }
 
-export const Router = () => {
+const SupabaseRouter = () => {
   return (
     <BrowserRouter>
       <InnerRouter />
     </BrowserRouter>
   )
 }
+
+export default SupabaseRouter

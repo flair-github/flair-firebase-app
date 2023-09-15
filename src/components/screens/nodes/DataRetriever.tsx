@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Handle, Position } from 'reactflow'
 import { nodeContents, type NodeData } from './Registry'
 import { GiConvergenceTarget } from 'react-icons/gi'
+import { NodeHeader } from '~/components/shared/NodeHeader'
 
 export interface DataRetrieverNodeContent {
   nodeType: 'data-retriever'
@@ -42,20 +43,22 @@ export const DataRetrieverNode = ({ data }: { data: NodeData }) => {
   return (
     <div
       style={{
-        background: 'white',
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
         width: 400,
-      }}>
-      <header className="fw-bold mb-2 flex items-center rounded-t-md bg-orange-200 px-5 py-3">
-        <GiConvergenceTarget className="h-7 w-7" />
-        <h4 className="ml-3 grow">Data Retriever</h4>
-      </header>
+      }}
+      className="bg-orange-50">
+      <NodeHeader
+        Icon={GiConvergenceTarget}
+        title="Data Retriever"
+        color="orange"
+        nodeId={data.nodeId}
+      />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Embedding Type</span>
+            <span className="font-semibold">Embedding Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -73,7 +76,7 @@ export const DataRetrieverNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Retrieve Strategy</span>
+            <span className="font-semibold">Retrieve Strategy</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "

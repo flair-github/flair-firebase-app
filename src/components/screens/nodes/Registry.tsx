@@ -1,4 +1,5 @@
 import { MutableRefObject } from 'react'
+import { atom } from 'jotai'
 import { Edge, type Node } from 'reactflow'
 import { DataExporterFlairNodeContent } from './DataExporterFlair'
 import { DataExtractorNodeContent } from './DataExtractorNode'
@@ -8,7 +9,6 @@ import { DataSourceLocalFilesNodeContent } from './DataSourceLocalFiles'
 import { DataSourceNodeContent } from './DataSourceNode'
 import { EvaluatorNodeContent } from './EvaluatorNode'
 import { LLMProcessorNodeContent } from './LLMProcessorNode'
-import { atom } from 'jotai'
 import { DataSourceS3NodeContent } from './DataSourceS3'
 import { DataSourceGCPNodeContent } from './DataSourceGCP'
 import { DataSourceAzureNodeContent } from './DataSourceAzure'
@@ -17,7 +17,15 @@ import { DataExporterS3NodeContent } from './DataExporterS3'
 import { DataExporterGCPNodeContent } from './DataExporterGCP'
 import { DataExporterAzureNodeContent } from './DataExporterAzure'
 import { DataExporterAPINodeContent } from './DataExporterAPI'
+import { DataExporterPowerBINodeContent } from './DataExporterPowerBI'
 import { AwsUploaderNodeContent } from './AwsUploaderNode'
+import { DataExporterSalesforceNodeContent } from './DataExporterSalesforce'
+import { DataExporterZendeskNodeContent } from './DataExporterZendesk'
+import { DataExporterPostgresNodeContent } from './DataExporterPostgres'
+import { DataExporterGmailNodeContent } from './DataExporterGmail'
+import { DataRetrieverApiNodeContent } from './DataRetrieverAPI'
+import { ConditionalLogicNodeContent } from './ConditionalLogicNode'
+import { DataExtractorAggregatorNodeContent } from './DataExtractorAggregatorNode'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -32,12 +40,20 @@ export type NodeContent =
   | DataExporterGCPNodeContent
   | DataExporterAzureNodeContent
   | DataExporterAPINodeContent
+  | DataExporterPowerBINodeContent
+  | DataExporterPostgresNodeContent
   | EvaluatorNodeContent
+  | ConditionalLogicNodeContent
   | LLMProcessorNodeContent
   | DataIndexerNodeContent
   | DataRetrieverNodeContent
   | DataSourceLocalFilesNodeContent
   | DataExporterFlairNodeContent
+  | DataExporterSalesforceNodeContent
+  | DataExporterZendeskNodeContent
+  | DataExporterGmailNodeContent
+  | DataRetrieverApiNodeContent
+  | DataExtractorAggregatorNodeContent
 
 export interface NodeData {
   nodeId: string
