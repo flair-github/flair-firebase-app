@@ -13,6 +13,7 @@ import { DataSourceS3NodeContent } from './DataSourceS3'
 import { DataSourceGCPNodeContent } from './DataSourceGCP'
 import { DataSourceAzureNodeContent } from './DataSourceAzure'
 import { DataSourceAPINodeContent } from './DataSourceAPI'
+import { DataSourceEmailNodeContent } from './DataSourceEmail'
 import { DataExporterS3NodeContent } from './DataExporterS3'
 import { DataExporterGCPNodeContent } from './DataExporterGCP'
 import { DataExporterAzureNodeContent } from './DataExporterAzure'
@@ -35,6 +36,7 @@ export type NodeContent =
   | DataSourceGCPNodeContent
   | DataSourceAPINodeContent
   | DataSourceAzureNodeContent
+  | DataSourceEmailNodeContent
   | DataExtractorNodeContent
   | DataExporterS3NodeContent
   | DataExporterGCPNodeContent
