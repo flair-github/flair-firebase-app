@@ -37,6 +37,7 @@ import { DataExporterFlairNode } from './nodes/DataExporterFlair'
 import { DataSourceS3Node } from './nodes/DataSourceS3'
 import { DataSourceGCPNode } from './nodes/DataSourceGCP'
 import { DataSourceAPINode } from './nodes/DataSourceAPI'
+import { DataSourceEmailNode } from './nodes/DataSourceEmail'
 import { DataSourceAzureNode } from './nodes/DataSourceAzure'
 import { DataExporterS3Node } from './nodes/DataExporterS3'
 import { DataExporterGCPNode } from './nodes/DataExporterGCP'
@@ -62,6 +63,7 @@ export const nodeTypes = {
   DataSourceGCPNode,
   DataSourceAPINode,
   DataSourceAzureNode,
+  DataSourceEmailNode,
   DataExtractorNode,
   DataExporterS3Node,
   DataExporterGCPNode,
@@ -108,6 +110,7 @@ import { SiPowerbi, SiZendesk } from 'react-icons/si'
 import { GiConvergenceTarget } from 'react-icons/gi'
 import { GrAggregate, GrFormClose } from 'react-icons/gr'
 import { BsArrowsAngleContract, BsFillCloudHaze2Fill } from 'react-icons/bs'
+import { MdEmail } from 'react-icons/md'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -380,6 +383,13 @@ export const FlowEditor: React.FC<{
             addNode('data-source-api', 'DataSourceAPINode')
           },
           icon: AiFillApi,
+        },
+        {
+          title: 'Email',
+          handleOnClick: () => {
+            addNode('data-source-email', 'DataSourceEmailNode')
+          },
+          icon: MdEmail,
         },
         {
           title: 'Salesforce',
