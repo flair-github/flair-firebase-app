@@ -2,7 +2,6 @@ import { useAtomValue } from 'jotai'
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Outlet, RouteObject, useNavigate, useRoutes } from 'react-router-dom'
 import { atomUserData } from '~/jotai/jotai'
-import { useAuth } from '~/lib/firebase'
 
 const Loading = () => <p className="h-full w-full p-4 text-center">Loading...</p>
 
@@ -11,11 +10,6 @@ const ResultDetailsScreen = lazy(() => import('~/components/screens/SupabaseResu
 
 function Layout() {
   const userData = useAtomValue(atomUserData)
-  const auth = useAuth()
-
-  const handleSignOut = () => {
-    auth.signOut()
-  }
 
   const navigate = useNavigate()
 
@@ -85,7 +79,7 @@ function Layout() {
                 }}>
                 <a>Settings</a>
               </li>
-              <li onClick={handleSignOut}>
+              <li onClick={() => {}}>
                 <a>Logout</a>
               </li>
             </ul>
