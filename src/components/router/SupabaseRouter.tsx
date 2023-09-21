@@ -2,7 +2,6 @@ import { useAtomValue } from 'jotai'
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Outlet, RouteObject, useNavigate, useRoutes } from 'react-router-dom'
 import { atomUserData } from '~/jotai/jotai'
-import { useAuth } from '~/lib/firebase'
 
 const Loading = () => <p className="h-full w-full p-4 text-center">Loading...</p>
 
@@ -11,11 +10,6 @@ const ResultDetailsScreen = lazy(() => import('~/components/screens/SupabaseResu
 
 function Layout() {
   const userData = useAtomValue(atomUserData)
-  const auth = useAuth()
-
-  const handleSignOut = () => {
-    auth.signOut()
-  }
 
   const navigate = useNavigate()
 
@@ -52,7 +46,7 @@ function Layout() {
             </label>
             <ul
               tabIndex={0}
-              className="menu dropdown-content rounded-box menu-sm z-[1] mt-3 w-52 bg-base-100 p-2 shadow">
+              className="menu dropdown-content rounded-box menu-sm z-20 mt-3 w-52 bg-base-100 p-2 shadow">
               <li
                 onClick={() => {
                   navigate('/llm-outputs')
@@ -72,7 +66,7 @@ function Layout() {
             </label>
             <ul
               tabIndex={0}
-              className="menu dropdown-content rounded-box menu-sm z-[1] mt-3 w-52 bg-base-100 p-2 shadow">
+              className="menu dropdown-content rounded-box menu-sm z-20 mt-3 w-52 bg-base-100 p-2 shadow">
               {/* <li>
                 <a className="justify-between">
                   Profile
@@ -85,7 +79,7 @@ function Layout() {
                 }}>
                 <a>Settings</a>
               </li>
-              <li onClick={handleSignOut}>
+              <li onClick={() => {}}>
                 <a>Logout</a>
               </li>
             </ul>
