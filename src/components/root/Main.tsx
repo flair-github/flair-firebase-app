@@ -3,11 +3,10 @@ import { Router } from '~/components/router/Router'
 import { db, setupFirebase } from '~/lib/firebase'
 import { useEffect } from 'react'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { atomUser, atomUserData } from '~/jotai/jotai'
 import { DocUser } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
-import SupabaseRouter from '../router/SupabaseRouter'
 import SharedResult from '../screens/SharedResult'
 
 function Main() {
@@ -80,11 +79,7 @@ function Main() {
 
   return (
     <main>
-      {import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_KEY ? (
-        <SupabaseRouter />
-      ) : (
-        <Router />
-      )}
+      <Router />
     </main>
   )
 }
