@@ -18,6 +18,7 @@ const SettingsScreen = lazy(() => import('~/components/screens/Settings'))
 const TemplatesScreen = lazy(() => import('~/components/screens/Templates'))
 const TemplateWizardScreen = lazy(() => import('~/components/screens/TemplateWizard'))
 const TranscriptionScreen = lazy(() => import('~/components/screens/Transcription'))
+const UserConfigScreen = lazy(() => import('~/components/screens/UserConfig'))
 
 const Layout = () => {
   const userData = useAtomValue(atomUserData)
@@ -73,7 +74,13 @@ const Layout = () => {
                 onClick={() => {
                   navigate('/llm-outputs')
                 }}>
-                <a>LLM Outputs</a>
+                <p>LLM Outputs</p>
+              </li>
+              <li
+                onClick={() => {
+                  navigate('/user-config')
+                }}>
+                <p>User Config</p>
               </li>
             </ul>
           </div>
@@ -160,6 +167,10 @@ const InnerRouter = () => {
         {
           path: 'transcription',
           element: <TranscriptionScreen />,
+        },
+        {
+          path: 'user-config',
+          element: <UserConfigScreen />,
         },
       ],
     },

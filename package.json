@@ -12,8 +12,11 @@
     "deploy": "tsc && vite build && firebase deploy --only hosting"
   },
   "dependencies": {
+    "@codemirror/language": "^6.9.1",
+    "@codemirror/legacy-modes": "^6.3.3",
     "@headlessui/react": "^1.7.15",
     "@supabase/supabase-js": "^2.33.1",
+    "@uiw/react-codemirror": "^4.21.18",
     "axios": "^1.4.0",
     "daisyui": "^3.1.6",
     "firebase": "^9.23.0",
