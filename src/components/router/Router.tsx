@@ -20,6 +20,7 @@ const TemplateWizardScreen = lazy(() => import('~/components/screens/TemplateWiz
 const TranscriptionScreen = lazy(() => import('~/components/screens/Transcription'))
 const UserConfigScreen = lazy(() => import('~/components/screens/UserConfig'))
 const DeploymentScreen = lazy(() => import('~/components/screens/Deployment'))
+const DeploymentDetailsScreen = lazy(() => import('~/components/screens/DeploymentDetails'))
 
 const Layout = () => {
   const userData = useAtomValue(atomUserData)
@@ -176,6 +177,10 @@ const InnerRouter = () => {
         {
           path: 'deployment',
           element: <DeploymentScreen />,
+        },
+        {
+          path: 'deployment/:deploymentId',
+          element: <DeploymentDetailsScreen />,
         },
       ],
     },

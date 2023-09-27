@@ -258,12 +258,12 @@ function Deployment() {
 
                   <td>
                     <div style={{ minWidth: 250 }}>
-                      <Link className="btn m-1 bg-slate-200" to={'/result-details/'}>
+                      <Link className="btn m-1 bg-slate-200" to={'/deployment/' + el.id}>
                         <HiDocumentReport /> Details
                       </Link>
-                      <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>
+                      <button className="btn m-1 bg-slate-200" onClick={() => {}}>
                         <RiFlowChart /> View Flow
-                      </a>
+                      </button>
                     </div>
                   </td>
                 </tr>
