@@ -340,6 +340,13 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                     setColumns(prev => {
                       const newColumns = [...prev]
+                      if (newColumns[index].type === 'number') {
+                        delete (newColumns[index] as any).min
+                        delete (newColumns[index] as any).max
+                      }
+                      if (newColumns[index].type === 'category') {
+                        delete (newColumns[index] as any).options
+                      }
                       newColumns[index].type = newValue as ColumnContent['type']
                       return newColumns
                     })

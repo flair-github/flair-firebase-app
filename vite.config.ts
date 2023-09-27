@@ -8,4 +8,12 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
+  server: {
+    proxy: {
+      '/api/v1': {
+        target: 'https://flair-api.flairlabs.ai',
+        changeOrigin: true,
+      },
+    },
+  },
 })
