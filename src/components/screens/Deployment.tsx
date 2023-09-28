@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { HiDocumentReport } from 'react-icons/hi'
 import { ImSpinner9 } from 'react-icons/im'
 import { RiFlowChart } from 'react-icons/ri'
+import { BiLogoAws, BiLogoGoogle, BiLogoMicrosoft } from 'react-icons/bi'
+import { TbCircleDotFilled } from 'react-icons/tb'
 
 const dummyItems = [
   {
@@ -169,6 +171,26 @@ const dummyItems = [
   },
 ]
 
+function getRandomBooleanArray(length: number): boolean[] {
+  const booleanArray: boolean[] = []
+  for (let i = 0; i < length; i++) {
+    const randomBoolean = Math.random() < 0.5 // Generates true or false with 50% probability
+    booleanArray.push(randomBoolean)
+  }
+  return booleanArray
+}
+
+const name2Icon = (name: string) => {
+  const loweredName = name.toLowerCase()
+  if (loweredName.includes('aws')) {
+    return <BiLogoAws className="mx-auto h-6 w-6" />
+  } else if (loweredName.includes('google')) {
+    return <BiLogoGoogle className="mx-auto h-6 w-6" />
+  } else {
+    return <BiLogoMicrosoft className="mx-auto h-6 w-6" />
+  }
+}
+
 function Deployment() {
   return (
     <div className="container mx-auto mb-9 mt-6 rounded-md border">
@@ -183,11 +205,11 @@ function Deployment() {
               Column
             </option>
             <option value="model">Deployment ID</option>
+            <option value="status">Workflow Name</option>
             <option value="status">Interval</option>
             {/* <option value="model and status">Model and Status</option> */}
             <option value="workflowRequestId">Source</option>
             <option value="workflowName">Export</option>
-            <option value="status">Status</option>
           </select>
           <input
             className="input join-item input-bordered"
@@ -216,12 +238,13 @@ function Deployment() {
             <tr>
               <th />
               <th>Deployment ID</th>
+              <th>Workflow Name</th>
               <th>Interval</th>
-              <th>Last Run</th>
-              <th>Next Run</th>
+              <th>Last Run Status</th>
+              <th>Next Run At</th>
               <th>Data Source</th>
               <th>Data Export</th>
-              <th>Status</th>
+              {/* <th>Status</th> */}
               <th>Actions</th>
             </tr>
           </thead>
@@ -238,23 +261,37 @@ function Deployment() {
                     <div className="w-24 break-words">{el.id}</div>
                   </td>
                   <td>
+                    <div className="w-24 break-words">{'My Workflow Name'}</div>
+                  </td>
+                  <td>
                     <div className="w-24 break-words">{el.interval}</div>
                   </td>
                   <td>
-                    <div className="w-24 break-words">{el.last_run}</div>
+                    <div className="flex w-24 flex-wrap break-words">
+                      {getRandomBooleanArray(Math.random() * 6).map((bool, idx) => (
+                        <TbCircleDotFilled
+                          key={idx}
+                          className={'h-4 w-4 ' + (bool ? 'text-green-400' : 'text-red-600')}
+                        />
+                      ))}
+                    </div>
                   </td>
                   <td>
                     <div className="w-24 break-words">{el.next_run}</div>
                   </td>
                   <td>
-                    <div className="w-24 break-words">{el.source}</div>
+                    <div className="w-24 break-words text-center">
+                      {name2Icon(el.source)} {el.source}
+                    </div>
                   </td>
                   <td>
-                    <div className="w-24 break-words">{el.export}</div>
+                    <div className="w-24 break-words text-center">
+                      {name2Icon(el.export)} {el.export}
+                    </div>
                   </td>
-                  <td>
+                  {/* <td>
                     <div className="w-24 break-words">{el.status}</div>
-                  </td>
+                  </td> */}
 
                   <td>
                     <div style={{ minWidth: 250 }}>
