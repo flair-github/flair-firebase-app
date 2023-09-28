@@ -28,7 +28,7 @@ const useFirestoreResults = (
   return { items, hasMore, loadMore, loading }
 }
 
-function PageResults() {
+function Results() {
   const [column, setColumn] = useState('')
   const [substring, setSubstring] = useState('')
   const [where, setWhere] = useState<[string, WhereFilterOp, string][]>(defaultWhere)
@@ -168,4 +168,4 @@ function PageResults() {
   )
 }
 
-export default PageResults
+export default Results
