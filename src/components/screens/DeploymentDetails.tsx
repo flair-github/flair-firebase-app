@@ -101,8 +101,10 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
         </div>
 
         <div className="grid grid-cols-6 gap-6">
+          <div className="col-span-1" />
           <BarChart />
-          <PieChart />
+          <div className="col-span-1" />
+          {/* <PieChart /> */}
         </div>
       </div>
 
