@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
@@ -8,38 +8,16 @@ import { DocWorkflowResult } from 'Types/firebaseStructure'
 import { OrderByDirection, WhereFilterOp } from 'firebase/firestore'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner9 } from 'react-icons/im'
-import { useDebounce } from 'react-use'
 
-const useFirestoreResults = (column: string, substring: string) => {
-  const [debouncedSubstring, setDebouncedSubstring] = useState('')
-  const [, cancel] = useDebounce(
-    () => {
-      setDebouncedSubstring(substring)
-    },
-    750,
-    [substring],
-  )
+const defaultWhere = [
+  ['docExists', '==', true],
+  ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
+] as [string, WhereFilterOp, string][]
 
-  const where = useMemo(() => {
-    let queryFilter = [
-      ['docExists', '==', true],
-      ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
-    ]
-    if (column && debouncedSubstring) {
-      queryFilter.push([column, '>=', debouncedSubstring])
-      queryFilter.push([column, '<=', debouncedSubstring + '\uf8ff'])
-    }
-    return queryFilter
-  }, [column, debouncedSubstring])
-
-  const orders = useMemo(() => {
-    if (!debouncedSubstring) {
-      return []
-    } else {
-      return [[column, 'desc'] as [string, OrderByDirection | undefined]]
-    }
-  }, [column, debouncedSubstring])
-
+const useFirestoreResults = (
+  where: [string, WhereFilterOp, string][],
+  orders: [string, OrderByDirection | undefined][],
+) => {
   const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocWorkflowResult>(
     'workflow_results',
     10,
@@ -50,15 +28,18 @@ const useFirestoreResults = (column: string, substring: string) => {
   return { items, hasMore, loadMore, loading }
 }
 
-function PageResults() {
+function Results() {
   const [column, setColumn] = useState('')
   const [substring, setSubstring] = useState('')
-  const { items, loading, hasMore, loadMore } = useFirestoreResults(column, substring)
+  const [where, setWhere] = useState<[string, WhereFilterOp, string][]>(defaultWhere)
+  const [orders, setOrders] = useState<[string, OrderByDirection | undefined][]>([])
+
+  const { items, loading, hasMore, loadMore } = useFirestoreResults(where, orders)
 
   return (
     <div className="container mx-auto mb-9 mt-6 rounded-md border">
       <div className="flex items-center border-b p-3">
-        <div className="join">
+        <form className="join">
           <select
             className={' join-item ' + 'select select-bordered '}
             value={column}
@@ -81,7 +62,23 @@ function PageResults() {
             onChange={event => setSubstring(event.target.value)}
             placeholder="Filter"
           />
-        </div>
+          <button
+            className="btn join-item"
+            onClick={e => {
+              e.preventDefault()
+              let queryOrders: [string, OrderByDirection | undefined][] = []
+              let queryFilter = [...defaultWhere]
+              if (column && substring) {
+                queryFilter.push([column, '>=', substring])
+                queryFilter.push([column, '<=', substring + '\uf8ff'])
+                queryOrders = [[column, 'desc']]
+              }
+              setWhere(queryFilter)
+              setOrders(queryOrders)
+            }}>
+            Search
+          </button>
+        </form>
         <div className="flex-1" />
         <button className="btn btn-disabled gap-1" onClick={async () => {}}>
           <div>Compare Selections</div>
@@ -171,4 +168,4 @@ function PageResults() {
   )
 }
 
-export default PageResults
+export default Results

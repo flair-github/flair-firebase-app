@@ -1,13 +1,18 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
 import { getAverage } from '~/lib/averager'
 import { AverageEvaluationData, EvaluationData } from 'Types/firebaseStructure'
 import { ImSpinner9 } from 'react-icons/im'
-import { useDebounce } from 'react-use'
 import usePaginatedSupabase from '~/lib/usePaginatedSupabase'
 import { Tables } from '~/supabase'
+
+const defaultWhere = [
+  { column: 'docExists', operator: 'eq', value: true },
+  { column: 'executorUserId', operator: 'eq', value: 'IVqAyQJR4ugRGR8qL9UuB809OX82' },
+]
+const defaultOrders = [{ column: 'createdTimestamp', direction: 'desc' }]
 
 export function transformDateString(inputDate: string): string {
   try {
@@ -52,39 +57,14 @@ export function transformDateString(inputDate: string): string {
   }
 }
 
-const useSupabaseResults = (column: string, substring: string) => {
-  const [debouncedSubstring, setDebouncedSubstring] = useState('')
-  const [, cancel] = useDebounce(
-    () => {
-      setDebouncedSubstring(substring)
-    },
-    750,
-    [substring],
-  )
-
-  const where = useMemo(() => {
-    const queryFilter = [
-      { column: 'docExists', operator: 'eq', value: true },
-      { column: 'executorUserId', operator: 'eq', value: 'IVqAyQJR4ugRGR8qL9UuB809OX82' },
-    ]
-    if (column && debouncedSubstring) {
-      queryFilter.push({ column: column, operator: 'ilike', value: '%' + debouncedSubstring + '%' })
-      return queryFilter
-    } else {
-      return queryFilter
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSubstring])
-
-  const orders = useMemo(() => {
-    return [{ column: 'createdTimestamp', direction: 'desc' }]
-  }, [])
-
+const useSupabaseResults = (
+  where: { column: string; operator: 'eq' | 'ilike' | 'gte' | 'lte'; value: any }[],
+) => {
   const { items, loading, hasMore, loadMore } = usePaginatedSupabase<Tables<'workflow_results'>>(
     'workflow_results',
     10,
-    where as { column: string; operator: 'eq' | 'ilike' | 'gte' | 'lte'; value: any }[],
-    orders as { column: string; direction: 'asc' | 'desc' }[],
+    where,
+    defaultOrders as { column: string; direction: 'asc' | 'desc' }[],
   )
 
   return { items, hasMore, loadMore, loading }
@@ -93,12 +73,16 @@ const useSupabaseResults = (column: string, substring: string) => {
 function PageResults() {
   const [column, setColumn] = useState('')
   const [substring, setSubstring] = useState('')
-  const { items, hasMore, loadMore, loading } = useSupabaseResults(column, substring)
+  const [where, setWhere] = useState(defaultWhere)
+
+  const { items, hasMore, loadMore, loading } = useSupabaseResults(
+    where as { column: string; operator: 'eq' | 'ilike' | 'gte' | 'lte'; value: any }[],
+  )
 
   return (
     <div className="container mx-auto mb-9 mt-6 rounded-md border">
       <div className="flex items-center border-b p-3">
-        <div className="join">
+        <form className="join">
           <select
             className={' join-item ' + 'select select-bordered '}
             value={column}
@@ -118,7 +102,23 @@ function PageResults() {
             onChange={event => setSubstring(event.target.value)}
             placeholder="Filter"
           />
-        </div>
+          <button
+            className="btn join-item"
+            onClick={e => {
+              e.preventDefault()
+              const queryFilter = [...defaultWhere]
+              if (column && substring) {
+                queryFilter.push({
+                  column: column,
+                  operator: 'ilike',
+                  value: '%' + substring + '%',
+                })
+              }
+              setWhere(queryFilter)
+            }}>
+            Search
+          </button>
+        </form>
         <div className="flex-1" />
         <button className="btn btn-disabled gap-1" onClick={async () => {}}>
           <div>Compare Selections</div>

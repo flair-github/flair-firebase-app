@@ -39,7 +39,7 @@ function Layout() {
             </li>
           </ul> */}
         </div>
-        <div className="flex-none">
+        {/* <div className="flex-none">
           <div className="dropdown-end dropdown">
             <label tabIndex={0} className="btn btn-ghost flex px-2 font-normal normal-case">
               <div>Debug</div>
@@ -55,9 +55,9 @@ function Layout() {
               </li>
             </ul>
           </div>
-        </div>
-        <div className="flex-none">
-          <div className="dropdown-end dropdown">
+        </div> */}
+        {/* <div className="flex-none">
+          <div className={'dropdown-end ' + 'dropdown'}>
             <label tabIndex={0} className="btn btn-ghost flex px-2 normal-case">
               <div>{userData?.userName || 'Flair User'}</div>
               <div className="w-9 overflow-hidden rounded-full">
@@ -67,12 +67,12 @@ function Layout() {
             <ul
               tabIndex={0}
               className="menu dropdown-content rounded-box menu-sm z-20 mt-3 w-52 bg-base-100 p-2 shadow">
-              {/* <li>
+              <li>
                 <a className="justify-between">
                   Profile
                   <span className="badge">New</span>
                 </a>
-              </li> */}
+              </li>
               <li
                 onClick={() => {
                   navigate('/settings')
@@ -84,7 +84,7 @@ function Layout() {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
       </div>
       <Outlet />
     </div>
