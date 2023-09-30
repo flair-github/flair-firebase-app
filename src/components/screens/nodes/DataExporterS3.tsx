@@ -4,6 +4,9 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoAws } from 'react-icons/bi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import { useAtomValue } from 'jotai'
+import { atomNodeKeys } from '~/jotai/jotai'
+import { edgesAtom } from '../FlowEditor'
 
 export interface DataExporterS3NodeContent {
   nodeType: 'data-exporter-s3'
@@ -13,6 +16,7 @@ export interface DataExporterS3NodeContent {
   secretKey: string
   bucketName: string
   regionName: string
+  keys: string[]
 }
 
 export const dataExporterS3DefaultContent: DataExporterS3NodeContent = {
@@ -23,6 +27,7 @@ export const dataExporterS3DefaultContent: DataExporterS3NodeContent = {
   secretKey: '',
   bucketName: '',
   regionName: '',
+  keys: [],
 }
 
 export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
@@ -47,6 +52,18 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
 
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
+
+  const nodeKeys = useAtomValue(atomNodeKeys)
+  const edges = useAtomValue(edgesAtom)
+
+  const keyOptions = React.useMemo(() => {
+    const keyEdges = edges.filter(({ target }) => target === data.nodeId)
+    let newKeys: string[] = []
+    keyEdges.forEach(kE => {
+      newKeys = newKeys.concat(nodeKeys[kE.source] ?? [])
+    })
+    return newKeys
+  }, [edges, data.nodeId, nodeKeys])
 
   return (
     <div
@@ -140,6 +157,35 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
               setNodeContent(prev => ({ ...prev, path: newVal }))
             }}
           />
+        </div>
+        <div className="mb-4 mt-1">
+          <label className="label">
+            <span className="font-semibold">Keys</span>
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {keyOptions.map(localKey => (
+              <div key={localKey} className="join border">
+                <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
+                  <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">{localKey}</p>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={nodeContent.keys?.includes(localKey)}
+                  className="checkbox join-item px-1"
+                  onChange={() => {
+                    setNodeContent(prev => {
+                      if (!prev.keys) {
+                        return { ...prev, keys: [localKey] }
+                      }
+                      return prev.keys.includes(localKey)
+                        ? { ...prev, keys: prev.keys.filter(key => key !== localKey) }
+                        : { ...prev, keys: [...prev.keys, localKey] }
+                    })
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
       {!noHandle && (

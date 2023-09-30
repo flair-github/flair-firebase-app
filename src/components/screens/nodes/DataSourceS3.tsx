@@ -1,9 +1,11 @@
-import React, { type MutableRefObject, useEffect, useState } from 'react'
+import React, { type MutableRefObject, useEffect, useState, useRef, LegacyRef } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoAws } from 'react-icons/bi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import { useAtom } from 'jotai'
+import { atomNodeKeys } from '~/jotai/jotai'
 
 export interface DataSourceS3NodeContent {
   nodeType: 'data-source-s3'
@@ -13,6 +15,7 @@ export interface DataSourceS3NodeContent {
   secretKey: string
   bucketName: string
   regionName: string
+  keys: string[]
 }
 
 export const dataSourceS3DefaultContent: DataSourceS3NodeContent = {
@@ -23,6 +26,7 @@ export const dataSourceS3DefaultContent: DataSourceS3NodeContent = {
   secretKey: '',
   bucketName: '',
   regionName: '',
+  keys: [],
 }
 
 export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
@@ -47,6 +51,13 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
 
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
+
+  const keyInputRef = useRef<HTMLInputElement>()
+
+  const [_, setNodeKeys] = useAtom(atomNodeKeys)
+  React.useEffect(() => {
+    setNodeKeys(prev => ({ ...prev, [data.nodeId]: nodeContent.keys }))
+  }, [data.nodeId, nodeContent.keys, setNodeKeys])
 
   return (
     <div
@@ -140,6 +151,51 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
               setNodeContent(prev => ({ ...prev, path: newVal }))
             }}
           />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="font-semibold">Keys</span>
+          </label>
+          <div className="join w-full">
+            <input
+              ref={keyInputRef as LegacyRef<HTMLInputElement>}
+              className="input join-item input-bordered grow border-black"
+              placeholder="New Key"
+            />
+            <button
+              className="btn btn-ghost join-item border-black"
+              onClick={() => {
+                keyInputRef.current
+                setNodeContent(prev => ({
+                  ...prev,
+                  keys: [...prev.keys, keyInputRef.current!.value],
+                }))
+                setTimeout(() => {
+                  keyInputRef.current!.value = ''
+                }, 10)
+              }}>
+              Add
+            </button>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {nodeContent.keys?.map(localKey => (
+              <div key={localKey} className="join border">
+                <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
+                  <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">{localKey}</p>
+                </span>
+                <button
+                  className="btn join-item btn-sm px-1"
+                  onClick={() => {
+                    setNodeContent(prev => ({
+                      ...prev,
+                      keys: prev.keys.filter(key => key !== localKey),
+                    }))
+                  }}>
+                  <GrFormClose className="h-6 w-6" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
       {!noHandle && (
