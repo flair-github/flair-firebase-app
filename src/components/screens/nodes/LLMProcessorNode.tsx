@@ -3,8 +3,10 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents, jotaiAllowInteraction } from './Registry'
 import { v4 } from 'uuid'
-import { useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import { edgesAtom, nodesAtom } from '../FlowEditor'
+import { atomNodeKeys } from '~/jotai/jotai'
 
 type ColumnContent =
   | {
@@ -51,15 +53,18 @@ type ColumnContent =
 export interface LLMProcessorNodeContent {
   nodeType: 'llm-processor'
   columns: Array<ColumnContent>
+  keys: string[]
 }
 
 export const llmProcessorNodeDefaultContent: LLMProcessorNodeContent = {
   nodeType: 'llm-processor',
   columns: [],
+  keys: [],
 }
 
 export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
   const [columns, setColumns] = useState<LLMProcessorNodeContent['columns']>([])
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
 
   // Initial data
@@ -69,6 +74,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
     }
 
     setColumns(JSON.parse(JSON.stringify(data.initialContents.columns)))
+    setSelectedKeys(data.initialContents.keys)
   }, [data.initialContents])
 
   // Copy node data to cache
@@ -76,10 +82,27 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
     const cache: LLMProcessorNodeContent = {
       nodeType: 'llm-processor',
       columns: columns,
+      keys: selectedKeys,
     }
 
     nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, columns])
+  }, [data.nodeId, columns, selectedKeys])
+
+  const [nodeKeys, setNodeKeys] = useAtom(atomNodeKeys)
+  const edges = useAtomValue(edgesAtom)
+
+  const keyOptions = React.useMemo(() => {
+    const keyEdges = edges.filter(({ target }) => target === data.nodeId)
+    let newKeys: string[] = []
+    keyEdges.forEach(kE => {
+      newKeys = newKeys.concat(nodeKeys[kE.source] ?? [])
+    })
+    return newKeys
+  }, [edges, data.nodeId, nodeKeys])
+
+  React.useEffect(() => {
+    setNodeKeys(prev => ({ ...prev, [data.nodeId]: selectedKeys }))
+  }, [data.nodeId, selectedKeys, setNodeKeys])
 
   return (
     <div
@@ -92,6 +115,35 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
       className="bg-blue-50">
       <NodeHeader title="LLM Processor" color="blue" withFlair nodeId={data.nodeId} />
       <section className="px-5 pb-5">
+        <div className="mb-4 mt-1">
+          <label className="label">
+            <span className="font-semibold">Keys</span>
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {keyOptions.map(localKey => (
+              <div key={localKey} className="join border">
+                <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
+                  <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">{localKey}</p>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={selectedKeys?.includes(localKey)}
+                  className="checkbox join-item px-1"
+                  onChange={() => {
+                    setSelectedKeys(prev => {
+                      if (!prev) {
+                        return [localKey]
+                      }
+                      return prev.includes(localKey)
+                        ? prev.filter(key => key !== localKey)
+                        : [...prev, localKey]
+                    })
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="mb-1 flex">
           {/* Col */}
           <div className="mr-2 flex w-14 items-center" />
