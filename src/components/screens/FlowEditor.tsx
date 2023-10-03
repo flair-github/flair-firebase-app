@@ -94,7 +94,7 @@ import {
   AiOutlineNodeIndex,
 } from 'react-icons/ai'
 import Menu from './editor/Menu'
-import { PiCaretDoubleLeft, PiCaretDoubleRight } from 'react-icons/pi'
+import { PiCaretDoubleLeft, PiCaretDoubleRight, PiMicrosoftOutlookLogoFill } from 'react-icons/pi'
 import EditTitleModal from './overlays/EditTitleModal'
 import {
   BiGitBranch,
@@ -513,7 +513,21 @@ evaluators:
           icon: AiFillApi,
         },
         {
-          title: 'Email',
+          title: 'Gmail',
+          handleOnClick: () => {
+            addNode('data-source-email', 'DataSourceEmailNode')
+          },
+          icon: BiLogoGmail,
+        },
+        {
+          title: 'Outlook',
+          handleOnClick: () => {
+            addNode('data-source-email', 'DataSourceEmailNode')
+          },
+          icon: PiMicrosoftOutlookLogoFill,
+        },
+        {
+          title: 'Missive',
           handleOnClick: () => {
             addNode('data-source-email', 'DataSourceEmailNode')
           },
@@ -553,7 +567,7 @@ evaluators:
         },
       ],
     },
-    {
+    /* {
       title: 'Data Retriever',
       subtitle: 'Fetches specific data subsets from the source or index.',
       color: 'orange',
@@ -573,8 +587,8 @@ evaluators:
           icon: AiFillApi,
         },
       ],
-    },
-    {
+    }, */
+    /* {
       title: 'Data Extractor',
       subtitle: 'Extracts or transforms specific data elements.',
       color: 'blue',
@@ -594,7 +608,7 @@ evaluators:
           icon: GrAggregate,
         },
       ],
-    },
+    }, */
     {
       title: 'Data Exporter',
       subtitle: 'Sends processed data to specified destinations.',
