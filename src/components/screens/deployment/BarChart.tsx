@@ -41,7 +41,7 @@ export const options = {
     },
     y: {
       stacked: true,
-      title: { text: 'Number of rows', display: true },
+      title: { text: 'Number of outputs', display: true },
     },
   },
 }
