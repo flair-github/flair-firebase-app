@@ -146,10 +146,9 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
             {/* head */}
             <thead>
               <tr>
-                <th>Review Flag</th>
                 <th>Result Period</th>
                 <th>Processed Emails</th>
-                <th>Avg. Sentiment Level</th>
+                <th>Complain Emails</th>
                 <th>Flagged for Review</th>
                 <th>Actions</th>
               </tr>
@@ -159,18 +158,13 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
                 return (
                   <tr key={el.resultPeriod}>
                     <td>
-                      <div className="flex h-full w-full items-center justify-center">
-                        <input type="checkbox" className="checkbox" />
-                      </div>
-                    </td>
-                    <td>
                       <div className="">{el.resultPeriod}</div>
                     </td>
                     <td>
                       <div className="w-24 break-words">{el.processedEmails}</div>
                     </td>
                     <td>
-                      <div className="w-24 break-words">{el.sentimentLevel}</div>
+                      <div className="w-24 break-words">{Math.ceil(Math.random() * 20)}</div>
                     </td>
                     <td>
                       <div className="w-24 break-words">{el.flaggedForReview}</div>
