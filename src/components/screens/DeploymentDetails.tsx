@@ -148,7 +148,7 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
               <tr>
                 <th>Result Period</th>
                 <th>Processed Emails</th>
-                <th>Complain Emails</th>
+                <th>Complaint Emails</th>
                 <th>Forward to Sales</th>
                 <th>Flagged for Review</th>
                 <th>Actions</th>
