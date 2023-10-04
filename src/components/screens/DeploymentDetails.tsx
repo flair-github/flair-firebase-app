@@ -1,12 +1,13 @@
 import * as React from 'react'
 import { RiFlowChart } from 'react-icons/ri'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { BarChart } from './deployment/BarChart'
-import Results from './Results'
 // import { PieChart } from './deployment/PieChart'
 import { GiCheckMark, GiChecklist, GiSandsOfTime } from 'react-icons/gi'
 import { HiDocumentReport } from 'react-icons/hi'
 import { ImSpinner9 } from 'react-icons/im'
+import { MdForwardToInbox } from 'react-icons/md'
+import { BsReplyAll } from 'react-icons/bs'
 
 interface DeploymentDetailsProps {}
 
@@ -56,6 +57,48 @@ function generateResults(length: number = 10): Result[] {
 
   return results
 }
+
+const complaints = [
+  {
+    id: 1,
+    email: 'john.doe@example.com',
+    subject: 'Faulty Product Received',
+    message:
+      'I recently purchased a product from your website and it arrived faulty. Please assist.',
+    date: '2023-10-01',
+  },
+  {
+    id: 2,
+    email: 'jane.smith@example.com',
+    subject: 'Late Delivery',
+    message:
+      'My order was supposed to arrive last week and I still haven’t received it. Can you update me on the status?',
+    date: '2023-10-02',
+  },
+  {
+    id: 3,
+    email: 'samuel.jones@example.com',
+    subject: 'Incorrect Item Sent',
+    message:
+      'I ordered a blue shirt and received a red one instead. Please send me the correct item.',
+    date: '2023-10-03',
+  },
+  {
+    id: 4,
+    email: 'lucy.williams@example.com',
+    subject: 'Billing Issue',
+    message: 'I was double charged for my last purchase. Please refund the extra charge.',
+    date: '2023-10-04',
+  },
+  {
+    id: 5,
+    email: 'michael.brown@example.com',
+    subject: 'Website Issue',
+    message:
+      'I was trying to place an order on your website and it kept crashing. Can you look into this?',
+    date: '2023-10-05',
+  },
+]
 
 const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props => {
   const { deploymentId } = useParams()
@@ -176,11 +219,13 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
 
                     <td>
                       <div>
-                        <Link
+                        <button
                           className="btn m-1 bg-slate-200"
-                          to={'/deployment/' + el.resultPeriod}>
+                          onClick={() => {
+                            ;(document.getElementById('my_modal') as HTMLDialogElement).showModal()
+                          }}>
                           <HiDocumentReport /> Details
-                        </Link>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -199,6 +244,44 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
           ) : null}
         </div>
       </div>
+      <dialog id="my_modal" className="modal">
+        <div className="modal-box w-5/6 max-w-200">
+          <form method="dialog">
+            <div className="mb-4 flex w-full items-center justify-between">
+              <h3 className="text-lg font-bold">Details List</h3>
+              <button className="btn btn-circle btn-ghost btn-sm">✕</button>
+            </div>
+          </form>
+          <div className="grid grid-cols-2 gap-3">
+            {complaints.map(complaint => (
+              <div key={complaint.id} className="card card-side border bg-base-100 shadow-sm">
+                <div className="card-body px-6 py-3">
+                  <h2 className="card-title">{complaint.subject}</h2>
+                  <p>{complaint.message}</p>
+                  <div className="card-actions items-center justify-between text-sm">
+                    <p>{complaint.email}</p>
+                    <span className="join">
+                      <div className="tooltip tooltip-bottom" data-tip="Reply">
+                        <button className="btn join-item btn-sm">
+                          <BsReplyAll />
+                        </button>
+                      </div>
+                      <div className="tooltip tooltip-bottom" data-tip="Forward">
+                        <button className="btn join-item btn-sm">
+                          <MdForwardToInbox />
+                        </button>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </>
   )
 }
