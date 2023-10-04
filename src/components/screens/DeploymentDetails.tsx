@@ -16,7 +16,7 @@ interface Result {
   resultPeriod: string
   processedEmails: string
   sentimentLevel: Sentiment
-  satisfactionLevel: string
+  flaggedForReview: string
 }
 
 function generateResults(length: number = 10): Result[] {
@@ -38,16 +38,16 @@ function generateResults(length: number = 10): Result[] {
       day: 'numeric',
       year: 'numeric',
     })}`
-    const processedEmails = Math.floor(Math.random() * 100 + 1).toString()
+    const processedEmails = Math.floor(Math.random() * 10000 + 1).toString()
     const sentiments: Sentiment[] = ['neutral', 'happy', 'angry']
     const sentimentLevel = sentiments[Math.floor(Math.random() * sentiments.length)]
-    const satisfactionLevel = Math.floor(Math.random() * 10 + 1).toString()
+    const flaggedForReview = Math.floor(Math.random() * 100 + 1).toString()
 
     results.push({
       resultPeriod,
       processedEmails,
       sentimentLevel,
-      satisfactionLevel,
+      flaggedForReview,
     })
 
     // Shift the date back
@@ -149,8 +149,8 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
                 <th>Review Flag</th>
                 <th>Result Period</th>
                 <th>Processed Emails</th>
-                <th>Sentiment Level</th>
-                <th>Satisfaction Level</th>
+                <th>Avg. Sentiment Level</th>
+                <th>Flagged for Review</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -173,7 +173,7 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
                       <div className="w-24 break-words">{el.sentimentLevel}</div>
                     </td>
                     <td>
-                      <div className="w-24 break-words">{el.satisfactionLevel}</div>
+                      <div className="w-24 break-words">{el.flaggedForReview}</div>
                     </td>
 
                     <td>
