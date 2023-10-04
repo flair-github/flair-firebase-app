@@ -149,6 +149,7 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
                 <th>Result Period</th>
                 <th>Processed Emails</th>
                 <th>Complain Emails</th>
+                <th>Forward to Sales</th>
                 <th>Flagged for Review</th>
                 <th>Actions</th>
               </tr>
@@ -162,6 +163,9 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
                     </td>
                     <td>
                       <div className="w-24 break-words">{el.processedEmails}</div>
+                    </td>
+                    <td>
+                      <div className="w-24 break-words">{Math.ceil(Math.random() * 20)}</div>
                     </td>
                     <td>
                       <div className="w-24 break-words">{Math.ceil(Math.random() * 20)}</div>
