@@ -206,14 +206,14 @@ function Deployment() {
             <div className="stat-desc">Compared to manual labor</div>
           </div>
 
-          <div className="stat">
+          {/* <div className="stat">
             <div className="stat-figure text-secondary">
               <GiMoneyStack className="h-10 w-10" />
             </div>
             <div className="stat-title">Money Saved</div>
             <div className="stat-value">1412 $</div>
             <div className="stat-desc">Compared to manual labor</div>
-          </div>
+          </div> */}
 
           <div className="stat">
             <div className="stat-figure text-secondary">
