@@ -14,6 +14,7 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
+      contexts: string[]
       prompt: string
     }
   | {
@@ -23,6 +24,7 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
+      contexts: string[]
       prompt: string
     }
   | {
@@ -34,6 +36,7 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
+      contexts: string[]
       prompt: string
     }
   | {
@@ -45,6 +48,7 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
+      contexts: string[]
       prompt: string
     }
 
@@ -224,6 +228,48 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                   }}
                   style={{ borderColor: 'black', resize: 'none' }}
                 />
+
+                {/* Contexts */}
+                <div className="mb-4 mt-1">
+                  <label className="label">
+                    <span className="font-semibold">Contexts</span>
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {['time', 'transcription', 'duration'].map((localKey, i) => {
+                      return (
+                        <div key={i} className="join border">
+                          <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
+                            <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">
+                              {localKey}
+                            </p>
+                          </span>
+                          <input
+                            type="checkbox"
+                            className="checkbox join-item px-1"
+                            checked={el.contexts.includes(localKey)}
+                            onChange={() => {
+                              setColumns(prev => {
+                                const newColumns = [...prev]
+                                const newColumn = { ...newColumns[index] }
+                                let newContexts = [...newColumn.contexts]
+
+                                if (newContexts.includes(localKey)) {
+                                  newContexts = newContexts.filter(key => key !== localKey)
+                                } else {
+                                  newContexts = [...newContexts, localKey]
+                                }
+
+                                newColumn.contexts = newContexts
+                                newColumns[index] = newColumn
+                                return newColumns
+                              })
+                            }}
+                          />
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
 
                 {/* Prompt */}
                 <label className="label">
@@ -497,6 +543,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                 instruction: '',
                 name: '',
                 prompt: '',
+                contexts: [],
               },
             ])
           }}>
