@@ -310,7 +310,8 @@ export const FlowEditor: React.FC<{
       // Call API
       {
         const headers = {
-          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/json',
+          'Content-Type': 'text/plain',
           // Additional headers if necessary (e.g., Authentication tokens)
         }
 
@@ -318,9 +319,9 @@ export const FlowEditor: React.FC<{
         axios
           .post(
             'https://flair-api.flairlabs.ai/api/v1/start-llm-executor',
-            {
+            JSON.stringify({
               workflow_request_id: ref.id,
-            },
+            }),
             { headers },
           )
           .then(response => {
@@ -614,7 +615,7 @@ export const FlowEditor: React.FC<{
         },
       ],
     }, */
-    /* {
+    {
       title: 'Data Extractor',
       subtitle: 'Extracts or transforms specific data elements.',
       color: 'blue',
@@ -634,7 +635,7 @@ export const FlowEditor: React.FC<{
           icon: GrAggregate,
         },
       ],
-    }, */
+    },
     {
       title: 'Data Exporter',
       subtitle: 'Sends processed data to specified destinations.',
