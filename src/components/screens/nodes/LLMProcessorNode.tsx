@@ -16,7 +16,7 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
-      contexts: string[]
+      importedKeys: Record<string, boolean>
       prompt: string
     }
   | {
@@ -26,19 +26,18 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
-      contexts: string[]
+      importedKeys: Record<string, boolean>
       prompt: string
     }
   | {
       columnId: string
       name: string
       type: 'category'
-      /** comma seperated */
       options: string
       promptStrategy: string
       model: string
       instruction: string
-      contexts: string[]
+      importedKeys: Record<string, boolean>
       prompt: string
     }
   | {
@@ -50,25 +49,25 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
-      contexts: string[]
+      importedKeys: Record<string, boolean>
       prompt: string
     }
 
 export interface LLMProcessorNodeContent {
   nodeType: 'llm-processor'
   columns: Array<ColumnContent>
-  keys: string[]
+  exportedKeys: Record<string, boolean>
 }
 
 export const llmProcessorNodeDefaultContent: LLMProcessorNodeContent = {
   nodeType: 'llm-processor',
   columns: [],
-  keys: [],
+  exportedKeys: {},
 }
 
 export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
   const [columns, setColumns] = useState<LLMProcessorNodeContent['columns']>([])
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [exportedKeys, setExportedKeys] = useState<LLMProcessorNodeContent['exportedKeys']>({})
   const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
 
   // Initial data
@@ -78,7 +77,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
     }
 
     setColumns(JSON.parse(JSON.stringify(data.initialContents.columns)))
-    setSelectedKeys(data.initialContents.keys)
+    setExportedKeys(data.initialContents.exportedKeys)
   }, [data.initialContents])
 
   // Copy node data to cache
@@ -86,27 +85,36 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
     const cache: LLMProcessorNodeContent = {
       nodeType: 'llm-processor',
       columns: columns,
-      keys: selectedKeys,
+      exportedKeys: exportedKeys,
     }
 
     nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, columns, selectedKeys])
+  }, [data.nodeId, columns, exportedKeys])
 
   const [nodeKeys, setNodeKeys] = useAtom(atomNodeKeys)
   const edges = useAtomValue(edgesAtom)
 
   const keyOptions = React.useMemo(() => {
     const keyEdges = edges.filter(({ target }) => target === data.nodeId)
-    let newKeys: string[] = []
+    let newKeys: Record<string, boolean> = {}
     keyEdges.forEach(kE => {
-      newKeys = newKeys.concat(nodeKeys[kE.source] ?? [])
+      newKeys = Object.assign(newKeys, nodeKeys[kE.source] ?? {})
     })
     return newKeys
   }, [edges, data.nodeId, nodeKeys])
 
   React.useEffect(() => {
-    setNodeKeys(prev => ({ ...prev, [data.nodeId]: selectedKeys }))
-  }, [data.nodeId, selectedKeys, setNodeKeys])
+    const newExportedKeys = { ...keyOptions }
+    columns.forEach(col => {
+      newExportedKeys[col.name] = true
+    })
+    setExportedKeys(newExportedKeys)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columns])
+
+  React.useEffect(() => {
+    setNodeKeys(prev => ({ ...prev, [data.nodeId]: exportedKeys }))
+  }, [data.nodeId, exportedKeys, setNodeKeys])
 
   return (
     <div
@@ -119,12 +127,12 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
       className="bg-blue-50">
       <NodeHeader title="LLM Processor" color="blue" withFlair nodeId={data.nodeId} />
       <section className="px-5 pb-5">
-        <div className="mb-4 mt-1">
+        {/* <div className="mb-4 mt-1">
           <label className="label">
             <span className="font-semibold">Keys</span>
           </label>
           <div className="grid grid-cols-4 gap-2">
-            {keyOptions.map(localKey => (
+            {Object.keys(keyOptions).map(localKey => (
               <div key={localKey} className="join border">
                 <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
                   <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">{localKey}</p>
@@ -147,7 +155,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
         <div className="mb-1 flex">
           {/* Col */}
           <div className="mr-2 flex w-14 items-center" />
@@ -287,7 +295,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                     <span className="font-semibold">Contexts</span>
                   </label>
                   <div className="grid grid-cols-3 gap-2">
-                    {['time', 'transcription', 'duration'].map((localKey, i) => {
+                    {Object.keys(keyOptions ? keyOptions : {}).map((localKey, i) => {
                       return (
                         <div key={i} className="join border">
                           <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
@@ -298,20 +306,20 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                           <input
                             type="checkbox"
                             className="checkbox join-item px-1"
-                            checked={el.contexts.includes(localKey)}
+                            checked={el.importedKeys[localKey]}
                             onChange={() => {
                               setColumns(prev => {
                                 const newColumns = [...prev]
                                 const newColumn = { ...newColumns[index] }
-                                let newContexts = [...newColumn.contexts]
+                                let newImportedKeys = { ...newColumn.importedKeys }
 
-                                if (newContexts.includes(localKey)) {
-                                  newContexts = newContexts.filter(key => key !== localKey)
+                                if (newImportedKeys[localKey]) {
+                                  newImportedKeys[localKey] = false
                                 } else {
-                                  newContexts = [...newContexts, localKey]
+                                  newImportedKeys[localKey] = true
                                 }
 
-                                newColumn.contexts = newContexts
+                                newColumn.importedKeys = newImportedKeys
                                 newColumns[index] = newColumn
                                 return newColumns
                               })
@@ -595,7 +603,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                 instruction: '',
                 name: '',
                 prompt: '',
-                contexts: [],
+                importedKeys: {},
               },
             ])
           }}>

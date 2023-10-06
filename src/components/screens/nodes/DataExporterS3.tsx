@@ -16,7 +16,7 @@ export interface DataExporterS3NodeContent {
   secretKey: string
   bucketName: string
   regionName: string
-  keys: string[]
+  importedKeys: Record<string, boolean>
 }
 
 export const dataExporterS3DefaultContent: DataExporterS3NodeContent = {
@@ -27,7 +27,7 @@ export const dataExporterS3DefaultContent: DataExporterS3NodeContent = {
   secretKey: '',
   bucketName: '',
   regionName: '',
-  keys: [],
+  importedKeys: {},
 }
 
 export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
@@ -58,9 +58,9 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
 
   const keyOptions = React.useMemo(() => {
     const keyEdges = edges.filter(({ target }) => target === data.nodeId)
-    let newKeys: string[] = []
+    let newKeys: Record<string, boolean> = {}
     keyEdges.forEach(kE => {
-      newKeys = newKeys.concat(nodeKeys[kE.source] ?? [])
+      newKeys = Object.assign(newKeys, nodeKeys[kE.source] ?? {})
     })
     return newKeys
   }, [edges, data.nodeId, nodeKeys])
@@ -163,23 +163,24 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
             <span className="font-semibold">Keys</span>
           </label>
           <div className="grid grid-cols-2 gap-2">
-            {keyOptions.map(localKey => (
+            {Object.keys(keyOptions ? keyOptions : {}).map(localKey => (
               <div key={localKey} className="join border">
                 <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
                   <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">{localKey}</p>
                 </span>
                 <input
                   type="checkbox"
-                  checked={nodeContent.keys?.includes(localKey)}
+                  checked={(nodeContent.importedKeys ?? {})[localKey]}
                   className="checkbox join-item px-1"
                   onChange={() => {
                     setNodeContent(prev => {
-                      if (!prev.keys) {
-                        return { ...prev, keys: [localKey] }
+                      const newImportedKeys = { ...prev.importedKeys }
+                      if (newImportedKeys[localKey]) {
+                        newImportedKeys[localKey] = false
+                      } else {
+                        newImportedKeys[localKey] = true
                       }
-                      return prev.keys.includes(localKey)
-                        ? { ...prev, keys: prev.keys.filter(key => key !== localKey) }
-                        : { ...prev, keys: [...prev.keys, localKey] }
+                      return { ...prev, importedKeys: newImportedKeys }
                     })
                   }}
                 />

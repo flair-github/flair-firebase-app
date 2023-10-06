@@ -15,7 +15,7 @@ export interface DataSourceS3NodeContent {
   secretKey: string
   bucketName: string
   regionName: string
-  keys: string[]
+  exportedKeys: Record<string, boolean>
 }
 
 export const dataSourceS3DefaultContent: DataSourceS3NodeContent = {
@@ -26,7 +26,7 @@ export const dataSourceS3DefaultContent: DataSourceS3NodeContent = {
   secretKey: '',
   bucketName: '',
   regionName: '',
-  keys: [],
+  exportedKeys: {},
 }
 
 export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
@@ -56,8 +56,8 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
 
   const [_, setNodeKeys] = useAtom(atomNodeKeys)
   React.useEffect(() => {
-    setNodeKeys(prev => ({ ...prev, [data.nodeId]: nodeContent.keys }))
-  }, [data.nodeId, nodeContent.keys, setNodeKeys])
+    setNodeKeys(prev => ({ ...prev, [data.nodeId]: nodeContent.exportedKeys }))
+  }, [data.nodeId, nodeContent.exportedKeys, setNodeKeys])
 
   return (
     <div
@@ -168,7 +168,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
                 keyInputRef.current
                 setNodeContent(prev => ({
                   ...prev,
-                  keys: [...prev.keys, keyInputRef.current!.value],
+                  exportedKeys: { ...prev.exportedKeys, [keyInputRef.current!.value]: true },
                 }))
                 setTimeout(() => {
                   keyInputRef.current!.value = ''
@@ -178,7 +178,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
             </button>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
-            {nodeContent.keys?.map(localKey => (
+            {Object.keys(nodeContent.exportedKeys ? nodeContent.exportedKeys : {}).map(localKey => (
               <div key={localKey} className="join border">
                 <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
                   <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">{localKey}</p>
@@ -186,10 +186,14 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
                 <button
                   className="btn join-item btn-sm px-1"
                   onClick={() => {
-                    setNodeContent(prev => ({
-                      ...prev,
-                      keys: prev.keys.filter(key => key !== localKey),
-                    }))
+                    setNodeContent(prev => {
+                      const newExportedKeys = { ...prev.exportedKeys }
+                      delete newExportedKeys[localKey]
+                      return {
+                        ...prev,
+                        exportedKeys: newExportedKeys,
+                      }
+                    })
                   }}>
                   <GrFormClose className="h-6 w-6" />
                 </button>
