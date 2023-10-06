@@ -67,6 +67,8 @@ export const llmProcessorNodeDefaultContent: LLMProcessorNodeContent = {
 
 export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
   const [columns, setColumns] = useState<LLMProcessorNodeContent['columns']>([])
+  const [columnNames, setColumnNames] = useState<Record<string, string>>({})
+  // We must introduce above "columnNames" state to prevent circular dependency between "columns" local state and "nodeExportedKeys" jotai state
   const [exportedKeys, setExportedKeys] = useState<LLMProcessorNodeContent['exportedKeys']>({})
   const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
 
@@ -76,7 +78,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
       return
     }
 
-    setColumns(JSON.parse(JSON.stringify(data.initialContents.columns)))
+    const initialColumns = JSON.parse(JSON.stringify(data.initialContents.columns))
+    setColumns(initialColumns)
+    setColumnNames(
+      Object.fromEntries(initialColumns.map((col: ColumnContent) => [col.columnId, col.name])),
+    )
     setExportedKeys(data.initialContents.exportedKeys)
   }, [data.initialContents])
 
@@ -91,25 +97,10 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, columns, exportedKeys])
 
-  const [nodeKeys, setNodeKeys] = useAtom(atomNodeExportedKeys)
+  const [nodeExportedKeys, setNodeExportedKeys] = useAtom(atomNodeExportedKeys)
   const edges = useAtomValue(edgesAtom)
 
-  const keyOptions = React.useMemo(() => {
-    let newKeys: Record<string, boolean> = {}
-
-    const recursiveAssign = (nodeId: string) => {
-      const keyEdges = edges.filter(({ target }) => target === nodeId)
-      keyEdges.forEach(kE => {
-        newKeys = Object.assign(newKeys, nodeKeys[kE.source] ?? {})
-        recursiveAssign(kE.source) // Recursive call
-      })
-    }
-
-    recursiveAssign(data.nodeId) // Start recursion from the initial nodeId
-
-    return newKeys
-  }, [edges, data.nodeId, nodeKeys])
-
+  const [keyOptions, setKeyOptions] = useState<Record<string, boolean>>({})
   React.useEffect(() => {
     const newExportedKeys = { ...keyOptions }
     columns.forEach(col => {
@@ -119,12 +110,29 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
   }, [keyOptions, columns])
 
   React.useEffect(() => {
+    let newKeys: Record<string, boolean> = {}
+
+    const recursiveAssign = (nodeId: string) => {
+      const keyEdges = edges.filter(({ target }) => target === nodeId)
+      keyEdges.forEach(kE => {
+        newKeys = Object.assign(newKeys, nodeExportedKeys[kE.source] ?? {})
+        recursiveAssign(kE.source) // Recursive call
+      })
+    }
+
+    recursiveAssign(data.nodeId) // Start recursion from the initial nodeId
+
+    setKeyOptions(newKeys)
+    setColumns(prev => prev.map(col => ({ ...col, importedKeys: newKeys })))
+  }, [edges, data.nodeId, nodeExportedKeys])
+
+  React.useEffect(() => {
     const newExportedKeys: Record<string, boolean> = {}
-    columns.forEach(col => {
-      newExportedKeys[col.name] = true
+    Object.values(columnNames).forEach(columnName => {
+      newExportedKeys[columnName] = true
     })
-    setNodeKeys(prev => ({ ...prev, [data.nodeId]: newExportedKeys }))
-  }, [data.nodeId, columns, setNodeKeys])
+    setNodeExportedKeys(prev => ({ ...prev, [data.nodeId]: newExportedKeys }))
+  }, [data.nodeId, columnNames, setNodeExportedKeys])
 
   return (
     <div
@@ -206,6 +214,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                     newColumns[index].name = newName
                     return newColumns
                   })
+                  setColumnNames(prev => {
+                    const newColumnNames = { ...prev }
+                    newColumnNames[el.columnId] = newName
+                    return newColumnNames
+                  })
                 }}
                 style={{ borderColor: 'black', resize: 'none' }}
               />
@@ -270,6 +283,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                       const newColumns = [...prev]
                       newColumns[index].name = newName
                       return newColumns
+                    })
+                    setColumnNames(prev => {
+                      const newColumnNames = { ...prev }
+                      newColumnNames[el.columnId] = newName
+                      return newColumnNames
                     })
                   }}
                   style={{ borderColor: 'black', resize: 'none' }}
@@ -593,6 +611,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
               className="ml-2 flex w-10 items-center justify-center"
               onClick={() => {
                 setColumns(prev => prev.filter(val => val.columnId !== el.columnId))
+                setColumnNames(prev => {
+                  const newColumnNames = { ...prev }
+                  delete newColumnNames[el.columnId]
+                  return newColumnNames
+                })
               }}>
               <div className="flex items-center justify-center" style={{ width: 22, height: 32 }}>
                 <GrFormClose style={{ color: '#6c757d' }} />
@@ -603,10 +626,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         <button
           className="btn"
           onClick={() => {
+            const columnId = v4()
             setColumns(prev => [
               ...prev,
               {
-                columnId: v4(),
+                columnId,
                 type: 'text',
                 promptStrategy: 'default',
                 model: 'gpt-3.5-turbo',
@@ -616,6 +640,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                 importedKeys: {},
               },
             ])
+            setColumnNames(prev => ({ ...prev, [columnId]: '' }))
           }}>
           Add
         </button>

@@ -53,7 +53,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
-  const nodeKeys = useAtomValue(atomNodeExportedKeys)
+  const nodeExportedKeys = useAtomValue(atomNodeExportedKeys)
   const edges = useAtomValue(edgesAtom)
 
   const keyOptions = React.useMemo(() => {
@@ -62,7 +62,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
     const recursiveAssign = (nodeId: string) => {
       const keyEdges = edges.filter(({ target }) => target === nodeId)
       keyEdges.forEach(kE => {
-        newKeys = Object.assign(newKeys, nodeKeys[kE.source] ?? {})
+        newKeys = Object.assign(newKeys, nodeExportedKeys[kE.source] ?? {})
         recursiveAssign(kE.source) // Recursive call
       })
     }
@@ -70,7 +70,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
     recursiveAssign(data.nodeId) // Start recursion from the initial nodeId
 
     return newKeys
-  }, [edges, data.nodeId, nodeKeys])
+  }, [edges, data.nodeId, nodeExportedKeys])
 
   useEffect(() => {
     setNodeContent(prev => ({ ...prev, importedKeys: keyOptions }))

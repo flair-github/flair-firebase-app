@@ -54,10 +54,10 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
 
   const keyInputRef = useRef<HTMLInputElement>()
 
-  const [_, setNodeKeys] = useAtom(atomNodeExportedKeys)
+  const [_, setNodeExportedKeys] = useAtom(atomNodeExportedKeys)
   React.useEffect(() => {
-    setNodeKeys(prev => ({ ...prev, [data.nodeId]: nodeContent.exportedKeys }))
-  }, [data.nodeId, nodeContent.exportedKeys, setNodeKeys])
+    setNodeExportedKeys(prev => ({ ...prev, [data.nodeId]: nodeContent.exportedKeys }))
+  }, [data.nodeId, nodeContent.exportedKeys, setNodeExportedKeys])
 
   return (
     <div
