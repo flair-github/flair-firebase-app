@@ -5,7 +5,7 @@ import { type NodeData, nodeContents } from './Registry'
 import { BiLogoAws } from 'react-icons/bi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
 import { useAtom } from 'jotai'
-import { atomNodeKeys } from '~/jotai/jotai'
+import { atomNodeExportedKeys } from '~/jotai/jotai'
 
 export interface DataSourceS3NodeContent {
   nodeType: 'data-source-s3'
@@ -54,7 +54,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
 
   const keyInputRef = useRef<HTMLInputElement>()
 
-  const [_, setNodeKeys] = useAtom(atomNodeKeys)
+  const [_, setNodeKeys] = useAtom(atomNodeExportedKeys)
   React.useEffect(() => {
     setNodeKeys(prev => ({ ...prev, [data.nodeId]: nodeContent.exportedKeys }))
   }, [data.nodeId, nodeContent.exportedKeys, setNodeKeys])

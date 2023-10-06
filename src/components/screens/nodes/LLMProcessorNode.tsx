@@ -6,7 +6,7 @@ import { v4 } from 'uuid'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
 import { edgesAtom, nodesAtom } from '../FlowEditor'
-import { atomNodeKeys } from '~/jotai/jotai'
+import { atomNodeExportedKeys } from '~/jotai/jotai'
 
 type ColumnContent =
   | {
@@ -91,15 +91,22 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, columns, exportedKeys])
 
-  const [nodeKeys, setNodeKeys] = useAtom(atomNodeKeys)
+  const [nodeKeys, setNodeKeys] = useAtom(atomNodeExportedKeys)
   const edges = useAtomValue(edgesAtom)
 
   const keyOptions = React.useMemo(() => {
-    const keyEdges = edges.filter(({ target }) => target === data.nodeId)
     let newKeys: Record<string, boolean> = {}
-    keyEdges.forEach(kE => {
-      newKeys = Object.assign(newKeys, nodeKeys[kE.source] ?? {})
-    })
+
+    const recursiveAssign = (nodeId: string) => {
+      const keyEdges = edges.filter(({ target }) => target === nodeId)
+      keyEdges.forEach(kE => {
+        newKeys = Object.assign(newKeys, nodeKeys[kE.source] ?? {})
+        recursiveAssign(kE.source) // Recursive call
+      })
+    }
+
+    recursiveAssign(data.nodeId) // Start recursion from the initial nodeId
+
     return newKeys
   }, [edges, data.nodeId, nodeKeys])
 
@@ -109,12 +116,15 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
       newExportedKeys[col.name] = true
     })
     setExportedKeys(newExportedKeys)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns])
+  }, [keyOptions, columns])
 
   React.useEffect(() => {
-    setNodeKeys(prev => ({ ...prev, [data.nodeId]: exportedKeys }))
-  }, [data.nodeId, exportedKeys, setNodeKeys])
+    const newExportedKeys: Record<string, boolean> = {}
+    columns.forEach(col => {
+      newExportedKeys[col.name] = true
+    })
+    setNodeKeys(prev => ({ ...prev, [data.nodeId]: newExportedKeys }))
+  }, [data.nodeId, columns, setNodeKeys])
 
   return (
     <div

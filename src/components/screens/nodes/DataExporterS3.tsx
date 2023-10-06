@@ -5,7 +5,7 @@ import { type NodeData, nodeContents } from './Registry'
 import { BiLogoAws } from 'react-icons/bi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
 import { useAtomValue } from 'jotai'
-import { atomNodeKeys } from '~/jotai/jotai'
+import { atomNodeExportedKeys } from '~/jotai/jotai'
 import { edgesAtom } from '../FlowEditor'
 
 export interface DataExporterS3NodeContent {
@@ -53,17 +53,28 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
-  const nodeKeys = useAtomValue(atomNodeKeys)
+  const nodeKeys = useAtomValue(atomNodeExportedKeys)
   const edges = useAtomValue(edgesAtom)
 
   const keyOptions = React.useMemo(() => {
-    const keyEdges = edges.filter(({ target }) => target === data.nodeId)
     let newKeys: Record<string, boolean> = {}
-    keyEdges.forEach(kE => {
-      newKeys = Object.assign(newKeys, nodeKeys[kE.source] ?? {})
-    })
+
+    const recursiveAssign = (nodeId: string) => {
+      const keyEdges = edges.filter(({ target }) => target === nodeId)
+      keyEdges.forEach(kE => {
+        newKeys = Object.assign(newKeys, nodeKeys[kE.source] ?? {})
+        recursiveAssign(kE.source) // Recursive call
+      })
+    }
+
+    recursiveAssign(data.nodeId) // Start recursion from the initial nodeId
+
     return newKeys
   }, [edges, data.nodeId, nodeKeys])
+
+  useEffect(() => {
+    setNodeContent(prev => ({ ...prev, importedKeys: keyOptions }))
+  }, [keyOptions])
 
   return (
     <div
@@ -170,8 +181,8 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
                 </span>
                 <input
                   type="checkbox"
-                  checked={(nodeContent.importedKeys ?? {})[localKey]}
                   className="checkbox join-item px-1"
+                  checked={(nodeContent.importedKeys ?? {})[localKey]}
                   onChange={() => {
                     setNodeContent(prev => {
                       const newImportedKeys = { ...prev.importedKeys }
