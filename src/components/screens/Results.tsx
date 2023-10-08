@@ -37,7 +37,7 @@ function Results() {
   const { items, loading, hasMore, loadMore } = useFirestoreResults(where, orders)
 
   return (
-    <div className="container mx-auto mb-9 mt-6 rounded-md border">
+    <div className="container mx-4 mb-9 mt-5 w-[calc(100%-2rem)] rounded-md border">
       <div className="flex items-center border-b p-3">
         <form className="join">
           <select
@@ -139,9 +139,7 @@ function Results() {
                   <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td>
                   <td>
                     <div style={{ minWidth: 250 }}>
-                      <Link
-                        className="btn m-1 bg-slate-200"
-                        to={'/result-details/' + el.workflowResultId}>
+                      <Link className="btn m-1 bg-slate-200" to={'/result/' + el.workflowResultId}>
                         <HiDocumentReport /> Details
                       </Link>
                       <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>

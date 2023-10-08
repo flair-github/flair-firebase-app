@@ -1,0 +1,151 @@
+import React, { Suspense, useState } from 'react'
+import { Disclosure } from '@headlessui/react'
+import { Link, Outlet, useLocation } from 'react-router-dom'
+import { RiFlowChart, RiLogoutCircleLine } from 'react-icons/ri'
+import { AiOutlineDeploymentUnit, AiOutlineSetting, AiTwotoneExperiment } from 'react-icons/ai'
+import { CgTranscript } from 'react-icons/cg'
+import { VscDebugLineByLine } from 'react-icons/vsc'
+import { FiChevronRight } from 'react-icons/fi'
+import { useAtomValue } from 'jotai'
+import { atomUserData } from '~/jotai/jotai'
+import { useAuth } from '~/lib/firebase'
+import { ImSpinner9 } from 'react-icons/im'
+
+const navigation = [
+  { name: 'Flow', href: '/', icon: RiFlowChart },
+  { name: 'Experiment', href: '/result', icon: AiTwotoneExperiment },
+  { name: 'Deployment', href: '/deployment', icon: AiOutlineDeploymentUnit },
+  { name: 'Script', href: '/transcription', icon: CgTranscript },
+  {
+    name: 'Debug',
+    icon: VscDebugLineByLine,
+    children: [
+      { name: 'LLM Output', href: '/llm-outputs' },
+      { name: 'User Config', href: '/user-config' },
+    ],
+  },
+  { name: 'Settings', href: '/settings', icon: AiOutlineSetting },
+]
+
+function classNames(...classes: any[]) {
+  return classes.filter(Boolean).join(' ')
+}
+
+export default function Sidenav() {
+  const location = useLocation()
+  const userData = useAtomValue(atomUserData)
+  const [isHover, setIsHover] = useState(false)
+  const auth = useAuth()
+  const handleSignOut = () => {
+    auth.signOut()
+  }
+
+  return (
+    <div className="flex h-screen min-h-screen w-full">
+      <div className="flex w-64 min-w-[16rem] flex-col overflow-y-auto border-r border-gray-200 bg-white px-6">
+        <div className="mb-2 flex h-16 shrink-0 items-center">
+          <img className="h-8 w-auto" src="/images/flair-ai.svg" alt="Flair Logo" />
+        </div>
+        <nav className="flex flex-1 flex-col">
+          <ul role="list" className="flex flex-1 flex-col gap-y-7">
+            <li>
+              <ul role="list" className="-mx-2 space-y-1">
+                {navigation.map(item => (
+                  <li key={item.name}>
+                    {!item.children ? (
+                      <Link
+                        to={item.href}
+                        className={classNames(
+                          item.href === location.pathname ? 'bg-gray-50' : 'hover:bg-gray-50',
+                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700',
+                        )}>
+                        <item.icon className="h-6 w-6 shrink-0 text-gray-400" aria-hidden="true" />
+                        {item.name}
+                      </Link>
+                    ) : (
+                      <Disclosure as="div">
+                        {({ open }) => (
+                          <>
+                            <Disclosure.Button
+                              className={classNames(
+                                item.href === location.pathname ? 'bg-gray-50' : 'hover:bg-gray-50',
+                                'flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold text-gray-700',
+                              )}>
+                              <item.icon
+                                className="h-6 w-6 shrink-0 text-gray-400"
+                                aria-hidden="true"
+                              />
+                              {item.name}
+                              <FiChevronRight
+                                className={classNames(
+                                  open ? 'rotate-90 text-gray-500' : 'text-gray-400',
+                                  'ml-auto h-5 w-5 shrink-0',
+                                )}
+                                aria-hidden="true"
+                              />
+                            </Disclosure.Button>
+                            <Disclosure.Panel as="ul" className="mt-1 px-2">
+                              {item.children.map(subItem => (
+                                <li key={subItem.name}>
+                                  {/* 44px */}
+                                  <Disclosure.Button
+                                    as={Link}
+                                    to={subItem.href}
+                                    className={classNames(
+                                      subItem.href === location.pathname
+                                        ? 'bg-gray-50'
+                                        : 'hover:bg-gray-50',
+                                      'block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-700',
+                                    )}>
+                                    {subItem.name}
+                                  </Disclosure.Button>
+                                </li>
+                              ))}
+                            </Disclosure.Panel>
+                          </>
+                        )}
+                      </Disclosure>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </li>
+
+            <li className="-mx-6 mt-auto">
+              <div
+                className="flex cursor-pointer items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+                onMouseEnter={() => setIsHover(true)}
+                onMouseLeave={() => setIsHover(false)}
+                onClick={handleSignOut}>
+                {isHover ? (
+                  <RiLogoutCircleLine className="h-8 w-8" />
+                ) : (
+                  <img
+                    className="h-8 w-8 rounded-full bg-gray-50"
+                    src={userData?.userPhotoUrl}
+                    alt="user image"
+                  />
+                )}
+                <span className="sr-only">Your profile</span>
+                <span aria-hidden="true">
+                  {isHover ? 'Logout' : userData?.userName || 'Flair User'}
+                </span>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <Suspense
+        fallback={
+          <main className="flex grow items-center justify-center overflow-hidden">
+            <ImSpinner9 className="h-16 w-16 animate-spin text-accent" />
+          </main>
+        }>
+        <main className="grow overflow-scroll">
+          <Outlet />
+        </main>
+      </Suspense>
+    </div>
+  )
+}

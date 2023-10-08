@@ -843,8 +843,8 @@ export const FlowEditor: React.FC<{
     </ReactFlow>
   ) : (
     <>
-      <main className="h-[calc(100vh-4rem)]">
-        <section className="relative h-[calc(100vh-4rem)] w-full">
+      <main className="h-full">
+        <section className="relative h-full w-full">
           <aside
             className={`absolute -left-1 top-0 z-10 flex h-full w-96 ${
               expanded ? 'translate-x-0' : '-translate-x-full'
