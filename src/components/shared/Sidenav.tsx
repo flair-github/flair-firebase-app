@@ -10,8 +10,14 @@ import { useAtomValue } from 'jotai'
 import { atomUserData } from '~/jotai/jotai'
 import { useAuth } from '~/lib/firebase'
 import { ImSpinner9 } from 'react-icons/im'
+import { IconType } from 'react-icons'
 
-const navigation = [
+const navigation: {
+  name: string
+  href: string
+  icon: IconType
+  children?: { name: string; href: string }
+}[] = [
   { name: 'Flow', href: '/', icon: RiFlowChart },
   { name: 'Experiment', href: '/result', icon: AiTwotoneExperiment },
   { name: 'Deployment', href: '/deployment', icon: AiOutlineDeploymentUnit },
