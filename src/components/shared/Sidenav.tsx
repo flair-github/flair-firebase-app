@@ -16,15 +16,15 @@ const navigation = [
   { name: 'Experiment', href: '/result', icon: AiTwotoneExperiment },
   { name: 'Deployment', href: '/deployment', icon: AiOutlineDeploymentUnit },
   { name: 'Script', href: '/transcription', icon: CgTranscript },
-  {
-    name: 'Debug',
-    icon: VscDebugLineByLine,
-    children: [
-      { name: 'LLM Output', href: '/llm-outputs' },
-      { name: 'User Config', href: '/user-config' },
-    ],
-  },
-  { name: 'Settings', href: '/settings', icon: AiOutlineSetting },
+  // {
+  //   name: 'Debug',
+  //   icon: VscDebugLineByLine,
+  //   children: [
+  //     { name: 'LLM Output', href: '/llm-outputs' },
+  //     { name: 'User Config', href: '/user-config' },
+  //   ],
+  // },
+  // { name: 'Settings', href: '/settings', icon: AiOutlineSetting },
 ]
 
 function classNames(...classes: any[]) {
