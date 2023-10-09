@@ -154,7 +154,7 @@ const UserConfig: React.FunctionComponent<UserConfigProps> = props => {
 
   return (
     <>
-      <div className="container relative mx-auto mb-9 mt-6 overflow-hidden rounded-md border">
+      <div className="container relative mx-4 mb-9 mt-5 w-[calc(100%-2rem)] overflow-hidden rounded-md border">
         <CodeMirror
           value={value}
           height="80vh"

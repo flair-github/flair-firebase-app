@@ -105,7 +105,7 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
 
   return (
     <>
-      <div className="container mx-auto mb-9 mt-6 rounded-md border px-6 py-3">
+      <div className="container mx-4 mb-9 mt-6 w-[calc(100%-2rem)] rounded-md border px-6 py-3">
         <div className="flex items-center justify-between">
           <h4 className="text-lg font-medium">Deployment ID : {deploymentId}</h4>
           <button className="btn bg-slate-200" onClick={() => {}}>
@@ -150,7 +150,7 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
         </div>
       </div>
 
-      <div className="container mx-auto mb-9 mt-6 rounded-md border">
+      <div className="container mx-4 mb-9 mt-6 w-[calc(100%-2rem)] rounded-md border">
         <div className="flex items-center border-b p-3">
           <form className="join">
             <select

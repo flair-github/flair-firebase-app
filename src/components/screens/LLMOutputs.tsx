@@ -48,7 +48,7 @@ function LLMOutputs() {
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
 
   return (
-    <div className="container mx-auto mb-9 mt-6 rounded-md border">
+    <div className="container mx-4 mb-9 mt-5 w-[calc(100%-2rem)] rounded-md border">
       <div className="border-grayscaleDivider flex h-[3rem] border-b">
         <div className="flex-1" />
         <button

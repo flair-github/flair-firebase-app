@@ -231,7 +231,7 @@ function ResultDetails({ id }: { id?: string }) {
         </a>
       </nav>
       {activeTab === 'evaluation' && (
-        <div>
+        <div className="overflow-scroll">
           <div className="mb-3 flex space-x-2">
             <div className="form-control w-80">
               <label className="label">

@@ -195,7 +195,7 @@ const name2Icon = (name: string) => {
 function Deployment() {
   return (
     <>
-      <div className="container mx-auto my-6 rounded-md">
+      <div className="container mx-4 my-5 w-[calc(100%-2rem)] rounded-md">
         <div className="stats w-full rounded-md border">
           <div className="stat">
             <div className="stat-figure text-secondary">
@@ -225,7 +225,7 @@ function Deployment() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto mb-9 mt-6 rounded-md border">
+      <div className="container mx-4 mb-9 mt-6 w-[calc(100%-2rem)] rounded-md border">
         {/* <div className="flex items-center border-b p-3">
         <form className="join">
           <select
