@@ -311,19 +311,16 @@ export const FlowEditor: React.FC<{
       {
         const headers = {
           // 'Content-Type': 'application/json',
-          'Content-Type': 'text/plain',
+          'Content-Type': 'application/x-www-form-urlencoded',
           // Additional headers if necessary (e.g., Authentication tokens)
         }
 
+        const params = new URLSearchParams()
+        params.append('workflow_request_id', ref.id)
+
         // Make API call
         axios
-          .post(
-            'https://flair-api.flairlabs.ai/api/v1/start-llm-executor',
-            JSON.stringify({
-              workflow_request_id: ref.id,
-            }),
-            { headers },
-          )
+          .post('https://flair-api.flairlabs.ai/api/v1/start-llm-executor', params, { headers })
           .then(response => {
             console.log('start-llm-executor response.data', response.data)
           })
