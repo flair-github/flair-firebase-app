@@ -16,7 +16,7 @@ const navigation: {
   name: string
   href: string
   icon: IconType
-  children?: { name: string; href: string }
+  children?: { name: string; href: string }[]
 }[] = [
   { name: 'Flow', href: '/', icon: RiFlowChart },
   { name: 'Experiment', href: '/result', icon: AiTwotoneExperiment },
@@ -91,7 +91,7 @@ export default function Sidenav() {
                               />
                             </Disclosure.Button>
                             <Disclosure.Panel as="ul" className="mt-1 px-2">
-                              {item.children.map(subItem => (
+                              {item.children?.map(subItem => (
                                 <li key={subItem.name}>
                                   {/* 44px */}
                                   <Disclosure.Button
