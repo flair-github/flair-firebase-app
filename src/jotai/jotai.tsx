@@ -11,3 +11,4 @@ export const atomClient = atom(
     ? createClient<Database>(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_KEY)
     : undefined,
 )
+export const atomNodeExportedKeys = atom<Record<string, Record<string, boolean>>>({})

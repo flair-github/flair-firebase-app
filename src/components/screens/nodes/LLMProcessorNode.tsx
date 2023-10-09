@@ -3,8 +3,10 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents, jotaiAllowInteraction } from './Registry'
 import { v4 } from 'uuid'
-import { useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import { edgesAtom, nodesAtom } from '../FlowEditor'
+import { atomNodeExportedKeys } from '~/jotai/jotai'
 
 type ColumnContent =
   | {
@@ -14,7 +16,7 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
-      contexts: string[]
+      importedKeys: Record<string, boolean>
       prompt: string
     }
   | {
@@ -24,19 +26,18 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
-      contexts: string[]
+      importedKeys: Record<string, boolean>
       prompt: string
     }
   | {
       columnId: string
       name: string
       type: 'category'
-      /** comma seperated */
       options: string
       promptStrategy: string
       model: string
       instruction: string
-      contexts: string[]
+      importedKeys: Record<string, boolean>
       prompt: string
     }
   | {
@@ -48,22 +49,27 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
-      contexts: string[]
+      importedKeys: Record<string, boolean>
       prompt: string
     }
 
 export interface LLMProcessorNodeContent {
   nodeType: 'llm-processor'
   columns: Array<ColumnContent>
+  exportedKeys: Record<string, boolean>
 }
 
 export const llmProcessorNodeDefaultContent: LLMProcessorNodeContent = {
   nodeType: 'llm-processor',
   columns: [],
+  exportedKeys: {},
 }
 
 export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
   const [columns, setColumns] = useState<LLMProcessorNodeContent['columns']>([])
+  const [columnNames, setColumnNames] = useState<Record<string, string>>({})
+  // We must introduce above "columnNames" state to prevent circular dependency between "columns" local state and "nodeExportedKeys" jotai state
+  const [exportedKeys, setExportedKeys] = useState<LLMProcessorNodeContent['exportedKeys']>({})
   const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
 
   // Initial data
@@ -72,7 +78,12 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
       return
     }
 
-    setColumns(JSON.parse(JSON.stringify(data.initialContents.columns)))
+    const initialColumns = JSON.parse(JSON.stringify(data.initialContents.columns))
+    setColumns(initialColumns)
+    setColumnNames(
+      Object.fromEntries(initialColumns.map((col: ColumnContent) => [col.columnId, col.name])),
+    )
+    setExportedKeys(data.initialContents.exportedKeys)
   }, [data.initialContents])
 
   // Copy node data to cache
@@ -80,10 +91,48 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
     const cache: LLMProcessorNodeContent = {
       nodeType: 'llm-processor',
       columns: columns,
+      exportedKeys: exportedKeys,
     }
 
     nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, columns])
+  }, [data.nodeId, columns, exportedKeys])
+
+  const [nodeExportedKeys, setNodeExportedKeys] = useAtom(atomNodeExportedKeys)
+  const edges = useAtomValue(edgesAtom)
+
+  const [keyOptions, setKeyOptions] = useState<Record<string, boolean>>({})
+  React.useEffect(() => {
+    const newExportedKeys = { ...keyOptions }
+    columns.forEach(col => {
+      newExportedKeys[col.name] = true
+    })
+    setExportedKeys(newExportedKeys)
+  }, [keyOptions, columns])
+
+  React.useEffect(() => {
+    let newKeys: Record<string, boolean> = {}
+
+    const recursiveAssign = (nodeId: string) => {
+      const keyEdges = edges.filter(({ target }) => target === nodeId)
+      keyEdges.forEach(kE => {
+        newKeys = Object.assign(newKeys, nodeExportedKeys[kE.source] ?? {})
+        recursiveAssign(kE.source) // Recursive call
+      })
+    }
+
+    recursiveAssign(data.nodeId) // Start recursion from the initial nodeId
+
+    setKeyOptions(newKeys)
+    setColumns(prev => prev.map(col => ({ ...col, importedKeys: newKeys })))
+  }, [edges, data.nodeId, nodeExportedKeys])
+
+  React.useEffect(() => {
+    const newExportedKeys: Record<string, boolean> = {}
+    Object.values(columnNames).forEach(columnName => {
+      newExportedKeys[columnName] = true
+    })
+    setNodeExportedKeys(prev => ({ ...prev, [data.nodeId]: newExportedKeys }))
+  }, [data.nodeId, columnNames, setNodeExportedKeys])
 
   return (
     <div
@@ -96,6 +145,35 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
       className="bg-blue-50">
       <NodeHeader title="LLM Processor" color="blue" withFlair nodeId={data.nodeId} />
       <section className="px-5 pb-5">
+        {/* <div className="mb-4 mt-1">
+          <label className="label">
+            <span className="font-semibold">Keys</span>
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {Object.keys(keyOptions).map(localKey => (
+              <div key={localKey} className="join border">
+                <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
+                  <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">{localKey}</p>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={selectedKeys?.includes(localKey)}
+                  className="checkbox join-item px-1"
+                  onChange={() => {
+                    setSelectedKeys(prev => {
+                      if (!prev) {
+                        return [localKey]
+                      }
+                      return prev.includes(localKey)
+                        ? prev.filter(key => key !== localKey)
+                        : [...prev, localKey]
+                    })
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div> */}
         <div className="mb-1 flex">
           {/* Col */}
           <div className="mr-2 flex w-14 items-center" />
@@ -135,6 +213,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                     const newColumns = [...prev]
                     newColumns[index].name = newName
                     return newColumns
+                  })
+                  setColumnNames(prev => {
+                    const newColumnNames = { ...prev }
+                    newColumnNames[el.columnId] = newName
+                    return newColumnNames
                   })
                 }}
                 style={{ borderColor: 'black', resize: 'none' }}
@@ -201,6 +284,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                       newColumns[index].name = newName
                       return newColumns
                     })
+                    setColumnNames(prev => {
+                      const newColumnNames = { ...prev }
+                      newColumnNames[el.columnId] = newName
+                      return newColumnNames
+                    })
                   }}
                   style={{ borderColor: 'black', resize: 'none' }}
                 />
@@ -235,7 +323,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                     <span className="font-semibold">Contexts</span>
                   </label>
                   <div className="grid grid-cols-3 gap-2">
-                    {['time', 'transcription', 'duration'].map((localKey, i) => {
+                    {Object.keys(keyOptions ? keyOptions : {}).map((localKey, i) => {
                       return (
                         <div key={i} className="join border">
                           <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
@@ -246,20 +334,20 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                           <input
                             type="checkbox"
                             className="checkbox join-item px-1"
-                            checked={el.contexts.includes(localKey)}
+                            checked={el.importedKeys[localKey]}
                             onChange={() => {
                               setColumns(prev => {
                                 const newColumns = [...prev]
                                 const newColumn = { ...newColumns[index] }
-                                let newContexts = [...newColumn.contexts]
+                                let newImportedKeys = { ...newColumn.importedKeys }
 
-                                if (newContexts.includes(localKey)) {
-                                  newContexts = newContexts.filter(key => key !== localKey)
+                                if (newImportedKeys[localKey]) {
+                                  newImportedKeys[localKey] = false
                                 } else {
-                                  newContexts = [...newContexts, localKey]
+                                  newImportedKeys[localKey] = true
                                 }
 
-                                newColumn.contexts = newContexts
+                                newColumn.importedKeys = newImportedKeys
                                 newColumns[index] = newColumn
                                 return newColumns
                               })
@@ -523,6 +611,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
               className="ml-2 flex w-10 items-center justify-center"
               onClick={() => {
                 setColumns(prev => prev.filter(val => val.columnId !== el.columnId))
+                setColumnNames(prev => {
+                  const newColumnNames = { ...prev }
+                  delete newColumnNames[el.columnId]
+                  return newColumnNames
+                })
               }}>
               <div className="flex items-center justify-center" style={{ width: 22, height: 32 }}>
                 <GrFormClose style={{ color: '#6c757d' }} />
@@ -533,19 +626,21 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         <button
           className="btn"
           onClick={() => {
+            const columnId = v4()
             setColumns(prev => [
               ...prev,
               {
-                columnId: v4(),
+                columnId,
                 type: 'text',
                 promptStrategy: 'default',
                 model: 'gpt-3.5-turbo',
                 instruction: '',
                 name: '',
                 prompt: '',
-                contexts: [],
+                importedKeys: {},
               },
             ])
+            setColumnNames(prev => ({ ...prev, [columnId]: '' }))
           }}>
           Add
         </button>
