@@ -5,6 +5,7 @@ import { RiFlowChart, RiLogoutCircleLine } from 'react-icons/ri'
 import { AiOutlineDeploymentUnit, AiOutlineSetting, AiTwotoneExperiment } from 'react-icons/ai'
 import { CgTranscript } from 'react-icons/cg'
 import { VscDebugLineByLine } from 'react-icons/vsc'
+import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 import { FiChevronRight } from 'react-icons/fi'
 import { useAtomValue } from 'jotai'
 import { atomUserData } from '~/jotai/jotai'
@@ -20,7 +21,7 @@ const navigation: {
 }[] = [
   { name: 'Flow', href: '/', icon: RiFlowChart },
   { name: 'Experiment', href: '/result', icon: AiTwotoneExperiment },
-  { name: 'Deployment', href: '/deployment', icon: AiOutlineDeploymentUnit },
+  { name: 'Deployment', href: '/deployment', icon: HiOutlineRocketLaunch },
   { name: 'Script', href: '/transcription', icon: CgTranscript },
   // {
   //   name: 'Debug',

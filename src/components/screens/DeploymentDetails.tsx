@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RiFlowChart } from 'react-icons/ri'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { BarChart } from './deployment/BarChart'
 // import { PieChart } from './deployment/PieChart'
 import { GiCheckMark, GiChecklist, GiSandsOfTime } from 'react-icons/gi'
@@ -105,7 +105,7 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
 
   return (
     <>
-      <div className="container mx-4 mb-9 mt-6 w-[calc(100%-2rem)] rounded-md border px-6 py-3">
+      <div className="container mx-4 mb-9 mt-5 w-[calc(100%-2rem)] rounded-md border px-6 py-3">
         <div className="flex items-center justify-between">
           <h4 className="text-lg font-medium">Deployment ID : {deploymentId}</h4>
           <button className="btn bg-slate-200" onClick={() => {}}>
@@ -219,13 +219,11 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
 
                     <td>
                       <div>
-                        <button
+                        <Link
                           className="btn m-1 bg-slate-200"
-                          onClick={() => {
-                            ;(document.getElementById('my_modal') as HTMLDialogElement).showModal()
-                          }}>
+                          to={'/deployment/' + deploymentId + '/13425'}>
                           <HiDocumentReport /> Details
-                        </button>
+                        </Link>
                       </div>
                     </td>
                   </tr>
@@ -244,44 +242,6 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
           ) : null}
         </div>
       </div>
-      <dialog id="my_modal" className="modal">
-        <div className="modal-box w-5/6 max-w-200">
-          <form method="dialog">
-            <div className="mb-4 flex w-full items-center justify-between">
-              <h3 className="text-lg font-bold">Details List</h3>
-              <button className="btn btn-circle btn-ghost btn-sm">✕</button>
-            </div>
-          </form>
-          <div className="grid grid-cols-2 gap-3">
-            {complaints.map(complaint => (
-              <div key={complaint.id} className="card card-side border bg-base-100 shadow-sm">
-                <div className="card-body px-6 py-3">
-                  <h2 className="card-title">{complaint.subject}</h2>
-                  <p>{complaint.message}</p>
-                  <div className="card-actions items-center justify-between text-sm">
-                    <p>{complaint.email}</p>
-                    <span className="join">
-                      <div className="tooltip tooltip-bottom" data-tip="Reply">
-                        <button className="btn join-item btn-sm">
-                          <BsReplyAll />
-                        </button>
-                      </div>
-                      <div className="tooltip tooltip-bottom" data-tip="Forward">
-                        <button className="btn join-item btn-sm">
-                          <MdForwardToInbox />
-                        </button>
-                      </div>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
     </>
   )
 }

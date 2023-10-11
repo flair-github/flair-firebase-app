@@ -111,6 +111,7 @@ import { GiConvergenceTarget } from 'react-icons/gi'
 import { GrAggregate, GrFormClose } from 'react-icons/gr'
 import { BsArrowsAngleContract, BsFillCloudHaze2Fill } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
+import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -779,7 +780,7 @@ export const FlowEditor: React.FC<{
     },
     {
       title: 'Deploy',
-      Icon: AiOutlineDeploymentUnit,
+      Icon: HiOutlineRocketLaunch,
       handleOnClick: async (event: React.SyntheticEvent) => {
         event.preventDefault()
         executeModalRef.current?.showModal()
