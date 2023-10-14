@@ -1,26 +1,18 @@
 import React, { RefObject, useEffect } from 'react'
-import { Dialog } from '@headlessui/react'
 import { useRef, useState } from 'react'
-import { SignInButton } from '~/components/domain/auth/SignInButton'
-import { SignOutButton } from '~/components/domain/auth/SignOutButton'
 import { Head } from '~/components/shared/Head'
 import { useAtomValue } from 'jotai'
-import { atomUser, atomUserData } from '~/jotai/jotai'
+import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { DocWorkflow } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { Link, useNavigate } from 'react-router-dom'
-import { MoonLoader, RingLoader } from 'react-spinners'
 import { TfiLayoutWidthDefault } from 'react-icons/tfi'
 import { BsArrowLeftShort, BsThreeDots } from 'react-icons/bs'
-import { ImFileEmpty } from 'react-icons/im'
+import { ImFileEmpty, ImSpinner9 } from 'react-icons/im'
 
 function Index() {
-  const [isOpen, setIsOpen] = useState(true)
-  const completeButtonRef = useRef(null)
-
   const userData = useAtomValue(atomUserData)
-
   const [myFlows, setMyFlows] = useState<DocWorkflow[]>()
 
   useEffect(() => {
@@ -77,12 +69,13 @@ function Index() {
   const navigate = useNavigate()
 
   const openWorkflow = (workflowId: string) => {
-    navigate('editor', { state: { workflowId } })
+    navigate('/editor/' + workflowId)
   }
   const onboardingModal = useRef() as RefObject<HTMLDialogElement>
   useEffect(() => {
     onboardingModal.current?.showModal()
   }, [])
+
   return (
     <>
       <Head title="Home" />
@@ -107,8 +100,8 @@ function Index() {
         {/* List of My Flows */}
 
         {!myFlows && (
-          <div className="flex h-52 items-center justify-center">
-            <MoonLoader color="rgba(0,0,0,0.2)" />
+          <div className="flex h-72 items-center justify-center">
+            <ImSpinner9 className="h-16 w-16 animate-spin" />
           </div>
         )}
         <div className="-m-4 flex flex-wrap">

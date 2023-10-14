@@ -36,6 +36,7 @@ export function NodeHeader({ color, Icon, title, withFlair, nodeId }: INodeHeade
         return 'bg-teal-200'
     }
   }, [color])
+
   return (
     <header className={'mb-3 flex items-center rounded-t-md px-5 py-5 ' + cssColor}>
       {Icon && <Icon className="mr-3 h-7 w-7" />}

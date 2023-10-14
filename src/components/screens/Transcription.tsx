@@ -1,7 +1,6 @@
 import React, { RefObject } from 'react'
 import { useRef, useState } from 'react'
 import { Head } from '~/components/shared/Head'
-import { MoonLoader } from 'react-spinners'
 import { BsThreeDots } from 'react-icons/bs'
 import { MdDescription, MdRecordVoiceOver } from 'react-icons/md'
 import { TbTemplate } from 'react-icons/tb'
@@ -52,9 +51,9 @@ function Transcription() {
 
         {/* List of My Flows */}
 
-        {false && (
-          <div className="flex h-52 items-center justify-center">
-            <MoonLoader color="rgba(0,0,0,0.2)" />
+        {!transcriptions && (
+          <div className="flex h-72 items-center justify-center">
+            <ImSpinner9 className="h-16 w-16 animate-spin" />
           </div>
         )}
         <div className="-m-4 flex flex-wrap">

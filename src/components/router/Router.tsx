@@ -56,6 +56,10 @@ const InnerRouter = () => {
           element: <FlowEditorScreen />,
         },
         {
+          path: 'editor/:workflowId',
+          element: <FlowEditorScreen />,
+        },
+        {
           path: '*',
           element: <Page404Screen />,
         },
