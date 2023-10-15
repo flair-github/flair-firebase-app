@@ -16,7 +16,7 @@ import 'reactflow/dist/style.css'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { atom, useAtom, useAtomValue } from 'jotai'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
@@ -126,7 +126,7 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   const [edges, setEdges] = useAtom(edgesAtom)
   const [title, setTitle] = useState<string>('')
 
-  const { workflowId } = useParams()
+  const { workflowId, workflowRequestId } = useParams()
 
   // Load initial
   useEffect(() => {
@@ -135,15 +135,25 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
         return
       }
 
-      const snap = await db.collection('workflows').doc(workflowId).get()
-      const data = snap.data() as DocWorkflow
-      setTitle(data.workflowTitle)
+      if (workflowRequestId) {
+        const snap = await db.collection('workflow_requests').doc(workflowRequestId).get()
+        const data = snap.data() as DocWorkflowRequest
 
-      const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
-      setNodes(newNodes)
-      setEdges(newEdges)
+        const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
+        setTitle('View Snapshot')
+        setNodes(newNodes)
+        setEdges(newEdges)
+      } else {
+        const snap = await db.collection('workflows').doc(workflowId).get()
+        const data = snap.data() as DocWorkflow
+        setTitle(data.workflowTitle)
+
+        const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
+        setNodes(newNodes)
+        setEdges(newEdges)
+      }
     })()
-  }, [workflowId, setEdges, setNodes])
+  }, [workflowId, workflowRequestId, setEdges, setNodes])
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
@@ -771,28 +781,38 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   const [expanded, setExpanded] = useState(true)
 
   return viewOnly ? (
-    <ReactFlow
-      elementsSelectable={allowInteraction}
-      nodesConnectable={allowInteraction}
-      nodesDraggable={allowInteraction}
-      zoomOnScroll={allowInteraction}
-      panOnScroll={allowInteraction}
-      zoomOnDoubleClick={allowInteraction}
-      panOnDrag={allowInteraction}
-      selectionOnDrag={allowInteraction}
-      nodes={nodes}
-      onNodesChange={onNodesChange}
-      edges={edges}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-      selectionMode={SelectionMode.Partial}
-      onMove={(_, newViewport) => {
-        viewport.current = newViewport
-      }}>
-      <Background />
-      <Controls position="bottom-right" />
-    </ReactFlow>
+    <>
+      <ReactFlow
+        elementsSelectable={false}
+        nodesConnectable={false}
+        nodesDraggable={false}
+        zoomOnScroll={true}
+        panOnScroll={true}
+        zoomOnDoubleClick={true}
+        panOnDrag={true}
+        selectionOnDrag={false}
+        nodes={nodes}
+        onNodesChange={onNodesChange}
+        edges={edges}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        selectionMode={SelectionMode.Partial}
+        onMove={(_, newViewport) => {
+          viewport.current = newViewport
+        }}>
+        <Background />
+        <Controls position="bottom-right" />
+      </ReactFlow>
+      <div className="absolute right-3 top-3 z-10 flex flex-col items-end space-y-3">
+        <div className="join w-fit bg-white shadow">
+          <Link className="btn btn-outline join-item" to={'/editor/' + workflowId}>
+            <AiOutlineEdit className="h-6 w-6" />
+            Edit
+          </Link>
+        </div>
+      </div>
+    </>
   ) : (
     <>
       <main className="h-full">

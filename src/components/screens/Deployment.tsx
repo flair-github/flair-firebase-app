@@ -329,9 +329,11 @@ function Deployment() {
                         <Link className="btn m-1 bg-slate-200" to={'/deployment/' + el.id}>
                           <HiDocumentReport /> Details
                         </Link>
-                        <button className="btn m-1 bg-slate-200" onClick={() => {}}>
+                        <Link
+                          className="btn m-1 bg-slate-200"
+                          to={'/editor/' + 'nBA6Nlx1HetqYzixWKAw' + '/' + '008wYclghfxk1MC1Jbug'}>
                           <RiFlowChart /> View Flow
-                        </button>
+                        </Link>
                       </div>
                     </td>
                   </tr>

@@ -108,9 +108,11 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
       <div className="container mx-4 mb-9 mt-5 w-[calc(100%-2rem)] rounded-md border px-6 py-3">
         <div className="flex items-center justify-between">
           <h4 className="text-lg font-medium">Deployment ID : {deploymentId}</h4>
-          <button className="btn bg-slate-200" onClick={() => {}}>
+          <Link
+            className="btn bg-slate-200"
+            to={'/editor/' + 'nBA6Nlx1HetqYzixWKAw' + '/' + '008wYclghfxk1MC1Jbug'}>
             <RiFlowChart /> View Flow
-          </button>
+          </Link>
         </div>
 
         <div className="stats mt-4 w-full rounded-md border shadow-sm">
@@ -180,9 +182,9 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
             </button>
           </form>
           <div className="flex-1" />
-          <button className="btn gap-1" onClick={async () => {}}>
+          {/* <button className="btn gap-1" onClick={async () => {}}>
             <div>View Flagged</div>
-          </button>
+          </button> */}
         </div>
         <div className="overflow-x-auto">
           <table className="table table-zebra">
