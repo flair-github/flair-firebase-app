@@ -9,32 +9,21 @@ import { OrderByDirection, WhereFilterOp } from 'firebase/firestore'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner9 } from 'react-icons/im'
 
-const defaultWhere = [
-  ['docExists', '==', true],
-  ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
-] as [string, WhereFilterOp, string][]
+function Results() {
+  const [column, setColumn] = useState('')
+  const [substring, setSubstring] = useState('')
+  const [where, setWhere] = useState<[string, WhereFilterOp, any][]>([
+    ['docExists', '==', true],
+    ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
+  ])
+  const [orders, setOrders] = useState<[string, OrderByDirection | undefined][]>([])
 
-const useFirestoreResults = (
-  where: [string, WhereFilterOp, string][],
-  orders: [string, OrderByDirection | undefined][],
-) => {
   const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocWorkflowResult>(
     'workflow_results',
     10,
     where as [string, WhereFilterOp, string][],
     orders,
   )
-
-  return { items, hasMore, loadMore, loading }
-}
-
-function Results() {
-  const [column, setColumn] = useState('')
-  const [substring, setSubstring] = useState('')
-  const [where, setWhere] = useState<[string, WhereFilterOp, string][]>(defaultWhere)
-  const [orders, setOrders] = useState<[string, OrderByDirection | undefined][]>([])
-
-  const { items, loading, hasMore, loadMore } = useFirestoreResults(where, orders)
 
   return (
     <div className="container mx-4 mb-9 mt-5 w-[calc(100%-2rem)] rounded-md border">
@@ -67,7 +56,10 @@ function Results() {
             onClick={e => {
               e.preventDefault()
               let queryOrders: [string, OrderByDirection | undefined][] = []
-              let queryFilter = [...defaultWhere]
+              let queryFilter: [string, WhereFilterOp, any][] = [
+                ['docExists', '==', true],
+                ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
+              ]
               if (column && substring) {
                 queryFilter.push([column, '>=', substring])
                 queryFilter.push([column, '<=', substring + '\uf8ff'])
