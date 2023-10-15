@@ -21,6 +21,7 @@ const TranscriptionScreen = lazy(() => import('~/components/screens/Transcriptio
 const UserConfigScreen = lazy(() => import('~/components/screens/UserConfig'))
 const DeploymentScreen = lazy(() => import('~/components/screens/Deployment'))
 const DeploymentDetailsScreen = lazy(() => import('~/components/screens/DeploymentDetails'))
+const DeploymentItemsScreen = lazy(() => import('~/components/screens/DeploymentItems'))
 
 const InnerRouter = () => {
   const user = useAtomValue(atomUser)
@@ -55,6 +56,14 @@ const InnerRouter = () => {
           element: <FlowEditorScreen />,
         },
         {
+          path: 'editor/:workflowId',
+          element: <FlowEditorScreen />,
+        },
+        {
+          path: 'editor/:workflowId/:workflowRequestId',
+          element: <FlowEditorScreen viewOnly={true} />,
+        },
+        {
           path: '*',
           element: <Page404Screen />,
         },
@@ -81,6 +90,10 @@ const InnerRouter = () => {
         {
           path: 'deployment/:deploymentId',
           element: <DeploymentDetailsScreen />,
+        },
+        {
+          path: 'deployment/:deploymentId/:detailId',
+          element: <DeploymentItemsScreen />,
         },
       ],
     },
