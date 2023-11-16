@@ -28,7 +28,7 @@ This starter uses following libraries:
 ## Set up
 
 ```shell
-mv .env.local.example .env.local
+mv .env.local.example .env
 yarn
 yarn dev
 ```
@@ -40,11 +40,11 @@ If you **DO NOT** use Firebase, you should do:
 - Delete the Firebase-related code: you check Main.tsx, SignInButton.tsx, SignOutButton.tsx.
 - And then delete `src/lib/firebase.ts`
 - Run `yarn remove firebase`
-- Remove `VITE_FIREBASE_*` env values from `.env.local`
+- Remove `VITE_FIREBASE_*` env values from `.env`
 
 If you want to use Firebase, you should do:
 
-- copy Firebase env values from Firebase Console, and paste them to `.env.local`.
+- copy Firebase env values from Firebase Console, and paste them to `.env`.
 - enable Google Auth in Firebase Console. ref: https://firebase.google.com/docs/auth/web/google-signin#before_you_begin
 
 ## Vite
