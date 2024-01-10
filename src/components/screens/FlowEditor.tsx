@@ -94,8 +94,6 @@ import {
   AiFillMinusSquare,
   AiOutlineNodeIndex,
 } from 'react-icons/ai'
-import { RiListSettingsLine, RiRobotLine } from 'react-icons/ri'
-import { AiFillApi, AiOutlineClear, AiOutlineEdit, AiOutlineNodeIndex } from 'react-icons/ai'
 import Menu from './editor/Menu'
 import { PiCaretDoubleLeft, PiCaretDoubleRight, PiMicrosoftOutlookLogoFill } from 'react-icons/pi'
 import EditTitleModal from './overlays/EditTitleModal'
