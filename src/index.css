@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -16,9 +16,29 @@ code {
     monospace;
 }
 
-.btn {
-  @apply normal-case;
+.input {
+  font-size: 20px;
 }
+
+.label {
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+
+/* .select {
+  font-size: 20px;
+} */
+
+.textarea {
+  font-size: 20px;
+}
+
+/* .btn {
+  @apply normal-case;
+  font-size: 18px;
+} */
 
 .btn-primary {
   @apply text-white;

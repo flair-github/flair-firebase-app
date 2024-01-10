@@ -40,8 +40,8 @@
   "devDependencies": {
     "@faker-js/faker": "^8.1.0",
     "@react-native-community/eslint-config": "^3.2.0",
-    "@types/react": "18.2.14",
-    "@types/react-dom": "18.2.6",
+    "@types/react": "18.2.47",
+    "@types/react-dom": "18.2.18",
     "@types/react-router-dom": "^5.3.3",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.60.0",

@@ -78,7 +78,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         <div className="fw-bold mb-2">Data Source</div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Source</span>
+            <span className="font-bold">Source</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -93,7 +93,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Data Type</span>
+            <span className="font-bold">Data Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black"
@@ -109,7 +109,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">API Key</span>
+            <span className="font-bold">API Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -122,7 +122,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Secret Key</span>
+            <span className="font-bold">Secret Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -135,7 +135,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Bucket Name</span>
+            <span className="font-bold">Bucket Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -148,7 +148,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Region Name</span>
+            <span className="font-bold">Region Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -161,7 +161,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Path</span>
+            <span className="font-bold">Path</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

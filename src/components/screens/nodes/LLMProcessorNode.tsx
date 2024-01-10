@@ -3,8 +3,10 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents, jotaiAllowInteraction } from './Registry'
 import { v4 } from 'uuid'
-import { useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import { edgesAtom, nodesAtom } from '../FlowEditor'
+import { atomNodeExportedKeys } from '~/jotai/jotai'
 
 type ColumnContent =
   | {
@@ -14,6 +16,7 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
+      importedKeys: Record<string, boolean>
       prompt: string
     }
   | {
@@ -23,17 +26,18 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
+      importedKeys: Record<string, boolean>
       prompt: string
     }
   | {
       columnId: string
       name: string
       type: 'category'
-      /** comma seperated */
       options: string
       promptStrategy: string
       model: string
       instruction: string
+      importedKeys: Record<string, boolean>
       prompt: string
     }
   | {
@@ -45,21 +49,27 @@ type ColumnContent =
       promptStrategy: string
       model: string
       instruction: string
+      importedKeys: Record<string, boolean>
       prompt: string
     }
 
 export interface LLMProcessorNodeContent {
   nodeType: 'llm-processor'
   columns: Array<ColumnContent>
+  exportedKeys: Record<string, boolean>
 }
 
 export const llmProcessorNodeDefaultContent: LLMProcessorNodeContent = {
   nodeType: 'llm-processor',
   columns: [],
+  exportedKeys: {},
 }
 
 export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
   const [columns, setColumns] = useState<LLMProcessorNodeContent['columns']>([])
+  const [columnNames, setColumnNames] = useState<Record<string, string>>({})
+  // We must introduce above "columnNames" state to prevent circular dependency between "columns" local state and "nodeExportedKeys" jotai state
+  const [exportedKeys, setExportedKeys] = useState<LLMProcessorNodeContent['exportedKeys']>({})
   const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
 
   // Initial data
@@ -68,7 +78,12 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
       return
     }
 
-    setColumns(JSON.parse(JSON.stringify(data.initialContents.columns)))
+    const initialColumns = JSON.parse(JSON.stringify(data.initialContents.columns))
+    setColumns(initialColumns)
+    setColumnNames(
+      Object.fromEntries(initialColumns.map((col: ColumnContent) => [col.columnId, col.name])),
+    )
+    setExportedKeys(data.initialContents.exportedKeys)
   }, [data.initialContents])
 
   // Copy node data to cache
@@ -76,10 +91,48 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
     const cache: LLMProcessorNodeContent = {
       nodeType: 'llm-processor',
       columns: columns,
+      exportedKeys: exportedKeys,
     }
 
     nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, columns])
+  }, [data.nodeId, columns, exportedKeys])
+
+  const [nodeExportedKeys, setNodeExportedKeys] = useAtom(atomNodeExportedKeys)
+  const edges = useAtomValue(edgesAtom)
+
+  const [keyOptions, setKeyOptions] = useState<Record<string, boolean>>({})
+  React.useEffect(() => {
+    const newExportedKeys = { ...keyOptions }
+    columns.forEach(col => {
+      newExportedKeys[col.name] = true
+    })
+    setExportedKeys(newExportedKeys)
+  }, [keyOptions, columns])
+
+  React.useEffect(() => {
+    let newKeys: Record<string, boolean> = {}
+
+    const recursiveAssign = (nodeId: string) => {
+      const keyEdges = edges.filter(({ target }) => target === nodeId)
+      keyEdges.forEach(kE => {
+        newKeys = Object.assign(newKeys, nodeExportedKeys[kE.source] ?? {})
+        recursiveAssign(kE.source) // Recursive call
+      })
+    }
+
+    recursiveAssign(data.nodeId) // Start recursion from the initial nodeId
+
+    setKeyOptions(newKeys)
+    setColumns(prev => prev.map(col => ({ ...col, importedKeys: newKeys })))
+  }, [edges, data.nodeId, nodeExportedKeys])
+
+  React.useEffect(() => {
+    const newExportedKeys: Record<string, boolean> = {}
+    Object.values(columnNames).forEach(columnName => {
+      newExportedKeys[columnName] = true
+    })
+    setNodeExportedKeys(prev => ({ ...prev, [data.nodeId]: newExportedKeys }))
+  }, [data.nodeId, columnNames, setNodeExportedKeys])
 
   return (
     <div
@@ -87,20 +140,20 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '5px',
-        width: 800,
+        width: 1000,
       }}
       className="bg-blue-50">
       <NodeHeader title="LLM Processor" color="blue" withFlair nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
-        <div className="mb-1 flex">
+      <section className="px-5 pb-5 text-xl">
+        <div className="mb-3 flex">
           {/* Col */}
-          <div className="mr-2 flex w-14 items-center" />
+          {/* <div className="mr-2 flex w-14 items-center" /> */}
 
           {/* Name */}
-          <div className="mr-2 flex-1 font-semibold">Column Name</div>
+          <div className="mr-2 flex-1 font-bold">Column Name</div>
 
           {/* Prompt */}
-          <div className="mr-2 flex-[2] font-semibold">Prompt</div>
+          <div className="mr-2 flex-[2] font-bold">Prompt</div>
 
           {/* Advanced */}
           <div className="mr-2 flex w-24 items-center" />
@@ -110,15 +163,15 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         {columns.map((el, index) => (
           <div key={el.columnId} className="mb-1 flex">
             {/* Col */}
-            <div className="mr-2 flex w-14 items-center font-semibold">
+            {/* <div className="mr-2 flex w-14 items-center text-lg font-bold">
               <div>Col {index + 1}</div>
-            </div>
+            </div> */}
 
             {/* Name */}
             <div className="mr-2 flex-1">
               <input
                 type="text"
-                className="input w-full"
+                className="input w-full text-lg"
                 value={el.name}
                 onChange={e => {
                   const newName = e.target.value
@@ -132,6 +185,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                     newColumns[index].name = newName
                     return newColumns
                   })
+                  setColumnNames(prev => {
+                    const newColumnNames = { ...prev }
+                    newColumnNames[el.columnId] = newName
+                    return newColumnNames
+                  })
                 }}
                 style={{ borderColor: 'black', resize: 'none' }}
               />
@@ -141,7 +199,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
             <div className="mr-2 flex-[2]">
               <input
                 type="text"
-                className="input w-full"
+                className="input w-full text-lg"
                 value={el.prompt}
                 onChange={e => {
                   const newText = e.target.value
@@ -163,7 +221,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
             {/* Advanced */}
             <div className="mr-2 flex w-24 items-center">
               <button
-                className="btn"
+                className="btn text-lg"
                 onClick={() => {
                   setAllowInteraction(false)
                   ;(window as any)['advanced-options-' + el.columnId].showModal()
@@ -179,7 +237,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Column Name */}
                 <label className="label">
-                  <span className="font-semibold">Column Name</span>
+                  <span className="font-bold">Column Name</span>
                 </label>
                 <input
                   type="text"
@@ -197,13 +255,18 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                       newColumns[index].name = newName
                       return newColumns
                     })
+                    setColumnNames(prev => {
+                      const newColumnNames = { ...prev }
+                      newColumnNames[el.columnId] = newName
+                      return newColumnNames
+                    })
                   }}
                   style={{ borderColor: 'black', resize: 'none' }}
                 />
 
                 {/* Instruction */}
                 <label className="label">
-                  <span className="font-semibold">Instruction</span>
+                  <span className="font-bold">Instruction</span>
                 </label>
                 <textarea
                   className="textarea textarea-bordered mb-3 w-full"
@@ -225,9 +288,51 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                   style={{ borderColor: 'black', resize: 'none' }}
                 />
 
+                {/* Contexts */}
+                <div className="mb-4 mt-1">
+                  <label className="label">
+                    <span className="font-semibold">Contexts</span>
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {Object.keys(keyOptions ? keyOptions : {}).map((localKey, i) => {
+                      return (
+                        <div key={i} className="join border">
+                          <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
+                            <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">
+                              {localKey}
+                            </p>
+                          </span>
+                          <input
+                            type="checkbox"
+                            className="checkbox join-item px-1"
+                            checked={el.importedKeys[localKey]}
+                            onChange={() => {
+                              setColumns(prev => {
+                                const newColumns = [...prev]
+                                const newColumn = { ...newColumns[index] }
+                                let newImportedKeys = { ...newColumn.importedKeys }
+
+                                if (newImportedKeys[localKey]) {
+                                  newImportedKeys[localKey] = false
+                                } else {
+                                  newImportedKeys[localKey] = true
+                                }
+
+                                newColumn.importedKeys = newImportedKeys
+                                newColumns[index] = newColumn
+                                return newColumns
+                              })
+                            }}
+                          />
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
                 {/* Prompt */}
                 <label className="label">
-                  <span className="font-semibold">Prompt</span>
+                  <span className="font-bold">Prompt</span>
                 </label>
                 <textarea
                   className="textarea textarea-bordered mb-3 w-full"
@@ -251,7 +356,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Prompt Strategy */}
                 <label className="label">
-                  <span className="font-semibold">Prompt Strategy</span>
+                  <span className="font-bold">Prompt Strategy</span>
                 </label>
                 <select
                   value={el.promptStrategy}
@@ -298,7 +403,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Model */}
                 <label className="label">
-                  <span className="font-semibold">Model</span>
+                  <span className="font-bold">Model</span>
                 </label>
                 <select
                   value={el.model}
@@ -326,7 +431,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
                 {/* Column Type */}
                 <label className="label">
-                  <span className="font-semibold">Column Type</span>
+                  <span className="font-bold">Column Type</span>
                 </label>
                 <select
                   value={el.type}
@@ -361,7 +466,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                   <>
                     {/* Categories */}
                     <label className="label">
-                      <span className="font-semibold">Categories (comma seperated)</span>
+                      <span className="font-bold">Categories (comma seperated)</span>
                     </label>
                     <textarea
                       className="textarea textarea-bordered mb-3 w-full"
@@ -395,7 +500,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                     <div className="flex">
                       <div className="mr-1 flex-1">
                         <label className="label">
-                          <span className="font-semibold">Min</span>
+                          <span className="font-bold">Min</span>
                         </label>
                         <input
                           type="text"
@@ -426,7 +531,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                       </div>
                       <div className="ml-1 flex-1">
                         <label className="label">
-                          <span className="font-semibold">Max</span>
+                          <span className="font-bold">Max</span>
                         </label>
                         <input
                           type="text"
@@ -477,6 +582,11 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
               className="ml-2 flex w-10 items-center justify-center"
               onClick={() => {
                 setColumns(prev => prev.filter(val => val.columnId !== el.columnId))
+                setColumnNames(prev => {
+                  const newColumnNames = { ...prev }
+                  delete newColumnNames[el.columnId]
+                  return newColumnNames
+                })
               }}>
               <div className="flex items-center justify-center" style={{ width: 22, height: 32 }}>
                 <GrFormClose style={{ color: '#6c757d' }} />
@@ -485,20 +595,26 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
           </div>
         ))}
         <button
-          className="btn"
+          className="btn mt-2 text-lg font-bold"
           onClick={() => {
+            const colId = v4()
             setColumns(prev => [
               ...prev,
               {
-                columnId: v4(),
+                columnId: colId,
                 type: 'text',
                 promptStrategy: 'default',
                 model: 'gpt-3.5-turbo',
                 instruction: '',
                 name: '',
                 prompt: '',
+                importedKeys: {},
               },
             ])
+            setTimeout(() => {
+              setAllowInteraction(false)
+              ;(window as any)['advanced-options-' + colId].showModal()
+            }, 50)
           }}>
           Add
         </button>

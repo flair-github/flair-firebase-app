@@ -51,7 +51,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="my-1">
           <label className="label">
-            <span className="font-semibold">Strategy</span>
+            <span className="font-bold">Strategy</span>
           </label>
           <select
             className="max-w-xs select w-full border-black"

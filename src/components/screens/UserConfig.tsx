@@ -6,6 +6,7 @@ import axios from 'axios'
 import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineDeploymentUnit } from 'react-icons/ai'
 import DeploymentToast from './overlays/DeploymentToast'
+import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 
 interface UserConfigProps {}
 const initialYamlValue = `name: 'My LLM workflow'
@@ -154,7 +155,7 @@ const UserConfig: React.FunctionComponent<UserConfigProps> = props => {
 
   return (
     <>
-      <div className="container relative mx-auto mb-9 mt-6 overflow-hidden rounded-md border">
+      <div className="container relative mx-4 mb-9 mt-5 w-[calc(100%-2rem)] overflow-hidden rounded-md border">
         <CodeMirror
           value={value}
           height="80vh"
@@ -172,7 +173,7 @@ const UserConfig: React.FunctionComponent<UserConfigProps> = props => {
             </>
           ) : (
             <>
-              <AiOutlineDeploymentUnit className="h-5 w-5" />
+              <HiOutlineRocketLaunch className="h-5 w-5" />
               Deploy
             </>
           )}

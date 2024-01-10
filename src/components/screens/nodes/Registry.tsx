@@ -23,6 +23,7 @@ import { AwsUploaderNodeContent } from './AwsUploaderNode'
 import { DataExporterSalesforceNodeContent } from './DataExporterSalesforce'
 import { DataExporterZendeskNodeContent } from './DataExporterZendesk'
 import { DataExporterPostgresNodeContent } from './DataExporterPostgres'
+import { DataExporterTwilioNodeContent } from './DataExporterTwilio'
 import { DataExporterGmailNodeContent } from './DataExporterGmail'
 import { DataRetrieverApiNodeContent } from './DataRetrieverAPI'
 import { ConditionalLogicNodeContent } from './ConditionalLogicNode'
@@ -44,6 +45,7 @@ export type NodeContent =
   | DataExporterAPINodeContent
   | DataExporterPowerBINodeContent
   | DataExporterPostgresNodeContent
+  | DataExporterTwilioNodeContent
   | EvaluatorNodeContent
   | ConditionalLogicNodeContent
   | LLMProcessorNodeContent

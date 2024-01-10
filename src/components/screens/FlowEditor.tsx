@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { LegacyRef, RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import React, { LegacyRef, useCallback, useEffect, useRef, useState } from 'react'
 import ReactFlow, {
   Background,
   Controls,
@@ -13,16 +13,13 @@ import ReactFlow, {
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
-// import '@manifoldco/react-select-zero/assets/react-select-zero.css'
-// import './style/override.css'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { atom, useAtom, useAtomValue } from 'jotai'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
-import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
 import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from './nodes/Registry'
 import { v4 } from 'uuid'
 
@@ -47,6 +44,7 @@ import { DataExporterPowerBINode } from './nodes/DataExporterPowerBI'
 import { DataExporterSalesforceNode } from './nodes/DataExporterSalesforce'
 import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
 import { DataExporterPostgresNode } from './nodes/DataExporterPostgres'
+import { DataExporterTwilioNode } from './nodes/DataExporterTwilio'
 import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
 import { ConditionalLogicNode } from './nodes/ConditionalLogicNode'
@@ -71,6 +69,7 @@ export const nodeTypes = {
   DataExporterAPINode,
   DataExporterPowerBINode,
   DataExporterPostgresNode,
+  DataExporterTwilioNode,
   EvaluatorNode,
   LLMProcessorNode,
   DataIndexerNode,
@@ -85,16 +84,18 @@ export const nodeTypes = {
   DataExtractorAggregatorNode,
 }
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
-import { RiListSettingsLine, RiRobotLine } from 'react-icons/ri'
+import { RiListSettingsLine, RiRobotLine, RiArrowRightLine, RiFileUploadLine } from 'react-icons/ri'
 import {
   AiFillApi,
   AiOutlineClear,
   AiOutlineDeploymentUnit,
   AiOutlineEdit,
+  AiOutlineRocket,
+  AiFillMinusSquare,
   AiOutlineNodeIndex,
 } from 'react-icons/ai'
 import Menu from './editor/Menu'
-import { PiCaretDoubleLeft, PiCaretDoubleRight } from 'react-icons/pi'
+import { PiCaretDoubleLeft, PiCaretDoubleRight, PiMicrosoftOutlookLogoFill } from 'react-icons/pi'
 import EditTitleModal from './overlays/EditTitleModal'
 import {
   BiGitBranch,
@@ -102,15 +103,17 @@ import {
   BiLogoGmail,
   BiLogoGoogle,
   BiLogoMicrosoft,
+  BiLogoMongodb,
   BiLogoPostgresql,
   BiLogoSlack,
 } from 'react-icons/bi'
 import { FaCloudUploadAlt, FaSalesforce } from 'react-icons/fa'
-import { SiPowerbi, SiZendesk } from 'react-icons/si'
+import { SiPowerbi, SiZendesk, SiAirtable, SiGooglesheets, SiTwilio } from 'react-icons/si'
 import { GiConvergenceTarget } from 'react-icons/gi'
-import { GrAggregate, GrFormClose } from 'react-icons/gr'
+import { GrAggregate, GrFormClose, GrCube } from 'react-icons/gr'
 import { BsArrowsAngleContract, BsFillCloudHaze2Fill } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
+import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -129,21 +132,13 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
 export const nodesAtom = atom<Nodes>([])
 export const edgesAtom = atom<Edges>([])
 
-export const FlowEditor: React.FC<{
-  viewerOnly?: boolean
-  initialNodes?: Nodes
-  initialEdges?: Edges
-  initialTitle?: string
-}> = ({ viewerOnly }) => {
+export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   const userData = useAtomValue(atomUserData)
-
   const [nodes, setNodes] = useAtom(nodesAtom)
   const [edges, setEdges] = useAtom(edgesAtom)
   const [title, setTitle] = useState<string>('')
 
-  const navigate = useNavigate()
-  const { state } = useLocation()
-  const { workflowId } = state || {} // Read values passed on state
+  const { workflowId, workflowRequestId } = useParams()
 
   // Load initial
   useEffect(() => {
@@ -152,23 +147,25 @@ export const FlowEditor: React.FC<{
         return
       }
 
-      const snap = await db.collection('workflows').doc(workflowId).get()
-      const data = snap.data() as DocWorkflow
-      setTitle(data.workflowTitle)
+      if (workflowRequestId) {
+        const snap = await db.collection('workflow_requests').doc(workflowRequestId).get()
+        const data = snap.data() as DocWorkflowRequest
 
-      const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
-      setNodes(newNodes)
-      setEdges(newEdges)
+        const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
+        setTitle('View Snapshot')
+        setNodes(newNodes)
+        setEdges(newEdges)
+      } else {
+        const snap = await db.collection('workflows').doc(workflowId).get()
+        const data = snap.data() as DocWorkflow
+        setTitle(data.workflowTitle)
+
+        const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
+        setNodes(newNodes)
+        setEdges(newEdges)
+      }
     })()
-  }, [workflowId, setEdges, setNodes])
-
-  // const [rflow, setRflow] = useState<ReactFlowInstance>()
-
-  // const onInit = useCallback((reactflowInstance: ReactFlowInstance) => {
-  //   console.log('rflow', rflow, reactflowInstance)
-  //   setRflow(reactflowInstance);
-  //   console.log('rflow', rflow)
-  // }, [rflow])
+  }, [workflowId, workflowRequestId, setEdges, setNodes])
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
@@ -183,26 +180,6 @@ export const FlowEditor: React.FC<{
     },
     [setEdges],
   )
-
-  // const connectablesMap: Record<string, string[]> = {
-  //   // TODO: Add "NodeType:handle"
-  //   'SourceNode:out': [
-  //     'DataExtractionNode:in',
-  //   ],
-  //   'DataExtractionNode:out': [
-  //     'MergerNode:in-data',
-  //     'MergerNode:in-context',
-  //     'MergerNode:in-input',
-
-  //     'PublishAPINode:in',
-  //     'AWSUploaderNode:in',
-  //   ],
-  //   'MergerNode:out': [
-  //     'PublishAPINode:in',
-  //     'WebhookNode:in',
-  //     'AWSUploaderNode:in',
-  //   ],
-  // }
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -224,7 +201,7 @@ export const FlowEditor: React.FC<{
     [nodes, setEdges],
   )
 
-  // useref of { x, y}
+  // useref of { x, y }
   const viewport = useRef({ x: 0, y: 0, zoom: 1 })
 
   const [isJsonModalShown, setIsJsonModalShown] = useState(false)
@@ -276,7 +253,7 @@ export const FlowEditor: React.FC<{
     }
   }
 
-  async function executeFlow() {
+  const executeFlow = async () => {
     if (!userData?.userId) {
       return
     }
@@ -286,7 +263,11 @@ export const FlowEditor: React.FC<{
     }
     try {
       setIsDeploying(true)
+
+      // Save Flow
       const flowData = await saveFlow()
+
+      // Write workflow request
       const ref = db.collection('workflow_requests').doc()
       const newWorkflowRequest: DocWorkflowRequest = {
         createdTimestamp: serverTimestamp() as Timestamp,
@@ -303,7 +284,28 @@ export const FlowEditor: React.FC<{
       await ref.set(newWorkflowRequest)
       console.log('workflow_request_id = ' + ref.id)
 
-      // const URL = `${CORE_API_URL}/api/flair-studio/flair-chain-runner`
+      // Call API
+      {
+        const headers = {
+          // 'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          // Additional headers if necessary (e.g., Authentication tokens)
+        }
+
+        const params = new URLSearchParams()
+        params.append('workflow_request_id', ref.id)
+
+        // Make API call
+        axios
+          .post('https://flair-api.flairlabs.ai/api/v1/start-llm-executor', params, { headers })
+          .then(response => {
+            console.log('start-llm-executor response.data', response.data)
+          })
+          .catch(error => {
+            console.error('Error during API call', error)
+          })
+      }
+
       // await axios.post(
       //   URL,
       //   { workflow_request_id: ref.id },
@@ -406,10 +408,6 @@ data_exporters:
     type: google # azure, s3, google, email
     data_type: csv
     uri: llm_outputs
-
-evaluators:
-  - name: evaluator_1
-    type: default
     `
 
           const blob = new Blob([yamlContent], { type: 'application/x-yaml' })
@@ -436,6 +434,7 @@ evaluators:
 
         uploadConfig()
       }
+
       setDeploymentStatus(['success', 'Your workflow has been deployed!'])
     } catch (error) {
       console.log(error)
@@ -474,7 +473,7 @@ evaluators:
   const nodeClassifications = [
     {
       title: 'Data Source',
-      subtitle: 'Origin of raw datasets.',
+      subtitle: 'Load unstructured data from a data source.',
       color: 'purple',
       members: [
         {
@@ -499,7 +498,28 @@ evaluators:
           icon: BiLogoMicrosoft,
         },
         {
-          title: 'Local Files',
+          title: 'Gmail',
+          handleOnClick: () => {
+            addNode('data-source-email', 'DataSourceEmailNode')
+          },
+          icon: BiLogoGmail,
+        },
+        {
+          title: 'PostgresDB',
+          handleOnClick: () => {
+            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+          },
+          icon: BiLogoPostgresql,
+        },
+        {
+          title: 'MongoDB',
+          handleOnClick: () => {
+            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+          },
+          icon: BiLogoMongodb,
+        },
+        {
+          title: 'File Upload',
           handleOnClick: () => {
             addNode('data-source-local-files', 'DataSourceLocalFilesNode')
           },
@@ -511,13 +531,6 @@ evaluators:
             addNode('data-source-api', 'DataSourceAPINode')
           },
           icon: AiFillApi,
-        },
-        {
-          title: 'Email',
-          handleOnClick: () => {
-            addNode('data-source-email', 'DataSourceEmailNode')
-          },
-          icon: MdEmail,
         },
         {
           title: 'Salesforce',
@@ -540,43 +553,50 @@ evaluators:
       ],
     },
     {
-      title: 'Data Indexer',
-      subtitle: 'Organizes and categorizes data for quick retrieval.',
+      title: 'Vector Indexer',
+      subtitle: 'Embed your data into your choice of vector data store for quick retrieval.',
       color: 'green',
       members: [
         {
-          title: 'Data Indexer',
+          title: 'Pinecone Indexer',
           handleOnClick: () => {
             addNode('data-indexer', 'DataIndexerNode')
           },
-          icon: AiOutlineNodeIndex,
+          icon: GrCube,
+        },
+        {
+          title: 'Chroma Indexer',
+          handleOnClick: () => {
+            addNode('data-indexer', 'DataIndexerNode')
+          },
+          icon: GrAggregate,
         },
       ],
     },
+    // {
+    //   title: 'Data Retriever',
+    //   subtitle: 'Fetches specific data subsets from the source or index.',
+    //   color: 'orange',
+    //   members: [
+    //     {
+    //       title: 'Data Retriever',
+    //       handleOnClick: () => {
+    //         addNode('data-retriever', 'DataRetrieverNode')
+    //       },
+    //       icon: GiConvergenceTarget,
+    //     },
+    //     {
+    //       title: 'Data Retriever API',
+    //       handleOnClick: () => {
+    //         addNode('data-retriever-api', 'DataRetrieverApiNode')
+    //       },
+    //       icon: AiFillApi,
+    //     },
+    //   ],
+    // },
     {
-      title: 'Data Retriever',
-      subtitle: 'Fetches specific data subsets from the source or index.',
-      color: 'orange',
-      members: [
-        {
-          title: 'Data Retriever',
-          handleOnClick: () => {
-            addNode('data-retriever', 'DataRetrieverNode')
-          },
-          icon: GiConvergenceTarget,
-        },
-        {
-          title: 'Data Retriever API',
-          handleOnClick: () => {
-            addNode('data-retriever-api', 'DataRetrieverApiNode')
-          },
-          icon: AiFillApi,
-        },
-      ],
-    },
-    {
-      title: 'Data Extractor',
-      subtitle: 'Extracts or transforms specific data elements.',
+      title: 'LLM Processor',
+      subtitle: 'Transforms your data using your choice of LLM and prompts.',
       color: 'blue',
       members: [
         {
@@ -591,13 +611,27 @@ evaluators:
           handleOnClick: () => {
             addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
           },
-          icon: GrAggregate,
+          icon: BsArrowsAngleContract,
         },
       ],
     },
     {
-      title: 'Data Exporter',
-      subtitle: 'Sends processed data to specified destinations.',
+      title: 'Control Flow',
+      subtitle: 'Control flow and logical branching.',
+      color: 'rose',
+      members: [
+        {
+          title: 'Conditional',
+          handleOnClick: () => {
+            addNode('conditional-logic', 'ConditionalLogicNode')
+          },
+          icon: BiGitBranch,
+        },
+      ],
+    },
+    {
+      title: 'Data Destination',
+      subtitle: 'Send processed data to a specified destination.',
       color: 'teal',
       members: [
         {
@@ -622,13 +656,6 @@ evaluators:
           icon: BiLogoMicrosoft,
         },
         {
-          title: 'Zendesk',
-          handleOnClick: () => {
-            addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
-          },
-          icon: SiZendesk,
-        },
-        {
           title: 'Gmail',
           handleOnClick: () => {
             addNode('data-exporter-gmail', 'DataExporterGmailNode')
@@ -636,18 +663,25 @@ evaluators:
           icon: BiLogoGmail,
         },
         {
-          title: 'Salesforce',
+          title: 'Airtable',
           handleOnClick: () => {
-            addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
+            addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
-          icon: FaSalesforce,
+          icon: SiAirtable,
         },
         {
-          title: 'Power BI',
+          title: 'Google Sheets',
           handleOnClick: () => {
-            addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
+            addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
-          icon: SiPowerbi,
+          icon: SiGooglesheets,
+        },
+        {
+          title: 'Twilio',
+          handleOnClick: () => {
+            addNode('data-exporter-twilio', 'DataExporterTwilioNode')
+          },
+          icon: SiTwilio,
         },
         {
           title: 'Postgres',
@@ -657,12 +691,26 @@ evaluators:
           icon: BiLogoPostgresql,
         },
         {
-          title: 'Flair',
+          title: 'Zendesk',
           handleOnClick: () => {
-            addNode('data-exporter-flair', 'DataExporterFlairNode')
+            addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
           },
-          icon: BsFillCloudHaze2Fill,
+          icon: SiZendesk,
         },
+        {
+          title: 'Salesforce',
+          handleOnClick: () => {
+            addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
+          },
+          icon: FaSalesforce,
+        },
+        // {
+        //   title: 'Power BI',
+        //   handleOnClick: () => {
+        //     addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
+        //   },
+        //   icon: SiPowerbi,
+        // },
         {
           title: 'API',
           handleOnClick: () => {
@@ -672,65 +720,51 @@ evaluators:
         },
       ],
     },
-    {
-      title: 'Router',
-      subtitle: 'Control flow and logical branching.',
-      color: 'rose',
-      members: [
-        {
-          title: 'Conditional Logic',
-          handleOnClick: () => {
-            addNode('conditional-logic', 'ConditionalLogicNode')
-          },
-          icon: BiGitBranch,
-        },
-      ],
-    },
-    {
-      title: 'Evaluation',
-      subtitle: 'Assesses data quality and accuracy.',
-      color: 'pink',
-      members: [
-        {
-          title: 'Evaluator',
-          handleOnClick: () => {
-            addNode('evaluator', 'EvaluatorNode')
-          },
-          icon: BsArrowsAngleContract,
-        },
-      ],
-    },
+    // {
+    //   title: 'Evaluation',
+    //   subtitle: 'Assesses data quality and accuracy.',
+    //   color: 'pink',
+    //   members: [
+    //     {
+    //       title: 'Evaluator',
+    //       handleOnClick: () => {
+    //         addNode('evaluator', 'EvaluatorNode')
+    //       },
+    //       icon: BsArrowsAngleContract,
+    //     },
+    //   ],
+    // },
   ]
 
   const controls = [
-    {
-      title: 'Sample',
-      Icon: LuLayoutTemplate,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
-        setNodes(newNodes)
-        setEdges(newEdges)
-      },
-    },
-    {
-      title: 'Config',
-      Icon: RiListSettingsLine,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
-        setIsJsonModalShown(true)
-      },
-    },
-    {
-      title: 'Clear',
-      Icon: AiOutlineClear,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        setNodes([])
-        setEdges([])
-      },
-    },
+    // {
+    //   title: 'Sample',
+    //   Icon: LuLayoutTemplate,
+    //   handleOnClick: async (event: React.SyntheticEvent) => {
+    //     event.preventDefault()
+    //     const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
+    //     setNodes(newNodes)
+    //     setEdges(newEdges)
+    //   },
+    // },
+    // {
+    //   title: 'Config',
+    //   Icon: RiListSettingsLine,
+    //   handleOnClick: async (event: React.SyntheticEvent) => {
+    //     event.preventDefault()
+    //     setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
+    //     setIsJsonModalShown(true)
+    //   },
+    // },
+    // {
+    //   title: 'Clear',
+    //   Icon: AiOutlineClear,
+    //   handleOnClick: async (event: React.SyntheticEvent) => {
+    //     event.preventDefault()
+    //     setNodes([])
+    //     setEdges([])
+    //   },
+    // },
     {
       title: 'Save',
       Icon: LuSaveAll,
@@ -740,8 +774,25 @@ evaluators:
       },
     },
     {
-      title: 'Deploy',
-      Icon: AiOutlineDeploymentUnit,
+      title: 'Run',
+      Icon: RiArrowRightLine,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        executeModalRef.current?.showModal()
+      },
+    },
+    {
+      title: 'Share',
+      Icon: RiFileUploadLine,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
+        setIsJsonModalShown(true)
+      },
+    },
+    {
+      title: 'Publish',
+      Icon: AiOutlineRocket,
       handleOnClick: async (event: React.SyntheticEvent) => {
         event.preventDefault()
         executeModalRef.current?.showModal()
@@ -777,40 +828,50 @@ evaluators:
 
   const [expanded, setExpanded] = useState(true)
 
-  return viewerOnly ? (
-    <ReactFlow
-      elementsSelectable={allowInteraction}
-      nodesConnectable={allowInteraction}
-      nodesDraggable={allowInteraction}
-      zoomOnScroll={allowInteraction}
-      panOnScroll={allowInteraction}
-      zoomOnDoubleClick={allowInteraction}
-      panOnDrag={allowInteraction}
-      selectionOnDrag={allowInteraction}
-      nodes={nodes}
-      onNodesChange={onNodesChange}
-      edges={edges}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-      selectionMode={SelectionMode.Partial}
-      onMove={(_, newViewport) => {
-        viewport.current = newViewport
-      }}>
-      <Background />
-      <Controls position="bottom-right" />
-    </ReactFlow>
+  return viewOnly ? (
+    <>
+      <ReactFlow
+        elementsSelectable={false}
+        nodesConnectable={false}
+        nodesDraggable={false}
+        zoomOnScroll={true}
+        panOnScroll={true}
+        zoomOnDoubleClick={true}
+        panOnDrag={true}
+        selectionOnDrag={false}
+        nodes={nodes}
+        onNodesChange={onNodesChange}
+        edges={edges}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        selectionMode={SelectionMode.Partial}
+        onMove={(_, newViewport) => {
+          viewport.current = newViewport
+        }}>
+        <Background />
+        <Controls position="bottom-right" />
+      </ReactFlow>
+      <div className="absolute right-3 top-3 z-10 flex flex-col items-end space-y-3">
+        <div className="join w-fit bg-white shadow">
+          <Link className="btn btn-outline join-item" to={'/editor/' + workflowId}>
+            <AiOutlineEdit className="h-6 w-6" />
+            Edit
+          </Link>
+        </div>
+      </div>
+    </>
   ) : (
     <>
-      <main className="h-[calc(100vh-4rem)]">
-        <section className="relative h-[calc(100vh-4rem)] w-full">
+      <main className="h-full">
+        <section className="relative h-full w-full">
           <aside
             className={`absolute -left-1 top-0 z-10 flex h-full w-96 ${
               expanded ? 'translate-x-0' : '-translate-x-full'
             } transform-gpu flex-col space-y-3 py-3 pl-4 transition-transform`}>
             <div className="join relative w-full bg-white shadow outline outline-1">
               <span className="join-item flex grow items-center">
-                <h5 className="pl-3 text-xl font-semibold">{title}</h5>
+                <h5 className="pl-3 text-xl font-bold">{title}</h5>
               </span>
               <button
                 className="btn btn-outline join-item border-y-0 border-r-0"
@@ -843,6 +904,7 @@ evaluators:
             zoomOnDoubleClick={allowInteraction}
             panOnDrag={allowInteraction}
             selectionOnDrag={allowInteraction}
+            defaultViewport={{ x: 650, y: 500, zoom: 0.5 }} // set the default zoom and sizing of the graph
             nodes={nodes}
             onNodesChange={onNodesChange}
             edges={edges}
@@ -882,101 +944,5 @@ evaluators:
     </>
   )
 }
-
-const sample1 = `
-{
-  "nodes": [
-    {
-      "id": "input-001",
-      "type": "InputNode",
-      "data": {
-        "nodeId": "input-001",
-        "initialContents": {
-          "keyValPairs": {
-            "x": "hello",
-            "y": "world"
-          }
-        }
-      },
-      "position": {
-        "x": 0,
-        "y": 200
-      },
-      "width": 400,
-      "height": 196
-    },
-    {
-      "id": "prompt-template-002",
-      "type": "PromptTemplateNode",
-      "data": {
-        "nodeId": "prompt-template-002",
-        "initialContents": {
-          "promptTemplate": "Check {x} in {y}"
-        }
-      },
-      "position": {
-        "x": 500,
-        "y": 200
-      },
-      "width": 400,
-      "height": 280
-    },
-    {
-      "id": "model-003",
-      "type": "ModelNode",
-      "data": {
-        "nodeId": "model-003",
-        "initialContents": {
-          "model": "gpt-4",
-          "temperature": "1"
-        }
-      },
-      "position": {
-        "x": 1000,
-        "y": 200
-      },
-      "width": 400,
-      "height": 222
-    },
-    {
-      "id": "output-004",
-      "type": "OutputNode",
-      "data": {
-        "nodeId": "output-004",
-        "initialContents": {}
-      },
-      "position": {
-        "x": 1500,
-        "y": 200
-      },
-      "width": 400,
-      "height": 74
-    }
-  ],
-  "edges": [
-    {
-      "id": "edge-1",
-      "source": "input-001",
-      "target": "prompt-template-002",
-      "sourceHandle": "outbound",
-      "targetHandle": "inbound"
-    },
-    {
-      "id": "edge-2",
-      "source": "prompt-template-002",
-      "target": "model-003",
-      "sourceHandle": "outbound",
-      "targetHandle": "inbound"
-    },
-    {
-      "id": "edge-3",
-      "source": "model-003",
-      "target": "output-004",
-      "sourceHandle": "outbound",
-      "targetHandle": "inbound"
-    }
-  ]
-}
-`
 
 export default FlowEditor

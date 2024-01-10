@@ -196,7 +196,7 @@ function TemplateWizard() {
 
     await ref.set(newFlowData)
 
-    navigate('/editor', { state: { workflowId: ref.id } })
+    navigate('/editor/' + ref.id)
   }
 
   const [showNewFlowModal, setShowNewFlowModal] = useState(false)

@@ -1,9 +1,11 @@
-import React, { type MutableRefObject, useEffect, useState } from 'react'
+import React, { type MutableRefObject, useEffect, useState, useRef, LegacyRef } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoAws } from 'react-icons/bi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import { useAtom } from 'jotai'
+import { atomNodeExportedKeys } from '~/jotai/jotai'
 
 export interface DataSourceS3NodeContent {
   nodeType: 'data-source-s3'
@@ -13,6 +15,7 @@ export interface DataSourceS3NodeContent {
   secretKey: string
   bucketName: string
   regionName: string
+  exportedKeys: Record<string, boolean>
 }
 
 export const dataSourceS3DefaultContent: DataSourceS3NodeContent = {
@@ -23,6 +26,7 @@ export const dataSourceS3DefaultContent: DataSourceS3NodeContent = {
   secretKey: '',
   bucketName: '',
   regionName: '',
+  exportedKeys: {},
 }
 
 export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
@@ -48,6 +52,13 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const keyInputRef = useRef<HTMLInputElement>()
+
+  const [_, setNodeExportedKeys] = useAtom(atomNodeExportedKeys)
+  React.useEffect(() => {
+    setNodeExportedKeys(prev => ({ ...prev, [data.nodeId]: nodeContent.exportedKeys }))
+  }, [data.nodeId, nodeContent.exportedKeys, setNodeExportedKeys])
+
   return (
     <div
       style={{
@@ -61,7 +72,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">File Type</span>
+            <span className="font-bold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -78,7 +89,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Secret Key</span>
+            <span className="font-bold">Secret Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -91,7 +102,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Access Key</span>
+            <span className="font-bold">Access Key</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -104,7 +115,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Region Name</span>
+            <span className="font-bold">Region Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -117,7 +128,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Bucket Name</span>
+            <span className="font-bold">Bucket Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -130,7 +141,7 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Path</span>
+            <span className="font-bold">Path</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -140,6 +151,55 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
               setNodeContent(prev => ({ ...prev, path: newVal }))
             }}
           />
+        </div>
+        <div className="mb-2 mt-1">
+          <label className="label">
+            <span className="font-semibold">Keys</span>
+          </label>
+          <div className="join w-full">
+            <input
+              ref={keyInputRef as LegacyRef<HTMLInputElement>}
+              className="input join-item input-bordered grow border-black"
+              placeholder="New Key"
+            />
+            <button
+              className="btn btn-ghost join-item border-black"
+              onClick={() => {
+                keyInputRef.current
+                setNodeContent(prev => ({
+                  ...prev,
+                  exportedKeys: { ...prev.exportedKeys, [keyInputRef.current!.value]: true },
+                }))
+                setTimeout(() => {
+                  keyInputRef.current!.value = ''
+                }, 10)
+              }}>
+              Add
+            </button>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {Object.keys(nodeContent.exportedKeys ? nodeContent.exportedKeys : {}).map(localKey => (
+              <div key={localKey} className="join border">
+                <span className="join-item flex grow items-center overflow-x-hidden bg-white px-3 text-black">
+                  <p className="overflow-x-hidden text-ellipsis whitespace-nowrap">{localKey}</p>
+                </span>
+                <button
+                  className="btn join-item btn-sm px-1"
+                  onClick={() => {
+                    setNodeContent(prev => {
+                      const newExportedKeys = { ...prev.exportedKeys }
+                      delete newExportedKeys[localKey]
+                      return {
+                        ...prev,
+                        exportedKeys: newExportedKeys,
+                      }
+                    })
+                  }}>
+                  <GrFormClose className="h-6 w-6" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
       {!noHandle && (

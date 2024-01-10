@@ -1,26 +1,18 @@
 import React, { RefObject, useEffect } from 'react'
-import { Dialog } from '@headlessui/react'
 import { useRef, useState } from 'react'
-import { SignInButton } from '~/components/domain/auth/SignInButton'
-import { SignOutButton } from '~/components/domain/auth/SignOutButton'
 import { Head } from '~/components/shared/Head'
 import { useAtomValue } from 'jotai'
-import { atomUser, atomUserData } from '~/jotai/jotai'
+import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
 import { DocWorkflow } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { Link, useNavigate } from 'react-router-dom'
-import { MoonLoader, RingLoader } from 'react-spinners'
 import { TfiLayoutWidthDefault } from 'react-icons/tfi'
 import { BsArrowLeftShort, BsThreeDots } from 'react-icons/bs'
-import { ImFileEmpty } from 'react-icons/im'
+import { ImFileEmpty, ImSpinner9 } from 'react-icons/im'
 
 function Index() {
-  const [isOpen, setIsOpen] = useState(true)
-  const completeButtonRef = useRef(null)
-
   const userData = useAtomValue(atomUserData)
-
   const [myFlows, setMyFlows] = useState<DocWorkflow[]>()
 
   useEffect(() => {
@@ -77,23 +69,25 @@ function Index() {
   const navigate = useNavigate()
 
   const openWorkflow = (workflowId: string) => {
-    navigate('editor', { state: { workflowId } })
+    navigate('/editor/' + workflowId)
   }
   const onboardingModal = useRef() as RefObject<HTMLDialogElement>
   useEffect(() => {
     onboardingModal.current?.showModal()
   }, [])
+
   return (
     <>
       <Head title="Home" />
-      <div className="container mx-auto px-4 py-2">
+      <div className="container px-16 py-4">
+        <div className="mb-9 mt-3 text-3xl font-bold">My Pipelines</div>
         <div className="mb-5 mt-3">
           <button
             className="btn btn-primary normal-case"
             onClick={() => {
               setShowNewFlowModal(true)
             }}>
-            New Empty Flow
+            + Add Pipeline
           </button>
           <button
             className="btn ml-2 normal-case"
@@ -107,8 +101,8 @@ function Index() {
         {/* List of My Flows */}
 
         {!myFlows && (
-          <div className="flex h-52 items-center justify-center">
-            <MoonLoader color="rgba(0,0,0,0.2)" />
+          <div className="flex h-72 items-center justify-center">
+            <ImSpinner9 className="h-16 w-16 animate-spin" />
           </div>
         )}
         <div className="-m-4 flex flex-wrap">
@@ -144,6 +138,13 @@ function Index() {
                               })
                             }}>
                             Delete
+                          </button>
+                          <button
+                            className=""
+                            onClick={event => {
+                              event.stopPropagation()
+                            }}>
+                            Duplicate
                           </button>
                         </li>
                       </ul>
@@ -199,7 +200,7 @@ function Index() {
       </div>
 
       {/* Onboarding Modal */}
-      <dialog ref={onboardingModal} className="modal">
+      {/* <dialog ref={onboardingModal} className="modal">
         <form method="dialog" className="modal-box max-w-160 divide-y">
           <header>
             <h3 className="text-lg font-bold">Welcome to Flair AI!</h3>
@@ -216,7 +217,7 @@ function Index() {
               </span>
               <article className="flex flex-col justify-center text-left">
                 <div className="flex items-center">
-                  <p className="font-semibold">Empty template</p>
+                  <p className="font-bold">Empty template</p>
                   <BsArrowLeftShort className="h-5 w-5 rotate-180" />
                 </div>
                 <p className="line-clamp-2">Start with white blank canvas</p>
@@ -228,7 +229,7 @@ function Index() {
               </span>
               <article className="flex flex-col justify-center text-left">
                 <div className="flex items-center">
-                  <p className="font-semibold">Workflow template</p>
+                  <p className="font-bold">Workflow template</p>
                   <BsArrowLeftShort className="h-5 w-5 rotate-180" />
                 </div>
                 <p className="line-clamp-2">Ready to go template for you</p>
@@ -242,7 +243,7 @@ function Index() {
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
         </form>
-      </dialog>
+      </dialog> */}
     </>
   )
 }

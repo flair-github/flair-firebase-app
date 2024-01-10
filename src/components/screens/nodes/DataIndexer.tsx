@@ -58,7 +58,7 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Embedding Type</span>
+            <span className="font-bold">Embedding Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -76,7 +76,7 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Index Strategy</span>
+            <span className="font-bold">Index Strategy</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -93,7 +93,7 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Vector Store</span>
+            <span className="font-bold">Vector Store</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "

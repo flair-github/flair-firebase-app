@@ -1,102 +1,146 @@
 import * as React from 'react'
 import { RiFlowChart } from 'react-icons/ri'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { BarChart } from './deployment/BarChart'
-import Results from './Results'
-import { PieChart } from './deployment/PieChart'
+// import { PieChart } from './deployment/PieChart'
+import { GiCheckMark, GiChecklist, GiSandsOfTime } from 'react-icons/gi'
+import { HiDocumentReport } from 'react-icons/hi'
+import { ImSpinner9 } from 'react-icons/im'
+import { MdForwardToInbox } from 'react-icons/md'
+import { BsReplyAll } from 'react-icons/bs'
 
 interface DeploymentDetailsProps {}
+
+type Sentiment = 'neutral' | 'happy' | 'angry'
+
+interface Result {
+  resultPeriod: string
+  processedEmails: string
+  sentimentLevel: Sentiment
+  flaggedForReview: string
+}
+
+function generateResults(length: number = 10): Result[] {
+  const results: Result[] = []
+
+  for (let i = 0; i < length; i++) {
+    const endDate = new Date()
+    endDate.setMonth(endDate.getMonth() - 1)
+    endDate.setDate(endDate.getDate() + 2 * i)
+    const startDate = new Date(endDate)
+    startDate.setDate(endDate.getDate() - 1)
+
+    const resultPeriod = `${startDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    })} - ${endDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    })}`
+    const processedEmails = Math.floor(Math.random() * 10000 + 1).toString()
+    const sentiments: Sentiment[] = ['neutral', 'happy', 'angry']
+    const sentimentLevel = sentiments[Math.floor(Math.random() * sentiments.length)]
+    const flaggedForReview = Math.floor(Math.random() * 100 + 1).toString()
+
+    results.push({
+      resultPeriod,
+      processedEmails,
+      sentimentLevel,
+      flaggedForReview,
+    })
+
+    // Shift the date back
+    endDate.setDate(endDate.getDate() - 1)
+  }
+
+  return results
+}
+
+const complaints = [
+  {
+    id: 1,
+    email: 'john.doe@example.com',
+    subject: 'Faulty Product Received',
+    message:
+      'I recently purchased a product from your website and it arrived faulty. Please assist.',
+    date: '2023-10-01',
+  },
+  {
+    id: 2,
+    email: 'jane.smith@example.com',
+    subject: 'Late Delivery',
+    message:
+      'My order was supposed to arrive last week and I still haven’t received it. Can you update me on the status?',
+    date: '2023-10-02',
+  },
+  {
+    id: 3,
+    email: 'samuel.jones@example.com',
+    subject: 'Incorrect Item Sent',
+    message:
+      'I ordered a blue shirt and received a red one instead. Please send me the correct item.',
+    date: '2023-10-03',
+  },
+  {
+    id: 4,
+    email: 'lucy.williams@example.com',
+    subject: 'Billing Issue',
+    message: 'I was double charged for my last purchase. Please refund the extra charge.',
+    date: '2023-10-04',
+  },
+  {
+    id: 5,
+    email: 'michael.brown@example.com',
+    subject: 'Website Issue',
+    message:
+      'I was trying to place an order on your website and it kept crashing. Can you look into this?',
+    date: '2023-10-05',
+  },
+]
 
 const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props => {
   const { deploymentId } = useParams()
 
   return (
     <>
-      <div className="container mx-auto mb-9 mt-6 rounded-md border px-6 py-3">
+      <div className="container mx-4 mb-9 mt-5 w-[calc(100%-2rem)] rounded-md border px-6 py-3">
         <div className="flex items-center justify-between">
           <h4 className="text-lg font-medium">Deployment ID : {deploymentId}</h4>
-          <button className="btn bg-slate-200" onClick={() => {}}>
+          <Link
+            className="btn bg-slate-200"
+            to={'/editor/' + 'nBA6Nlx1HetqYzixWKAw' + '/' + '008wYclghfxk1MC1Jbug'}>
             <RiFlowChart /> View Flow
-          </button>
+          </Link>
         </div>
 
-        <div className="mb-8 mt-3 grid grid-cols-2 gap-3">
-          <div className="">
-            <h4 className="text-lg font-medium">Usage</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae voluptate fugiat
-              laudantium, ea consequuntur tenetur quasi necessitatibus repellat sapiente officiis
-            </p>
-          </div>
-          <div className="">
-            <h4 className="text-lg font-medium">Usage This Month</h4>
-            <article className="flex w-full justify-between">
-              <p>700.000</p>
-              <p>1.000.000</p>
-            </article>
-            <progress className="progress w-full" value="70" max="100" />
-          </div>
-        </div>
-
-        <div className="stats w-full rounded-md border shadow-sm">
+        <div className="stats mt-4 w-full rounded-md border shadow-sm">
           <div className="stat">
             <div className="stat-figure text-secondary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="inline-block h-8 w-8 stroke-current">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <GiChecklist className="h-10 w-10" />
             </div>
-            <div className="stat-title">Usage this month</div>
-            <div className="stat-value">31K</div>
-            <div className="stat-desc">Jan 1st - Feb 1st</div>
+            <div className="stat-title">Data Processed</div>
+            <div className="stat-value">3776 rows</div>
+            <div className="stat-desc">3 GigaByte(s)</div>
           </div>
 
           <div className="stat">
             <div className="stat-figure text-secondary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="inline-block h-8 w-8 stroke-current">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-                />
-              </svg>
-            </div>
-            <div className="stat-title">Usage Breakdown</div>
-            <div className="stat-value">4,200</div>
-            <div className="stat-desc">↗︎ 400 (22%)</div>
-          </div>
-
-          <div className="stat">
-            <div className="stat-figure text-secondary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="inline-block h-8 w-8 stroke-current">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                />
-              </svg>
+              <GiCheckMark className="h-10 w-10" />
             </div>
             <div className="stat-title">Success Rate</div>
-            <div className="stat-value">1,200</div>
-            <div className="stat-desc">↘︎ 90 (14%)</div>
+            <div className="stat-value">78 %</div>
+            <div className="stat-desc">From whole data</div>
+          </div>
+
+          <div className="stat">
+            <div className="stat-figure text-secondary">
+              <GiSandsOfTime className="h-10 w-10" />
+            </div>
+            <div className="stat-title">Average Time</div>
+            <div className="stat-value">2.4 minutes</div>
+            <div className="stat-desc">For each item</div>
           </div>
         </div>
 
@@ -108,7 +152,98 @@ const DeploymentDetails: React.FunctionComponent<DeploymentDetailsProps> = props
         </div>
       </div>
 
-      <Results />
+      <div className="container mx-4 mb-9 mt-6 w-[calc(100%-2rem)] rounded-md border">
+        <div className="flex items-center border-b p-3">
+          <form className="join">
+            <select
+              className={' join-item ' + 'select select-bordered '}
+              // value={}
+              // onChange={event => {}}
+            >
+              <option disabled value="">
+                Column
+              </option>
+              <option value="period">Period</option>
+              <option value="sentiment">Sentiment</option>
+              <option value="satisfaction">Satisfaction</option>
+            </select>
+            <input
+              className="input join-item input-bordered"
+              // value={substring}
+              // onChange={event => setSubstring(event.target.value)}
+              placeholder="Filter"
+            />
+            <button
+              className="btn join-item"
+              onClick={e => {
+                e.preventDefault()
+              }}>
+              Search
+            </button>
+          </form>
+          <div className="flex-1" />
+          {/* <button className="btn gap-1" onClick={async () => {}}>
+            <div>View Flagged</div>
+          </button> */}
+        </div>
+        <div className="overflow-x-auto">
+          <table className="table table-zebra">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>Result Period</th>
+                <th>Processed Emails</th>
+                <th>Complaint Emails</th>
+                <th>Forward to Sales</th>
+                <th>Flagged for Review</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {generateResults().map(el => {
+                return (
+                  <tr key={el.resultPeriod}>
+                    <td>
+                      <div className="">{el.resultPeriod}</div>
+                    </td>
+                    <td>
+                      <div className="w-24 break-words">{el.processedEmails}</div>
+                    </td>
+                    <td>
+                      <div className="w-24 break-words">{Math.ceil(Math.random() * 20)}</div>
+                    </td>
+                    <td>
+                      <div className="w-24 break-words">{Math.ceil(Math.random() * 20)}</div>
+                    </td>
+                    <td>
+                      <div className="w-24 break-words">{el.flaggedForReview}</div>
+                    </td>
+
+                    <td>
+                      <div>
+                        <Link
+                          className="btn m-1 bg-slate-200"
+                          to={'/deployment/' + deploymentId + '/13425'}>
+                          <HiDocumentReport /> Details
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+          {true ? (
+            <button className="btn mx-auto my-3 block w-36" onClick={() => {}}>
+              {false ? (
+                <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
+              ) : (
+                'Load More'
+              )}
+            </button>
+          ) : null}
+        </div>
+      </div>
     </>
   )
 }

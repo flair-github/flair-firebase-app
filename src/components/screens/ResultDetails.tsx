@@ -1,6 +1,5 @@
 import React, { useMemo, SyntheticEvent, useEffect } from 'react'
 import { useState } from 'react'
-// import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
 import { PiFileCsvFill } from 'react-icons/pi'
 import { ImFilesEmpty } from 'react-icons/im'
@@ -9,29 +8,78 @@ import useFirestoreDoc from '~/lib/useFirestoreDoc'
 import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner9 } from 'react-icons/im'
-import { AiOutlineCopy, AiOutlineEdit, AiOutlineExpand } from 'react-icons/ai'
-import { Firestore, Timestamp, WhereFilterOp } from 'firebase/firestore'
+import { AiOutlineCopy, AiOutlineExpand } from 'react-icons/ai'
 import { timestampToLocaleString } from './LLMOutputs'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '../../lib/firebase'
 import { useCopyToClipboard } from 'react-use'
 import DetailModal from '../shared/DetailModal'
+import { WhereFilterOp } from 'firebase/firestore'
 
-// const nodes = JSON.parse(FLOW_SAMPLE_2).nodes
-// const edges = JSON.parse(FLOW_SAMPLE_2).edges
+const yaml = `name: 'My LLM workflow'
+description: 'Workflow that extracts information from customer support calls.'
+tags: ['audio-pipelines']
+frequency: '1d'
+customer_id: 'IVqAyQJR4ugRGR8qL9UuB809OX82'
 
-const downloadYAML = (yaml: string) => {
-  const blob = new Blob([yaml], { type: 'text/yaml' })
+data_sources:
+  - name: s3
+    type: s3
+    uri: mp3s
+    data_type: mp3
+    data_indexer_name: data_indexer_1
+    data_retriever_name: data_retriever_1
+
+data_indexers:
+  - name: data_indexer_1
+    type: default
+
+data_retrievers:
+  - name: data_retriever_1
+    type: default
+
+llm_processors:
+  - name: llm_processor_1
+    type: qa
+    data_exporter_name: s3
+    data_sources:
+      - s3
+    questions:
+      - name: 'customer_objections'
+        type: 'text'
+        prompt_strategy: 'CoT'
+        model_name: 'gpt-3.5-turbo'
+        instruction: ''
+        prompt: 'What are some customer objections if there are any otherwise None.'
+        self_consistency: 0
+      - name: 'call_type'
+        type: 'category'
+        options: ['schedule_appt', 'live_transfer', 'callback', 'NA']
+        prompt_strategy: 'CoT'
+        model_name: 'gpt-3.5-turbo'
+        instruction: ''
+        prompt: 'Which of the categories does the conversation best match?'
+        self_consistency: 10
+
+data_exporters:
+  - name: s3
+    type: s3
+    uri: 'output'
+    data_type: 'csv'
+`
+
+const downloadYAML = (yamlString: string) => {
+  const blob = new Blob([yamlString], { type: 'text/yaml' })
   const href = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = href
-  link.download = 'config.yaml' // or any other filename you want
+  link.download = 'config.yaml' // can be adjusted
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
 }
 
-function getFilenameFromURL(urlString: string, defaultName: string): string {
+const getFilenameFromURL = (urlString: string, defaultName: string): string => {
   const url = new URL(urlString)
   const pathname = url.pathname
 
@@ -46,30 +94,17 @@ function getFilenameFromURL(urlString: string, defaultName: string): string {
   return defaultName
 }
 
-// const snakeToTitle = (input: string): string => {
-//   return input
-//     .split('_') // Split the string on underscores
-//     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
-//     .join(' ') // Join the words together with spaces
-// }
-
-function ResultDetails({ id }: { id?: string }) {
+const ResultDetails = ({ id }: { id?: string }) => {
   const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
   const resultId =
     id ?? window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
-
   const [sharedToken, setSharedToken] = useState('')
 
-  const [data, loading, error] = useFirestoreDoc<DocWorkflowResult>(
-    'workflow_results',
-    resultId as string,
-  )
+  const [data] = useFirestoreDoc<DocWorkflowResult>('workflow_results', resultId as string)
   const [columnName, setColumnName] = useState<string>()
   const where: [string, WhereFilterOp, string][] = useMemo(
     () => [
-      .../* sharedToken
-        ? ([['shared_token', '==', sharedToken]] as [string, WhereFilterOp, string][])
-        : */ ([['workflowResultId', '==', resultId]] as [string, WhereFilterOp, string][]),
+      ...([['workflowResultId', '==', resultId]] as [string, WhereFilterOp, string][]),
       ...(columnName
         ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
         : []),
@@ -131,8 +166,6 @@ function ResultDetails({ id }: { id?: string }) {
       setSharing(false)
     }
   }
-
-  console.log(items)
 
   return (
     <div className="container mx-auto p-4">
@@ -231,7 +264,7 @@ function ResultDetails({ id }: { id?: string }) {
         </a>
       </nav>
       {activeTab === 'evaluation' && (
-        <div>
+        <div className="overflow-scroll">
           <div className="mb-3 flex space-x-2">
             <div className="form-control w-80">
               <label className="label">
@@ -324,7 +357,7 @@ function ResultDetails({ id }: { id?: string }) {
             ) : (
               <div className="my-36 flex w-full flex-col items-center justify-center space-y-6">
                 <ImFilesEmpty className="h-32 w-32" />
-                <h5 className="text-lg font-semibold">There is empty result for this query</h5>
+                <h5 className="text-lg font-bold">There is empty result for this query</h5>
               </div>
             )}
           </table>
@@ -343,7 +376,7 @@ function ResultDetails({ id }: { id?: string }) {
         <div className="justify-left flex w-full border">
           <div className="container max-w-200 p-5">
             <div className="px-4 sm:px-0">
-              <h3 className="text-base font-semibold leading-7 text-gray-900">Workflow Result</h3>
+              <h3 className="text-base font-bold leading-7 text-gray-900">Workflow Result</h3>
               {/* <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">
                 Personal details and application.
               </p> */}
@@ -457,55 +490,3 @@ function ResultDetails({ id }: { id?: string }) {
 }
 
 export default ResultDetails
-
-const yaml = `name: 'My LLM workflow'
-description: 'Workflow that extracts information from customer support calls.'
-tags: ['audio-pipelines']
-frequency: '1d'
-customer_id: 'IVqAyQJR4ugRGR8qL9UuB809OX82'
-
-data_sources:
-  - name: s3
-    type: s3
-    uri: mp3s
-    data_type: mp3
-    data_indexer_name: data_indexer_1
-    data_retriever_name: data_retriever_1
-
-data_indexers:
-  - name: data_indexer_1
-    type: default
-
-data_retrievers:
-  - name: data_retriever_1
-    type: default
-
-llm_processors:
-  - name: llm_processor_1
-    type: qa
-    data_exporter_name: s3
-    data_sources:
-      - s3
-    questions:
-      - name: 'customer_objections'
-        type: 'text'
-        prompt_strategy: 'CoT'
-        model_name: 'gpt-3.5-turbo'
-        instruction: ''
-        prompt: 'What are some customer objections if there are any otherwise None.'
-        self_consistency: 0
-      - name: 'call_type'
-        type: 'category'
-        options: ['schedule_appt', 'live_transfer', 'callback', 'NA']
-        prompt_strategy: 'CoT'
-        model_name: 'gpt-3.5-turbo'
-        instruction: ''
-        prompt: 'Which of the categories does the conversation best match?'
-        self_consistency: 10
-
-data_exporters:
-  - name: s3
-    type: s3
-    uri: 'output'
-    data_type: 'csv'
-`
