@@ -20,7 +20,7 @@ const navigation: {
   children?: { name: string; href: string }[]
 }[] = [
   { name: 'Flow', href: '/', icon: RiFlowChart },
-  { name: 'Experiment', href: '/result', icon: AiTwotoneExperiment },
+  { name: 'Executions', href: '/result', icon: AiTwotoneExperiment },
   { name: 'Deployment', href: '/deployment', icon: HiOutlineRocketLaunch },
   { name: 'Script', href: '/transcription', icon: CgTranscript },
   // {
