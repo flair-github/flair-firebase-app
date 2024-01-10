@@ -5,6 +5,7 @@ import { RiFlowChart, RiLogoutCircleLine } from 'react-icons/ri'
 import { AiOutlineDeploymentUnit, AiOutlineSetting, AiTwotoneExperiment } from 'react-icons/ai'
 import { CgTranscript } from 'react-icons/cg'
 import { VscDebugLineByLine } from 'react-icons/vsc'
+import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 import { FiChevronRight } from 'react-icons/fi'
 import { useAtomValue } from 'jotai'
 import { atomUserData } from '~/jotai/jotai'
@@ -20,7 +21,7 @@ const navigation: {
 }[] = [
   { name: 'Flow', href: '/', icon: RiFlowChart },
   { name: 'Experiment', href: '/result', icon: AiTwotoneExperiment },
-  { name: 'Deployment', href: '/deployment', icon: AiOutlineDeploymentUnit },
+  { name: 'Deployment', href: '/deployment', icon: HiOutlineRocketLaunch },
   { name: 'Script', href: '/transcription', icon: CgTranscript },
   // {
   //   name: 'Debug',
@@ -35,6 +36,14 @@ const navigation: {
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
+}
+
+const isActive = (currentPath: string, pathId: string) => {
+  if (pathId === '/') {
+    return currentPath.includes('editor') || currentPath === '/'
+  } else {
+    return currentPath.includes(pathId)
+  }
 }
 
 export default function Sidenav() {
@@ -62,7 +71,9 @@ export default function Sidenav() {
                       <Link
                         to={item.href}
                         className={classNames(
-                          item.href === location.pathname ? 'bg-gray-50' : 'hover:bg-gray-50',
+                          isActive(location.pathname, item.href)
+                            ? 'bg-gray-100'
+                            : 'hover:bg-gray-100',
                           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700',
                         )}>
                         <item.icon className="h-6 w-6 shrink-0 text-gray-400" aria-hidden="true" />
@@ -74,7 +85,9 @@ export default function Sidenav() {
                           <>
                             <Disclosure.Button
                               className={classNames(
-                                item.href === location.pathname ? 'bg-gray-50' : 'hover:bg-gray-50',
+                                isActive(location.pathname, item.href)
+                                  ? 'bg-gray-100'
+                                  : 'hover:bg-gray-100',
                                 'flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold text-gray-700',
                               )}>
                               <item.icon
@@ -98,9 +111,9 @@ export default function Sidenav() {
                                     as={Link}
                                     to={subItem.href}
                                     className={classNames(
-                                      subItem.href === location.pathname
-                                        ? 'bg-gray-50'
-                                        : 'hover:bg-gray-50',
+                                      isActive(location.pathname, subItem.href)
+                                        ? 'bg-gray-100'
+                                        : 'hover:bg-gray-100',
                                       'block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-700',
                                     )}>
                                     {subItem.name}

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { LegacyRef, RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import React, { LegacyRef, useCallback, useEffect, useRef, useState } from 'react'
 import ReactFlow, {
   Background,
   Controls,
@@ -13,16 +13,13 @@ import ReactFlow, {
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
-// import '@manifoldco/react-select-zero/assets/react-select-zero.css'
-// import './style/override.css'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { atom, useAtom, useAtomValue } from 'jotai'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
-import { AUTH_TOKEN, CORE_API_URL } from '../../constants'
 import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from './nodes/Registry'
 import { v4 } from 'uuid'
 
@@ -97,6 +94,8 @@ import {
   AiFillMinusSquare,
   AiOutlineNodeIndex,
 } from 'react-icons/ai'
+import { RiListSettingsLine, RiRobotLine } from 'react-icons/ri'
+import { AiFillApi, AiOutlineClear, AiOutlineEdit, AiOutlineNodeIndex } from 'react-icons/ai'
 import Menu from './editor/Menu'
 import { PiCaretDoubleLeft, PiCaretDoubleRight, PiMicrosoftOutlookLogoFill } from 'react-icons/pi'
 import EditTitleModal from './overlays/EditTitleModal'
@@ -116,6 +115,7 @@ import { GiConvergenceTarget } from 'react-icons/gi'
 import { GrAggregate, GrFormClose, GrCube } from 'react-icons/gr'
 import { BsArrowsAngleContract, BsFillCloudHaze2Fill } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
+import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -134,21 +134,13 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
 export const nodesAtom = atom<Nodes>([])
 export const edgesAtom = atom<Edges>([])
 
-export const FlowEditor: React.FC<{
-  viewerOnly?: boolean
-  initialNodes?: Nodes
-  initialEdges?: Edges
-  initialTitle?: string
-}> = ({ viewerOnly }) => {
+export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   const userData = useAtomValue(atomUserData)
-
   const [nodes, setNodes] = useAtom(nodesAtom)
   const [edges, setEdges] = useAtom(edgesAtom)
   const [title, setTitle] = useState<string>('')
 
-  const navigate = useNavigate()
-  const { state } = useLocation()
-  const { workflowId } = state || {} // Read values passed on state
+  const { workflowId, workflowRequestId } = useParams()
 
   // Load initial
   useEffect(() => {
@@ -157,23 +149,25 @@ export const FlowEditor: React.FC<{
         return
       }
 
-      const snap = await db.collection('workflows').doc(workflowId).get()
-      const data = snap.data() as DocWorkflow
-      setTitle(data.workflowTitle)
+      if (workflowRequestId) {
+        const snap = await db.collection('workflow_requests').doc(workflowRequestId).get()
+        const data = snap.data() as DocWorkflowRequest
 
-      const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
-      setNodes(newNodes)
-      setEdges(newEdges)
+        const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
+        setTitle('View Snapshot')
+        setNodes(newNodes)
+        setEdges(newEdges)
+      } else {
+        const snap = await db.collection('workflows').doc(workflowId).get()
+        const data = snap.data() as DocWorkflow
+        setTitle(data.workflowTitle)
+
+        const { nodes: newNodes, edges: newEdges } = JSON.parse(data.frontendConfig)
+        setNodes(newNodes)
+        setEdges(newEdges)
+      }
     })()
-  }, [workflowId, setEdges, setNodes])
-
-  // const [rflow, setRflow] = useState<ReactFlowInstance>()
-
-  // const onInit = useCallback((reactflowInstance: ReactFlowInstance) => {
-  //   console.log('rflow', rflow, reactflowInstance)
-  //   setRflow(reactflowInstance);
-  //   console.log('rflow', rflow)
-  // }, [rflow])
+  }, [workflowId, workflowRequestId, setEdges, setNodes])
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
@@ -188,26 +182,6 @@ export const FlowEditor: React.FC<{
     },
     [setEdges],
   )
-
-  // const connectablesMap: Record<string, string[]> = {
-  //   // TODO: Add "NodeType:handle"
-  //   'SourceNode:out': [
-  //     'DataExtractionNode:in',
-  //   ],
-  //   'DataExtractionNode:out': [
-  //     'MergerNode:in-data',
-  //     'MergerNode:in-context',
-  //     'MergerNode:in-input',
-
-  //     'PublishAPINode:in',
-  //     'AWSUploaderNode:in',
-  //   ],
-  //   'MergerNode:out': [
-  //     'PublishAPINode:in',
-  //     'WebhookNode:in',
-  //     'AWSUploaderNode:in',
-  //   ],
-  // }
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -281,7 +255,7 @@ export const FlowEditor: React.FC<{
     }
   }
 
-  async function executeFlow() {
+  const executeFlow = async () => {
     if (!userData?.userId) {
       return
     }
@@ -856,29 +830,39 @@ data_exporters:
 
   const [expanded, setExpanded] = useState(true)
 
-  return viewerOnly ? (
-    <ReactFlow
-      elementsSelectable={allowInteraction}
-      nodesConnectable={allowInteraction}
-      nodesDraggable={allowInteraction}
-      zoomOnScroll={allowInteraction}
-      panOnScroll={allowInteraction}
-      zoomOnDoubleClick={allowInteraction}
-      panOnDrag={allowInteraction}
-      selectionOnDrag={allowInteraction}
-      nodes={nodes}
-      onNodesChange={onNodesChange}
-      edges={edges}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-      selectionMode={SelectionMode.Partial}
-      onMove={(_, newViewport) => {
-        viewport.current = newViewport
-      }}>
-      <Background />
-      <Controls position="bottom-right" />
-    </ReactFlow>
+  return viewOnly ? (
+    <>
+      <ReactFlow
+        elementsSelectable={false}
+        nodesConnectable={false}
+        nodesDraggable={false}
+        zoomOnScroll={true}
+        panOnScroll={true}
+        zoomOnDoubleClick={true}
+        panOnDrag={true}
+        selectionOnDrag={false}
+        nodes={nodes}
+        onNodesChange={onNodesChange}
+        edges={edges}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        selectionMode={SelectionMode.Partial}
+        onMove={(_, newViewport) => {
+          viewport.current = newViewport
+        }}>
+        <Background />
+        <Controls position="bottom-right" />
+      </ReactFlow>
+      <div className="absolute right-3 top-3 z-10 flex flex-col items-end space-y-3">
+        <div className="join w-fit bg-white shadow">
+          <Link className="btn btn-outline join-item" to={'/editor/' + workflowId}>
+            <AiOutlineEdit className="h-6 w-6" />
+            Edit
+          </Link>
+        </div>
+      </div>
+    </>
   ) : (
     <>
       <main className="h-full">
@@ -962,101 +946,5 @@ data_exporters:
     </>
   )
 }
-
-const sample1 = `
-{
-  "nodes": [
-    {
-      "id": "input-001",
-      "type": "InputNode",
-      "data": {
-        "nodeId": "input-001",
-        "initialContents": {
-          "keyValPairs": {
-            "x": "hello",
-            "y": "world"
-          }
-        }
-      },
-      "position": {
-        "x": 0,
-        "y": 200
-      },
-      "width": 400,
-      "height": 196
-    },
-    {
-      "id": "prompt-template-002",
-      "type": "PromptTemplateNode",
-      "data": {
-        "nodeId": "prompt-template-002",
-        "initialContents": {
-          "promptTemplate": "Check {x} in {y}"
-        }
-      },
-      "position": {
-        "x": 500,
-        "y": 200
-      },
-      "width": 400,
-      "height": 280
-    },
-    {
-      "id": "model-003",
-      "type": "ModelNode",
-      "data": {
-        "nodeId": "model-003",
-        "initialContents": {
-          "model": "gpt-4",
-          "temperature": "1"
-        }
-      },
-      "position": {
-        "x": 1000,
-        "y": 200
-      },
-      "width": 400,
-      "height": 222
-    },
-    {
-      "id": "output-004",
-      "type": "OutputNode",
-      "data": {
-        "nodeId": "output-004",
-        "initialContents": {}
-      },
-      "position": {
-        "x": 1500,
-        "y": 200
-      },
-      "width": 400,
-      "height": 74
-    }
-  ],
-  "edges": [
-    {
-      "id": "edge-1",
-      "source": "input-001",
-      "target": "prompt-template-002",
-      "sourceHandle": "outbound",
-      "targetHandle": "inbound"
-    },
-    {
-      "id": "edge-2",
-      "source": "prompt-template-002",
-      "target": "model-003",
-      "sourceHandle": "outbound",
-      "targetHandle": "inbound"
-    },
-    {
-      "id": "edge-3",
-      "source": "model-003",
-      "target": "output-004",
-      "sourceHandle": "outbound",
-      "targetHandle": "inbound"
-    }
-  ]
-}
-`
 
 export default FlowEditor
