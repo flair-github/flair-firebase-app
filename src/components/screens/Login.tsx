@@ -23,7 +23,7 @@ function PageLogin() {
         <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
           <a
             href="#"
-            className="mb-6 flex items-center text-2xl font-semibold text-gray-900 dark:text-white">
+            className="mb-6 flex items-center text-2xl font-bold text-gray-900 dark:text-white">
             <div className="flex justify-center">
               <img src="images/flair-ai.svg" width={180} height={48} className="mb-2" />
             </div>

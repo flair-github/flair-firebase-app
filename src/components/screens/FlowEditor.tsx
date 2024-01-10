@@ -47,6 +47,7 @@ import { DataExporterPowerBINode } from './nodes/DataExporterPowerBI'
 import { DataExporterSalesforceNode } from './nodes/DataExporterSalesforce'
 import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
 import { DataExporterPostgresNode } from './nodes/DataExporterPostgres'
+import { DataExporterTwilioNode } from './nodes/DataExporterTwilio'
 import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
 import { ConditionalLogicNode } from './nodes/ConditionalLogicNode'
@@ -71,6 +72,7 @@ export const nodeTypes = {
   DataExporterAPINode,
   DataExporterPowerBINode,
   DataExporterPostgresNode,
+  DataExporterTwilioNode,
   EvaluatorNode,
   LLMProcessorNode,
   DataIndexerNode,
@@ -85,12 +87,14 @@ export const nodeTypes = {
   DataExtractorAggregatorNode,
 }
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
-import { RiListSettingsLine, RiRobotLine } from 'react-icons/ri'
+import { RiListSettingsLine, RiRobotLine, RiArrowRightLine, RiFileUploadLine } from 'react-icons/ri'
 import {
   AiFillApi,
   AiOutlineClear,
   AiOutlineDeploymentUnit,
   AiOutlineEdit,
+  AiOutlineRocket,
+  AiFillMinusSquare,
   AiOutlineNodeIndex,
 } from 'react-icons/ai'
 import Menu from './editor/Menu'
@@ -102,13 +106,14 @@ import {
   BiLogoGmail,
   BiLogoGoogle,
   BiLogoMicrosoft,
+  BiLogoMongodb,
   BiLogoPostgresql,
   BiLogoSlack,
 } from 'react-icons/bi'
 import { FaCloudUploadAlt, FaSalesforce } from 'react-icons/fa'
-import { SiPowerbi, SiZendesk } from 'react-icons/si'
+import { SiPowerbi, SiZendesk, SiAirtable, SiGooglesheets, SiTwilio } from 'react-icons/si'
 import { GiConvergenceTarget } from 'react-icons/gi'
-import { GrAggregate, GrFormClose } from 'react-icons/gr'
+import { GrAggregate, GrFormClose, GrCube } from 'react-icons/gr'
 import { BsArrowsAngleContract, BsFillCloudHaze2Fill } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
 
@@ -224,7 +229,7 @@ export const FlowEditor: React.FC<{
     [nodes, setEdges],
   )
 
-  // useref of { x, y}
+  // useref of { x, y }
   const viewport = useRef({ x: 0, y: 0, zoom: 1 })
 
   const [isJsonModalShown, setIsJsonModalShown] = useState(false)
@@ -335,130 +340,128 @@ export const FlowEditor: React.FC<{
       //   { headers: { Authorization: AUTH_TOKEN } },
       // )
 
-      //       {
-      //         async function uploadConfig() {
-      //           const formData = new FormData()
+      {
+        async function uploadConfig() {
+          const formData = new FormData()
 
-      //           const yamlContent = `name: 'My LLM workflow'
-      // description: 'Workflow that extracts information from customer support calls.'
-      // tags: ['audio-pipelines']
-      // frequency: '1d'
-      // customer_id: 'IVqAyQJR4ugRGR8qL9UuB809OX82'
+          const yamlContent = `name: 'My LLM workflow'
+description: 'Workflow that extracts information from customer support calls.'
+tags: ['audio-pipelines']
+frequency: '1d'
+customer_id: 'IVqAyQJR4ugRGR8qL9UuB809OX82'
 
-      // workflow:
-      //   data_source_1: [llm_processor_1]
-      //   llm_processor_1: [llm_processor_2, data_exporter_1, data_exporter_2]
-      //   llm_processor_2: [data_exporter_1, data_exporter_2]
+workflow:
+  data_source_1: [llm_processor_1]
+  llm_processor_1: [llm_processor_2, data_exporter_1, data_exporter_2]
+  llm_processor_2: [data_exporter_1, data_exporter_2]
 
-      // data_sources:
-      //   # - name: data_source_1
-      //   #   type: missive # s3, azure, google, missive
-      //   #   data_type: json # mp3, wav, csv, txt, pdf
-      //   #   keys: [text]
-      //   #   missive_api_key: 7bc9e948-3e69-4c91-a830-660a4e1c39b7
-      //   - name: data_source_1
-      //     type: s3 # s3, azure, google, missive
-      //     uri: tusol/b2b_emails
-      //     data_type: txt # mp3, wav, csv, txt, pdf
-      //     keys: [text]
 
-      // llm_processors:
-      //   - name: llm_processor_1
-      //     type: column
-      //     keys: [text]
-      //     columns:
-      //       - name: generated_email
-      //         type: text # text, category, number, list, regex
-      //         prompt_strategy: CoT # default, CoT, plan_and_solve
-      //         model_name: gpt-3.5-turbo # gpt-3.5-turbo, gpt-4, text-davinci-003, azure-gpt-3.5-turbo, command, llama-2-7b-chat, mpt-7b
-      //         instruction: |-
-      //           You are Ilana, the manager responding to b2b outreach emails. Use the following email response templates to generate a response.
-      //           -
-      //           Sample request template:
-      //           Hi,
+data_sources:
+  # - name: data_source_1
+  #   type: missive # s3, azure, google, missive
+  #   data_type: json # mp3, wav, csv, txt, pdf
+  #   keys: [text]
+  #   missive_api_key: 7bc9e948-3e69-4c91-a830-660a4e1c39b7
+  - name: data_source_1
+    type: s3 # s3, azure, google, missive
+    uri: tusol/b2b_emails
+    data_type: txt # mp3, wav, csv, txt, pdf
+    keys: [text]
 
-      //           Please find attached additional product and integration information and let me know what might be a fit at your property.
-      //           Generally, our Organic Protein Bars do well at spas, grab-and-go outlets, minibars and cafes, and the Smoothies are a great option for cafes and banquets.
-      //           I'm looking forward to hearing your thoughts and sharing our collection with you!
+llm_processors:
+  - name: llm_processor_1
+    type: column
+    keys: [text]
+    columns:
+      - name: generated_email
+        type: text # text, category, number, list, regex
+        prompt_strategy: CoT # default, CoT, plan_and_solve
+        model_name: gpt-3.5-turbo # gpt-3.5-turbo, gpt-4, text-davinci-003, azure-gpt-3.5-turbo, command, llama-2-7b-chat, mpt-7b
+        instruction: |-
+          You are Ilana, the manager responding to b2b outreach emails. Use the following email response templates to generate a response.
+          -
+          Sample request template:
+          Hi,
 
-      //           Thanks,
-      //           Ilana
-      //           -
-      //           Inbound inquiry template:
-      //           Hi,
+          Please find attached additional product and integration information and let me know what might be a fit at your property.
+          Generally, our Organic Protein Bars do well at spas, grab-and-go outlets, minibars and cafes, and the Smoothies are a great option for cafes and banquets.
+          I'm looking forward to hearing your thoughts and sharing our collection with you!
 
-      //           Thanks so much for your note, we'd love to discuss wholesale partnerships with you!
-      //           We currently work with similar resorts - Four Seasons, Meadowood, Montage, Auberge - in a similar capacity and would love to work with you at Cliff House as well.
-      //           Please find additional details attached and let me know what you have in mind for an initial order.
-      //           Looking forward to our partnership!
+          Thanks,
+          Ilana
+          -
+          Inbound inquiry template:
+          Hi,
 
-      //           Warmly,
-      //           Ilana
-      //         prompt: Given an input email chain, generate a personalized response from Ilana using the templates in the instruction. Make sure to include the customer's name in the response.
-      //       - name: intent
-      //         type: category
-      //         prompt_strategy: CoT # default, CoT, plan_and_solve
-      //         model_name: gpt-3.5-turbo # gpt-3.5-turbo, gpt-4, text-davinci-003, azure-gpt-3.5-turbo, command, llama-2-7b-chat, mpt-7b
-      //         instruction: |-
-      //           You are Ilana, the manager responding to customer support emails. Answer the following questions about the email.
-      //         prompt: Given the email, what is the intent of the original email from the options? If the intent is not listed, return OTHER.
-      //         options: ['Sample request', 'Request more information', 'Follow up after product sample', 'OTHER']
+          Thanks so much for your note, we'd love to discuss wholesale partnerships with you!
+          We currently work with similar resorts - Four Seasons, Meadowood, Montage, Auberge - in a similar capacity and would love to work with you at Cliff House as well.
+          Please find additional details attached and let me know what you have in mind for an initial order.
+          Looking forward to our partnership!
 
-      //   - name: llm_processor_2
-      //     type: column
-      //     keys: [generated_email]
-      //     columns:
-      //       - name: generated_subject
-      //         type: text # text, category, number, list, regex
-      //         prompt_strategy: CoT # default, CoT, plan_and_solve
-      //         model_name: gpt-3.5-turbo # gpt-3.5-turbo, gpt-4, text-davinci-003, azure-gpt-3.5-turbo, command, llama-2-7b-chat, mpt-7b
-      //         instruction: |-
-      //           You are Ilana, the manager responding to customer service outreach emails.
-      //         prompt: Return only the subject of the given email. If there is no subject, return 'Subject'.
+          Warmly,
+          Ilana
+        prompt: Given an input email chain, generate a personalized response from Ilana using the templates in the instruction. Make sure to include the customer's name in the response.
+      - name: intent
+        type: category
+        prompt_strategy: CoT # default, CoT, plan_and_solve
+        model_name: gpt-3.5-turbo # gpt-3.5-turbo, gpt-4, text-davinci-003, azure-gpt-3.5-turbo, command, llama-2-7b-chat, mpt-7b
+        instruction: |-
+          You are Ilana, the manager responding to customer support emails. Answer the following questions about the email.
+        prompt: Given the email, what is the intent of the original email from the options? If the intent is not listed, return OTHER.
+        options: ['Sample request', 'Request more information', 'Follow up after product sample', 'OTHER']
 
-      // data_exporters:
-      //   - name: data_exporter_1
-      //     type: email
-      //     data_type: csv
-      //     from_email: no-reply@flairlabs.ai
-      //     to_emails: [trtets@gmail.com]
-      //     email_password: flairlabs1234!
-      //     content_key: generated_email
-      //     subject_key: generated_subject
-      //   - name: data_exporter_2
-      //     type: google # azure, s3, google, email
-      //     data_type: csv
-      //     uri: llm_outputs
+  - name: llm_processor_2
+    type: column
+    keys: [generated_email]
+    columns:
+      - name: generated_subject
+        type: text # text, category, number, list, regex
+        prompt_strategy: CoT # default, CoT, plan_and_solve
+        model_name: gpt-3.5-turbo # gpt-3.5-turbo, gpt-4, text-davinci-003, azure-gpt-3.5-turbo, command, llama-2-7b-chat, mpt-7b
+        instruction: |-
+          You are Ilana, the manager responding to customer service outreach emails.
+        prompt: Return only the subject of the given email. If there is no subject, return 'Subject'.
 
-      // evaluators:
-      //   - name: evaluator_1
-      //     type: default
-      //     `
 
-      //           const blob = new Blob([yamlContent], { type: 'application/x-yaml' })
-      //           formData.append('user_config_yaml', blob, 'b2b.yaml')
+data_exporters:
+  - name: data_exporter_1
+    type: email
+    data_type: csv
+    from_email: no-reply@flairlabs.ai
+    to_emails: [trtets@gmail.com]
+    email_password: flairlabs1234!
+    content_key: generated_email
+    subject_key: generated_subject
+  - name: data_exporter_2
+    type: google # azure, s3, google, email
+    data_type: csv
+    uri: llm_outputs
+    `
 
-      //           try {
-      //             const response = await axios.post(
-      //               'https://flair-api.flairlabs.ai/api/v1/upload-user-config-yaml',
-      //               formData,
-      //               {
-      //                 headers: {
-      //                   accept: 'application/json',
-      //                   // Content-Type will be set automatically by the browser when using FormData
-      //                 },
-      //               },
-      //             )
+          const blob = new Blob([yamlContent], { type: 'application/x-yaml' })
+          formData.append('user_config_yaml', blob, 'b2b.yaml')
 
-      //             console.log('response', response)
-      //             console.log('response.data', response.data)
-      //           } catch (error) {
-      //             console.error('Error uploading the config:', error)
-      //           }
-      //         }
+          try {
+            const response = await axios.post(
+              'https://flair-api.flairlabs.ai/api/v1/upload-user-config-yaml',
+              formData,
+              {
+                headers: {
+                  accept: 'application/json',
+                  // Content-Type will be set automatically by the browser when using FormData
+                },
+              },
+            )
 
-      //         uploadConfig()
-      //       }
+            console.log('response', response)
+            console.log('response.data', response.data)
+          } catch (error) {
+            console.error('Error uploading the config:', error)
+          }
+        }
+
+        uploadConfig()
+      }
 
       setDeploymentStatus(['success', 'Your workflow has been deployed!'])
     } catch (error) {
@@ -498,7 +501,7 @@ export const FlowEditor: React.FC<{
   const nodeClassifications = [
     {
       title: 'Data Source',
-      subtitle: 'Origin of raw datasets.',
+      subtitle: 'Load unstructured data from a data source.',
       color: 'purple',
       members: [
         {
@@ -523,7 +526,28 @@ export const FlowEditor: React.FC<{
           icon: BiLogoMicrosoft,
         },
         {
-          title: 'Local Files',
+          title: 'Gmail',
+          handleOnClick: () => {
+            addNode('data-source-email', 'DataSourceEmailNode')
+          },
+          icon: BiLogoGmail,
+        },
+        {
+          title: 'PostgresDB',
+          handleOnClick: () => {
+            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+          },
+          icon: BiLogoPostgresql,
+        },
+        {
+          title: 'MongoDB',
+          handleOnClick: () => {
+            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+          },
+          icon: BiLogoMongodb,
+        },
+        {
+          title: 'File Upload',
           handleOnClick: () => {
             addNode('data-source-local-files', 'DataSourceLocalFilesNode')
           },
@@ -535,27 +559,6 @@ export const FlowEditor: React.FC<{
             addNode('data-source-api', 'DataSourceAPINode')
           },
           icon: AiFillApi,
-        },
-        {
-          title: 'Gmail',
-          handleOnClick: () => {
-            addNode('data-source-email', 'DataSourceEmailNode')
-          },
-          icon: BiLogoGmail,
-        },
-        {
-          title: 'Outlook',
-          handleOnClick: () => {
-            addNode('data-source-email', 'DataSourceEmailNode')
-          },
-          icon: PiMicrosoftOutlookLogoFill,
-        },
-        {
-          title: 'Missive',
-          handleOnClick: () => {
-            addNode('data-source-email', 'DataSourceEmailNode')
-          },
-          icon: MdEmail,
         },
         {
           title: 'Salesforce',
@@ -578,43 +581,50 @@ export const FlowEditor: React.FC<{
       ],
     },
     {
-      title: 'Data Indexer',
-      subtitle: 'Organizes and categorizes data for quick retrieval.',
+      title: 'Vector Indexer',
+      subtitle: 'Embed your data into your choice of vector data store for quick retrieval.',
       color: 'green',
       members: [
         {
-          title: 'Data Indexer',
+          title: 'Pinecone Indexer',
           handleOnClick: () => {
             addNode('data-indexer', 'DataIndexerNode')
           },
-          icon: AiOutlineNodeIndex,
+          icon: GrCube,
+        },
+        {
+          title: 'Chroma Indexer',
+          handleOnClick: () => {
+            addNode('data-indexer', 'DataIndexerNode')
+          },
+          icon: GrAggregate,
         },
       ],
     },
-    /* {
-      title: 'Data Retriever',
-      subtitle: 'Fetches specific data subsets from the source or index.',
-      color: 'orange',
-      members: [
-        {
-          title: 'Data Retriever',
-          handleOnClick: () => {
-            addNode('data-retriever', 'DataRetrieverNode')
-          },
-          icon: GiConvergenceTarget,
-        },
-        {
-          title: 'Data Retriever API',
-          handleOnClick: () => {
-            addNode('data-retriever-api', 'DataRetrieverApiNode')
-          },
-          icon: AiFillApi,
-        },
-      ],
-    }, */
+    // {
+    //   title: 'Data Retriever',
+    //   subtitle: 'Fetches specific data subsets from the source or index.',
+    //   color: 'orange',
+    //   members: [
+    //     {
+    //       title: 'Data Retriever',
+    //       handleOnClick: () => {
+    //         addNode('data-retriever', 'DataRetrieverNode')
+    //       },
+    //       icon: GiConvergenceTarget,
+    //     },
+    //     {
+    //       title: 'Data Retriever API',
+    //       handleOnClick: () => {
+    //         addNode('data-retriever-api', 'DataRetrieverApiNode')
+    //       },
+    //       icon: AiFillApi,
+    //     },
+    //   ],
+    // },
     {
-      title: 'Data Extractor',
-      subtitle: 'Extracts or transforms specific data elements.',
+      title: 'LLM Processor',
+      subtitle: 'Transforms your data using your choice of LLM and prompts.',
       color: 'blue',
       members: [
         {
@@ -629,13 +639,27 @@ export const FlowEditor: React.FC<{
           handleOnClick: () => {
             addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
           },
-          icon: GrAggregate,
+          icon: BsArrowsAngleContract,
         },
       ],
     },
     {
-      title: 'Data Exporter',
-      subtitle: 'Sends processed data to specified destinations.',
+      title: 'Control Flow',
+      subtitle: 'Control flow and logical branching.',
+      color: 'rose',
+      members: [
+        {
+          title: 'Conditional',
+          handleOnClick: () => {
+            addNode('conditional-logic', 'ConditionalLogicNode')
+          },
+          icon: BiGitBranch,
+        },
+      ],
+    },
+    {
+      title: 'Data Destination',
+      subtitle: 'Send processed data to a specified destination.',
       color: 'teal',
       members: [
         {
@@ -660,13 +684,6 @@ export const FlowEditor: React.FC<{
           icon: BiLogoMicrosoft,
         },
         {
-          title: 'Zendesk',
-          handleOnClick: () => {
-            addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
-          },
-          icon: SiZendesk,
-        },
-        {
           title: 'Gmail',
           handleOnClick: () => {
             addNode('data-exporter-gmail', 'DataExporterGmailNode')
@@ -674,18 +691,25 @@ export const FlowEditor: React.FC<{
           icon: BiLogoGmail,
         },
         {
-          title: 'Salesforce',
+          title: 'Airtable',
           handleOnClick: () => {
-            addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
+            addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
-          icon: FaSalesforce,
+          icon: SiAirtable,
         },
         {
-          title: 'Power BI',
+          title: 'Google Sheets',
           handleOnClick: () => {
-            addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
+            addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
-          icon: SiPowerbi,
+          icon: SiGooglesheets,
+        },
+        {
+          title: 'Twilio',
+          handleOnClick: () => {
+            addNode('data-exporter-twilio', 'DataExporterTwilioNode')
+          },
+          icon: SiTwilio,
         },
         {
           title: 'Postgres',
@@ -695,12 +719,26 @@ export const FlowEditor: React.FC<{
           icon: BiLogoPostgresql,
         },
         {
-          title: 'Flair',
+          title: 'Zendesk',
           handleOnClick: () => {
-            addNode('data-exporter-flair', 'DataExporterFlairNode')
+            addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
           },
-          icon: BsFillCloudHaze2Fill,
+          icon: SiZendesk,
         },
+        {
+          title: 'Salesforce',
+          handleOnClick: () => {
+            addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
+          },
+          icon: FaSalesforce,
+        },
+        // {
+        //   title: 'Power BI',
+        //   handleOnClick: () => {
+        //     addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
+        //   },
+        //   icon: SiPowerbi,
+        // },
         {
           title: 'API',
           handleOnClick: () => {
@@ -710,65 +748,51 @@ export const FlowEditor: React.FC<{
         },
       ],
     },
-    {
-      title: 'Router',
-      subtitle: 'Control flow and logical branching.',
-      color: 'rose',
-      members: [
-        {
-          title: 'Conditional Logic',
-          handleOnClick: () => {
-            addNode('conditional-logic', 'ConditionalLogicNode')
-          },
-          icon: BiGitBranch,
-        },
-      ],
-    },
-    {
-      title: 'Evaluation',
-      subtitle: 'Assesses data quality and accuracy.',
-      color: 'pink',
-      members: [
-        {
-          title: 'Evaluator',
-          handleOnClick: () => {
-            addNode('evaluator', 'EvaluatorNode')
-          },
-          icon: BsArrowsAngleContract,
-        },
-      ],
-    },
+    // {
+    //   title: 'Evaluation',
+    //   subtitle: 'Assesses data quality and accuracy.',
+    //   color: 'pink',
+    //   members: [
+    //     {
+    //       title: 'Evaluator',
+    //       handleOnClick: () => {
+    //         addNode('evaluator', 'EvaluatorNode')
+    //       },
+    //       icon: BsArrowsAngleContract,
+    //     },
+    //   ],
+    // },
   ]
 
   const controls = [
-    {
-      title: 'Sample',
-      Icon: LuLayoutTemplate,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
-        setNodes(newNodes)
-        setEdges(newEdges)
-      },
-    },
-    {
-      title: 'Config',
-      Icon: RiListSettingsLine,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
-        setIsJsonModalShown(true)
-      },
-    },
-    {
-      title: 'Clear',
-      Icon: AiOutlineClear,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        setNodes([])
-        setEdges([])
-      },
-    },
+    // {
+    //   title: 'Sample',
+    //   Icon: LuLayoutTemplate,
+    //   handleOnClick: async (event: React.SyntheticEvent) => {
+    //     event.preventDefault()
+    //     const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
+    //     setNodes(newNodes)
+    //     setEdges(newEdges)
+    //   },
+    // },
+    // {
+    //   title: 'Config',
+    //   Icon: RiListSettingsLine,
+    //   handleOnClick: async (event: React.SyntheticEvent) => {
+    //     event.preventDefault()
+    //     setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
+    //     setIsJsonModalShown(true)
+    //   },
+    // },
+    // {
+    //   title: 'Clear',
+    //   Icon: AiOutlineClear,
+    //   handleOnClick: async (event: React.SyntheticEvent) => {
+    //     event.preventDefault()
+    //     setNodes([])
+    //     setEdges([])
+    //   },
+    // },
     {
       title: 'Save',
       Icon: LuSaveAll,
@@ -778,8 +802,25 @@ export const FlowEditor: React.FC<{
       },
     },
     {
-      title: 'Deploy',
-      Icon: AiOutlineDeploymentUnit,
+      title: 'Run',
+      Icon: RiArrowRightLine,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        executeModalRef.current?.showModal()
+      },
+    },
+    {
+      title: 'Share',
+      Icon: RiFileUploadLine,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
+        setIsJsonModalShown(true)
+      },
+    },
+    {
+      title: 'Publish',
+      Icon: AiOutlineRocket,
       handleOnClick: async (event: React.SyntheticEvent) => {
         event.preventDefault()
         executeModalRef.current?.showModal()
@@ -848,7 +889,7 @@ export const FlowEditor: React.FC<{
             } transform-gpu flex-col space-y-3 py-3 pl-4 transition-transform`}>
             <div className="join relative w-full bg-white shadow outline outline-1">
               <span className="join-item flex grow items-center">
-                <h5 className="pl-3 text-xl font-semibold">{title}</h5>
+                <h5 className="pl-3 text-xl font-bold">{title}</h5>
               </span>
               <button
                 className="btn btn-outline join-item border-y-0 border-r-0"
@@ -881,6 +922,7 @@ export const FlowEditor: React.FC<{
             zoomOnDoubleClick={allowInteraction}
             panOnDrag={allowInteraction}
             selectionOnDrag={allowInteraction}
+            defaultViewport={{ x: 650, y: 500, zoom: 0.5 }} // set the default zoom and sizing of the graph
             nodes={nodes}
             onNodesChange={onNodesChange}
             edges={edges}

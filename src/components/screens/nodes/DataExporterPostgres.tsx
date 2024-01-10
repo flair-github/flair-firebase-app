@@ -60,7 +60,7 @@ export const DataExporterPostgresNode = ({
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
-        width: 400,
+        width: 600,
       }}
       className="bg-teal-50">
       <NodeHeader
@@ -72,7 +72,7 @@ export const DataExporterPostgresNode = ({
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Connection String</span>
+            <span className="font-bold">Connection String</span>
           </label>
           <textarea
             rows={2}
@@ -86,7 +86,7 @@ export const DataExporterPostgresNode = ({
 
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Table Name</span>
+            <span className="font-bold">Table Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -96,11 +96,17 @@ export const DataExporterPostgresNode = ({
           />
         </div>
 
-        <div className="mb-2 mt-1">
+        <div className="mb-2 mt-1 text-center">
           <label className="label">
-            <span className="font-semibold">Column Mapping</span>
+            <span className="font-bold">Column Mapping</span>
           </label>
-          <textarea
+          <button type="button" className="min-w-30 btn btn-primary m-2 normal-case">
+            Auto-map
+          </button>
+          <button type="button" className="min-w-30 btn btn-primary m-3 normal-case">
+            Manual
+          </button>
+          {/* <textarea
             rows={4}
             className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
             name={'columnMapping'}
@@ -110,7 +116,7 @@ export const DataExporterPostgresNode = ({
   "table_row_name": "output_header_name",
   "table_row_name": "output_header_name",
 }`}
-          />
+          /> */}
         </div>
       </section>
       {!noHandle && (

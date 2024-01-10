@@ -70,14 +70,14 @@ export const DataExporterGmailNode = ({
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
-        width: 400,
+        width: 800,
       }}
       className="bg-teal-50">
       <NodeHeader Icon={BiLogoGmail} title="Exporter: Gmail" color="teal" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">To</span>
+            <span className="font-bold">To</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -88,7 +88,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Subject</span>
+            <span className="font-bold">Subject</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -99,7 +99,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">From</span>
+            <span className="font-bold">From</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -110,10 +110,10 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Prompt</span>
+            <span className="font-bold">Prompt</span>
           </label>
           <textarea
-            rows={6}
+            rows={10}
             className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
             name={'prompt'}
             value={nodeContent.prompt}
@@ -121,9 +121,14 @@ export const DataExporterGmailNode = ({
             placeholder={''}
           />
         </div>
-        <div className="mb-2 mt-1">
+        <div className="text-center">
+          <button type="button" className="btn btn-primary min-w-40 normal-case">
+            Connect Account
+          </button>
+        </div>
+        {/* <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">SMTP Mail Server</span>
+            <span className="font-bold">SMTP Mail Server</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -134,7 +139,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">SMTP Port</span>
+            <span className="font-bold">SMTP Port</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -145,7 +150,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">User Name</span>
+            <span className="font-bold">User Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -156,7 +161,7 @@ export const DataExporterGmailNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Password</span>
+            <span className="font-bold">Password</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -164,7 +169,7 @@ export const DataExporterGmailNode = ({
             value={nodeContent.password}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
       </section>
       {!noHandle && (
         <Handle

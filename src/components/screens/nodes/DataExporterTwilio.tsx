@@ -2,45 +2,43 @@ import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
-import { SiZendesk } from 'react-icons/si'
+import { SiTwilio } from 'react-icons/si'
 import { NodeHeader } from '~/components/shared/NodeHeader'
 
-export interface DataExporterZendeskNodeContent {
-  nodeType: 'data-exporter-zendesk'
-  subdomain: string
-  email: string
-  apiToken: string
-  title: string
-  comment: string
-  priority: string
+export interface DataExporterTwilioNodeContent {
+  nodeType: 'data-exporter-twilio'
+  account_sid: string
+  auth_token: string
+  from: string
+  to: string
+  body: string
   type: string
 }
 
-export const dataExporterZendeskDefaultContent: DataExporterZendeskNodeContent = {
-  nodeType: 'data-exporter-zendesk',
-  subdomain: '',
-  email: '',
-  apiToken: '',
-  title: '',
-  comment: '',
-  priority: '',
-  type: '',
+export const dataExporterTwilioDefaultContent: DataExporterTwilioNodeContent = {
+  nodeType: 'data-exporter-twilio',
+  account_sid: '',
+  auth_token: '',
+  from: '',
+  to: '',
+  body: '',
+  type: 'SMS',
 }
 
-export const DataExporterZendeskNode = ({
+export const DataExporterTwilioNode = ({
   data,
   noHandle,
 }: {
   data: NodeData
   noHandle?: boolean
 }) => {
-  const [nodeContent, setNodeContent] = useState<DataExporterZendeskNodeContent>(
-    dataExporterZendeskDefaultContent,
+  const [nodeContent, setNodeContent] = useState<DataExporterTwilioNodeContent>(
+    dataExporterTwilioDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-exporter-zendesk') {
+    if (data.initialContents.nodeType === 'data-exporter-twilio') {
       setNodeContent({
         ...data.initialContents,
       })
@@ -49,7 +47,7 @@ export const DataExporterZendeskNode = ({
 
   // Copy node data to cache
   useEffect(() => {
-    const cache: DataExporterZendeskNodeContent = {
+    const cache: DataExporterTwilioNodeContent = {
       ...nodeContent,
     }
 
@@ -68,80 +66,68 @@ export const DataExporterZendeskNode = ({
         borderWidth: '1px',
         borderColor: 'black',
         borderRadius: '6px',
-        width: 400,
+        width: 1000,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={SiZendesk} title="Exporter: Zendesk" color="teal" nodeId={data.nodeId} />
+      <NodeHeader Icon={SiTwilio} title="Exporter: Twilio" color="teal" nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-bold">Subdomain</span>
+            <span className="font-bold">TWILIO_ACCOUNT_SID</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            name={'subdomain'}
-            value={nodeContent.subdomain}
+            name={'account_sid'}
+            value={nodeContent.account_sid}
             onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-bold">Email</span>
+            <span className="font-bold">TWILIO_AUTH_TOKEN</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            name={'email'}
-            value={nodeContent.email}
+            name={'auth_token'}
+            value={nodeContent.auth_token}
             onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-bold">API Token</span>
+            <span className="font-bold">From</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            name={'apiToken'}
-            value={nodeContent.apiToken}
+            name={'from'}
+            value={nodeContent.from}
             onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-bold">Title</span>
+            <span className="font-bold">To</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
-            name={'title'}
-            value={nodeContent.title}
+            name={'to'}
+            value={nodeContent.to}
             onChange={handleChange}
           />
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-bold">Comment</span>
+            <span className="font-bold">Body</span>
           </label>
           <textarea
-            rows={3}
+            rows={15}
             className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
-            name={'comment'}
-            value={nodeContent.comment}
+            name={'body'}
+            value={nodeContent.body}
             onChange={handleChange}
             placeholder={''}
           />
         </div>
-        <div className="mb-2 mt-1">
-          <label className="label">
-            <span className="font-bold">Priority</span>
-          </label>
-          <input
-            className="max-w-xs input w-full border-black"
-            name={'priority'}
-            value={nodeContent.priority}
-            onChange={handleChange}
-          />
-        </div>
-
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">Type</span>

@@ -38,20 +38,20 @@ export const ConditionalLogicNode = ({ data }: { data: NodeData }) => {
         width: 400,
       }}
       className="bg-rose-50">
-      <NodeHeader title="Conditional Logic" color="rose" withFlair nodeId={data.nodeId} />
+      <NodeHeader title="Conditional" color="rose" withFlair nodeId={data.nodeId} />
       <section className="px-5 pb-5">
         <div className="mb-2 flex">
           <div className="flex-1">
-            <div className="mb-2">props</div>
+            <div className="mb-2 text-xl font-bold">input</div>
           </div>
           <div className="flex-1 text-right">
-            <div className="mb-2">true</div>
-            <div className="mb-2">false</div>
+            <div className="mb-2 text-xl font-bold">true</div>
+            <div className="mb-2 text-xl font-bold">false</div>
           </div>
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Formula</span>
+            <span className="font-bold">Formula</span>
           </label>
           <textarea
             rows={6}

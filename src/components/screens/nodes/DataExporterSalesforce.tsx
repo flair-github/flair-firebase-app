@@ -76,7 +76,7 @@ export const DataExporterSalesforceNode = ({
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Username</span>
+            <span className="font-bold">Username</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -87,7 +87,7 @@ export const DataExporterSalesforceNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Password</span>
+            <span className="font-bold">Password</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -98,7 +98,7 @@ export const DataExporterSalesforceNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Security Token</span>
+            <span className="font-bold">Security Token</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -109,7 +109,7 @@ export const DataExporterSalesforceNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Salesforce Object</span>
+            <span className="font-bold">Salesforce Object</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -122,7 +122,7 @@ export const DataExporterSalesforceNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Insert Statement</span>
+            <span className="font-bold">Insert Statement</span>
           </label>
           <textarea
             rows={3}

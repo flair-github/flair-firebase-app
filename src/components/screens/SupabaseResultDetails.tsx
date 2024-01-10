@@ -269,7 +269,7 @@ function ResultDetails() {
             ) : (
               <div className="my-36 flex w-full flex-col items-center justify-center space-y-6">
                 <ImFilesEmpty className="h-32 w-32" />
-                <h5 className="text-lg font-semibold">There is empty result for this query</h5>
+                <h5 className="text-lg font-bold">There is empty result for this query</h5>
               </div>
             )}
           </table>
@@ -288,7 +288,7 @@ function ResultDetails() {
         <div className="justify-left flex w-full border">
           <div className="container max-w-200 p-5">
             <div className="px-4 sm:px-0">
-              <h3 className="text-base font-semibold leading-7 text-gray-900">Workflow Result</h3>
+              <h3 className="text-base font-bold leading-7 text-gray-900">Workflow Result</h3>
               {/* <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">
                 Personal details and application.
               </p> */}

@@ -227,7 +227,7 @@ function Templates() {
                 />
               </div>
               <div className="flex-1">
-                <div className="mb-2 text-3xl font-semibold">Basic Prompting</div>
+                <div className="mb-2 text-3xl font-bold">Basic Prompting</div>
                 <div className="mb-2">
                   Load files from external source, write prompts, and produce LLM results in under 5
                   minutes

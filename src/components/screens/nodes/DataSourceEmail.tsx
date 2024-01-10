@@ -62,7 +62,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Protocol</span>
+            <span className="font-bold">Protocol</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -77,7 +77,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Hostname</span>
+            <span className="font-bold">Hostname</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -90,7 +90,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Port</span>
+            <span className="font-bold">Port</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -103,7 +103,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Username</span>
+            <span className="font-bold">Username</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -116,7 +116,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Password</span>
+            <span className="font-bold">Password</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -129,7 +129,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="form-control">
           <label className="label cursor-pointer">
-            <span className="font-semibold">Use TLS</span>
+            <span className="font-bold">Use TLS</span>
             <input
               onChange={e => {
                 const newVal = e.target.checked

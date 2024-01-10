@@ -59,7 +59,7 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">File Type</span>
+            <span className="font-bold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -76,7 +76,7 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">URL</span>
+            <span className="font-bold">URL</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -89,7 +89,7 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Request Method</span>
+            <span className="font-bold">Request Method</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -102,7 +102,7 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Request Headers</span>
+            <span className="font-bold">Request Headers</span>
           </label>
           <textarea
             rows={3}
@@ -119,7 +119,7 @@ export const DataSourceAPINode = ({ data, noHandle }: { data: NodeData; noHandle
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Request Body</span>
+            <span className="font-bold">Request Body</span>
           </label>
           <textarea
             rows={3}
