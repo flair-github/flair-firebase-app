@@ -64,7 +64,7 @@ export const DataSourceLocalFilesNode = ({
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">File Type</span>
+            <span className="font-bold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -81,7 +81,7 @@ export const DataSourceLocalFilesNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Files</span>
+            <span className="font-bold">Files</span>
           </label>
           <section className="container">
             <div {...getRootProps()} className="mb-2 border-2 border-dashed bg-slate-100 p-4">

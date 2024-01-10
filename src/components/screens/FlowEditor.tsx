@@ -47,6 +47,7 @@ import { DataExporterPowerBINode } from './nodes/DataExporterPowerBI'
 import { DataExporterSalesforceNode } from './nodes/DataExporterSalesforce'
 import { DataExporterZendeskNode } from './nodes/DataExporterZendesk'
 import { DataExporterPostgresNode } from './nodes/DataExporterPostgres'
+import { DataExporterTwilioNode } from './nodes/DataExporterTwilio'
 import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
 import { ConditionalLogicNode } from './nodes/ConditionalLogicNode'
@@ -71,6 +72,7 @@ export const nodeTypes = {
   DataExporterAPINode,
   DataExporterPowerBINode,
   DataExporterPostgresNode,
+  DataExporterTwilioNode,
   EvaluatorNode,
   LLMProcessorNode,
   DataIndexerNode,
@@ -85,12 +87,14 @@ export const nodeTypes = {
   DataExtractorAggregatorNode,
 }
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
-import { RiListSettingsLine, RiRobotLine } from 'react-icons/ri'
+import { RiListSettingsLine, RiRobotLine, RiArrowRightLine, RiFileUploadLine } from 'react-icons/ri'
 import {
   AiFillApi,
   AiOutlineClear,
   AiOutlineDeploymentUnit,
   AiOutlineEdit,
+  AiOutlineRocket,
+  AiFillMinusSquare,
   AiOutlineNodeIndex,
 } from 'react-icons/ai'
 import Menu from './editor/Menu'
@@ -102,13 +106,14 @@ import {
   BiLogoGmail,
   BiLogoGoogle,
   BiLogoMicrosoft,
+  BiLogoMongodb,
   BiLogoPostgresql,
   BiLogoSlack,
 } from 'react-icons/bi'
 import { FaCloudUploadAlt, FaSalesforce } from 'react-icons/fa'
-import { SiPowerbi, SiZendesk } from 'react-icons/si'
+import { SiPowerbi, SiZendesk, SiAirtable, SiGooglesheets, SiTwilio } from 'react-icons/si'
 import { GiConvergenceTarget } from 'react-icons/gi'
-import { GrAggregate, GrFormClose } from 'react-icons/gr'
+import { GrAggregate, GrFormClose, GrCube } from 'react-icons/gr'
 import { BsArrowsAngleContract, BsFillCloudHaze2Fill } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
 
@@ -224,7 +229,7 @@ export const FlowEditor: React.FC<{
     [nodes, setEdges],
   )
 
-  // useref of { x, y}
+  // useref of { x, y }
   const viewport = useRef({ x: 0, y: 0, zoom: 1 })
 
   const [isJsonModalShown, setIsJsonModalShown] = useState(false)
@@ -406,10 +411,6 @@ data_exporters:
     type: google # azure, s3, google, email
     data_type: csv
     uri: llm_outputs
-
-evaluators:
-  - name: evaluator_1
-    type: default
     `
 
           const blob = new Blob([yamlContent], { type: 'application/x-yaml' })
@@ -474,7 +475,7 @@ evaluators:
   const nodeClassifications = [
     {
       title: 'Data Source',
-      subtitle: 'Origin of raw datasets.',
+      subtitle: 'Load unstructured data from a data source.',
       color: 'purple',
       members: [
         {
@@ -499,7 +500,28 @@ evaluators:
           icon: BiLogoMicrosoft,
         },
         {
-          title: 'Local Files',
+          title: 'Gmail',
+          handleOnClick: () => {
+            addNode('data-source-email', 'DataSourceEmailNode')
+          },
+          icon: BiLogoGmail,
+        },
+        {
+          title: 'PostgresDB',
+          handleOnClick: () => {
+            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+          },
+          icon: BiLogoPostgresql,
+        },
+        {
+          title: 'MongoDB',
+          handleOnClick: () => {
+            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+          },
+          icon: BiLogoMongodb,
+        },
+        {
+          title: 'File Upload',
           handleOnClick: () => {
             addNode('data-source-local-files', 'DataSourceLocalFilesNode')
           },
@@ -511,13 +533,6 @@ evaluators:
             addNode('data-source-api', 'DataSourceAPINode')
           },
           icon: AiFillApi,
-        },
-        {
-          title: 'Email',
-          handleOnClick: () => {
-            addNode('data-source-email', 'DataSourceEmailNode')
-          },
-          icon: MdEmail,
         },
         {
           title: 'Salesforce',
@@ -540,43 +555,50 @@ evaluators:
       ],
     },
     {
-      title: 'Data Indexer',
-      subtitle: 'Organizes and categorizes data for quick retrieval.',
+      title: 'Vector Indexer',
+      subtitle: 'Embed your data into your choice of vector data store for quick retrieval.',
       color: 'green',
       members: [
         {
-          title: 'Data Indexer',
+          title: 'Pinecone Indexer',
           handleOnClick: () => {
             addNode('data-indexer', 'DataIndexerNode')
           },
-          icon: AiOutlineNodeIndex,
+          icon: GrCube,
+        },
+        {
+          title: 'Chroma Indexer',
+          handleOnClick: () => {
+            addNode('data-indexer', 'DataIndexerNode')
+          },
+          icon: GrAggregate
         },
       ],
     },
+    // {
+    //   title: 'Data Retriever',
+    //   subtitle: 'Fetches specific data subsets from the source or index.',
+    //   color: 'orange',
+    //   members: [
+    //     {
+    //       title: 'Data Retriever',
+    //       handleOnClick: () => {
+    //         addNode('data-retriever', 'DataRetrieverNode')
+    //       },
+    //       icon: GiConvergenceTarget,
+    //     },
+    //     {
+    //       title: 'Data Retriever API',
+    //       handleOnClick: () => {
+    //         addNode('data-retriever-api', 'DataRetrieverApiNode')
+    //       },
+    //       icon: AiFillApi,
+    //     },
+    //   ],
+    // },
     {
-      title: 'Data Retriever',
-      subtitle: 'Fetches specific data subsets from the source or index.',
-      color: 'orange',
-      members: [
-        {
-          title: 'Data Retriever',
-          handleOnClick: () => {
-            addNode('data-retriever', 'DataRetrieverNode')
-          },
-          icon: GiConvergenceTarget,
-        },
-        {
-          title: 'Data Retriever API',
-          handleOnClick: () => {
-            addNode('data-retriever-api', 'DataRetrieverApiNode')
-          },
-          icon: AiFillApi,
-        },
-      ],
-    },
-    {
-      title: 'Data Extractor',
-      subtitle: 'Extracts or transforms specific data elements.',
+      title: 'LLM Processor',
+      subtitle: 'Transforms your data using your choice of LLM and prompts.',
       color: 'blue',
       members: [
         {
@@ -591,13 +613,27 @@ evaluators:
           handleOnClick: () => {
             addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
           },
-          icon: GrAggregate,
+          icon: BsArrowsAngleContract,
         },
       ],
     },
     {
-      title: 'Data Exporter',
-      subtitle: 'Sends processed data to specified destinations.',
+      title: 'Control Flow',
+      subtitle: 'Control flow and logical branching.',
+      color: 'rose',
+      members: [
+        {
+          title: 'Conditional',
+          handleOnClick: () => {
+            addNode('conditional-logic', 'ConditionalLogicNode')
+          },
+          icon: BiGitBranch,
+        },
+      ],
+    },
+    {
+      title: 'Data Destination',
+      subtitle: 'Send processed data to a specified destination.',
       color: 'teal',
       members: [
         {
@@ -622,13 +658,6 @@ evaluators:
           icon: BiLogoMicrosoft,
         },
         {
-          title: 'Zendesk',
-          handleOnClick: () => {
-            addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
-          },
-          icon: SiZendesk,
-        },
-        {
           title: 'Gmail',
           handleOnClick: () => {
             addNode('data-exporter-gmail', 'DataExporterGmailNode')
@@ -636,18 +665,25 @@ evaluators:
           icon: BiLogoGmail,
         },
         {
-          title: 'Salesforce',
+          title: 'Airtable',
           handleOnClick: () => {
-            addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
+            addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
-          icon: FaSalesforce,
+          icon: SiAirtable,
         },
         {
-          title: 'Power BI',
+          title: 'Google Sheets',
           handleOnClick: () => {
-            addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
+            addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
-          icon: SiPowerbi,
+          icon: SiGooglesheets,
+        },
+        {
+          title: 'Twilio',
+          handleOnClick: () => {
+            addNode('data-exporter-twilio', 'DataExporterTwilioNode')
+          },
+          icon: SiTwilio,
         },
         {
           title: 'Postgres',
@@ -657,12 +693,26 @@ evaluators:
           icon: BiLogoPostgresql,
         },
         {
-          title: 'Flair',
+          title: 'Zendesk',
           handleOnClick: () => {
-            addNode('data-exporter-flair', 'DataExporterFlairNode')
+            addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
           },
-          icon: BsFillCloudHaze2Fill,
+          icon: SiZendesk,
         },
+        {
+          title: 'Salesforce',
+          handleOnClick: () => {
+            addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
+          },
+          icon: FaSalesforce,
+        },
+        // {
+        //   title: 'Power BI',
+        //   handleOnClick: () => {
+        //     addNode('data-exporter-power-bi', 'DataExporterPowerBINode')
+        //   },
+        //   icon: SiPowerbi,
+        // },
         {
           title: 'API',
           handleOnClick: () => {
@@ -672,65 +722,51 @@ evaluators:
         },
       ],
     },
-    {
-      title: 'Router',
-      subtitle: 'Control flow and logical branching.',
-      color: 'rose',
-      members: [
-        {
-          title: 'Conditional Logic',
-          handleOnClick: () => {
-            addNode('conditional-logic', 'ConditionalLogicNode')
-          },
-          icon: BiGitBranch,
-        },
-      ],
-    },
-    {
-      title: 'Evaluation',
-      subtitle: 'Assesses data quality and accuracy.',
-      color: 'pink',
-      members: [
-        {
-          title: 'Evaluator',
-          handleOnClick: () => {
-            addNode('evaluator', 'EvaluatorNode')
-          },
-          icon: BsArrowsAngleContract,
-        },
-      ],
-    },
+    // {
+    //   title: 'Evaluation',
+    //   subtitle: 'Assesses data quality and accuracy.',
+    //   color: 'pink',
+    //   members: [
+    //     {
+    //       title: 'Evaluator',
+    //       handleOnClick: () => {
+    //         addNode('evaluator', 'EvaluatorNode')
+    //       },
+    //       icon: BsArrowsAngleContract,
+    //     },
+    //   ],
+    // },
   ]
 
   const controls = [
-    {
-      title: 'Sample',
-      Icon: LuLayoutTemplate,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
-        setNodes(newNodes)
-        setEdges(newEdges)
-      },
-    },
-    {
-      title: 'Config',
-      Icon: RiListSettingsLine,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
-        setIsJsonModalShown(true)
-      },
-    },
-    {
-      title: 'Clear',
-      Icon: AiOutlineClear,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        setNodes([])
-        setEdges([])
-      },
-    },
+    // {
+    //   title: 'Sample',
+    //   Icon: LuLayoutTemplate,
+    //   handleOnClick: async (event: React.SyntheticEvent) => {
+    //     event.preventDefault()
+    //     const { nodes: newNodes, edges: newEdges } = JSON.parse(FLOW_SAMPLE_2)
+    //     setNodes(newNodes)
+    //     setEdges(newEdges)
+    //   },
+    // },
+    // {
+    //   title: 'Config',
+    //   Icon: RiListSettingsLine,
+    //   handleOnClick: async (event: React.SyntheticEvent) => {
+    //     event.preventDefault()
+    //     setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
+    //     setIsJsonModalShown(true)
+    //   },
+    // },
+    // {
+    //   title: 'Clear',
+    //   Icon: AiOutlineClear,
+    //   handleOnClick: async (event: React.SyntheticEvent) => {
+    //     event.preventDefault()
+    //     setNodes([])
+    //     setEdges([])
+    //   },
+    // },
     {
       title: 'Save',
       Icon: LuSaveAll,
@@ -740,8 +776,25 @@ evaluators:
       },
     },
     {
-      title: 'Deploy',
-      Icon: AiOutlineDeploymentUnit,
+      title: 'Run',
+      Icon: RiArrowRightLine,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        executeModalRef.current?.showModal()
+      },
+    },
+    {
+      title: 'Share',
+      Icon: RiFileUploadLine,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        setJsonConfig(JSON.stringify(getFrontendConfig(), null, 2))
+        setIsJsonModalShown(true)
+      },
+    },
+    {
+      title: 'Publish',
+      Icon: AiOutlineRocket,
       handleOnClick: async (event: React.SyntheticEvent) => {
         event.preventDefault()
         executeModalRef.current?.showModal()
@@ -810,7 +863,7 @@ evaluators:
             } transform-gpu flex-col space-y-3 py-3 pl-4 transition-transform`}>
             <div className="join relative w-full bg-white shadow outline outline-1">
               <span className="join-item flex grow items-center">
-                <h5 className="pl-3 text-xl font-semibold">{title}</h5>
+                <h5 className="pl-3 text-xl font-bold">{title}</h5>
               </span>
               <button
                 className="btn btn-outline join-item border-y-0 border-r-0"
@@ -843,6 +896,7 @@ evaluators:
             zoomOnDoubleClick={allowInteraction}
             panOnDrag={allowInteraction}
             selectionOnDrag={allowInteraction}
+            defaultViewport={{ x: 650, y: 500, zoom: 0.5 }} // set the default zoom and sizing of the graph
             nodes={nodes}
             onNodesChange={onNodesChange}
             edges={edges}

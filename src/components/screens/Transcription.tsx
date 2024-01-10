@@ -129,7 +129,7 @@ function Transcription() {
                   <MdRecordVoiceOver className="m-3 h-12 w-12 text-white" />
                 </span>
                 <article className="flex flex-col space-y-3 divide-y whitespace-normal">
-                  <p className="font-semibold">Upload a recording</p>
+                  <p className="font-bold">Upload a recording</p>
                   <p className="px-3 pt-3">
                     Flair will take call recording, transcribe it, and create a framework from it
                     that your agent can follow.
@@ -146,7 +146,7 @@ function Transcription() {
                   <MdDescription className="m-3 h-12 w-12 text-white" />
                 </span>
                 <article className="flex flex-col space-y-3 divide-y whitespace-normal">
-                  <p className="font-semibold">Existing script</p>
+                  <p className="font-bold">Existing script</p>
                   <p className="px-3 pt-3">
                     Copy and paste your current script and let Flair reformat it in a way that is
                     easy for your agent to follow.
@@ -163,7 +163,7 @@ function Transcription() {
                   <TbTemplate className="m-3 h-12 w-12 text-white" />
                 </span>
                 <article className="flex flex-col space-y-3 divide-y whitespace-normal">
-                  <p className="font-semibold">Flair template</p>
+                  <p className="font-bold">Flair template</p>
                   <p className="px-3 pt-3">
                     Select a proven template, give Flair some basic context, and have AI customize
                     it for your business.
@@ -182,7 +182,7 @@ function Transcription() {
                 ) : (
                   <ImUpload2 className="mb-6 h-12 w-12" />
                 )}
-                <h5 className="font-semibold">Click to upload audio from computer</h5>
+                <h5 className="font-bold">Click to upload audio from computer</h5>
                 <p>or drag and drop here</p>
               </label>
               <input

@@ -1,5 +1,4 @@
 import React, { forwardRef } from 'react'
-import { db } from '~/lib/firebase'
 import { ImSpinner9 } from 'react-icons/im'
 
 function ExecuteModal(
@@ -15,21 +14,19 @@ function ExecuteModal(
   return (
     <dialog ref={ref} className="modal">
       <form method="dialog" className="modal-box">
-        <h3 className="mb-5 text-center text-lg font-bold">Deployment Options</h3>
+        <h3 className="mb-5 text-center text-lg font-bold">font-bold</h3>
         <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text font-bold">Run Every</span>
+            <span className="label-text">Frequency Settings</span>
           </label>
           <select className="max-w-xs select mb-3 w-full border-black">
-            <option value={'one-time'}>One Time</option>
-            <option value={'1d'}>1d</option>
-            <option value={'2d'}>2d</option>
-            <option value={'3d'}>3d</option>
-            <option value={'7d'}>7d</option>
+            <option value={'one-time'}>Once</option>
+            <option value={'1d'}>Daily</option>
+            <option value={'7d'}>Weekly</option>
           </select>
           <label className="label">
-            <span className="label-text font-bold">at</span>
+            <span className="label-text">at</span>
           </label>
           <select className="max-w-xs select mb-3 w-full border-black">
             <option value={'now'}>Now</option>
@@ -43,7 +40,6 @@ function ExecuteModal(
             <option value={'7am'}>7:00 am</option>
             <option value={'8am'}>8:00 am</option>
             <option value={'9am'}>9:00 am</option>
-            <option value={'10am'}>10:00 am</option>
           </select>
           <button
             className="btn btn-primary mx-auto block w-36"
@@ -51,21 +47,11 @@ function ExecuteModal(
               event.preventDefault()
               await executeFlow()
               ref?.current?.close()
-              db.collection('workflow_results').add({
-                docExists: true,
-                averageEvaluationData: 0.86,
-                workflowName: 'NPS Survey Tool',
-                workflowRequestId: '91837235983',
-                status: 'initiated',
-                createdTimestamp: new Date(),
-                model: 'gpt-4',
-                executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
-              })
             }}>
             {isDeploying ? (
               <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
             ) : (
-              'Publish'
+              'Deploy'
             )}
           </button>
         </div>

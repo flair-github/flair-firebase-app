@@ -62,7 +62,7 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">File Type</span>
+            <span className="font-bold">File Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -79,7 +79,7 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Service Account Key</span>
+            <span className="font-bold">Service Account Key</span>
           </label>
           <textarea
             rows={6}
@@ -108,7 +108,7 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Bucket Name</span>
+            <span className="font-bold">Bucket Name</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -121,7 +121,7 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Path</span>
+            <span className="font-bold">Path</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

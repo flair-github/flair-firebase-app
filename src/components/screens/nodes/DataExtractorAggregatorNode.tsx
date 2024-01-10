@@ -76,7 +76,7 @@ export const DataExtractorAggregatorNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Column</span>
+            <span className="font-bold">Column</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -87,7 +87,7 @@ export const DataExtractorAggregatorNode = ({
         </div>
         {/* <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Method</span>
+            <span className="font-bold">Method</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -100,7 +100,7 @@ export const DataExtractorAggregatorNode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Model</span>
+            <span className="font-bold">Model</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "

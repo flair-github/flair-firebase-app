@@ -34,7 +34,7 @@ const Layout = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="navbar h-1 max-h-16 border-b bg-base-100">
+      <div className="max-h-22 navbar h-1 border-b bg-base-100">
         <div className="flex-1">
           <div
             className="btn btn-ghost text-xl normal-case"
@@ -48,7 +48,7 @@ const Layout = () => {
               onClick={() => {
                 navigate('/results')
               }}>
-              <a>Experiments</a>
+              <a>Executions</a>
             </li>
             <li
               onClick={() => {
@@ -56,15 +56,15 @@ const Layout = () => {
               }}>
               <a>Deployments</a>
             </li>
-            <li
+            {/* <li
               onClick={() => {
                 navigate('/transcription')
               }}>
               <a>Scripts</a>
-            </li>
+            </li> */}
           </ul>
         </div>
-        <div className="flex-none">
+        {/* <div className="flex-none">
           <div className={'dropdown-end' + ' dropdown'}>
             <label tabIndex={0} className="btn btn-ghost flex px-2 font-normal normal-case">
               <div>Debug</div>
@@ -86,7 +86,7 @@ const Layout = () => {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
         <div className="flex-none">
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost flex px-2 normal-case">

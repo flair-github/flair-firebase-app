@@ -79,17 +79,17 @@ export const DataExtractorNode = ({ data }: { data: NodeData }) => {
           <div className="mr-2 flex w-14 items-center" />
 
           {/* Key */}
-          <div className="mr-2 w-28 font-semibold">Header</div>
+          <div className="mr-2 w-28 font-bold">Header</div>
 
           {/* Prompt */}
-          <div className="flex-1 font-semibold">Prompt</div>
+          <div className="flex-1 font-bold">Prompt</div>
 
           <div className="ml-2 flex w-10 items-center justify-center" />
         </div>
         {keyPromptPairArr.map((el, index) => (
           <div key={el.uniqueId} className="mb-1 flex">
             {/* Col */}
-            <div className="mr-2 flex w-14 items-center font-semibold">
+            <div className="mr-2 flex w-14 items-center font-bold">
               <div>Col {index + 1}</div>
             </div>
 

@@ -78,7 +78,7 @@ export const DataExporterPowerBINode = ({
       <section className="px-5 pb-5">
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Client ID</span>
+            <span className="font-bold">Client ID</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -89,7 +89,7 @@ export const DataExporterPowerBINode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Client Secret</span>
+            <span className="font-bold">Client Secret</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -100,7 +100,7 @@ export const DataExporterPowerBINode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Tenant ID</span>
+            <span className="font-bold">Tenant ID</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -111,7 +111,7 @@ export const DataExporterPowerBINode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Username</span>
+            <span className="font-bold">Username</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -122,7 +122,7 @@ export const DataExporterPowerBINode = ({
         </div>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Password</span>
+            <span className="font-bold">Password</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -134,7 +134,7 @@ export const DataExporterPowerBINode = ({
         </div>
         {/* <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Chart Type</span>
+            <span className="font-bold">Chart Type</span>
           </label>
           <select
             className="max-w-xs select w-full border-black "
@@ -168,7 +168,7 @@ export const DataExporterPowerBINode = ({
         </div> */}
         {/* <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">X Axis</span>
+            <span className="font-bold">X Axis</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"
@@ -179,7 +179,7 @@ export const DataExporterPowerBINode = ({
         </div> */}
         {/* <div className="mb-2 mt-1">
           <label className="label">
-            <span className="font-semibold">Y Axis</span>
+            <span className="font-bold">Y Axis</span>
           </label>
           <input
             className="max-w-xs input w-full border-black"

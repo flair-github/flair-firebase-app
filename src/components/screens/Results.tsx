@@ -99,7 +99,7 @@ function Results() {
               {/* <th>Faithfulness</th> */}
               <th>Latency</th>
               {/* <th>Context Relevancy</th> */}
-              <th>Answer Relevancy</th>
+              <th>Accuracy</th>
               <th>Invalid Format (%)</th>
               <th>Tokens per Request</th>
               <th>Actions</th>

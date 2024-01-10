@@ -86,14 +86,15 @@ function Index() {
   return (
     <>
       <Head title="Home" />
-      <div className="container mx-auto px-4 py-2">
+      <div className="container px-16 py-4">
+        <div className="mb-9 mt-3 text-3xl font-bold">My Pipelines</div>
         <div className="mb-5 mt-3">
           <button
             className="btn btn-primary normal-case"
             onClick={() => {
               setShowNewFlowModal(true)
             }}>
-            New Empty Flow
+            + Add Pipeline
           </button>
           <button
             className="btn ml-2 normal-case"
@@ -107,7 +108,7 @@ function Index() {
         {/* List of My Flows */}
 
         {!myFlows && (
-          <div className="flex h-52 items-center justify-center">
+          <div className="flex h-52">
             <MoonLoader color="rgba(0,0,0,0.2)" />
           </div>
         )}
@@ -144,6 +145,13 @@ function Index() {
                               })
                             }}>
                             Delete
+                          </button>
+                          <button
+                            className=""
+                            onClick={event => {
+                              event.stopPropagation()
+                            }}>
+                            Duplicate
                           </button>
                         </li>
                       </ul>
@@ -199,7 +207,7 @@ function Index() {
       </div>
 
       {/* Onboarding Modal */}
-      <dialog ref={onboardingModal} className="modal">
+      {/* <dialog ref={onboardingModal} className="modal">
         <form method="dialog" className="modal-box max-w-160 divide-y">
           <header>
             <h3 className="text-lg font-bold">Welcome to Flair AI!</h3>
@@ -216,7 +224,7 @@ function Index() {
               </span>
               <article className="flex flex-col justify-center text-left">
                 <div className="flex items-center">
-                  <p className="font-semibold">Empty template</p>
+                  <p className="font-bold">Empty template</p>
                   <BsArrowLeftShort className="h-5 w-5 rotate-180" />
                 </div>
                 <p className="line-clamp-2">Start with white blank canvas</p>
@@ -228,7 +236,7 @@ function Index() {
               </span>
               <article className="flex flex-col justify-center text-left">
                 <div className="flex items-center">
-                  <p className="font-semibold">Workflow template</p>
+                  <p className="font-bold">Workflow template</p>
                   <BsArrowLeftShort className="h-5 w-5 rotate-180" />
                 </div>
                 <p className="line-clamp-2">Ready to go template for you</p>
@@ -242,7 +250,7 @@ function Index() {
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
         </form>
-      </dialog>
+      </dialog> */}
     </>
   )
 }

@@ -66,11 +66,11 @@ export default function DetailModal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
               <Dialog.Panel className="relative my-8 w-full max-w-160 overflow-hidden rounded-lg bg-white p-6 px-4 pb-4 pt-5 text-left shadow-xl transition-all">
-                <header className="border-b pb-3 text-left text-base font-semibold leading-6 text-gray-900">
+                <header className="border-b pb-3 text-left text-base font-bold leading-6 text-gray-900">
                   LLM Output Detail
                 </header>
                 <section className="my-6 grid max-h-[30rem] grid-cols-6 gap-3 overflow-y-scroll border-b px-1 pb-9">
-                  <h2 className="col-span-6 border-y py-2 text-base font-semibold leading-7 text-gray-900">
+                  <h2 className="col-span-6 border-y py-2 text-base font-bold leading-7 text-gray-900">
                     Meta
                   </h2>
 
@@ -147,7 +147,7 @@ export default function DetailModal({
                     />
                   </article>
 
-                  <h2 className="col-span-6 border-y py-2 text-base font-semibold leading-7 text-gray-900">
+                  <h2 className="col-span-6 border-y py-2 text-base font-bold leading-7 text-gray-900">
                     Content
                   </h2>
 
@@ -280,7 +280,7 @@ export default function DetailModal({
                     </pre>
                   </article>
 
-                  <h2 className="col-span-6 border-y py-2 text-base font-semibold leading-7 text-gray-900">
+                  <h2 className="col-span-6 border-y py-2 text-base font-bold leading-7 text-gray-900">
                     Other
                   </h2>
 
