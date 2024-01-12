@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { nodeContents, type NodeData } from './Registry'
 import { AiOutlineNodeIndex } from 'react-icons/ai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataIndexerNodeContent {
   nodeType: 'data-indexer'
@@ -40,6 +41,8 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -54,8 +57,12 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
         title="Data Indexer"
         color="green"
         nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
       />
-      <section className="px-5 pb-5">
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">Embedding Type</span>

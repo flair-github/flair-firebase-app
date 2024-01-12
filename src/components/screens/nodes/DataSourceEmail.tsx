@@ -5,6 +5,7 @@ import { type NodeData, nodeContents } from './Registry'
 import { AiFillApi } from 'react-icons/ai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
 import { MdEmail } from 'react-icons/md'
+import clsx from 'clsx'
 
 export interface DataSourceEmailNodeContent {
   nodeType: 'data-source-email'
@@ -49,6 +50,8 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -58,8 +61,17 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
         width: 400,
       }}
       className="bg-purple-50">
-      <NodeHeader Icon={MdEmail} title="Source: Email" color="purple" nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        Icon={MdEmail}
+        title="Source: Email"
+        color="purple"
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">Protocol</span>

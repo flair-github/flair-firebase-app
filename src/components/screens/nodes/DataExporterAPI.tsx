@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { AiFillApi } from 'react-icons/ai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataExporterAPINodeContent {
   nodeType: 'data-exporter-api'
@@ -46,6 +47,8 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -55,8 +58,17 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={AiFillApi} title="Exporter: API" color="teal" nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        Icon={AiFillApi}
+        title="Exporter: API"
+        color="teal"
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">File Type</span>

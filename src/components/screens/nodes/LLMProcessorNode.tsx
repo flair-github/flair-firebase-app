@@ -7,6 +7,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
 import { edgesAtom, nodesAtom } from '../FlowEditor'
 import { atomNodeExportedKeys } from '~/jotai/jotai'
+import clsx from 'clsx'
 
 type ColumnContent =
   | {
@@ -134,6 +135,8 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
     setNodeExportedKeys(prev => ({ ...prev, [data.nodeId]: newExportedKeys }))
   }, [data.nodeId, columnNames, setNodeExportedKeys])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -143,8 +146,17 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         width: 1000,
       }}
       className="bg-blue-50">
-      <NodeHeader title="LLM Processor" color="blue" withFlair nodeId={data.nodeId} />
-      <section className="px-5 pb-5 text-xl">
+      <NodeHeader
+        title="LLM Processor"
+        color="blue"
+        withFlair
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-3 flex">
           {/* Col */}
           {/* <div className="mr-2 flex w-14 items-center" /> */}

@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { GrAggregate } from 'react-icons/gr'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataExtractorAggregatorNodeContent {
   nodeType: 'data-extractor-aggregator'
@@ -54,6 +55,8 @@ export const DataExtractorAggregatorNode = ({
     setNodeContent(prev => ({ ...prev, [event.target.name]: event.target.value }))
   }
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -63,8 +66,17 @@ export const DataExtractorAggregatorNode = ({
         width: 400,
       }}
       className="bg-blue-50">
-      <NodeHeader Icon={GrAggregate} title="Aggregator" color="blue" nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        Icon={GrAggregate}
+        title="Aggregator"
+        color="blue"
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 flex">
           <div className="flex-1">
             <div className="mb-2">input</div>
@@ -123,7 +135,7 @@ export const DataExtractorAggregatorNode = ({
             position={Position.Left}
             id="in"
             style={{
-              top: 95,
+              top: isCollapsed ? 40 : 95,
               width: 16,
               height: 16,
               left: -8,
@@ -134,7 +146,7 @@ export const DataExtractorAggregatorNode = ({
             position={Position.Right}
             id="out-description"
             style={{
-              top: 95,
+              top: isCollapsed ? 30 : 95,
               width: 16,
               height: 16,
               right: -8,
@@ -145,7 +157,7 @@ export const DataExtractorAggregatorNode = ({
             position={Position.Right}
             id="out-data"
             style={{
-              top: 128,
+              top: isCollapsed ? 50 : 127,
               width: 16,
               height: 16,
               right: -8,

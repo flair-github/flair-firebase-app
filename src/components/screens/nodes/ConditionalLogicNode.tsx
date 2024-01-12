@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface ConditionalLogicNodeContent {
   nodeType: 'conditional-logic'
@@ -29,6 +30,8 @@ export const ConditionalLogicNode = ({ data }: { data: NodeData }) => {
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, formula])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -38,8 +41,17 @@ export const ConditionalLogicNode = ({ data }: { data: NodeData }) => {
         width: 400,
       }}
       className="bg-rose-50">
-      <NodeHeader title="Conditional" color="rose" withFlair nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        title="Conditional"
+        color="rose"
+        withFlair
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 flex">
           <div className="flex-1">
             <div className="mb-2 text-xl font-bold">input</div>
@@ -75,7 +87,7 @@ props("Hours Allotted") > 2, true)
         position={Position.Left}
         id="in-ai-data"
         style={{
-          top: 95,
+          top: isCollapsed ? 40 : 95,
           width: 16,
           height: 16,
           left: -8,
@@ -86,7 +98,7 @@ props("Hours Allotted") > 2, true)
         position={Position.Right}
         id="out-true"
         style={{
-          top: 95,
+          top: isCollapsed ? 30 : 95,
           width: 16,
           height: 16,
           right: -8,
@@ -97,7 +109,7 @@ props("Hours Allotted") > 2, true)
         position={Position.Right}
         id="out-false"
         style={{
-          top: 127,
+          top: isCollapsed ? 50 : 127,
           width: 16,
           height: 16,
           right: -8,

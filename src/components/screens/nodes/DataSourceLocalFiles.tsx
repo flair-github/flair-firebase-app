@@ -5,6 +5,7 @@ import { nodeContents, type NodeData } from './Registry'
 import { FaCloudUploadAlt } from 'react-icons/fa'
 import { useDropzone } from 'react-dropzone'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataSourceLocalFilesNodeContent {
   nodeType: 'data-source-local-files'
@@ -46,6 +47,8 @@ export const DataSourceLocalFilesNode = ({
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -60,8 +63,12 @@ export const DataSourceLocalFilesNode = ({
         title="Source: Local Files"
         color="purple"
         nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
       />
-      <section className="px-5 pb-5">
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">File Type</span>

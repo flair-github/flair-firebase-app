@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { SiTwilio } from 'react-icons/si'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataExporterTwilioNodeContent {
   nodeType: 'data-exporter-twilio'
@@ -60,6 +61,8 @@ export const DataExporterTwilioNode = ({
     setNodeContent(prev => ({ ...prev, [event.target.name]: event.target.value }))
   }
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -69,8 +72,17 @@ export const DataExporterTwilioNode = ({
         width: 1000,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={SiTwilio} title="Exporter: Twilio" color="teal" nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        Icon={SiTwilio}
+        title="Exporter: Twilio"
+        color="teal"
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">TWILIO_ACCOUNT_SID</span>

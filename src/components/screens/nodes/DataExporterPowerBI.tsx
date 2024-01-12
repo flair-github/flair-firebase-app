@@ -5,6 +5,7 @@ import { type NodeData, nodeContents } from './Registry'
 import { SiPowerbi } from 'react-icons/si'
 import { AiOutlineBarChart, AiOutlineLineChart, AiOutlinePieChart } from 'react-icons/ai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataExporterPowerBINodeContent {
   nodeType: 'data-exporter-power-bi'
@@ -65,6 +66,8 @@ export const DataExporterPowerBINode = ({
     setNodeContent(prev => ({ ...prev, [event.target.name]: event.target.value }))
   }
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -74,8 +77,17 @@ export const DataExporterPowerBINode = ({
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={SiPowerbi} title="Exporter: PowerBI" color="teal" nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        Icon={SiPowerbi}
+        title="Exporter: PowerBI"
+        color="teal"
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">Client ID</span>

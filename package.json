@@ -19,6 +19,7 @@
     "@uiw/react-codemirror": "^4.21.18",
     "axios": "^1.4.0",
     "chart.js": "^4.4.0",
+    "clsx": "^2.1.0",
     "daisyui": "^3.1.6",
     "firebase": "^9.23.0",
     "jotai": "^2.2.1",

@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoPostgresql } from 'react-icons/bi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataExporterPostgresNodeContent {
   nodeType: 'data-exporter-postgres'
@@ -54,6 +55,8 @@ export const DataExporterPostgresNode = ({
     setNodeContent(prev => ({ ...prev, [event.target.name]: event.target.value }))
   }
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -68,8 +71,12 @@ export const DataExporterPostgresNode = ({
         title="Exporter: Postgres"
         color="teal"
         nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
       />
-      <section className="px-5 pb-5">
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">Connection String</span>

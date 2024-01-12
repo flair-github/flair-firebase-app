@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { SiZendesk } from 'react-icons/si'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataExporterZendeskNodeContent {
   nodeType: 'data-exporter-zendesk'
@@ -62,6 +63,8 @@ export const DataExporterZendeskNode = ({
     setNodeContent(prev => ({ ...prev, [event.target.name]: event.target.value }))
   }
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -71,8 +74,17 @@ export const DataExporterZendeskNode = ({
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader Icon={SiZendesk} title="Exporter: Zendesk" color="teal" nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        Icon={SiZendesk}
+        title="Exporter: Zendesk"
+        color="teal"
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">Subdomain</span>

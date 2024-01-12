@@ -6,6 +6,7 @@ import { BiLogoAws } from 'react-icons/bi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
 import { useAtom } from 'jotai'
 import { atomNodeExportedKeys } from '~/jotai/jotai'
+import clsx from 'clsx'
 
 export interface DataSourceS3NodeContent {
   nodeType: 'data-source-s3'
@@ -59,6 +60,8 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
     setNodeExportedKeys(prev => ({ ...prev, [data.nodeId]: nodeContent.exportedKeys }))
   }, [data.nodeId, nodeContent.exportedKeys, setNodeExportedKeys])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -68,8 +71,17 @@ export const DataSourceS3Node = ({ data, noHandle }: { data: NodeData; noHandle?
         width: 400,
       }}
       className="bg-purple-50">
-      <NodeHeader Icon={BiLogoAws} title="Source: S3" color="purple" nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        Icon={BiLogoAws}
+        title="Source: S3"
+        color="purple"
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">File Type</span>
