@@ -3,6 +3,8 @@ import React, { useMemo } from 'react'
 import { IconType } from 'react-icons'
 import { CgClose } from 'react-icons/cg'
 import { nodesAtom } from '../screens/FlowEditor'
+import clsx from 'clsx'
+import { BiCollapseVertical, BiExpandVertical } from 'react-icons/bi'
 
 export interface INodeHeaderProps {
   color: string
@@ -10,9 +12,20 @@ export interface INodeHeaderProps {
   title: string
   withFlair?: boolean
   nodeId?: string
+
+  isCollapsed?: boolean
+  toggleCollapse?: () => void
 }
 
-export function NodeHeader({ color, Icon, title, withFlair, nodeId }: INodeHeaderProps) {
+export function NodeHeader({
+  color,
+  Icon,
+  title,
+  withFlair,
+  nodeId,
+  isCollapsed,
+  toggleCollapse,
+}: INodeHeaderProps) {
   const [_, setNodes] = useAtom(nodesAtom)
 
   // Don't remove below switch operation, it's necessary for tailwind to know needed classes
@@ -38,10 +51,24 @@ export function NodeHeader({ color, Icon, title, withFlair, nodeId }: INodeHeade
   }, [color])
 
   return (
-    <header className={'mb-3 flex items-center rounded-t-md px-5 py-5 ' + cssColor}>
+    <header
+      className={clsx(
+        'flex items-center p-5',
+        cssColor,
+        isCollapsed ? 'rounded-md' : 'rounded-t-md',
+      )}>
       {Icon && <Icon className="mr-3 h-7 w-7" />}
       <h4 className="grow text-2xl font-bold">{title}</h4>
       {withFlair && <img src="/images/powered-by-flair.png" width={135} height={28} />}
+      <button
+        className="ml-3 scale-90 opacity-75 hover:scale-100 hover:opacity-100"
+        onClick={toggleCollapse}>
+        {isCollapsed ? (
+          <BiExpandVertical className="h-7 w-7" />
+        ) : (
+          <BiCollapseVertical className="h-7 w-7" />
+        )}
+      </button>
       {nodeId && (
         <button
           className="ml-3 scale-90 opacity-75 hover:scale-100 hover:opacity-100"
