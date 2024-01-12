@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { nodeContents, type NodeData } from './Registry'
 import { AiFillApi } from 'react-icons/ai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataRetrieverApiNodeContent {
   nodeType: 'data-retriever-api'
@@ -44,6 +45,8 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -53,8 +56,17 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
         width: 400,
       }}
       className="bg-orange-50">
-      <NodeHeader Icon={AiFillApi} title="Data Retriever API" color="orange" nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        Icon={AiFillApi}
+        title="Data Retriever API"
+        color="orange"
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">URL</span>

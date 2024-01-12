@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoGoogle } from 'react-icons/bi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataSourceGCPNodeContent {
   nodeType: 'data-source-gcp'
@@ -44,6 +45,8 @@ export const DataSourceGCPNode = ({ data, noHandle }: { data: NodeData; noHandle
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -58,8 +61,12 @@ export const DataSourceGCPNode = ({ data, noHandle }: { data: NodeData; noHandle
         title="Google Cloud Storage"
         color="purple"
         nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
       />
-      <section className="px-5 pb-5">
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">File Type</span>

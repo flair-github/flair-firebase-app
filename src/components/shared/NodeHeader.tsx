@@ -13,8 +13,8 @@ export interface INodeHeaderProps {
   withFlair?: boolean
   nodeId?: string
 
-  isCollapsed?: boolean
-  toggleCollapse?: () => void
+  isCollapsed: boolean
+  toggleCollapse: () => void
 }
 
 export function NodeHeader({

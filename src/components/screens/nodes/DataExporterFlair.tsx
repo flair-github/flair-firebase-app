@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { NodeData, nodeContents } from './Registry'
 import { HiDocumentReport } from 'react-icons/hi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataExporterFlairNodeContent {
   nodeType: 'data-exporter-flair'
@@ -32,6 +33,8 @@ export const DataExporterFlairNode = ({
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -41,8 +44,17 @@ export const DataExporterFlairNode = ({
         width: 400,
       }}
       className="bg-teal-50">
-      <NodeHeader title="Flair Hosted" color="teal" nodeId={data.nodeId} withFlair />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        title="Flair Hosted"
+        color="teal"
+        nodeId={data.nodeId}
+        withFlair
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <p className="mb-2">
             Workflow job results will be available in the <b>Results</b> page

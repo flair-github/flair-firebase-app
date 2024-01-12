@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { BiLogoMicrosoft } from 'react-icons/bi'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface DataExporterAzureNodeContent {
   nodeType: 'data-exporter-azure'
@@ -52,6 +53,8 @@ export const DataExporterAzureNode = ({
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -67,8 +70,12 @@ export const DataExporterAzureNode = ({
         title="Exporter: Azure Blob Storage"
         color="teal"
         nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
       />
-      <section className="px-5 pb-5">
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <label className="label">
             <span className="font-bold">File Type</span>

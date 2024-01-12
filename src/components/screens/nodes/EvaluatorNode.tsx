@@ -3,6 +3,7 @@ import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
 import { type NodeData, nodeContents } from './Registry'
 import { NodeHeader } from '~/components/shared/NodeHeader'
+import clsx from 'clsx'
 
 export interface EvaluatorNodeContent {
   nodeType: 'evaluator'
@@ -29,6 +30,8 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, strategy])
 
+  const [isCollapsed, setIsCollapse] = useState(true)
+
   return (
     <div
       style={{
@@ -38,8 +41,17 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
         width: 400,
       }}
       className="bg-pink-50">
-      <NodeHeader title="Evaluator" color="pink" withFlair nodeId={data.nodeId} />
-      <section className="px-5 pb-5">
+      <NodeHeader
+        title="Evaluator"
+        color="pink"
+        withFlair
+        nodeId={data.nodeId}
+        isCollapsed={isCollapsed}
+        toggleCollapse={() => {
+          setIsCollapse(x => !x)
+        }}
+      />
+      <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-4 flex">
           <div className="flex-1">
             <div className="mb-2">LLM Generated Data</div>
