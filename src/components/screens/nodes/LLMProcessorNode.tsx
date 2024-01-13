@@ -157,7 +157,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
         }}
       />
       <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
-        <div className="mb-3 flex">
+        <div className="my-3 flex">
           {/* Col */}
           {/* <div className="mr-2 flex w-14 items-center" /> */}
 
