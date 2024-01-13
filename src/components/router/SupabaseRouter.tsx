@@ -22,7 +22,7 @@ function Layout() {
             onClick={() => {
               navigate('/')
             }}>
-            <img src="/images/flair-ai.svg" width={120} height={2} className="" />
+            <img src="/images/flair-logo.svg" width={120} height={2} className="" />
           </div>
           {/* <ul className="menu menu-horizontal px-1">
             <li

@@ -59,7 +59,7 @@ export default function Sidenav() {
     <div className="flex h-screen min-h-screen w-full">
       <div className="flex w-64 min-w-[16rem] flex-col overflow-y-auto border-r border-gray-200 bg-white px-6">
         <div className="mb-2 flex h-16 shrink-0 items-center">
-          <img className="h-8 w-auto" src="/images/flair-ai.svg" alt="Flair Logo" />
+          <img className="h-8 w-auto" src="/images/flair-logo.svg" alt="Flair Logo" />
         </div>
         <nav className="flex flex-1 flex-col">
           <ul role="list" className="flex flex-1 flex-col gap-y-7">
