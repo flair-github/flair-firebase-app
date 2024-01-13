@@ -79,11 +79,11 @@ export const DataExtractorAggregatorNode = ({
       <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 flex">
           <div className="flex-1">
-            <div className="mb-2">input</div>
+            <div className="mb-2 font-bold">input</div>
           </div>
           <div className="flex-1 text-right">
-            <div className="mb-2">description</div>
-            <div className="mb-2">data</div>
+            <div className="mb-2 font-bold">description</div>
+            <div className="mb-2 font-bold">data</div>
           </div>
         </div>
         <div className="mb-2 mt-1">
@@ -135,7 +135,7 @@ export const DataExtractorAggregatorNode = ({
             position={Position.Left}
             id="in"
             style={{
-              top: isCollapsed ? 40 : 95,
+              top: isCollapsed ? 50 : 110,
               width: 16,
               height: 16,
               left: -8,
@@ -146,7 +146,7 @@ export const DataExtractorAggregatorNode = ({
             position={Position.Right}
             id="out-description"
             style={{
-              top: isCollapsed ? 30 : 95,
+              top: isCollapsed ? 35 : 110,
               width: 16,
               height: 16,
               right: -8,
@@ -157,7 +157,7 @@ export const DataExtractorAggregatorNode = ({
             position={Position.Right}
             id="out-data"
             style={{
-              top: isCollapsed ? 50 : 127,
+              top: isCollapsed ? 65 : 140,
               width: 16,
               height: 16,
               right: -8,

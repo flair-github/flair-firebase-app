@@ -87,7 +87,7 @@ props("Hours Allotted") > 2, true)
         position={Position.Left}
         id="in-ai-data"
         style={{
-          top: isCollapsed ? 40 : 95,
+          top: isCollapsed ? 50 : 110,
           width: 16,
           height: 16,
           left: -8,
@@ -98,7 +98,7 @@ props("Hours Allotted") > 2, true)
         position={Position.Right}
         id="out-true"
         style={{
-          top: isCollapsed ? 30 : 95,
+          top: isCollapsed ? 35 : 110,
           width: 16,
           height: 16,
           right: -8,
@@ -109,7 +109,7 @@ props("Hours Allotted") > 2, true)
         position={Position.Right}
         id="out-false"
         style={{
-          top: isCollapsed ? 50 : 127,
+          top: isCollapsed ? 65 : 150,
           width: 16,
           height: 16,
           right: -8,

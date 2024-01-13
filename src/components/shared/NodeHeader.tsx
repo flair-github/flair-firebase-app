@@ -53,12 +53,12 @@ export function NodeHeader({
   return (
     <header
       className={clsx(
-        'flex items-center p-5',
+        'flex h-24 items-center p-5',
         cssColor,
         isCollapsed ? 'rounded-md' : 'rounded-t-md',
       )}>
-      {Icon && <Icon className="mr-3 h-7 w-7" />}
-      <h4 className="grow text-2xl font-bold">{title}</h4>
+      {Icon && <Icon className="mr-3 h-10 w-10" />}
+      <h4 className="grow text-3xl font-bold">{title}</h4>
       {withFlair && <img src="/images/powered-by-flair.png" width={135} height={28} />}
       <button
         className="ml-3 scale-90 opacity-75 hover:scale-100 hover:opacity-100"
