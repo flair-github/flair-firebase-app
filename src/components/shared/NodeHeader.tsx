@@ -59,7 +59,7 @@ export function NodeHeader({
       )}>
       {Icon && <Icon className="mr-3 h-10 w-10" />}
       <h4 className="grow text-3xl font-bold">{title}</h4>
-      {withFlair && <img src="/images/powered-by-flair.png" width={135} height={28} />}
+      {/* {withFlair && <img src="/images/powered-by-flair.png" width={135} height={28} />} */}
       <button
         className="ml-3 scale-90 opacity-75 hover:scale-100 hover:opacity-100"
         onClick={toggleCollapse}>
