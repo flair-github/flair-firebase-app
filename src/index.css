@@ -54,16 +54,15 @@ code {
 
 path.react-flow__edge-path {
   stroke-width: 6;
-  stroke: '#797979',
+  stroke: #787878;
 }
 
 path.react-flow__edge-path:hover {
   stroke-width: 8;
-  stroke: '#474747',
+  stroke: #474747;
 }
 
-path.react-flow__edge-path.selected {
+.selected path.react-flow__edge-path {
   stroke-width: 10;
-  stroke: '#353535',
 }
 
