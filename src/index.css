@@ -51,3 +51,19 @@ code {
 .tabs-boxed .tab-active:not(.tab-disabled):not([disabled]) {
   @apply text-white
 }
+
+path.react-flow__edge-path {
+  stroke-width: 6;
+  stroke: '#797979',
+}
+
+path.react-flow__edge-path:hover {
+  stroke-width: 8;
+  stroke: '#474747',
+}
+
+path.react-flow__edge-path.selected {
+  stroke-width: 10;
+  stroke: '#353535',
+}
+
