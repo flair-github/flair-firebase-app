@@ -222,7 +222,7 @@ const name2Icon = (name: string) => {
 function Deployment() {
   return (
     <>
-      <div className="container mx-4 my-5 w-[calc(100%-2rem)] rounded-md">
+      {/* <div className="container mx-4 my-5 w-[calc(100%-2rem)] rounded-md">
         <div className="stats w-full rounded-md border">
           <div className="stat">
             <div className="stat-figure text-secondary">
@@ -233,14 +233,14 @@ function Deployment() {
             <div className="stat-desc">Compared to manual labor</div>
           </div>
 
-          {/* <div className="stat">
+          <div className="stat">
             <div className="stat-figure text-secondary">
               <GiMoneyStack className="h-10 w-10" />
             </div>
             <div className="stat-title">Money Saved</div>
             <div className="stat-value">1412 $</div>
             <div className="stat-desc">Compared to manual labor</div>
-          </div> */}
+          </div>
 
           <div className="stat">
             <div className="stat-figure text-secondary">
@@ -251,44 +251,49 @@ function Deployment() {
             <div className="stat-desc">8 GigaByte(s)</div>
           </div>
         </div>
+      </div> */}
+
+      <div className="flex h-16 items-center border-b px-5">
+        <div className="text-lg font-medium">Deployment</div>
       </div>
-      <div className="container mx-4 mb-9 mt-6 w-[calc(100%-2rem)] rounded-md border">
-        {/* <div className="flex items-center border-b p-3">
-        <form className="join">
-          <select
-            className={' join-item ' + 'select select-bordered '}
-            // value={}
-            // onChange={event => {}}
-          >
-            <option disabled value="">
-              Column
-            </option>
-            <option value="model">Deployment ID</option>
-            <option value="status">Workflow Name</option>
-            <option value="status">Interval</option>
-            <option value="workflowRequestId">Source</option>
-            <option value="workflowName">Export</option>
-          </select>
-          <input
-            className="input join-item input-bordered"
-            // value={substring}
-            // onChange={event => setSubstring(event.target.value)}
-            placeholder="Filter"
-          />
-          <button
-            className="btn join-item"
-            onClick={e => {
-              e.preventDefault()
-            }}>
-            Search
+      {/* <div className="container mx-4 mb-9 mt-0 w-[calc(100%-2rem)] rounded-md">
+        <div className="flex items-center border-b p-3">
+          <form className="join">
+            <select
+              className={' join-item ' + 'select select-bordered '}
+              // value={}
+              // onChange={event => {}}
+            >
+              <option disabled value="">
+                Column
+              </option>
+              <option value="model">Deployment ID</option>
+              <option value="status">Workflow Name</option>
+              <option value="status">Interval</option>
+              <option value="workflowRequestId">Source</option>
+              <option value="workflowName">Export</option>
+            </select>
+            <input
+              className="input join-item input-bordered"
+              // value={substring}
+              // onChange={event => setSubstring(event.target.value)}
+              placeholder="Filter"
+            />
+            <button
+              className="btn join-item"
+              onClick={e => {
+                e.preventDefault()
+              }}>
+              Search
+            </button>
+          </form>
+          <div className="flex-1" />
+          <button className="btn btn-disabled gap-1" onClick={async () => {}}>
+            <div>Compare Selections</div>
+            <div className="text-xs">(soon)</div>
           </button>
-        </form>
-        <div className="flex-1" />
-        {/* <button className="btn btn-disabled gap-1" onClick={async () => {}}>
-          <div>Compare Selections</div>
-          <div className="text-xs">(soon)</div>
-        </button> */}
-      </div>
+        </div>
+      </div> */}
       <div className="overflow-x-auto">
         <table className="table table-zebra">
           {/* head */}
