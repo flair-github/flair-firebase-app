@@ -25,7 +25,7 @@ function PageLogin() {
             href="#"
             className="mb-6 flex items-center text-2xl font-bold text-gray-900 dark:text-white">
             <div className="flex justify-center">
-              <img src="images/flair-logo.svg" width={180} height={48} className="mb-2" />
+              <img src="/images/flair-logo.svg" width={180} height={48} className="mb-2" />
             </div>
           </a>
           <div className="sm:max-w-md w-full rounded-lg bg-white shadow md:mt-0 xl:p-0 dark:border dark:border-gray-700 dark:bg-gray-800">
