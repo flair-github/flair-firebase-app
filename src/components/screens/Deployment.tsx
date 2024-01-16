@@ -298,7 +298,7 @@ function Deployment() {
         <table className="table table-zebra">
           {/* head */}
           <thead>
-            <tr>
+            <tr className="text-sm">
               <th />
               <th>Deployment ID</th>
               <th>Workflow Name</th>

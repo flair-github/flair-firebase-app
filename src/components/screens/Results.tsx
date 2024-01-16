@@ -86,7 +86,7 @@ function Results() {
           <table className="table table-zebra">
             {/* head */}
             <thead>
-              <tr>
+              <tr className="text-sm">
                 <th />
                 <th>Workflow Name</th>
                 <th>Workflow Request Id</th>
