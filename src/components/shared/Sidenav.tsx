@@ -57,7 +57,7 @@ export default function Sidenav() {
 
   return (
     <div className="flex h-screen min-h-screen w-full">
-      <div className="flex w-64 min-w-[16rem] flex-col overflow-y-auto border-r border-gray-200 bg-white px-6">
+      <div className="flex w-[16rem] shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6">
         <div className="mb-2 flex h-16 shrink-0 items-center">
           <img className="h-8 w-auto" src="/images/flair-logo.svg" alt="Flair Logo" />
         </div>
