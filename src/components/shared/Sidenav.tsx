@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from 'react'
 import { Disclosure } from '@headlessui/react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { RiFlowChart, RiLogoutCircleLine } from 'react-icons/ri'
 import { AiOutlineDeploymentUnit, AiOutlineSetting, AiTwotoneExperiment } from 'react-icons/ai'
 import { CgTranscript } from 'react-icons/cg'
@@ -12,6 +12,7 @@ import { atomUserData } from '~/jotai/jotai'
 import { useAuth } from '~/lib/firebase'
 import { ImSpinner9 } from 'react-icons/im'
 import { IconType } from 'react-icons'
+import clsx from 'clsx'
 
 const navigation: {
   name: string
@@ -48,6 +49,7 @@ const isActive = (currentPath: string, pathId: string) => {
 
 export default function Sidenav() {
   const location = useLocation()
+  const navigate = useNavigate()
   const userData = useAtomValue(atomUserData)
   const [isHover, setIsHover] = useState(false)
   const auth = useAuth()
@@ -55,10 +57,20 @@ export default function Sidenav() {
     auth.signOut()
   }
 
+  const isMini = location.pathname.split('/')[1] === 'editor'
+
   return (
     <div className="flex h-screen min-h-screen w-full">
-      <div className="flex w-[16rem] shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6">
-        <div className="mb-2 flex h-16 shrink-0 items-center">
+      <div
+        className={clsx(
+          isMini ? 'w-[72px]' : 'w-[16rem]',
+          'flex shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6',
+        )}>
+        <div
+          className="mb-2 flex h-16 shrink-0 cursor-pointer items-center"
+          onClick={() => {
+            navigate('/')
+          }}>
           <img className="h-8 w-auto" src="/images/flair-logo.svg" alt="Flair Logo" />
         </div>
         <nav className="flex flex-1 flex-col">
@@ -77,7 +89,7 @@ export default function Sidenav() {
                           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700',
                         )}>
                         <item.icon className="h-6 w-6 shrink-0 text-gray-400" aria-hidden="true" />
-                        {item.name}
+                        {!isMini && item.name}
                       </Link>
                     ) : (
                       <Disclosure as="div">
@@ -132,7 +144,7 @@ export default function Sidenav() {
 
             <li className="-mx-6 mt-auto">
               <div
-                className="flex cursor-pointer items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+                className="flex cursor-pointer items-center gap-x-4 px-5 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
                 onClick={handleSignOut}>
@@ -145,10 +157,7 @@ export default function Sidenav() {
                     alt="user image"
                   />
                 )}
-                <span className="sr-only">Your profile</span>
-                <span aria-hidden="true">
-                  {isHover ? 'Logout' : userData?.userName || 'Flair User'}
-                </span>
+                {!isMini && <span>{isHover ? 'Logout' : userData?.userName || 'Flair User'}</span>}
               </div>
             </li>
           </ul>
