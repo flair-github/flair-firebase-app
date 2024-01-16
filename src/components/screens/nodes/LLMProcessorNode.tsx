@@ -301,7 +301,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                 />
 
                 {/* Contexts */}
-                <div className="mb-4 mt-1">
+                {/* <div className="mb-4 mt-1">
                   <label className="label">
                     <span className="font-semibold">Contexts</span>
                   </label>
@@ -340,7 +340,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                       )
                     })}
                   </div>
-                </div>
+                </div> */}
 
                 {/* Prompt */}
                 <label className="label">
