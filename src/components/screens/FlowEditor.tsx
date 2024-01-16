@@ -10,6 +10,7 @@ import ReactFlow, {
   type Connection,
   type EdgeChange,
   type NodeChange,
+  BackgroundVariant,
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -848,6 +849,9 @@ data_exporters:
         selectionMode={SelectionMode.Partial}
         onMove={(_, newViewport) => {
           viewport.current = newViewport
+        }}
+        style={{
+          background: '#F0F0F0',
         }}>
         <Background />
         <Controls position="bottom-right" />
@@ -914,6 +918,9 @@ data_exporters:
             selectionMode={SelectionMode.Partial}
             onMove={(_, newViewport) => {
               viewport.current = newViewport
+            }}
+            style={{
+              background: '#F0F0F0',
             }}>
             <Background />
             <Controls position="bottom-right" />
