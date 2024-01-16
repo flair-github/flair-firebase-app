@@ -20,9 +20,9 @@ const navigation: {
   children?: { name: string; href: string }[]
 }[] = [
   { name: 'Flow', href: '/', icon: RiFlowChart },
-  { name: 'Executions', href: '/result', icon: AiTwotoneExperiment },
   { name: 'Deployment', href: '/deployment', icon: HiOutlineRocketLaunch },
-  { name: 'Script', href: '/transcription', icon: CgTranscript },
+  { name: 'Executions', href: '/result', icon: AiTwotoneExperiment },
+  // { name: 'Script', href: '/transcription', icon: CgTranscript },
   // {
   //   name: 'Debug',
   //   icon: VscDebugLineByLine,
