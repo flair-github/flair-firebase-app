@@ -1,4 +1,5 @@
-import React from 'react'
+import clsx from 'clsx'
+import React, { useState } from 'react'
 import { IconType } from 'react-icons'
 
 const classificationColor2colorClasses = (classificationColor: string): string[] => {
@@ -64,18 +65,30 @@ export interface IAsideProps {
 }
 
 export default function Menu({ nodeClassifications }: IAsideProps) {
+  const [set, setSet] = useState(new Set())
+
   return (
     <menu className="grow overflow-y-scroll rounded-lg bg-white shadow outline outline-1">
       {/* Data Connectors */}
       <div className="join join-vertical w-full">
-        {nodeClassifications.map(classification => {
+        {nodeClassifications.map((classification, i) => {
           const colorClasses = classificationColor2colorClasses(classification.color)
           return (
             <div
               key={classification.title}
-              className={'collapse-arrow collapse' + ' join-item border border-base-300'}>
-              <input type="checkbox" name="my-accordion-4" />
-              <div className="collapse-title text-xl font-medium">
+              className={clsx(
+                set.has(i) && 'collapse-open',
+                'collapse join-item collapse-arrow border border-base-300',
+              )}>
+              <div
+                className="collapse-title text-xl font-medium"
+                onClick={() => {
+                  setSet(x => {
+                    const setAfter = new Set([...x])
+                    setAfter.has(i) ? setAfter.delete(i) : setAfter.add(i)
+                    return setAfter
+                  })
+                }}>
                 {classification.title} <br />
                 <div className="mt-1 text-sm font-normal text-gray-500">
                   {classification.subtitle}
