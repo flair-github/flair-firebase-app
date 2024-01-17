@@ -8,6 +8,8 @@ import { Link } from './link'
 
 const styles = {
   base: [
+    'cursor-pointer',
+
     // Base
     'relative isolate inline-flex items-center justify-center gap-x-2 rounded-lg border text-base/6 font-semibold',
 
@@ -207,7 +209,7 @@ export const Button = React.forwardRef(function Button(
       <TouchTarget>{children}</TouchTarget>
     </Link>
   ) : (
-    <HeadlessButton {...props} className={clsx(classes, 'cursor-default')} ref={ref}>
+    <HeadlessButton {...props} className={clsx(classes, 'cursor-pointer')} ref={ref}>
       <TouchTarget>{children}</TouchTarget>
     </HeadlessButton>
   )

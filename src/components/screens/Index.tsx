@@ -10,6 +10,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import { TfiLayoutWidthDefault } from 'react-icons/tfi'
 import { BsArrowLeftShort, BsThreeDots } from 'react-icons/bs'
 import { ImFileEmpty, ImSpinner9 } from 'react-icons/im'
+import { Button } from '~/catalyst/button'
+import clsx from 'clsx'
+import { FaChevronRight } from 'react-icons/fa'
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
+import { TiFlowMerge } from 'react-icons/ti'
 
 function Index() {
   const userData = useAtomValue(atomUserData)
@@ -76,128 +83,230 @@ function Index() {
     onboardingModal.current?.showModal()
   }, [])
 
+  const statuses: Record<string, string> = {
+    Running: 'text-green-700 bg-green-50 ring-green-600/20',
+    'In progress': 'text-gray-600 bg-gray-50 ring-gray-500/10',
+    Archived: 'text-yellow-800 bg-yellow-50 ring-yellow-600/20',
+  }
+  const projects = [
+    {
+      id: 1,
+      name: 'GraphQL API',
+      href: '#',
+      status: 'Complete',
+      createdBy: 'Leslie Alexander',
+      dueDate: 'March 17, 2023',
+      dueDateTime: '2023-03-17T00:00Z',
+    },
+    {
+      id: 2,
+      name: 'New benefits plan',
+      href: '#',
+      status: 'In progress',
+      createdBy: 'Leslie Alexander',
+      dueDate: 'May 5, 2023',
+      dueDateTime: '2023-05-05T00:00Z',
+    },
+    {
+      id: 3,
+      name: 'Onboarding emails',
+      href: '#',
+      status: 'In progress',
+      createdBy: 'Courtney Henry',
+      dueDate: 'May 25, 2023',
+      dueDateTime: '2023-05-25T00:00Z',
+    },
+    {
+      id: 4,
+      name: 'iOS app',
+      href: '#',
+      status: 'In progress',
+      createdBy: 'Leonard Krasner',
+      dueDate: 'June 7, 2023',
+      dueDateTime: '2023-06-07T00:00Z',
+    },
+    {
+      id: 5,
+      name: 'Marketing site redesign',
+      href: '#',
+      status: 'Archived',
+      createdBy: 'Courtney Henry',
+      dueDate: 'June 10, 2023',
+      dueDateTime: '2023-06-10T00:00Z',
+    },
+  ]
+
   return (
     <>
       <Head title="Home" />
-      <div className="container px-16 py-4">
-        <div className="mb-9 mt-3 text-3xl font-bold">My Pipelines</div>
-        <div className="mb-5 mt-3">
-          <button
-            className="btn btn-primary normal-case"
-            onClick={() => {
-              setShowNewFlowModal(true)
-            }}>
-            + Add Pipeline
-          </button>
-          <button
-            className="btn ml-2 normal-case"
-            onClick={() => {
-              navigate('templates')
-            }}>
-            Flow Templates
-          </button>
-        </div>
-
-        {/* List of My Flows */}
-
-        {!myFlows && (
-          <div className="flex h-72 items-center justify-center">
-            <ImSpinner9 className="h-16 w-16 animate-spin" />
-          </div>
-        )}
-        <div className="-m-4 flex flex-wrap">
-          {myFlows &&
-            myFlows.map(myFlow => (
-              <div
-                key={myFlow.workflowId}
-                className="card m-4 w-96 cursor-pointer border bg-base-100 shadow-md transition-shadow hover:shadow-xl"
-                onClick={() => {
-                  openWorkflow(myFlow.workflowId)
-                }}>
-                <div className="card-body">
-                  <header className="flex justify-between">
-                    <h2 className="card-title truncate">{myFlow.workflowTitle}</h2>
-                    <div
-                      className="dropdown"
-                      onClick={event => {
-                        event.stopPropagation()
-                      }}>
-                      <label tabIndex={0} className="btn btn-circle btn-ghost btn-sm m-1">
-                        <BsThreeDots />
-                      </label>
-                      <ul
-                        tabIndex={0}
-                        className="menu dropdown-content rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
-                        <li>
-                          <button
-                            className=""
-                            onClick={event => {
-                              event.stopPropagation()
-                              db.collection('workflows').doc(myFlow.workflowId).update({
-                                docExists: false,
-                              })
-                            }}>
-                            Delete
-                          </button>
-                          <button
-                            className=""
-                            onClick={event => {
-                              event.stopPropagation()
-                            }}>
-                            Duplicate
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  </header>
-                  <img src="/images/flow-artwork.svg" width={330} height={180} className="border" />
+      <div className="min-h-full bg-slate-50">
+        <div className="bg-slate-800 pb-32">
+          <header className="py-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="flex">
+                <h1 className="text-3xl font-bold tracking-tight text-white">My Pipelines</h1>
+                <div className="flex-1" />
+                <div className="flex gap-2">
+                  <Button
+                    color="blue"
+                    onClick={() => {
+                      setShowNewFlowModal(true)
+                    }}>
+                    + Add Pipeline
+                  </Button>
+                  <Button
+                    color="zinc"
+                    onClick={() => {
+                      navigate('templates')
+                    }}>
+                    Flow Templates
+                  </Button>
                 </div>
               </div>
-            ))}
+            </div>
+          </header>
         </div>
 
-        {/* New Flow Modal */}
-        <dialog className={['modal', showNewFlowModal ? 'modal-open' : ''].join(' ')}>
-          <form method="dialog" className="modal-box">
-            <h3 className="text-lg font-bold">Create New Flow</h3>
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text">Flow Title</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Flow Title"
-                id="flow-title-field"
-                className="input input-bordered w-full"
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    setShowNewFlowModal(false)
-                    createNewFlow()
-                  }
-                }}
-              />
+        <main className="-mt-32">
+          <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+            <div className="rounded-lg bg-white px-5 py-2 shadow sm:px-6">
+              {!myFlows && (
+                <div className="flex h-72 w-full items-center justify-center">
+                  <ImSpinner9 className="h-16 w-16 animate-spin" />
+                </div>
+              )}
+
+              {/* Your content */}
+              <ul role="list" className="divide-y divide-gray-100">
+                {myFlows &&
+                  myFlows.map(myflow => (
+                    <li
+                      key={myflow.workflowId}
+                      className="flex items-center justify-between gap-x-6 py-5">
+                      <div
+                        className="flex min-w-0 cursor-pointer gap-2"
+                        onClick={() => {
+                          openWorkflow(myflow.workflowId)
+                        }}>
+                        <div className="flex w-11 items-center justify-center">
+                          <TiFlowMerge size={28} className="text-slate-600" />
+                        </div>
+                        <div>
+                          <div className="flex items-start gap-x-3">
+                            <p className="text-sm font-semibold leading-6 text-gray-900">
+                              {myflow.workflowTitle}
+                            </p>
+                            <p
+                              className={clsx(
+                                statuses.Running,
+                                'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset',
+                              )}>
+                              Running
+                            </p>
+                          </div>
+                          <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                            <p className="whitespace-nowrap">
+                              Created on {myflow.lastSaveTimestamp.toDate().toLocaleDateString()}
+                            </p>
+                            <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                              <circle cx={1} cy={1} r={1} />
+                            </svg>
+                            <p className="truncate">Created by {userData?.userName}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-none items-center gap-x-4">
+                        <a
+                          onClick={() => {
+                            openWorkflow(myflow.workflowId)
+                          }}
+                          className="hidden cursor-pointer rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">
+                          View project
+                        </a>
+                        <Menu as="div" className="relative flex-none">
+                          <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
+                            <span className="sr-only">Open options</span>
+                            <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+                          </Menu.Button>
+                          <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-100"
+                            enterFrom="transform opacity-0 scale-95"
+                            enterTo="transform opacity-100 scale-100"
+                            leave="transition ease-in duration-75"
+                            leaveFrom="transform opacity-100 scale-100"
+                            leaveTo="transform opacity-0 scale-95">
+                            <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <a
+                                    onClick={event => {
+                                      event.stopPropagation()
+                                      db.collection('workflows').doc(myflow.workflowId).update({
+                                        docExists: false,
+                                      })
+                                    }}
+                                    className={clsx(
+                                      active ? 'bg-gray-50' : '',
+                                      'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900',
+                                    )}>
+                                    Delete
+                                  </a>
+                                )}
+                              </Menu.Item>
+                            </Menu.Items>
+                          </Transition>
+                        </Menu>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
             </div>
-            <div className="modal-action">
-              <button
-                className="btn"
-                onClick={() => {
-                  setShowNewFlowModal(false)
-                }}>
-                Close
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={() => {
+          </div>
+        </main>
+      </div>
+
+      {/* New Flow Modal */}
+      <dialog className={['modal', showNewFlowModal ? 'modal-open' : ''].join(' ')}>
+        <form method="dialog" className="modal-box">
+          <h3 className="text-lg font-bold">Create New Flow</h3>
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Flow Title</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Flow Title"
+              id="flow-title-field"
+              className="input input-bordered w-full"
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
                   setShowNewFlowModal(false)
                   createNewFlow()
-                }}>
-                Create
-              </button>
-            </div>
-          </form>
-        </dialog>
-      </div>
+                }
+              }}
+            />
+          </div>
+          <div className="modal-action">
+            <button
+              className="btn"
+              onClick={() => {
+                setShowNewFlowModal(false)
+              }}>
+              Close
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setShowNewFlowModal(false)
+                createNewFlow()
+              }}>
+              Create
+            </button>
+          </div>
+        </form>
+      </dialog>
 
       {/* Onboarding Modal */}
       {/* <dialog ref={onboardingModal} className="modal">
