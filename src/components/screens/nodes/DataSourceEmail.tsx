@@ -77,7 +77,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Protocol</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataSourceEmailNodeContent['protocol']
               setNodeContent(prev => ({ ...prev, protocol: newVal }))
@@ -92,7 +92,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Hostname</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.hostname}
             onChange={e => {
               const newVal = e.target.value
@@ -105,7 +105,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Port</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.port}
             onChange={e => {
               const newVal = e.target.value
@@ -118,7 +118,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Username</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.username}
             onChange={e => {
               const newVal = e.target.value
@@ -131,7 +131,7 @@ export const DataSourceEmailNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Password</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.password}
             onChange={e => {
               const newVal = e.target.value

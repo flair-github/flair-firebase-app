@@ -74,7 +74,7 @@ export const DataSourceLocalFilesNode = ({
             <span className="font-bold">File Type</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataSourceLocalFilesNodeContent['fileType']
               setNodeContent(prev => ({ ...prev, fileType: newVal }))

@@ -68,7 +68,7 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Embedding Type</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataIndexerNodeContent['embeddingType']
               setNodeContent(prev => ({ ...prev, embeddingType: newVal }))
@@ -86,7 +86,7 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Index Strategy</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataIndexerNodeContent['indexStrategy']
               setNodeContent(prev => ({ ...prev, indexStrategy: newVal }))
@@ -103,7 +103,7 @@ export const DataIndexerNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Vector Store</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataIndexerNodeContent['vectorStore']
               setNodeContent(prev => ({ ...prev, vectorStore: newVal }))

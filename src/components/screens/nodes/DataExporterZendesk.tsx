@@ -90,7 +90,7 @@ export const DataExporterZendeskNode = ({
             <span className="font-bold">Subdomain</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'subdomain'}
             value={nodeContent.subdomain}
             onChange={handleChange}
@@ -101,7 +101,7 @@ export const DataExporterZendeskNode = ({
             <span className="font-bold">Email</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'email'}
             value={nodeContent.email}
             onChange={handleChange}
@@ -112,7 +112,7 @@ export const DataExporterZendeskNode = ({
             <span className="font-bold">API Token</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'apiToken'}
             value={nodeContent.apiToken}
             onChange={handleChange}
@@ -123,7 +123,7 @@ export const DataExporterZendeskNode = ({
             <span className="font-bold">Title</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'title'}
             value={nodeContent.title}
             onChange={handleChange}
@@ -135,7 +135,7 @@ export const DataExporterZendeskNode = ({
           </label>
           <textarea
             rows={3}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             name={'comment'}
             value={nodeContent.comment}
             onChange={handleChange}
@@ -147,7 +147,7 @@ export const DataExporterZendeskNode = ({
             <span className="font-bold">Priority</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'priority'}
             value={nodeContent.priority}
             onChange={handleChange}
@@ -159,7 +159,7 @@ export const DataExporterZendeskNode = ({
             <span className="font-bold">Type</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'type'}
             value={nodeContent.type}
             onChange={handleChange}

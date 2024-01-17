@@ -20,7 +20,7 @@ function ExecuteModal(
             <span className="label-text">Workflow Name</span>
           </label>
           <input
-            className="max-w-xs input mb-3 w-full border-black"
+            className="input mb-3 w-full border-black"
             value={newTitle}
             onChange={event => setNewTitle(event.target.value)}
           />

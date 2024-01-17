@@ -21,7 +21,7 @@ function ExecuteModal(
           <label className="label">
             <span className="label-text font-bold">Run Every</span>
           </label>
-          <select className="max-w-xs select mb-3 w-full border-black">
+          <select className="select mb-3 w-full border-black">
             <option value={'one-time'}>One Time</option>
             <option value={'1d'}>1d</option>
             <option value={'2d'}>2d</option>
@@ -31,7 +31,7 @@ function ExecuteModal(
           <label className="label">
             <span className="label-text font-bold">at</span>
           </label>
-          <select className="max-w-xs select mb-3 w-full border-black">
+          <select className="select mb-3 w-full border-black">
             <option value={'now'}>Now</option>
             <option value={'12am'}>12:00 am</option>
             <option value={'1am'}>1:00 am</option>

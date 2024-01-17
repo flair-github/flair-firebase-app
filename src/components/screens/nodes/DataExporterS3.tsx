@@ -104,7 +104,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
             <span className="font-bold">File Type</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataExporterS3NodeContent['fileType']
               setNodeContent(prev => ({ ...prev, fileType: newVal }))
@@ -121,7 +121,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
             <span className="font-bold">Secret Key</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.secretKey}
             onChange={e => {
               const newVal = e.target.value
@@ -134,7 +134,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
             <span className="font-bold">Access Key</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.accessKey}
             onChange={e => {
               const newVal = e.target.value
@@ -147,7 +147,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
             <span className="font-bold">Region Name</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.regionName}
             onChange={e => {
               const newVal = e.target.value
@@ -160,7 +160,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
             <span className="font-bold">Bucket Name</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.bucketName}
             onChange={e => {
               const newVal = e.target.value
@@ -173,7 +173,7 @@ export const DataExporterS3Node = ({ data, noHandle }: { data: NodeData; noHandl
             <span className="font-bold">Path</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.path}
             onChange={e => {
               const newVal = e.target.value

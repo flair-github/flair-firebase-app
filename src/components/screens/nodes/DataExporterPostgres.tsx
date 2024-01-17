@@ -83,7 +83,7 @@ export const DataExporterPostgresNode = ({
           </label>
           <textarea
             rows={2}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             name={'connectionString'}
             value={nodeContent.connectionString}
             onChange={handleChange}
@@ -96,7 +96,7 @@ export const DataExporterPostgresNode = ({
             <span className="font-bold">Table Name</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'tableName'}
             value={nodeContent.tableName}
             onChange={handleChange}
@@ -115,7 +115,7 @@ export const DataExporterPostgresNode = ({
           </button>
           {/* <textarea
             rows={4}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             name={'columnMapping'}
             value={nodeContent.columnMapping}
             onChange={handleChange}

@@ -72,7 +72,7 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">URL</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.url}
             onChange={e => {
               const newVal = e.target.value
@@ -85,7 +85,7 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Request Method</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.method}
             onChange={e => {
               const newVal = e.target.value
@@ -99,7 +99,7 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
           </label>
           <textarea
             rows={3}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             value={nodeContent.headers}
             onChange={e => {
               const newVal = e.target.value
@@ -116,7 +116,7 @@ export const DataRetrieverApiNode = ({ data }: { data: NodeData }) => {
           </label>
           <textarea
             rows={3}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             value={nodeContent.body}
             onChange={e => {
               const newVal = e.target.value

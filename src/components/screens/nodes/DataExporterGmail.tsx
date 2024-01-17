@@ -92,7 +92,7 @@ export const DataExporterGmailNode = ({
             <span className="font-bold">To</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'to'}
             value={nodeContent.to}
             onChange={handleChange}
@@ -103,7 +103,7 @@ export const DataExporterGmailNode = ({
             <span className="font-bold">Subject</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'subject'}
             value={nodeContent.subject}
             onChange={handleChange}
@@ -114,7 +114,7 @@ export const DataExporterGmailNode = ({
             <span className="font-bold">From</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'from'}
             value={nodeContent.from}
             onChange={handleChange}
@@ -126,7 +126,7 @@ export const DataExporterGmailNode = ({
           </label>
           <textarea
             rows={10}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             name={'prompt'}
             value={nodeContent.prompt}
             onChange={handleChange}
@@ -143,7 +143,7 @@ export const DataExporterGmailNode = ({
             <span className="font-bold">SMTP Mail Server</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'mailServer'}
             value={nodeContent.mailServer}
             onChange={handleChange}
@@ -154,7 +154,7 @@ export const DataExporterGmailNode = ({
             <span className="font-bold">SMTP Port</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'port'}
             value={nodeContent.port}
             onChange={handleChange}
@@ -165,7 +165,7 @@ export const DataExporterGmailNode = ({
             <span className="font-bold">User Name</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'username'}
             value={nodeContent.username}
             onChange={handleChange}
@@ -176,7 +176,7 @@ export const DataExporterGmailNode = ({
             <span className="font-bold">Password</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'password'}
             value={nodeContent.password}
             onChange={handleChange}

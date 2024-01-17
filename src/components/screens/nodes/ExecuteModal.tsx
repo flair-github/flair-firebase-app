@@ -20,7 +20,7 @@ function ExecuteModal(
           <label className="label">
             <span className="label-text">Frequency Settings</span>
           </label>
-          <select className="max-w-xs select mb-3 w-full border-black">
+          <select className="select mb-3 w-full border-black">
             <option value={'one-time'}>Once</option>
             <option value={'1d'}>Daily</option>
             <option value={'7d'}>Weekly</option>
@@ -28,7 +28,7 @@ function ExecuteModal(
           <label className="label">
             <span className="label-text">at</span>
           </label>
-          <select className="max-w-xs select mb-3 w-full border-black">
+          <select className="select mb-3 w-full border-black">
             <option value={'now'}>Now</option>
             <option value={'12am'}>12:00 am</option>
             <option value={'1am'}>1:00 am</option>

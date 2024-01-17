@@ -72,7 +72,7 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">File Type</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataExporterGCPNodeContent['fileType']
               setNodeContent(prev => ({ ...prev, fileType: newVal }))
@@ -90,7 +90,7 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
           </label>
           <textarea
             rows={6}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             value={nodeContent.accountKey}
             onChange={e => {
               const newVal = e.target.value
@@ -118,7 +118,7 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Bucket Name</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.bucketName}
             onChange={e => {
               const newVal = e.target.value
@@ -131,7 +131,7 @@ export const DataExporterGCPNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Path</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.path}
             onChange={e => {
               const newVal = e.target.value

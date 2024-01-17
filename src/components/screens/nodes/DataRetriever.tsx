@@ -68,7 +68,7 @@ export const DataRetrieverNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Embedding Type</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataRetrieverNodeContent['embeddingType']
               setNodeContent(prev => ({ ...prev, embeddingType: newVal }))
@@ -86,7 +86,7 @@ export const DataRetrieverNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Retrieve Strategy</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataRetrieverNodeContent['retrieveStrategy']
               setNodeContent(prev => ({ ...prev, retrieveStrategy: newVal }))

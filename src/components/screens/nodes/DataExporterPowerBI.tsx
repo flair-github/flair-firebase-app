@@ -93,7 +93,7 @@ export const DataExporterPowerBINode = ({
             <span className="font-bold">Client ID</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.clientId}
             name={'clientId'}
             onChange={handleChange}
@@ -104,7 +104,7 @@ export const DataExporterPowerBINode = ({
             <span className="font-bold">Client Secret</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.clientSecret}
             name={'clientSecret'}
             onChange={handleChange}
@@ -115,7 +115,7 @@ export const DataExporterPowerBINode = ({
             <span className="font-bold">Tenant ID</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.tenantId}
             name={'tenantId'}
             onChange={handleChange}
@@ -126,7 +126,7 @@ export const DataExporterPowerBINode = ({
             <span className="font-bold">Username</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.username}
             name={'username'}
             onChange={handleChange}
@@ -137,7 +137,7 @@ export const DataExporterPowerBINode = ({
             <span className="font-bold">Password</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.password}
             name={'password'}
             onChange={handleChange}
@@ -149,7 +149,7 @@ export const DataExporterPowerBINode = ({
             <span className="font-bold">Chart Type</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             value={nodeContent.chartType}
             name={'chartType'}
             onChange={handleChange}>
@@ -183,7 +183,7 @@ export const DataExporterPowerBINode = ({
             <span className="font-bold">X Axis</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.xAxis}
             name={'xAxis'}
             onChange={handleChange}
@@ -194,7 +194,7 @@ export const DataExporterPowerBINode = ({
             <span className="font-bold">Y Axis</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.yAxis}
             name={'yAxis'}
             onChange={handleChange}
