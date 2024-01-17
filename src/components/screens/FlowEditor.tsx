@@ -83,6 +83,7 @@ export const nodeTypes = {
   DataRetrieverApiNode,
   ConditionalLogicNode,
   DataExtractorAggregatorNode,
+  EventNode,
 }
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
 import { RiListSettingsLine, RiRobotLine, RiArrowRightLine, RiFileUploadLine } from 'react-icons/ri'
@@ -112,9 +113,15 @@ import { FaCloudUploadAlt, FaSalesforce } from 'react-icons/fa'
 import { SiPowerbi, SiZendesk, SiAirtable, SiGooglesheets, SiTwilio } from 'react-icons/si'
 import { GiConvergenceTarget } from 'react-icons/gi'
 import { GrAggregate, GrFormClose, GrCube } from 'react-icons/gr'
-import { BsArrowsAngleContract, BsFillCloudHaze2Fill } from 'react-icons/bs'
-import { MdEmail } from 'react-icons/md'
+import {
+  BsArrowsAngleContract,
+  BsFillCloudHaze2Fill,
+  BsLightning,
+  BsThunderbolt,
+} from 'react-icons/bs'
+import { MdEmail, MdThunderstorm } from 'react-icons/md'
 import { HiOutlineRocketLaunch } from 'react-icons/hi2'
+import { EventNode } from './nodes/EventNode'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -721,20 +728,20 @@ data_exporters:
         },
       ],
     },
-    // {
-    //   title: 'Evaluation',
-    //   subtitle: 'Assesses data quality and accuracy.',
-    //   color: 'pink',
-    //   members: [
-    //     {
-    //       title: 'Evaluator',
-    //       handleOnClick: () => {
-    //         addNode('evaluator', 'EvaluatorNode')
-    //       },
-    //       icon: BsArrowsAngleContract,
-    //     },
-    //   ],
-    // },
+    {
+      title: 'Event',
+      subtitle: 'Event Nodes',
+      color: 'pink',
+      members: [
+        {
+          title: 'Event Node',
+          handleOnClick: () => {
+            addNode('event-node', 'EventNode')
+          },
+          icon: BsLightning,
+        },
+      ],
+    },
   ]
 
   const controls = [

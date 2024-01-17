@@ -28,6 +28,7 @@ import { DataExporterGmailNodeContent } from './DataExporterGmail'
 import { DataRetrieverApiNodeContent } from './DataRetrieverAPI'
 import { ConditionalLogicNodeContent } from './ConditionalLogicNode'
 import { DataExtractorAggregatorNodeContent } from './DataExtractorAggregatorNode'
+import { EventNodeContent } from './EventNode'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -58,6 +59,7 @@ export type NodeContent =
   | DataExporterGmailNodeContent
   | DataRetrieverApiNodeContent
   | DataExtractorAggregatorNodeContent
+  | EventNodeContent
 
 export interface NodeData {
   nodeId: string
