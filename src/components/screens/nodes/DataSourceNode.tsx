@@ -81,7 +81,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Source</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               setSource(e.target.value)
             }}
@@ -96,7 +96,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Data Type</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black"
+            className="select w-full border-black"
             onChange={e => {
               setDataType(e.target.value)
             }}
@@ -112,7 +112,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">API Key</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={apiKey}
             onChange={e => {
               const newApiKey = e.target.value
@@ -125,7 +125,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Secret Key</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={secretApiKey}
             onChange={e => {
               const newSecretKey = e.target.value
@@ -138,7 +138,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Bucket Name</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={bucketName}
             onChange={e => {
               const newBucketName = e.target.value
@@ -151,7 +151,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Region Name</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={regionName}
             onChange={e => {
               const newRegionName = e.target.value
@@ -164,7 +164,7 @@ export const DataSourceNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Path</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={path}
             onChange={e => {
               const newPath = e.target.value

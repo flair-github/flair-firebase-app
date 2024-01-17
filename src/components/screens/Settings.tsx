@@ -16,7 +16,7 @@ function Settings() {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="max-w-xs form-control w-full">
+      <div className="form-control w-full">
         <h1 className="mt-5 text-2xl font-bold">AWS</h1>
 
         <label className="label">
@@ -25,7 +25,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter AWS Access Key"
-          className="max-w-xs  input w-full border-gray-800"
+          className=" input w-full border-gray-800"
         />
 
         <label className="label">
@@ -34,7 +34,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter AWS Bucket Name"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <label className="label">
@@ -43,7 +43,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter AWS Region Name"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <label className="label">
@@ -52,7 +52,7 @@ function Settings() {
         <input
           type="password"
           placeholder="Enter AWS Secret Key"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <h1 className="mt-5 text-2xl font-bold">DeepGram</h1>
@@ -63,7 +63,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter DeepGram API Key"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <h1 className="mt-5 text-2xl font-bold">Google Cloud</h1>
@@ -74,7 +74,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter Google Cloud Credentials"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <label className="label">
@@ -83,7 +83,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter Google Storage Bucket"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <h1 className="mt-5 text-2xl font-bold">OpenAI</h1>
@@ -94,7 +94,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter OpenAI API Key"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <label className="label">
@@ -103,7 +103,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter OpenAI Organization ID"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <label className="label">
@@ -112,7 +112,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter Owner User ID"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <h1 className="mt-5 text-2xl font-bold">Pine Cone</h1>
@@ -123,7 +123,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter Pine Cone API Key"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <label className="label">
@@ -132,7 +132,7 @@ function Settings() {
         <input
           type="text"
           placeholder="Enter Pine Cone Environment"
-          className="max-w-xs input w-full border-gray-800"
+          className="input w-full border-gray-800"
         />
 
         <div>

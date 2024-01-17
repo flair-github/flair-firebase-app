@@ -74,7 +74,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">File Type</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataSourceAzureNodeContent['fileType']
               setNodeContent(prev => ({ ...prev, fileType: newVal }))
@@ -91,7 +91,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Account Name</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.accountName}
             onChange={e => {
               const newVal = e.target.value
@@ -104,7 +104,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Account Key</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.accountKey}
             onChange={e => {
               const newVal = e.target.value
@@ -117,7 +117,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Container Name</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.containerName}
             onChange={e => {
               const newVal = e.target.value
@@ -130,7 +130,7 @@ export const DataSourceAzureNode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Path</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.path}
             onChange={e => {
               const newVal = e.target.value

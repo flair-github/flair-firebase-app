@@ -67,7 +67,7 @@ export const ConditionalLogicNode = ({ data }: { data: NodeData }) => {
           </label>
           <textarea
             rows={6}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             value={formula}
             onChange={e => {
               const newVal = e.target.value

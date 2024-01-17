@@ -74,7 +74,7 @@ export default function DetailModal({
                     Meta
                   </h2>
 
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Workflow ID</span>
                       <button
@@ -88,11 +88,11 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.workflowId}
-                      className="max-w-xs input input-bordered w-full"
+                      className="input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Workflow Request ID</span>
                       <button
@@ -106,11 +106,11 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.workflowRequestId}
-                      className="max-w-xs input input-bordered w-full"
+                      className="input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Workflow Result ID</span>
                       <button
@@ -124,11 +124,11 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.workflowResultId ?? ''}
-                      className="max-w-xs input input-bordered w-full"
+                      className="input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Output ID</span>
                       <button
@@ -142,7 +142,7 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.id}
-                      className="max-w-xs input input-bordered w-full"
+                      className="input input-bordered w-full"
                       readOnly
                     />
                   </article>
@@ -151,7 +151,7 @@ export default function DetailModal({
                     Content
                   </h2>
 
-                  <article className="max-w-xs form-control col-span-6 w-full">
+                  <article className="form-control col-span-6 w-full">
                     <div className="label">
                       <span className="label-text">Column Name</span>
                       <button
@@ -165,11 +165,11 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.columnName}
-                      className="max-w-xs input input-bordered w-full"
+                      className="input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Column Prompt</span>
                       <button
@@ -186,7 +186,7 @@ export default function DetailModal({
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Context</span>
                       <button
@@ -203,7 +203,7 @@ export default function DetailModal({
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Instruction</span>
                       <button
@@ -220,7 +220,7 @@ export default function DetailModal({
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Answer</span>
                       <button
@@ -249,7 +249,7 @@ export default function DetailModal({
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-6 w-full">
+                  <article className="form-control col-span-6 w-full">
                     <div className="label">
                       <span className="label-text">Input</span>
                       <button
@@ -264,7 +264,7 @@ export default function DetailModal({
                       {item.input}
                     </pre>
                   </article>
-                  <article className="max-w-xs form-control col-span-6 w-full">
+                  <article className="form-control col-span-6 w-full">
                     <div className="label">
                       <span className="label-text">Output</span>
                       <button
@@ -284,7 +284,7 @@ export default function DetailModal({
                     Other
                   </h2>
 
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Doc Exists</span>
                       <button
@@ -298,11 +298,11 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={item.docExists.toString()}
-                      className="max-w-xs input input-bordered w-full"
+                      className="input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Latency</span>
                       <button
@@ -316,11 +316,11 @@ export default function DetailModal({
                     <input
                       type="number"
                       value={item.latency}
-                      className="max-w-xs input input-bordered w-full"
+                      className="input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Created Timestamp</span>
                       <button
@@ -334,11 +334,11 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={timestampToLocaleString(item.createdTimestamp)}
-                      className="max-w-xs input input-bordered w-full"
+                      className="input input-bordered w-full"
                       readOnly
                     />
                   </article>
-                  <article className="max-w-xs form-control col-span-3 w-full">
+                  <article className="form-control col-span-3 w-full">
                     <div className="label">
                       <span className="label-text">Updated Timestamp</span>{' '}
                       <button
@@ -352,7 +352,7 @@ export default function DetailModal({
                     <input
                       type="text"
                       value={timestampToLocaleString(item.updatedTimestamp)}
-                      className="max-w-xs input input-bordered w-full"
+                      className="input input-bordered w-full"
                       readOnly
                     />
                   </article>

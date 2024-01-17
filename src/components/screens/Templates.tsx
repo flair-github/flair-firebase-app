@@ -24,7 +24,7 @@ function Templates() {
     <>
       <div className="hero h-96 bg-base-200">
         <div className="hero-content text-center">
-          <div className="max-w-md">
+          <div className="">
             <h1 className="text-5xl font-bold">
               🚀 Rapidly develop workflows with ready-made templates
             </h1>

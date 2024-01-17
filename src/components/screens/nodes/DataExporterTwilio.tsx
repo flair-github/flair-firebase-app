@@ -88,7 +88,7 @@ export const DataExporterTwilioNode = ({
             <span className="font-bold">TWILIO_ACCOUNT_SID</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'account_sid'}
             value={nodeContent.account_sid}
             onChange={handleChange}
@@ -99,7 +99,7 @@ export const DataExporterTwilioNode = ({
             <span className="font-bold">TWILIO_AUTH_TOKEN</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'auth_token'}
             value={nodeContent.auth_token}
             onChange={handleChange}
@@ -110,7 +110,7 @@ export const DataExporterTwilioNode = ({
             <span className="font-bold">From</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'from'}
             value={nodeContent.from}
             onChange={handleChange}
@@ -121,7 +121,7 @@ export const DataExporterTwilioNode = ({
             <span className="font-bold">To</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'to'}
             value={nodeContent.to}
             onChange={handleChange}
@@ -133,7 +133,7 @@ export const DataExporterTwilioNode = ({
           </label>
           <textarea
             rows={15}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             name={'body'}
             value={nodeContent.body}
             onChange={handleChange}
@@ -145,7 +145,7 @@ export const DataExporterTwilioNode = ({
             <span className="font-bold">Type</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'type'}
             value={nodeContent.type}
             onChange={handleChange}

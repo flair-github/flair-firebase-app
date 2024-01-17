@@ -91,7 +91,7 @@ export const DataExtractorAggregatorNode = ({
             <span className="font-bold">Column</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'column'}
             value={nodeContent.column}
             onChange={handleChange}
@@ -102,7 +102,7 @@ export const DataExtractorAggregatorNode = ({
             <span className="font-bold">Method</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             name={'method'}
             value={nodeContent.method}
             onChange={handleChange}>
@@ -115,7 +115,7 @@ export const DataExtractorAggregatorNode = ({
             <span className="font-bold">Model</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             name={'model'}
             value={nodeContent.model}
             onChange={handleChange}>

@@ -68,7 +68,7 @@ export const AwsUploaderNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">API Key</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             type="text"
             value={apiKey}
             onChange={e => {
@@ -82,7 +82,7 @@ export const AwsUploaderNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Path</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             type="text"
             value={path}
             onChange={e => {
@@ -97,7 +97,7 @@ export const AwsUploaderNode = ({ data }: { data: NodeData }) => {
           </label>
 
           <select
-            className="max-w-xs select w-full border-black"
+            className="select w-full border-black"
             value={period}
             onChange={e => {
               setPeriod(e.target.value)

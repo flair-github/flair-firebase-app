@@ -74,7 +74,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">File Type</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             onChange={e => {
               const newVal = e.target.value as DataExporterAPINodeContent['fileType']
               setNodeContent(prev => ({ ...prev, fileType: newVal }))
@@ -91,7 +91,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">URL</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.url}
             onChange={e => {
               const newVal = e.target.value
@@ -104,7 +104,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
             <span className="font-bold">Request Method</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             value={nodeContent.method}
             onChange={e => {
               const newVal = e.target.value
@@ -118,7 +118,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
           </label>
           <textarea
             rows={3}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             value={nodeContent.headers}
             onChange={e => {
               const newVal = e.target.value
@@ -135,7 +135,7 @@ export const DataExporterAPINode = ({ data, noHandle }: { data: NodeData; noHand
           </label>
           <textarea
             rows={3}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             value={nodeContent.body}
             onChange={e => {
               const newVal = e.target.value

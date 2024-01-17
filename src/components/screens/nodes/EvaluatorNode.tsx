@@ -66,7 +66,7 @@ export const EvaluatorNode = ({ data }: { data: NodeData }) => {
             <span className="font-bold">Strategy</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black"
+            className="select w-full border-black"
             onChange={e => {
               setStrategy(e.target.value)
             }}

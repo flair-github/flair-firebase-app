@@ -86,7 +86,7 @@ export const DataExporterSalesforceNode = ({
             <span className="font-bold">Username</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'username'}
             value={nodeContent.username}
             onChange={handleChange}
@@ -97,7 +97,7 @@ export const DataExporterSalesforceNode = ({
             <span className="font-bold">Password</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'password'}
             value={nodeContent.password}
             onChange={handleChange}
@@ -108,7 +108,7 @@ export const DataExporterSalesforceNode = ({
             <span className="font-bold">Security Token</span>
           </label>
           <input
-            className="max-w-xs input w-full border-black"
+            className="input w-full border-black"
             name={'securityToken'}
             value={nodeContent.securityToken}
             onChange={handleChange}
@@ -119,7 +119,7 @@ export const DataExporterSalesforceNode = ({
             <span className="font-bold">Salesforce Object</span>
           </label>
           <select
-            className="max-w-xs select w-full border-black "
+            className="select w-full border-black "
             name={'salesforceObject'}
             value={nodeContent.salesforceObject}
             onChange={handleChange}>
@@ -133,7 +133,7 @@ export const DataExporterSalesforceNode = ({
           </label>
           <textarea
             rows={3}
-            className="max-w-xs textarea w-full overflow-y-scroll border-black py-2"
+            className="textarea w-full overflow-y-scroll border-black py-2"
             name={'statement'}
             value={nodeContent.statement}
             onChange={handleChange}

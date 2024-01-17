@@ -372,7 +372,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                 </label>
                 <select
                   value={el.promptStrategy}
-                  className="max-w-xs select mb-3 w-full border-black"
+                  className="select mb-3 w-full border-black"
                   onChange={e => {
                     const newValue = e.target.value
 
@@ -419,7 +419,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                 </label>
                 <select
                   value={el.model}
-                  className="max-w-xs select mb-3 w-full border-black"
+                  className="select mb-3 w-full border-black"
                   onChange={e => {
                     const newValue = e.target.value
                     if (typeof newValue !== 'string') {
@@ -447,7 +447,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                 </label>
                 <select
                   value={el.type}
-                  className="max-w-xs select mb-3 w-full border-black"
+                  className="select mb-3 w-full border-black"
                   onChange={e => {
                     const newValue = e.target.value
 

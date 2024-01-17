@@ -28,7 +28,7 @@ function PageLogin() {
               <img src="/images/flair-logo.svg" width={180} height={48} className="mb-2" />
             </div>
           </a>
-          <div className="sm:max-w-md w-full rounded-lg bg-white shadow md:mt-0 xl:p-0 dark:border dark:border-gray-700 dark:bg-gray-800">
+          <div className="w-full rounded-lg bg-white shadow md:mt-0 xl:p-0 dark:border dark:border-gray-700 dark:bg-gray-800">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Sign in to your account
