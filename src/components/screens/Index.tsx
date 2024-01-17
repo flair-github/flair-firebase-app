@@ -9,7 +9,7 @@ import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { Link, useNavigate } from 'react-router-dom'
 import { TfiLayoutWidthDefault } from 'react-icons/tfi'
 import { BsArrowLeftShort, BsThreeDots } from 'react-icons/bs'
-import { ImFileEmpty, ImSpinner9 } from 'react-icons/im'
+import { ImFileEmpty, ImSpinner8, ImSpinner9 } from 'react-icons/im'
 import { Button } from '~/catalyst/button'
 import clsx from 'clsx'
 import { FaChevronRight } from 'react-icons/fa'
@@ -172,7 +172,7 @@ function Index() {
             <div className="rounded-lg bg-white px-5 py-2 shadow sm:px-6">
               {!myFlows && (
                 <div className="flex h-72 w-full items-center justify-center">
-                  <ImSpinner9 className="h-16 w-16 animate-spin" />
+                  <ImSpinner8 className="h-16 w-16 animate-spin text-slate-400" />
                 </div>
               )}
 
