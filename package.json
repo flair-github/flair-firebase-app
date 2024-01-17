@@ -16,6 +16,7 @@
     "@codemirror/legacy-modes": "^6.3.3",
     "@headlessui/react": "^2.0.0-alpha.4",
     "@headlessui/tailwindcss": "^0.2.0",
+    "@heroicons/react": "^2.1.1",
     "@supabase/supabase-js": "^2.33.1",
     "@tailwindcss/forms": "^0.5.7",
     "@uiw/react-codemirror": "^4.21.18",
