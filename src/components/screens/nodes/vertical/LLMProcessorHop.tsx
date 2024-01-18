@@ -120,6 +120,7 @@ export const LLMProcessorHop = ({ data, noHandle }: { data: NodeData; noHandle?:
           </div>
           <div className="flex-1" />
           <div
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-slate-100"
             onClick={() => {
               setOpen(true)
               setNodeFormContent(cloneDeep(nodeContent))
