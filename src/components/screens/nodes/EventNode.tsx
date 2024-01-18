@@ -15,26 +15,17 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { LinkIcon, PlusIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { Field } from '~/catalyst/fieldset'
 import { Select } from '~/catalyst/select'
+import cloneDeep from 'lodash/cloneDeep'
 
 export interface EventNodeContent {
   nodeType: 'event-node'
-  fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
-  accessKey: string
-  path: string
-  secretKey: string
-  bucketName: string
-  regionName: string
+  eventType: 'New CSV file' | 'Updated CSV file' | 'Deleted CSV File'
   importedKeys: Record<string, boolean>
 }
 
 export const eventNodeDefaultContent: EventNodeContent = {
   nodeType: 'event-node',
-  fileType: 'csv',
-  accessKey: '',
-  path: '',
-  secretKey: '',
-  bucketName: '',
-  regionName: '',
+  eventType: 'New CSV file',
   importedKeys: {},
 }
 
@@ -78,6 +69,7 @@ const team = [
 
 export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
   const [nodeContent, setNodeContent] = useState<EventNodeContent>(eventNodeDefaultContent)
+  const [nodeFormContent, setNodeFormContent] = useState<EventNodeContent>(eventNodeDefaultContent)
 
   // Initial data
   useEffect(() => {
@@ -135,12 +127,13 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
             <span className="inline-flex items-center rounded-md bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
               Event
             </span>
-            <div className="text-lg font-medium">New CSV Row in S3</div>
+            <div className="text-lg font-medium">{nodeContent.eventType}</div>
           </div>
           <div className="flex-1" />
           <div
             onClick={() => {
               setOpen(true)
+              setNodeFormContent(cloneDeep(nodeContent))
             }}>
             <FaEllipsisH />
           </div>
@@ -268,7 +261,14 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
                                       aria-describedby="public-access-description"
                                       type="radio"
                                       className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      defaultChecked
+                                      checked={nodeFormContent.eventType === 'New CSV file'}
+                                      onClick={() => {
+                                        setNodeFormContent(prev => {
+                                          const newFormContent = cloneDeep(prev)
+                                          newFormContent.eventType = 'New CSV file'
+                                          return newFormContent
+                                        })
+                                      }}
                                     />
                                   </div>
                                   <div className="pl-7 text-sm leading-6">
@@ -290,6 +290,14 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
                                       aria-describedby="restricted-access-description"
                                       type="radio"
                                       className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
+                                      checked={nodeFormContent.eventType === 'Updated CSV file'}
+                                      onClick={() => {
+                                        setNodeFormContent(prev => {
+                                          const newFormContent = cloneDeep(prev)
+                                          newFormContent.eventType = 'Updated CSV file'
+                                          return newFormContent
+                                        })
+                                      }}
                                     />
                                   </div>
                                   <div className="pl-7 text-sm leading-6">
@@ -311,6 +319,14 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
                                       aria-describedby="private-access-description"
                                       type="radio"
                                       className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
+                                      checked={nodeFormContent.eventType === 'Deleted CSV File'}
+                                      onClick={() => {
+                                        setNodeFormContent(prev => {
+                                          const newFormContent = cloneDeep(prev)
+                                          newFormContent.eventType = 'Deleted CSV File'
+                                          return newFormContent
+                                        })
+                                      }}
                                     />
                                   </div>
                                   <div className="pl-7 text-sm leading-6">
@@ -352,7 +368,13 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
                           <button
                             type="button"
                             className="inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            onClick={() => setOpen(false)}>
+                            onClick={() => {
+                              setOpen(false)
+                              setNodeContent(prev => {
+                                const newContent = cloneDeep(nodeFormContent)
+                                return newContent
+                              })
+                            }}>
                             Save
                           </button>
                         </div>
