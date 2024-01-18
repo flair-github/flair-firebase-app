@@ -47,11 +47,7 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
 
   return (
     <>
-      <div
-        style={{
-          width: 400,
-        }}
-        className="rounded-md border border-slate-300 bg-white p-3 shadow-md">
+      <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <img src="/images/data-sources/s3.svg" width={45} height={45} />
           <div>
