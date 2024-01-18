@@ -1,21 +1,13 @@
-import React, { type MutableRefObject, useEffect, useState } from 'react'
-import { GrFormClose } from 'react-icons/gr'
-import { Handle, Position } from 'reactflow'
-import { type NodeData, nodeContents } from './Registry'
-import { BiLogoAws } from 'react-icons/bi'
-import { NodeHeader } from '~/components/shared/NodeHeader'
-import { useAtomValue } from 'jotai'
-import { atomNodeExportedKeys } from '~/jotai/jotai'
-import { edgesAtom } from '../FlowEditor'
-import clsx from 'clsx'
-import { FaEllipsisH } from 'react-icons/fa'
-import { Fragment } from 'react'
+import React from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { LinkIcon, PlusIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
-import { Field } from '~/catalyst/fieldset'
-import { Select } from '~/catalyst/select'
 import cloneDeep from 'lodash/cloneDeep'
+import { Fragment, useEffect, useState } from 'react'
+import { FaEllipsisH } from 'react-icons/fa'
+import { Handle, Position } from 'reactflow'
+import { Select } from '~/catalyst/select'
+import { nodeContents, type NodeData } from './Registry'
 
 export interface EventNodeContent {
   nodeType: 'event-node'
@@ -50,29 +42,6 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
 
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
-
-  const nodeExportedKeys = useAtomValue(atomNodeExportedKeys)
-  const edges = useAtomValue(edgesAtom)
-
-  const keyOptions = React.useMemo(() => {
-    let newKeys: Record<string, boolean> = {}
-
-    const recursiveAssign = (nodeId: string) => {
-      const keyEdges = edges.filter(({ target }) => target === nodeId)
-      keyEdges.forEach(kE => {
-        newKeys = Object.assign(newKeys, nodeExportedKeys[kE.source] ?? {})
-        recursiveAssign(kE.source) // Recursive call
-      })
-    }
-
-    recursiveAssign(data.nodeId) // Start recursion from the initial nodeId
-
-    return newKeys
-  }, [edges, data.nodeId, nodeExportedKeys])
-
-  useEffect(() => {
-    setNodeContent(prev => ({ ...prev, importedKeys: keyOptions }))
-  }, [keyOptions])
 
   const [open, setOpen] = useState(false)
 
