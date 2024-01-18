@@ -10,11 +10,12 @@ import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 import { GrFormClose } from 'react-icons/gr'
 import { v4 } from 'uuid'
-import { Field, FieldGroup, Label } from '~/catalyst/fieldset'
+import { Description, Field, FieldGroup, Fieldset, Label, Legend } from '~/catalyst/fieldset'
 import { Input } from '~/catalyst/input'
 import { Textarea } from '~/catalyst/textarea'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/catalyst/table'
 import { Button } from '~/catalyst/button'
+import { Text } from '~/catalyst/text'
 
 type ColumnContent =
   | {
@@ -251,7 +252,6 @@ export const LLMProcessorHop = ({ data, noHandle }: { data: NodeData; noHandle?:
                                   <div className="flex">
                                     <Button
                                       onClick={() => {
-                                        // setAllowInteraction(false)
                                         ;(window as any)[
                                           'advanced-options-' + el.columnId
                                         ].showModal()
@@ -284,373 +284,358 @@ export const LLMProcessorHop = ({ data, noHandle }: { data: NodeData; noHandle?:
                                 <dialog
                                   id={'advanced-options-' + el.columnId}
                                   className="nowheel modal">
-                                  <form method="dialog" className="modal-box w-11/12 max-w-5xl">
-                                    <h3 className="text-lg font-bold">
-                                      Advanced Options: {el.name}
-                                    </h3>
+                                  <form method="dialog" className="modal-box w-11/12 max-w-xl">
+                                    <Fieldset>
+                                      <Legend>
+                                        Advanced Options{el.name && ':'} {el.name}
+                                      </Legend>
+                                      <Text>Further configurations for the prompt</Text>
+                                      <FieldGroup>
+                                        <Field>
+                                          <Label>Column Name</Label>
+                                          <Input
+                                            value={el.name}
+                                            onChange={e => {
+                                              const newText = e.target.value
 
-                                    {/* Column Name */}
-                                    <label className="label">
-                                      <span className="font-bold">Column Name</span>
-                                    </label>
-                                    <input
-                                      type="text"
-                                      className="input mb-3 w-full"
-                                      value={el.name}
-                                      onChange={e => {
-                                        const newText = e.target.value
-
-                                        if (typeof newText !== 'string') {
-                                          return
-                                        }
-
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.columns[index].name = newText
-                                          return newFormContent
-                                        })
-                                      }}
-                                      style={{ borderColor: 'black', resize: 'none' }}
-                                    />
-
-                                    {/* Instruction */}
-                                    <label className="label">
-                                      <span className="font-bold">Instruction</span>
-                                    </label>
-                                    <textarea
-                                      className="textarea textarea-bordered mb-3 w-full"
-                                      rows={2}
-                                      value={el.instruction}
-                                      onChange={e => {
-                                        const newText = e.target.value
-
-                                        if (typeof newText !== 'string') {
-                                          return
-                                        }
-
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.columns[index].instruction = newText
-                                          return newFormContent
-                                        })
-                                      }}
-                                      style={{ borderColor: 'black', resize: 'none' }}
-                                    />
-
-                                    {/* Contexts */}
-                                    <div className="mb-4 mt-1">
-                                      <label className="label">
-                                        <span className="font-semibold">Contexts</span>
-                                      </label>
-                                      <textarea
-                                        className="textarea textarea-bordered mb-3 w-full"
-                                        rows={2}
-                                        value={el.context}
-                                        onChange={e => {
-                                          const newText = e.target.value
-
-                                          if (typeof newText !== 'string') {
-                                            return
-                                          }
-
-                                          setNodeFormContent(prev => {
-                                            const newFormContent = cloneDeep(prev)
-                                            newFormContent.columns[index].context = newText
-                                            return newFormContent
-                                          })
-                                        }}
-                                        style={{ borderColor: 'black', resize: 'none' }}
-                                      />
-                                    </div>
-
-                                    {/* Prompt */}
-                                    <label className="label">
-                                      <span className="font-bold">Prompt</span>
-                                    </label>
-                                    <textarea
-                                      className="textarea textarea-bordered mb-3 w-full"
-                                      rows={2}
-                                      value={el.prompt}
-                                      onChange={e => {
-                                        const newText = e.target.value
-
-                                        if (typeof newText !== 'string') {
-                                          return
-                                        }
-
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.columns[index].prompt = newText
-                                          return newFormContent
-                                        })
-                                      }}
-                                      style={{ borderColor: 'black', resize: 'none' }}
-                                    />
-
-                                    {/* Prompt Strategy */}
-                                    <label className="label">
-                                      <span className="font-bold">Prompt Strategy</span>
-                                    </label>
-                                    <select
-                                      value={el.promptStrategy}
-                                      className="select mb-3 w-full border-black"
-                                      onChange={e => {
-                                        const newValue = e.target.value
-
-                                        if (typeof newValue !== 'string') {
-                                          return
-                                        }
-
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.columns[index].promptStrategy =
-                                            newValue as ColumnContent['promptStrategy']
-                                          return newFormContent
-                                        })
-                                      }}>
-                                      <option
-                                        value={'Default' satisfies ColumnContent['promptStrategy']}>
-                                        Default
-                                      </option>
-                                      <option
-                                        value={
-                                          'Chain-of-Thought' satisfies ColumnContent['promptStrategy']
-                                        }>
-                                        Chain-of-Thought
-                                      </option>
-                                      <option
-                                        value={
-                                          'Tree-of-Thought' satisfies ColumnContent['promptStrategy']
-                                        }>
-                                        Tree-of-Thought
-                                      </option>
-                                      <option
-                                        value={
-                                          'Consistency' satisfies ColumnContent['promptStrategy']
-                                        }>
-                                        Reflection
-                                      </option>
-                                      <option
-                                        value={
-                                          'Reflection' satisfies ColumnContent['promptStrategy']
-                                        }>
-                                        Consistency
-                                      </option>
-                                      <option
-                                        value={
-                                          'Reflection' satisfies ColumnContent['promptStrategy']
-                                        }>
-                                        Multi-hop Prompt
-                                      </option>
-                                      <option
-                                        value={
-                                          'QA Prompt' satisfies ColumnContent['promptStrategy']
-                                        }>
-                                        QA Prompt
-                                      </option>
-                                      <option
-                                        value={
-                                          'Few-shot' satisfies ColumnContent['promptStrategy']
-                                        }>
-                                        Few-shot
-                                      </option>
-                                      <option
-                                        value={'DSP' satisfies ColumnContent['promptStrategy']}>
-                                        DSP
-                                      </option>
-                                    </select>
-
-                                    {/* Model */}
-                                    <label className="label">
-                                      <span className="font-bold">Model</span>
-                                    </label>
-                                    <select
-                                      value={el.model}
-                                      className="select mb-3 w-full border-black"
-                                      onChange={e => {
-                                        const newValue = e.target.value
-                                        if (typeof newValue !== 'string') {
-                                          return
-                                        }
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.columns[index].model =
-                                            newValue as ColumnContent['model']
-                                          return newFormContent
-                                        })
-                                      }}>
-                                      <option
-                                        value={'gpt-3.5-turbo' satisfies ColumnContent['model']}>
-                                        gpt-3.5-turbo
-                                      </option>
-                                      <option value={'gpt-4' satisfies ColumnContent['model']}>
-                                        gpt-4
-                                      </option>
-                                      <option value={'falcon-40b' satisfies ColumnContent['model']}>
-                                        falcon-40b
-                                      </option>
-                                      <option value={'vicuna-13' satisfies ColumnContent['model']}>
-                                        vicuna-13
-                                      </option>
-                                      <option value={'claude' satisfies ColumnContent['model']}>
-                                        Claude
-                                      </option>
-                                      <option value={'bard' satisfies ColumnContent['model']}>
-                                        Bard
-                                      </option>
-                                    </select>
-
-                                    {/* Column Type */}
-                                    <label className="label">
-                                      <span className="font-bold">Column Type</span>
-                                    </label>
-                                    <select
-                                      value={el.type}
-                                      className="select mb-3 w-full border-black"
-                                      onChange={e => {
-                                        const newValue = e.target.value
-
-                                        if (typeof newValue !== 'string') {
-                                          return
-                                        }
-
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          if (newFormContent.columns[index].type === 'number') {
-                                            delete (newFormContent.columns[index] as any).min
-                                            delete (newFormContent.columns[index] as any).max
-                                          }
-                                          if (newFormContent.columns[index].type === 'category') {
-                                            delete (newFormContent.columns[index] as any).options
-                                          }
-                                          newFormContent.columns[index].type =
-                                            newValue as ColumnContent['type']
-                                          return newFormContent
-                                        })
-                                      }}>
-                                      <option value={'text' satisfies ColumnContent['type']}>
-                                        Text
-                                      </option>
-                                      <option value={'list' satisfies ColumnContent['type']}>
-                                        List
-                                      </option>
-                                      <option value={'number' satisfies ColumnContent['type']}>
-                                        Number
-                                      </option>
-                                      <option value={'category' satisfies ColumnContent['type']}>
-                                        Category
-                                      </option>
-                                    </select>
-
-                                    {el.type === 'category' && (
-                                      <>
-                                        {/* Categories */}
-                                        <label className="label">
-                                          <span className="font-bold">
-                                            Categories (comma seperated)
-                                          </span>
-                                        </label>
-                                        <textarea
-                                          className="textarea textarea-bordered mb-3 w-full"
-                                          rows={2}
-                                          value={el.options}
-                                          onChange={e => {
-                                            const newText = e.target.value
-
-                                            if (typeof newText !== 'string') {
-                                              return
-                                            }
-
-                                            setNodeFormContent(prev => {
-                                              const newFormContent = cloneDeep(prev)
-                                              const newColumn = newFormContent.columns[index]
-
-                                              if (newColumn.type === 'category') {
-                                                newColumn.options = newText
+                                              if (typeof newText !== 'string') {
+                                                return
                                               }
 
-                                              return newFormContent
-                                            })
-                                          }}
-                                          style={{ borderColor: 'black', resize: 'none' }}
-                                        />
-                                      </>
-                                    )}
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.columns[index].name = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </Field>
+                                        <Field>
+                                          <Label>Instruction</Label>
+                                          <Textarea
+                                            value={el.instruction}
+                                            onChange={e => {
+                                              const newText = e.target.value
 
-                                    {el.type === 'number' && (
-                                      <>
-                                        <div className="flex">
-                                          <div className="mr-1 flex-1">
-                                            <label className="label">
-                                              <span className="font-bold">Min</span>
-                                            </label>
-                                            <input
-                                              type="text"
-                                              pattern="[0-9]*"
-                                              className="input mb-3 w-full border-black"
-                                              value={el.min}
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.columns[index].instruction = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </Field>
+                                        <Field>
+                                          <Label>Context</Label>
+                                          <Textarea
+                                            value={el.context}
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.columns[index].context = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </Field>
+                                        <Field>
+                                          <Label>Prompt</Label>
+                                          <Textarea
+                                            value={el.prompt}
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.columns[index].prompt = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </Field>
+                                        <Field>
+                                          <Label>Prompt Strategy</Label>
+                                          <Select
+                                            value={el.promptStrategy}
+                                            onChange={e => {
+                                              const newValue = e.target.value
+
+                                              if (typeof newValue !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.columns[index].promptStrategy =
+                                                  newValue as ColumnContent['promptStrategy']
+                                                return newFormContent
+                                              })
+                                            }}>
+                                            <option
+                                              value={
+                                                'Default' satisfies ColumnContent['promptStrategy']
+                                              }>
+                                              Default
+                                            </option>
+                                            <option
+                                              value={
+                                                'Chain-of-Thought' satisfies ColumnContent['promptStrategy']
+                                              }>
+                                              Chain-of-Thought
+                                            </option>
+                                            <option
+                                              value={
+                                                'Tree-of-Thought' satisfies ColumnContent['promptStrategy']
+                                              }>
+                                              Tree-of-Thought
+                                            </option>
+                                            <option
+                                              value={
+                                                'Consistency' satisfies ColumnContent['promptStrategy']
+                                              }>
+                                              Reflection
+                                            </option>
+                                            <option
+                                              value={
+                                                'Reflection' satisfies ColumnContent['promptStrategy']
+                                              }>
+                                              Consistency
+                                            </option>
+                                            <option
+                                              value={
+                                                'Reflection' satisfies ColumnContent['promptStrategy']
+                                              }>
+                                              Multi-hop Prompt
+                                            </option>
+                                            <option
+                                              value={
+                                                'QA Prompt' satisfies ColumnContent['promptStrategy']
+                                              }>
+                                              QA Prompt
+                                            </option>
+                                            <option
+                                              value={
+                                                'Few-shot' satisfies ColumnContent['promptStrategy']
+                                              }>
+                                              Few-shot
+                                            </option>
+                                            <option
+                                              value={
+                                                'DSP' satisfies ColumnContent['promptStrategy']
+                                              }>
+                                              DSP
+                                            </option>
+                                          </Select>
+                                        </Field>
+                                        <Field>
+                                          <Label>Model</Label>
+                                          <Select
+                                            value={el.model}
+                                            onChange={e => {
+                                              const newValue = e.target.value
+                                              if (typeof newValue !== 'string') {
+                                                return
+                                              }
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.columns[index].model =
+                                                  newValue as ColumnContent['model']
+                                                return newFormContent
+                                              })
+                                            }}>
+                                            <option
+                                              value={
+                                                'gpt-3.5-turbo' satisfies ColumnContent['model']
+                                              }>
+                                              gpt-3.5-turbo
+                                            </option>
+                                            <option
+                                              value={'gpt-4' satisfies ColumnContent['model']}>
+                                              gpt-4
+                                            </option>
+                                            <option
+                                              value={'falcon-40b' satisfies ColumnContent['model']}>
+                                              falcon-40b
+                                            </option>
+                                            <option
+                                              value={'vicuna-13' satisfies ColumnContent['model']}>
+                                              vicuna-13
+                                            </option>
+                                            <option
+                                              value={'claude' satisfies ColumnContent['model']}>
+                                              Claude
+                                            </option>
+                                            <option value={'bard' satisfies ColumnContent['model']}>
+                                              Bard
+                                            </option>
+                                          </Select>
+                                        </Field>
+                                        <Field>
+                                          <Label>Column Type</Label>
+                                          <Select
+                                            value={el.type}
+                                            onChange={e => {
+                                              const newValue = e.target.value
+
+                                              if (typeof newValue !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                if (
+                                                  newFormContent.columns[index].type === 'number'
+                                                ) {
+                                                  delete (newFormContent.columns[index] as any).min
+                                                  delete (newFormContent.columns[index] as any).max
+                                                }
+                                                if (
+                                                  newFormContent.columns[index].type === 'category'
+                                                ) {
+                                                  delete (newFormContent.columns[index] as any)
+                                                    .options
+                                                }
+                                                newFormContent.columns[index].type =
+                                                  newValue as ColumnContent['type']
+                                                return newFormContent
+                                              })
+                                            }}>
+                                            <option value={'text' satisfies ColumnContent['type']}>
+                                              Text
+                                            </option>
+                                            <option value={'list' satisfies ColumnContent['type']}>
+                                              List
+                                            </option>
+                                            <option
+                                              value={'number' satisfies ColumnContent['type']}>
+                                              Number
+                                            </option>
+                                            <option
+                                              value={'category' satisfies ColumnContent['type']}>
+                                              Category
+                                            </option>
+                                          </Select>
+                                        </Field>
+
+                                        {el.type === 'category' && (
+                                          <Field>
+                                            <Label>Categories (comma seperated)</Label>
+                                            <Textarea
+                                              value={el.options}
                                               onChange={e => {
-                                                const newText = e.target.value as any
-                                                const newNum = Number(newText)
+                                                const newText = e.target.value
+
+                                                if (typeof newText !== 'string') {
+                                                  return
+                                                }
 
                                                 setNodeFormContent(prev => {
                                                   const newFormContent = cloneDeep(prev)
                                                   const newColumn = newFormContent.columns[index]
 
-                                                  if (newColumn.type === 'number') {
-                                                    if (isFinite(newNum)) {
-                                                      newColumn.min = newNum
-                                                    } else {
-                                                      newColumn.min = 0
-                                                    }
+                                                  if (newColumn.type === 'category') {
+                                                    newColumn.options = newText
                                                   }
 
                                                   return newFormContent
                                                 })
                                               }}
-                                              style={{ borderColor: 'black', resize: 'none' }}
                                             />
-                                          </div>
-                                          <div className="ml-1 flex-1">
-                                            <label className="label">
-                                              <span className="font-bold">Max</span>
-                                            </label>
-                                            <input
-                                              type="text"
-                                              pattern="[0-9]*"
-                                              className="input mb-3 w-full border-black"
-                                              value={el.max}
-                                              onChange={e => {
-                                                const newText = e.target.value as any
-                                                const newNum = Number(newText)
+                                          </Field>
+                                        )}
 
-                                                setNodeFormContent(prev => {
-                                                  const newFormContent = cloneDeep(prev)
-                                                  const newColumn = newFormContent.columns[index]
+                                        {el.type === 'number' && (
+                                          <>
+                                            <div className="flex">
+                                              <div className="mr-1 flex-1">
+                                                <Field>
+                                                  <Label>Min</Label>
+                                                  <Input
+                                                    pattern="[0-9]*"
+                                                    value={el.min}
+                                                    onChange={e => {
+                                                      const newText = e.target.value as any
+                                                      const newNum = Number(newText)
 
-                                                  if (newColumn.type === 'number') {
-                                                    if (isFinite(newNum)) {
-                                                      newColumn.max = newNum
-                                                    } else {
-                                                      newColumn.max = 0
-                                                    }
-                                                  }
+                                                      setNodeFormContent(prev => {
+                                                        const newFormContent = cloneDeep(prev)
+                                                        const newColumn =
+                                                          newFormContent.columns[index]
 
-                                                  return newFormContent
-                                                })
-                                              }}
-                                              style={{ borderColor: 'black', resize: 'none' }}
-                                            />
-                                          </div>
-                                        </div>
-                                      </>
-                                    )}
+                                                        if (newColumn.type === 'number') {
+                                                          if (isFinite(newNum)) {
+                                                            newColumn.min = newNum
+                                                          } else {
+                                                            newColumn.min = 0
+                                                          }
+                                                        }
+
+                                                        return newFormContent
+                                                      })
+                                                    }}
+                                                  />
+                                                </Field>
+                                              </div>
+                                              <div className="ml-1 flex-1">
+                                                <Field>
+                                                  <Label>Max</Label>
+                                                  <Input
+                                                    pattern="[0-9]*"
+                                                    value={el.max}
+                                                    onChange={e => {
+                                                      const newText = e.target.value as any
+                                                      const newNum = Number(newText)
+
+                                                      setNodeFormContent(prev => {
+                                                        const newFormContent = cloneDeep(prev)
+                                                        const newColumn =
+                                                          newFormContent.columns[index]
+
+                                                        if (newColumn.type === 'number') {
+                                                          if (isFinite(newNum)) {
+                                                            newColumn.max = newNum
+                                                          } else {
+                                                            newColumn.max = 0
+                                                          }
+                                                        }
+
+                                                        return newFormContent
+                                                      })
+                                                    }}
+                                                  />
+                                                </Field>
+                                              </div>
+                                            </div>
+                                          </>
+                                        )}
+                                      </FieldGroup>
+                                    </Fieldset>
 
                                     <div className="modal-action">
                                       {/* if there is a button in form, it will close the modal */}
-                                      <button className="btn" onClick={() => {}}>
+                                      <Button
+                                        color="blue"
+                                        onClick={() => {
+                                          ;(window as any)[
+                                            'advanced-options-' + el.columnId
+                                          ].close()
+                                        }}>
                                         Close
-                                      </button>
+                                      </Button>
                                     </div>
                                   </form>
                                 </dialog>
