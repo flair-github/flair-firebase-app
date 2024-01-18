@@ -114,7 +114,7 @@ export const LLMProcessorHop = ({ data, noHandle }: { data: NodeData; noHandle?:
               Transform
             </span>
             <div className="text-lg font-medium">LLM Processor</div>
-            <div className="">
+            <div>
               {nodeContent.columns.length} Prompt{nodeContent.columns.length >= 2 && 's'}
             </div>
           </div>
