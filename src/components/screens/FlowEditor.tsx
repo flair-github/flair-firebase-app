@@ -490,7 +490,7 @@ data_exporters:
       color: 'slate',
       members: [
         {
-          title: 'Data Source S3',
+          title: 'Data Source: S3',
           handleOnClick: () => {
             addNode('data-source-s3-hop', 'DataSourceS3Hop')
           },
