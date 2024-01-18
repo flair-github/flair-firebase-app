@@ -19,6 +19,7 @@ type ColumnContent =
       instruction: string
       importedKeys: Record<string, boolean>
       prompt: string
+      context: string
     }
   | {
       columnId: string
@@ -29,6 +30,7 @@ type ColumnContent =
       instruction: string
       importedKeys: Record<string, boolean>
       prompt: string
+      context: string
     }
   | {
       columnId: string
@@ -40,6 +42,7 @@ type ColumnContent =
       instruction: string
       importedKeys: Record<string, boolean>
       prompt: string
+      context: string
     }
   | {
       name: string
@@ -52,6 +55,7 @@ type ColumnContent =
       instruction: string
       importedKeys: Record<string, boolean>
       prompt: string
+      context: string
     }
 
 export interface LLMProcessorNodeContent {
@@ -244,7 +248,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
 
             {/* Advanced Options Modal */}
             <dialog id={'advanced-options-' + el.columnId} className="nowheel modal">
-              <form method="dialog" className="max-w-5xl modal-box w-11/12">
+              <form method="dialog" className="modal-box w-11/12 max-w-5xl">
                 <h3 className="text-lg font-bold">Advanced Options: {el.name}</h3>
 
                 {/* Column Name */}
@@ -301,11 +305,30 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                 />
 
                 {/* Contexts */}
-                {/* <div className="mb-4 mt-1">
+                <div className="mb-4 mt-1">
                   <label className="label">
                     <span className="font-semibold">Contexts</span>
                   </label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <textarea
+                    className="textarea textarea-bordered mb-3 w-full"
+                    rows={2}
+                    value={el.context}
+                    onChange={e => {
+                      const newText = e.target.value
+
+                      if (typeof newText !== 'string') {
+                        return
+                      }
+
+                      setColumns(prev => {
+                        const newColumns = [...prev]
+                        newColumns[index].context = newText
+                        return newColumns
+                      })
+                    }}
+                    style={{ borderColor: 'black', resize: 'none' }}
+                  />
+                  {/* <div className="grid grid-cols-3 gap-2">
                     {Object.keys(keyOptions ? keyOptions : {}).map((localKey, i) => {
                       return (
                         <div key={i} className="join border">
@@ -339,8 +362,8 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                         </div>
                       )
                     })}
-                  </div>
-                </div> */}
+                  </div> */}
+                </div>
 
                 {/* Prompt */}
                 <label className="label">
@@ -620,6 +643,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                 instruction: '',
                 name: '',
                 prompt: '',
+                context: '',
                 importedKeys: {},
               },
             ])
