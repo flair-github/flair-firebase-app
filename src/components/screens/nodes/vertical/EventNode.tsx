@@ -7,7 +7,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, type NodeData } from './Registry'
+import { nodeContents, type NodeData } from '../Registry'
 
 export interface EventNodeContent {
   nodeType: 'event-node'
