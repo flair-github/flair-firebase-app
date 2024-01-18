@@ -83,8 +83,12 @@ export const nodeTypes = {
   DataRetrieverApiNode,
   ConditionalLogicNode,
   DataExtractorAggregatorNode,
-  EventNode,
+
+  // Hops
+  DataSourceS3Hop,
+  LLMProcessorHop,
 }
+
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
 import { RiListSettingsLine, RiRobotLine, RiArrowRightLine, RiFileUploadLine } from 'react-icons/ri'
 import {
@@ -121,7 +125,8 @@ import {
 } from 'react-icons/bs'
 import { MdEmail, MdThunderstorm } from 'react-icons/md'
 import { HiOutlineRocketLaunch } from 'react-icons/hi2'
-import { EventNode } from './nodes/vertical/DataSourceS3Hop'
+import { DataSourceS3Hop, DataSourceS3HopContent } from './nodes/vertical/DataSourceS3Hop'
+import { LLMProcessorHop } from './nodes/vertical/LLMProcessorHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -734,9 +739,16 @@ data_exporters:
       color: 'pink',
       members: [
         {
-          title: 'Event Node',
+          title: 'Data Source S3',
           handleOnClick: () => {
-            addNode('event-node', 'EventNode')
+            addNode('data-source-s3-hop', 'DataSourceS3Hop')
+          },
+          icon: BsLightning,
+        },
+        {
+          title: 'LLM Processor',
+          handleOnClick: () => {
+            addNode('llm-processor-hop', 'LLMProcessorHop')
           },
           icon: BsLightning,
         },

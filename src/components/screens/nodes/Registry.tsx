@@ -28,7 +28,8 @@ import { DataExporterGmailNodeContent } from './DataExporterGmail'
 import { DataRetrieverApiNodeContent } from './DataRetrieverAPI'
 import { ConditionalLogicNodeContent } from './ConditionalLogicNode'
 import { DataExtractorAggregatorNodeContent } from './DataExtractorAggregatorNode'
-import { DataSourceS3Hop } from './vertical/DataSourceS3Hop'
+import { DataSourceS3HopContent } from './vertical/DataSourceS3Hop'
+import { LLMProcessorHopContent } from './vertical/LLMProcessorHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -59,7 +60,10 @@ export type NodeContent =
   | DataExporterGmailNodeContent
   | DataRetrieverApiNodeContent
   | DataExtractorAggregatorNodeContent
-  | DataSourceS3Hop
+
+  // New Vertical Hops
+  | DataSourceS3HopContent
+  | LLMProcessorHopContent
 
 export interface NodeData {
   nodeId: string
