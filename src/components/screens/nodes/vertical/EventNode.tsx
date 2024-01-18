@@ -69,6 +69,19 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
             <FaEllipsisH />
           </div>
         </div>
+        {/* {!noHandle && (
+          <Handle
+            type="target"
+            position={Position.Top}
+            style={{
+              top: -7,
+              width: 14,
+              height: 14,
+              background: 'rgb(148 163 184)',
+            }}
+            id="out"
+          />
+        )} */}
         {!noHandle && (
           <Handle
             type="source"
@@ -80,19 +93,6 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
               background: 'rgb(148 163 184)',
             }}
             id="in"
-          />
-        )}
-        {!noHandle && (
-          <Handle
-            type="target"
-            position={Position.Top}
-            style={{
-              top: -7,
-              width: 14,
-              height: 14,
-              background: 'rgb(148 163 184)',
-            }}
-            id="out"
           />
         )}
       </div>
