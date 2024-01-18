@@ -485,6 +485,48 @@ data_exporters:
 
   const nodeClassifications = [
     {
+      title: 'Events and Actions',
+      subtitle: 'Event and action based nodes.',
+      color: 'slate',
+      members: [
+        {
+          title: 'Data Source S3',
+          handleOnClick: () => {
+            addNode('data-source-s3-hop', 'DataSourceS3Hop')
+          },
+          icon: BiLogoAws,
+        },
+        {
+          title: 'LLM Processor',
+          handleOnClick: () => {
+            addNode('llm-processor-hop', 'LLMProcessorHop')
+          },
+          icon: BsLightning,
+        },
+      ],
+    },
+    {
+      title: 'LLM Processor',
+      subtitle: 'Transforms your data using your choice of LLM and prompts.',
+      color: 'blue',
+      members: [
+        {
+          title: 'LLM Processor',
+          handleOnClick: () => {
+            addNode('llm-processor', 'LLMProcessorNode')
+          },
+          icon: RiRobotLine,
+        },
+        {
+          title: 'Aggregator',
+          handleOnClick: () => {
+            addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
+          },
+          icon: BsArrowsAngleContract,
+        },
+      ],
+    },
+    {
       title: 'Data Source',
       subtitle: 'Load unstructured data from a data source.',
       color: 'purple',
@@ -608,27 +650,6 @@ data_exporters:
     //   ],
     // },
     {
-      title: 'LLM Processor',
-      subtitle: 'Transforms your data using your choice of LLM and prompts.',
-      color: 'blue',
-      members: [
-        {
-          title: 'LLM Processor',
-          handleOnClick: () => {
-            addNode('llm-processor', 'LLMProcessorNode')
-          },
-          icon: RiRobotLine,
-        },
-        {
-          title: 'Aggregator',
-          handleOnClick: () => {
-            addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
-          },
-          icon: BsArrowsAngleContract,
-        },
-      ],
-    },
-    {
       title: 'Control Flow',
       subtitle: 'Control flow and logical branching.',
       color: 'rose',
@@ -730,27 +751,6 @@ data_exporters:
             addNode('data-exporter-api', 'DataExporterAPINode')
           },
           icon: AiFillApi,
-        },
-      ],
-    },
-    {
-      title: 'Event',
-      subtitle: 'Event Nodes',
-      color: 'pink',
-      members: [
-        {
-          title: 'Data Source S3',
-          handleOnClick: () => {
-            addNode('data-source-s3-hop', 'DataSourceS3Hop')
-          },
-          icon: BsLightning,
-        },
-        {
-          title: 'LLM Processor',
-          handleOnClick: () => {
-            addNode('llm-processor-hop', 'LLMProcessorHop')
-          },
-          icon: BsLightning,
         },
       ],
     },
