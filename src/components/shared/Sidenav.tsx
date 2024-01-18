@@ -21,7 +21,7 @@ const navigation: {
   children?: { name: string; href: string }[]
 }[] = [
   { name: 'Flow', href: '/', icon: RiFlowChart },
-  { name: 'Deployment', href: '/deployment', icon: HiOutlineRocketLaunch },
+  // { name: 'Deployment', href: '/deployment', icon: HiOutlineRocketLaunch },
   { name: 'Executions', href: '/result', icon: AiTwotoneExperiment },
   // { name: 'Script', href: '/transcription', icon: CgTranscript },
   // {

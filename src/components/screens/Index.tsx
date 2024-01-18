@@ -17,6 +17,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { TiFlowMerge } from 'react-icons/ti'
+import { Switch } from '~/catalyst/switch'
 
 function Index() {
   const userData = useAtomValue(atomUserData)
@@ -183,15 +184,14 @@ function Index() {
                     <li
                       key={myflow.workflowId}
                       className="flex items-center justify-between gap-x-6 py-5">
-                      <div
-                        className="flex min-w-0 cursor-pointer gap-2"
-                        onClick={() => {
-                          openWorkflow(myflow.workflowId)
-                        }}>
+                      <div className="flex min-w-0 cursor-pointer gap-2">
                         <div className="flex w-11 items-center justify-center">
-                          <TiFlowMerge size={28} className="text-slate-600" />
+                          <Switch color="blue" defaultChecked />
                         </div>
-                        <div>
+                        <div
+                          onClick={() => {
+                            openWorkflow(myflow.workflowId)
+                          }}>
                           <div className="flex items-start gap-x-3">
                             <p className="text-sm font-semibold leading-6 text-gray-900">
                               {myflow.workflowTitle}
