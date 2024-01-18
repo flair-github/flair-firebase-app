@@ -28,7 +28,7 @@ import { DataExporterGmailNodeContent } from './DataExporterGmail'
 import { DataRetrieverApiNodeContent } from './DataRetrieverAPI'
 import { ConditionalLogicNodeContent } from './ConditionalLogicNode'
 import { DataExtractorAggregatorNodeContent } from './DataExtractorAggregatorNode'
-import { EventNodeContent } from './vertical/EventNode'
+import { DataSourceS3Hop } from './vertical/DataSourceS3Hop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -59,7 +59,7 @@ export type NodeContent =
   | DataExporterGmailNodeContent
   | DataRetrieverApiNodeContent
   | DataExtractorAggregatorNodeContent
-  | EventNodeContent
+  | DataSourceS3Hop
 
 export interface NodeData {
   nodeId: string

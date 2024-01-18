@@ -9,25 +9,25 @@ import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 
-export interface EventNodeContent {
-  nodeType: 'event-node'
+export interface DataSourceS3Hop {
+  nodeType: 'data-source-s3-hop'
   eventType: 'New CSV file' | 'Updated CSV file' | 'Deleted CSV File'
   importedKeys: Record<string, boolean>
 }
 
-export const eventNodeDefaultContent: EventNodeContent = {
-  nodeType: 'event-node',
+export const eventNodeDefaultContent: DataSourceS3Hop = {
+  nodeType: 'data-source-s3-hop',
   eventType: 'New CSV file',
   importedKeys: {},
 }
 
 export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<EventNodeContent>(eventNodeDefaultContent)
-  const [nodeFormContent, setNodeFormContent] = useState<EventNodeContent>(eventNodeDefaultContent)
+  const [nodeContent, setNodeContent] = useState<DataSourceS3Hop>(eventNodeDefaultContent)
+  const [nodeFormContent, setNodeFormContent] = useState<DataSourceS3Hop>(eventNodeDefaultContent)
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'event-node') {
+    if (data.initialContents.nodeType === 'data-source-s3-hop') {
       setNodeContent({
         ...data.initialContents,
       })
@@ -36,7 +36,7 @@ export const EventNode = ({ data, noHandle }: { data: NodeData; noHandle?: boole
 
   // Copy node data to cache
   useEffect(() => {
-    const cache: EventNodeContent = {
+    const cache: DataSourceS3Hop = {
       ...nodeContent,
     }
 

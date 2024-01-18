@@ -121,7 +121,7 @@ import {
 } from 'react-icons/bs'
 import { MdEmail, MdThunderstorm } from 'react-icons/md'
 import { HiOutlineRocketLaunch } from 'react-icons/hi2'
-import { EventNode } from './nodes/vertical/EventNode'
+import { EventNode } from './nodes/vertical/DataSourceS3Hop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
