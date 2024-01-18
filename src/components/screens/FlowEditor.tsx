@@ -87,6 +87,7 @@ export const nodeTypes = {
   // Hops
   DataSourceS3Hop,
   LLMProcessorHop,
+  DataExporterGmailHop,
 }
 
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
@@ -127,6 +128,7 @@ import { MdEmail, MdThunderstorm } from 'react-icons/md'
 import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 import { DataSourceS3Hop, DataSourceS3HopContent } from './nodes/vertical/DataSourceS3Hop'
 import { LLMProcessorHop } from './nodes/vertical/LLMProcessorHop'
+import { DataExporterGmailHop } from './nodes/vertical/DataExporterGmailHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -502,6 +504,13 @@ data_exporters:
             addNode('llm-processor-hop', 'LLMProcessorHop')
           },
           icon: BsLightning,
+        },
+        {
+          title: 'Data Exporter: Gmail',
+          handleOnClick: () => {
+            addNode('data-exporter-gmail-hop', 'DataExporterGmailHop')
+          },
+          icon: BiLogoGmail,
         },
       ],
     },

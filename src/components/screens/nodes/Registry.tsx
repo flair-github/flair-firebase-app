@@ -30,6 +30,7 @@ import { ConditionalLogicNodeContent } from './ConditionalLogicNode'
 import { DataExtractorAggregatorNodeContent } from './DataExtractorAggregatorNode'
 import { DataSourceS3HopContent } from './vertical/DataSourceS3Hop'
 import { LLMProcessorHopContent } from './vertical/LLMProcessorHop'
+import { DataExporterGmailHopContent } from './vertical/DataExporterGmailHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -64,6 +65,7 @@ export type NodeContent =
   // New Vertical Hops
   | DataSourceS3HopContent
   | LLMProcessorHopContent
+  | DataExporterGmailHopContent
 
 export interface NodeData {
   nodeId: string
