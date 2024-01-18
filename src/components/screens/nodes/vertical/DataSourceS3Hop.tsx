@@ -32,18 +32,13 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
   // Initial data
   useEffect(() => {
     if (data.initialContents.nodeType === 'data-source-s3-hop') {
-      setNodeContent({
-        ...data.initialContents,
-      })
+      setNodeContent(cloneDeep(data.initialContents))
     }
   }, [data.initialContents])
 
   // Copy node data to cache
   useEffect(() => {
-    const cache: DataSourceS3HopContent = {
-      ...nodeContent,
-    }
-
+    const cache = cloneDeep(nodeContent)
     nodeContents.current[data.nodeId] = cache
   }, [data.nodeId, nodeContent])
 
