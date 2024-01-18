@@ -16,6 +16,7 @@ import { Textarea } from '~/catalyst/textarea'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/catalyst/table'
 import { Button } from '~/catalyst/button'
 import { Text } from '~/catalyst/text'
+import { FaBoltLightning } from 'react-icons/fa6'
 
 type ColumnContent =
   | {
@@ -105,12 +106,17 @@ export const LLMProcessorHop = ({ data, noHandle }: { data: NodeData; noHandle?:
     <>
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
-          <img src="/images/data-sources/s3.svg" width={45} height={45} />
+          <div className="flex w-10 items-center justify-center">
+            <FaBoltLightning size={40} className="text-slate-600" />
+          </div>
           <div>
-            <span className="inline-flex items-center rounded-md bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+            <span className="inline-flex items-center rounded-md bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
               Transform
             </span>
             <div className="text-lg font-medium">LLM Processor</div>
+            <div className="">
+              {nodeContent.columns.length} Prompt{nodeContent.columns.length >= 2 && 's'}
+            </div>
           </div>
           <div className="flex-1" />
           <div
