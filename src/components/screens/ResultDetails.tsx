@@ -1,7 +1,7 @@
 import React, { useMemo, SyntheticEvent, useEffect } from 'react'
 import { useState } from 'react'
 import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
-import { PiFileCsvFill } from 'react-icons/pi'
+import { PiFileCsvFill, PiTableBold } from 'react-icons/pi'
 import { ImFilesEmpty } from 'react-icons/im'
 import { CodeBlock } from 'react-code-blocks'
 import useFirestoreDoc from '~/lib/useFirestoreDoc'
@@ -397,7 +397,7 @@ const ResultDetails = ({ id }: { id?: string }) => {
                 <section className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">Output Files</dt>
                   <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {data?.outputData && (
+                    {/* {data?.outputData && (
                       <ul
                         role="list"
                         className="divide-y divide-gray-100 rounded-md border border-gray-200">
@@ -426,7 +426,29 @@ const ResultDetails = ({ id }: { id?: string }) => {
                           </li>
                         ))}
                       </ul>
-                    )}
+                    )} */}
+                    <ul
+                      role="list"
+                      className="divide-y divide-gray-100 rounded-md border border-gray-200">
+                      <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                        <div className="flex w-0 flex-1 items-center">
+                          <PiTableBold className="h-5 w-5 shrink-0 text-gray-400" />
+                          <div className="ml-4 flex min-w-0 flex-1 gap-2 overflow-hidden">
+                            <p className="truncate font-medium">FUB call metadata</p>
+                          </div>
+                        </div>
+                        <div className="ml-4 shrink-0">
+                          <a
+                            target="_blank"
+                            href={
+                              'https://docs.google.com/spreadsheets/d/19uYCfSJF3j7hVz4tDtQSwIKuq-6LoegEGq9ctYKOhLA/edit#gid=0'
+                            }
+                            className="font-medium text-primary hover:text-primary/80">
+                            Open
+                          </a>
+                        </div>
+                      </li>
+                    </ul>
                   </dd>
                 </section>
                 {/* Result files */}
@@ -436,7 +458,7 @@ const ResultDetails = ({ id }: { id?: string }) => {
                     {data?.resultData && (
                       <ul
                         role="list"
-                        className="divide-y divide-gray-100 rounded-md border border-gray-200">
+                        className="divide-y divide-gray-100 rounded-md border border-gray-200 empty:hidden">
                         {Object.entries(data.resultData).map(([key, url]) => (
                           <li
                             key={key}
@@ -444,7 +466,7 @@ const ResultDetails = ({ id }: { id?: string }) => {
                             <div className="flex w-0 flex-1 items-center">
                               <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
                               <div
-                                className="min-w-0 ml-4 flex flex-1 gap-2 overflow-hidden"
+                                className="ml-4 flex min-w-0 flex-1 gap-2 overflow-hidden"
                                 style={{ direction: 'rtl' }}>
                                 <p className="truncate font-medium">
                                   {getFilenameFromURL(url, key)}
