@@ -11,7 +11,7 @@ import { nodeContents, type NodeData } from '../Registry'
 
 export interface DataSourceS3HopContent {
   nodeType: 'data-source-s3-hop'
-  eventType: 'New CSV file' | 'Updated CSV file' | 'Deleted CSV File'
+  eventType: 'New CSV file' | 'Updated CSV file'
   importedKeys: Record<string, boolean>
 }
 
@@ -53,9 +53,9 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-              Event
+              Source
             </span>
-            <div className="text-lg font-medium">{nodeContent.eventType}</div>
+            <div className="text-lg font-medium">Import data from S3</div>
           </div>
           <div className="flex-1" />
           <div
@@ -127,7 +127,7 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                S3 Node
+                                S3 Source
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new
@@ -147,9 +147,9 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                           </div>
                         </div>
 
-                        {/* Divider container */}
+                        {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
-                          {/* Project name */}
+                          {/* Credential */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label
@@ -168,12 +168,7 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                             </div>
                           </div>
 
-                          {/* Project description */}
-
-                          {/* Team members */}
-                          {/* Deleted */}
-
-                          {/* Privacy */}
+                          {/* Event Type */}
                           <fieldset className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div
                               className="text-sm font-medium leading-6 text-gray-900"
@@ -237,35 +232,6 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                                     </label>
                                     <p id="restricted-access-description" className="text-gray-500">
                                       An existing CSV file is deleted in S3
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex h-6 items-center">
-                                    <input
-                                      id="private-access"
-                                      name="privacy"
-                                      aria-describedby="private-access-description"
-                                      type="radio"
-                                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.eventType === 'Deleted CSV File'}
-                                      onClick={() => {
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.eventType = 'Deleted CSV File'
-                                          return newFormContent
-                                        })
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm leading-6">
-                                    <label
-                                      htmlFor="private-access"
-                                      className="font-medium text-gray-900">
-                                      Deleted CSV File
-                                    </label>
-                                    <p id="private-access-description" className="text-gray-500">
-                                      A CSV file is deleted in S3
                                     </p>
                                   </div>
                                 </div>
