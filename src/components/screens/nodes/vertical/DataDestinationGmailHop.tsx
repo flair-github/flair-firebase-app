@@ -9,37 +9,37 @@ import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 
-export interface DataExporterGmailHopContent {
-  nodeType: 'data-exporter-gmail-hop'
+export interface DataDestinationGmailHopContent {
+  nodeType: 'data-destination-gmail-hop'
   to: string
   subject: string
   prompt: string
 }
 
-export const dataExporterGmailHopDefaultContent: DataExporterGmailHopContent = {
-  nodeType: 'data-exporter-gmail-hop',
+export const dataDestinationGmailHopDefaultContent: DataDestinationGmailHopContent = {
+  nodeType: 'data-destination-gmail-hop',
   to: '',
   subject: '',
   prompt: '',
 }
 
-export const DataExporterGmailHop = ({
+export const DataDestinationGmailHop = ({
   data,
   noHandle,
 }: {
   data: NodeData
   noHandle?: boolean
 }) => {
-  const [nodeContent, setNodeContent] = useState<DataExporterGmailHopContent>(
-    dataExporterGmailHopDefaultContent,
+  const [nodeContent, setNodeContent] = useState<DataDestinationGmailHopContent>(
+    dataDestinationGmailHopDefaultContent,
   )
-  const [nodeFormContent, setNodeFormContent] = useState<DataExporterGmailHopContent>(
-    dataExporterGmailHopDefaultContent,
+  const [nodeFormContent, setNodeFormContent] = useState<DataDestinationGmailHopContent>(
+    dataDestinationGmailHopDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-exporter-gmail-hop') {
+    if (data.initialContents.nodeType === 'data-destination-gmail-hop') {
       setNodeContent(cloneDeep(data.initialContents))
     }
   }, [data.initialContents])
@@ -61,7 +61,7 @@ export const DataExporterGmailHop = ({
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-orange-50 px-1.5 py-0.5 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-700/10">
-              Exporter
+              Destination
             </span>
             <div className="text-lg font-medium">Send Email through Gmail</div>
           </div>
