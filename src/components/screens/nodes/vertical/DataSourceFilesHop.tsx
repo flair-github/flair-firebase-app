@@ -4,34 +4,33 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import cloneDeep from 'lodash/cloneDeep'
 import { Fragment, useEffect, useState } from 'react'
-import { FaEllipsisH } from 'react-icons/fa'
+import { FaCloudUploadAlt, FaEllipsisH } from 'react-icons/fa'
 import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
+import { FaFolder } from 'react-icons/fa6'
 
-export interface DataSourceS3HopContent {
-  nodeType: 'data-source-s3-hop'
-  eventType: 'New CSV file' | 'Updated CSV file'
-  importedKeys: Record<string, boolean>
+export interface DataSourceFilesHopContent {
+  nodeType: 'data-source-files-hop'
+  fileType: string
 }
 
-export const dataSourceS3HopDefaultContent: DataSourceS3HopContent = {
-  nodeType: 'data-source-s3-hop',
-  eventType: 'New CSV file',
-  importedKeys: {},
+export const dataSourceFilesHopDefaultContent: DataSourceFilesHopContent = {
+  nodeType: 'data-source-files-hop',
+  fileType: 'csv',
 }
 
-export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceS3HopContent>(
-    dataSourceS3HopDefaultContent,
+export const DataSourceFilesHop = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
+  const [nodeContent, setNodeContent] = useState<DataSourceFilesHopContent>(
+    dataSourceFilesHopDefaultContent,
   )
-  const [nodeFormContent, setNodeFormContent] = useState<DataSourceS3HopContent>(
-    dataSourceS3HopDefaultContent,
+  const [nodeFormContent, setNodeFormContent] = useState<DataSourceFilesHopContent>(
+    dataSourceFilesHopDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-s3-hop') {
+    if (data.initialContents.nodeType === 'data-source-files-hop') {
       setNodeContent(cloneDeep(data.initialContents))
     }
   }, [data.initialContents])
@@ -49,13 +48,13 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <img src="/images/data-sources/s3.svg" width={45} height={45} />
+            <FaFolder size={40} className="text-slate-600" />
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
               Source
             </span>
-            <div className="text-lg font-medium">Import data from S3</div>
+            <div className="text-lg font-medium">Import local files</div>
           </div>
           <div className="flex-1" />
           <div
@@ -127,7 +126,7 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                S3 Source
+                                Local Files Source
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new
@@ -149,107 +148,53 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
-                          {/* Credential */}
+                          {/* File Type */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label
                                 htmlFor="project-name"
                                 className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Credential
+                                File Type
                               </label>
                             </div>
                             <div className="sm:col-span-2">
-                              <Select name="status">
-                                <option value="production">Production</option>
-                                <option value="staging-1">Staging 1</option>
-                                <option value="staging-2">Staging 2</option>
-                                <option value="my-aws">My AWS</option>
+                              <Select
+                                name="status"
+                                value={nodeFormContent.fileType}
+                                onChange={ev => {
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.fileType = ev.target.value
+                                    return newFormContent
+                                  })
+                                }}>
+                                <option value="csv">csv</option>
+                                <option value="txt">txt</option>
+                                <option value="pdf">pdf</option>
+                                <option value="mp3">mp3</option>
                               </Select>
                             </div>
                           </div>
 
-                          {/* Event Type */}
-                          <fieldset className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div
-                              className="text-sm font-medium leading-6 text-gray-900"
-                              aria-hidden="true">
-                              Event Type
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label
+                                htmlFor="project-name"
+                                className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Upload Files
+                              </label>
                             </div>
-                            <div className="space-y-5 sm:col-span-2">
-                              <div className="space-y-5 sm:mt-0">
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex h-6 items-center">
-                                    <input
-                                      id="public-access"
-                                      name="privacy"
-                                      aria-describedby="public-access-description"
-                                      type="radio"
-                                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.eventType === 'New CSV file'}
-                                      onClick={() => {
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.eventType = 'New CSV file'
-                                          return newFormContent
-                                        })
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm leading-6">
-                                    <label
-                                      htmlFor="public-access"
-                                      className="font-medium text-gray-900">
-                                      New CSV file
-                                    </label>
-                                    <p id="public-access-description" className="text-gray-500">
-                                      New CSV file detected in S3
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex h-6 items-center">
-                                    <input
-                                      id="restricted-access"
-                                      name="privacy"
-                                      aria-describedby="restricted-access-description"
-                                      type="radio"
-                                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.eventType === 'Updated CSV file'}
-                                      onClick={() => {
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.eventType = 'Updated CSV file'
-                                          return newFormContent
-                                        })
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm leading-6">
-                                    <label
-                                      htmlFor="restricted-access"
-                                      className="font-medium text-gray-900">
-                                      Updated CSV file
-                                    </label>
-                                    <p id="restricted-access-description" className="text-gray-500">
-                                      An existing CSV file is deleted in S3
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                              <hr className="border-gray-200" />
-                              <div className="flex text-sm">
-                                <a className="group inline-flex items-center text-gray-500 hover:text-gray-900">
-                                  <QuestionMarkCircleIcon
-                                    className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                    aria-hidden="true"
-                                  />
-                                  <span className="ml-2">
-                                    Learn more about structuring CSV in S3
-                                  </span>
-                                </a>
-                              </div>
+                            <div className="sm:col-span-2">
+                              <button
+                                type="button"
+                                className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                <FaCloudUploadAlt size={45} className="text-grey-400" />
+                                <span className="mt-2 block text-sm font-semibold text-gray-900">
+                                  Upload Files
+                                </span>
+                              </button>
                             </div>
-                          </fieldset>
+                          </div>
                         </div>
                       </div>
 

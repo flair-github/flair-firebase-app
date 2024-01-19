@@ -9,37 +9,35 @@ import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 
-export interface DataDestinationTwilioHopContent {
-  nodeType: 'data-destination-twilio-hop'
-  to: string
-  body: string
-  type: string
+export interface DataDestinationSheetsHopContent {
+  nodeType: 'data-destination-sheets-hop'
+  path: string
+  columnMapping: string
 }
 
-export const dataDestinationTwilioHopDefaultContent: DataDestinationTwilioHopContent = {
-  nodeType: 'data-destination-twilio-hop',
-  to: '',
-  body: '',
-  type: 'SMS',
+export const dataDestinationSheetsHopDefaultContent: DataDestinationSheetsHopContent = {
+  nodeType: 'data-destination-sheets-hop',
+  path: '',
+  columnMapping: '',
 }
 
-export const DataDestinationTwilioHop = ({
+export const DataDestinationSheetsHop = ({
   data,
   noHandle,
 }: {
   data: NodeData
   noHandle?: boolean
 }) => {
-  const [nodeContent, setNodeContent] = useState<DataDestinationTwilioHopContent>(
-    dataDestinationTwilioHopDefaultContent,
+  const [nodeContent, setNodeContent] = useState<DataDestinationSheetsHopContent>(
+    dataDestinationSheetsHopDefaultContent,
   )
-  const [nodeFormContent, setNodeFormContent] = useState<DataDestinationTwilioHopContent>(
-    dataDestinationTwilioHopDefaultContent,
+  const [nodeFormContent, setNodeFormContent] = useState<DataDestinationSheetsHopContent>(
+    dataDestinationSheetsHopDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-destination-twilio-hop') {
+    if (data.initialContents.nodeType === 'data-destination-sheets-hop') {
       setNodeContent(cloneDeep(data.initialContents))
     }
   }, [data.initialContents])
@@ -57,13 +55,13 @@ export const DataDestinationTwilioHop = ({
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <img src="/images/data-sources/twilio.svg" width={45} height={45} />
+            <img src="/images/data-sources/google-sheets.svg" width={45} height={45} />
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-orange-50 px-1.5 py-0.5 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-700/10">
               Destination
             </span>
-            <div className="text-lg font-medium">Send {nodeContent.type} through Twilio</div>
+            <div className="text-lg font-medium">Insert rows in Google Sheets</div>
           </div>
           <div className="flex-1" />
           <div
@@ -135,7 +133,7 @@ export const DataDestinationTwilioHop = ({
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                Twilio
+                                Google Sheets
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new
@@ -167,24 +165,24 @@ export const DataDestinationTwilioHop = ({
                             </div>
                             <div className="sm:col-span-2">
                               <Select name="status">
-                                <option value="1">twilio-main-1</option>
-                                <option value="2">twilio-main-2</option>
+                                <option value="google-account-1">google-account-1</option>
+                                <option value="google-account-2">google-account-2</option>
                               </Select>
                             </div>
                           </div>
 
-                          {/* To */}
+                          {/* Path */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                To
+                                Path
                               </label>
                             </div>
                             <div className="sm:col-span-2">
                               <input
                                 type="text"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.to}
+                                value={nodeFormContent.path}
                                 onChange={e => {
                                   const newText = e.target.value
 
@@ -194,7 +192,7 @@ export const DataDestinationTwilioHop = ({
 
                                   setNodeFormContent(prev => {
                                     const newFormContent = cloneDeep(prev)
-                                    newFormContent.to = newText
+                                    newFormContent.path = newText
                                     return newFormContent
                                   })
                                 }}
@@ -202,40 +200,12 @@ export const DataDestinationTwilioHop = ({
                             </div>
                           </div>
 
-                          {/* Prompt */}
-                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div>
-                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Body
-                              </label>
-                            </div>
-                            <div className="sm:col-span-2">
-                              <textarea
-                                rows={8}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.body}
-                                onChange={e => {
-                                  const newText = e.target.value
-
-                                  if (typeof newText !== 'string') {
-                                    return
-                                  }
-
-                                  setNodeFormContent(prev => {
-                                    const newFormContent = cloneDeep(prev)
-                                    newFormContent.body = newText
-                                    return newFormContent
-                                  })
-                                }}
-                              />
-                            </div>
-                          </div>
-
+                          {/* Column Mapping */}
                           <fieldset className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div
                               className="text-sm font-medium leading-6 text-gray-900"
                               aria-hidden="true">
-                              Type
+                              Column Mapping
                             </div>
                             <div className="space-y-5 sm:col-span-2">
                               <div className="space-y-5 sm:mt-0">
@@ -247,11 +217,11 @@ export const DataDestinationTwilioHop = ({
                                       aria-describedby="public-access-description"
                                       type="radio"
                                       className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.type === 'SMS'}
+                                      checked={nodeFormContent.columnMapping === 'Auto-map'}
                                       onClick={() => {
                                         setNodeFormContent(prev => {
                                           const newFormContent = cloneDeep(prev)
-                                          newFormContent.type = 'SMS'
+                                          newFormContent.columnMapping = 'Auto-map'
                                           return newFormContent
                                         })
                                       }}
@@ -261,11 +231,11 @@ export const DataDestinationTwilioHop = ({
                                     <label
                                       htmlFor="public-access"
                                       className="font-medium text-gray-900">
-                                      SMS
+                                      Auto-map
                                     </label>
-                                    {/* <p id="public-access-description" className="text-gray-500">
-                                      Send bulk SMS
-                                    </p> */}
+                                    <p id="public-access-description" className="text-gray-500">
+                                      Automatically detect column names and match
+                                    </p>
                                   </div>
                                 </div>
                                 <div className="relative flex items-start">
@@ -276,11 +246,11 @@ export const DataDestinationTwilioHop = ({
                                       aria-describedby="restricted-access-description"
                                       type="radio"
                                       className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.type === 'Email'}
+                                      checked={nodeFormContent.columnMapping === 'Manual'}
                                       onClick={() => {
                                         setNodeFormContent(prev => {
                                           const newFormContent = cloneDeep(prev)
-                                          newFormContent.type = 'Email'
+                                          newFormContent.columnMapping = 'Manual'
                                           return newFormContent
                                         })
                                       }}
@@ -290,11 +260,11 @@ export const DataDestinationTwilioHop = ({
                                     <label
                                       htmlFor="restricted-access"
                                       className="font-medium text-gray-900">
-                                      Email
+                                      Manual
                                     </label>
-                                    {/* <p id="restricted-access-description" className="text-gray-500">
-                                      Send bulk email
-                                    </p> */}
+                                    <p id="restricted-access-description" className="text-gray-500">
+                                      Manually map columns
+                                    </p>
                                   </div>
                                 </div>
                               </div>
@@ -305,7 +275,9 @@ export const DataDestinationTwilioHop = ({
                                     className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
                                     aria-hidden="true"
                                   />
-                                  <span className="ml-2">Learn more about Twilio connection</span>
+                                  <span className="ml-2">
+                                    Learn more about Google Sheets connection
+                                  </span>
                                 </a>
                               </div>
                             </div>

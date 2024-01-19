@@ -86,10 +86,14 @@ export const nodeTypes = {
 
   // Hops
   DataSourceS3Hop,
+  DataSourceAPIHop,
+  DataSourceFilesHop,
+  DataSourcePostgresHop,
   LLMProcessorHop,
   DataDestinationGmailHop,
   DataDestinationPostgresHop,
   DataDestinationTwilioHop,
+  DataDestinationSheetsHop,
   ConditionalHop,
 }
 
@@ -136,6 +140,10 @@ import { USER_ID_MODE } from '~/config'
 import { DataDestinationPostgresHop } from './nodes/vertical/DataDestinationPostgresHop'
 import { DataDestinationTwilioHop } from './nodes/vertical/DataDestinationTwilioHop'
 import { ConditionalHop } from './nodes/vertical/ConditionalHop'
+import { DataSourceAPIHop } from './nodes/vertical/DataSourceAPIHop'
+import { DataSourceFilesHop } from './nodes/vertical/DataSourceFilesHop'
+import { DataSourcePostgresHop } from './nodes/vertical/DataSourcePostgresHop'
+import { DataDestinationSheetsHop } from './nodes/vertical/DataDestinationSheetsHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)

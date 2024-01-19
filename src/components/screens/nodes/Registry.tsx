@@ -34,6 +34,10 @@ import { DataDestinationGmailHopContent } from './vertical/DataDestinationGmailH
 import { DataDestinationPostgresHopContent } from './vertical/DataDestinationPostgresHop'
 import { DataDestinationTwilioHopContent } from './vertical/DataDestinationTwilioHop'
 import { ConditionalHopContent } from './vertical/ConditionalHop'
+import { DataSourceAPIHopContent } from './vertical/DataSourceAPIHop'
+import { DataSourceFilesHopContent } from './vertical/DataSourceFilesHop'
+import { DataSourcePostgresHopContent } from './vertical/DataSourcePostgresHop'
+import { DataDestinationSheetsHopContent } from './vertical/DataDestinationSheetsHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -67,10 +71,14 @@ export type NodeContent =
 
   // New Vertical Hops
   | DataSourceS3HopContent
+  | DataSourceAPIHopContent
+  | DataSourceFilesHopContent
+  | DataSourcePostgresHopContent
   | LLMProcessorHopContent
   | DataDestinationGmailHopContent
   | DataDestinationPostgresHopContent
   | DataDestinationTwilioHopContent
+  | DataDestinationSheetsHopContent
   | ConditionalHopContent
 
 export interface NodeData {

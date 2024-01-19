@@ -8,38 +8,38 @@ import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
+import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
+import { AiFillApi } from 'react-icons/ai'
 
-export interface DataDestinationTwilioHopContent {
-  nodeType: 'data-destination-twilio-hop'
-  to: string
+export interface DataSourceAPIHopContent {
+  nodeType: 'data-source-api-hop'
+  fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
+  url: string
+  method: string
+  headers: string
   body: string
-  type: string
 }
 
-export const dataDestinationTwilioHopDefaultContent: DataDestinationTwilioHopContent = {
-  nodeType: 'data-destination-twilio-hop',
-  to: '',
+export const dataSourceAPIHopDefaultContent: DataSourceAPIHopContent = {
+  nodeType: 'data-source-api-hop',
+  fileType: 'csv',
+  url: '',
+  method: 'GET',
+  headers: '',
   body: '',
-  type: 'SMS',
 }
 
-export const DataDestinationTwilioHop = ({
-  data,
-  noHandle,
-}: {
-  data: NodeData
-  noHandle?: boolean
-}) => {
-  const [nodeContent, setNodeContent] = useState<DataDestinationTwilioHopContent>(
-    dataDestinationTwilioHopDefaultContent,
+export const DataSourceAPIHop = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
+  const [nodeContent, setNodeContent] = useState<DataSourceAPIHopContent>(
+    dataSourceAPIHopDefaultContent,
   )
-  const [nodeFormContent, setNodeFormContent] = useState<DataDestinationTwilioHopContent>(
-    dataDestinationTwilioHopDefaultContent,
+  const [nodeFormContent, setNodeFormContent] = useState<DataSourceAPIHopContent>(
+    dataSourceAPIHopDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-destination-twilio-hop') {
+    if (data.initialContents.nodeType === 'data-source-api-hop') {
       setNodeContent(cloneDeep(data.initialContents))
     }
   }, [data.initialContents])
@@ -57,13 +57,13 @@ export const DataDestinationTwilioHop = ({
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <img src="/images/data-sources/twilio.svg" width={45} height={45} />
+            <AiFillApi size={40} className="text-slate-600" />
           </div>
           <div>
-            <span className="inline-flex items-center rounded-md bg-orange-50 px-1.5 py-0.5 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-700/10">
-              Destination
+            <span className="inline-flex items-center rounded-md bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+              Source
             </span>
-            <div className="text-lg font-medium">Send {nodeContent.type} through Twilio</div>
+            <div className="text-lg font-medium">Import data from API</div>
           </div>
           <div className="flex-1" />
           <div
@@ -75,7 +75,7 @@ export const DataDestinationTwilioHop = ({
             <FaEllipsisH />
           </div>
         </div>
-        {!noHandle && (
+        {/* {!noHandle && (
           <Handle
             type="target"
             position={Position.Top}
@@ -87,8 +87,8 @@ export const DataDestinationTwilioHop = ({
             }}
             id="in"
           />
-        )}
-        {/* {!noHandle && (
+        )} */}
+        {!noHandle && (
           <Handle
             type="source"
             position={Position.Bottom}
@@ -100,7 +100,7 @@ export const DataDestinationTwilioHop = ({
             }}
             id="out"
           />
-        )} */}
+        )}
       </div>
 
       <Transition.Root show={open} as={Fragment}>
@@ -135,7 +135,7 @@ export const DataDestinationTwilioHop = ({
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                Twilio
+                                API Source
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new
@@ -155,36 +155,47 @@ export const DataDestinationTwilioHop = ({
                           </div>
                         </div>
 
-                        {/* Divider container */}
+                        {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* File Type */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label
                                 htmlFor="project-name"
                                 className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Credential
+                                File Type
                               </label>
                             </div>
                             <div className="sm:col-span-2">
-                              <Select name="status">
-                                <option value="1">twilio-main-1</option>
-                                <option value="2">twilio-main-2</option>
+                              <Select
+                                name="status"
+                                value={nodeFormContent.fileType}
+                                onChange={ev => {
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.fileType = ev.target.value as any
+                                    return newFormContent
+                                  })
+                                }}>
+                                <option value="csv">csv</option>
+                                <option value="txt">txt</option>
+                                <option value="pdf">pdf</option>
+                                <option value="mp3">mp3</option>
                               </Select>
                             </div>
                           </div>
 
-                          {/* To */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                To
+                                URL
                               </label>
                             </div>
                             <div className="sm:col-span-2">
                               <input
                                 type="text"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.to}
+                                value={nodeFormContent.url}
                                 onChange={e => {
                                   const newText = e.target.value
 
@@ -194,7 +205,7 @@ export const DataDestinationTwilioHop = ({
 
                                   setNodeFormContent(prev => {
                                     const newFormContent = cloneDeep(prev)
-                                    newFormContent.to = newText
+                                    newFormContent.url = newText
                                     return newFormContent
                                   })
                                 }}
@@ -202,7 +213,66 @@ export const DataDestinationTwilioHop = ({
                             </div>
                           </div>
 
-                          {/* Prompt */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Method
+                              </label>
+                            </div>
+                            <div className="sm:col-span-2">
+                              <Select
+                                name="status"
+                                value={nodeFormContent.method}
+                                onChange={ev => {
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.fileType = ev.target.value as any
+                                    return newFormContent
+                                  })
+                                }}>
+                                <option value="GET">GET</option>
+                                <option value="HEAD">HEAD</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                                <option value="CONNECT">CONNECT</option>
+                                <option value="OPTIONS">OPTIONS</option>
+                                <option value="TRACE">TRACE</option>
+                                <option value="PATCH">PATCH</option>
+                              </Select>
+                            </div>
+                          </div>
+
+                          {/* Headers */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Headers
+                              </label>
+                            </div>
+                            <div className="sm:col-span-2">
+                              <textarea
+                                rows={3}
+                                className="block w-full rounded-md border-0 py-1.5 font-mono text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={nodeFormContent.headers}
+                                onChange={e => {
+                                  const newText = e.target.value
+
+                                  if (typeof newText !== 'string') {
+                                    return
+                                  }
+
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.headers = newText
+                                    return newFormContent
+                                  })
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Body */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
@@ -211,8 +281,8 @@ export const DataDestinationTwilioHop = ({
                             </div>
                             <div className="sm:col-span-2">
                               <textarea
-                                rows={8}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                rows={5}
+                                className="block w-full rounded-md border-0 py-1.5 font-mono text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 value={nodeFormContent.body}
                                 onChange={e => {
                                   const newText = e.target.value
@@ -230,86 +300,6 @@ export const DataDestinationTwilioHop = ({
                               />
                             </div>
                           </div>
-
-                          <fieldset className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div
-                              className="text-sm font-medium leading-6 text-gray-900"
-                              aria-hidden="true">
-                              Type
-                            </div>
-                            <div className="space-y-5 sm:col-span-2">
-                              <div className="space-y-5 sm:mt-0">
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex h-6 items-center">
-                                    <input
-                                      id="public-access"
-                                      name="privacy"
-                                      aria-describedby="public-access-description"
-                                      type="radio"
-                                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.type === 'SMS'}
-                                      onClick={() => {
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.type = 'SMS'
-                                          return newFormContent
-                                        })
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm leading-6">
-                                    <label
-                                      htmlFor="public-access"
-                                      className="font-medium text-gray-900">
-                                      SMS
-                                    </label>
-                                    {/* <p id="public-access-description" className="text-gray-500">
-                                      Send bulk SMS
-                                    </p> */}
-                                  </div>
-                                </div>
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex h-6 items-center">
-                                    <input
-                                      id="restricted-access"
-                                      name="privacy"
-                                      aria-describedby="restricted-access-description"
-                                      type="radio"
-                                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.type === 'Email'}
-                                      onClick={() => {
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.type = 'Email'
-                                          return newFormContent
-                                        })
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm leading-6">
-                                    <label
-                                      htmlFor="restricted-access"
-                                      className="font-medium text-gray-900">
-                                      Email
-                                    </label>
-                                    {/* <p id="restricted-access-description" className="text-gray-500">
-                                      Send bulk email
-                                    </p> */}
-                                  </div>
-                                </div>
-                              </div>
-                              <hr className="border-gray-200" />
-                              <div className="flex text-sm">
-                                <a className="group inline-flex items-center text-gray-500 hover:text-gray-900">
-                                  <QuestionMarkCircleIcon
-                                    className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                    aria-hidden="true"
-                                  />
-                                  <span className="ml-2">Learn more about Twilio connection</span>
-                                </a>
-                              </div>
-                            </div>
-                          </fieldset>
                         </div>
                       </div>
 
