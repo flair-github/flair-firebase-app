@@ -494,27 +494,6 @@ data_exporters:
 
   const nodeClassifications = [
     {
-      title: 'LLM Processor',
-      subtitle: 'Transforms your data using your choice of LLM and prompts.',
-      color: 'blue',
-      members: [
-        {
-          title: 'LLM Processor',
-          handleOnClick: () => {
-            addNode('llm-processor', 'LLMProcessorNode')
-          },
-          icon: RiRobotLine,
-        },
-        {
-          title: 'Aggregator',
-          handleOnClick: () => {
-            addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
-          },
-          icon: BsArrowsAngleContract,
-        },
-      ],
-    },
-    {
       title: 'Data Source',
       subtitle: 'Load unstructured data from a data source.',
       color: 'purple',
@@ -522,7 +501,8 @@ data_exporters:
         {
           title: 'AWS S3',
           handleOnClick: () => {
-            addNode('data-source-s3', 'DataSourceS3Node')
+            // addNode('data-source-s3', 'DataSourceS3Node')
+            addNode('data-source-s3-hop', 'DataSourceS3Hop')
           },
           icon: BiLogoAws,
         },
@@ -596,10 +576,33 @@ data_exporters:
       ],
     },
     {
-      title: 'Vector Indexer',
-      subtitle: 'Embed your data into your choice of vector data store for quick retrieval.',
-      color: 'green',
+      title: 'Transform',
+      subtitle: 'Transforms your data using your choice of LLM and prompts.',
+      color: 'blue',
       members: [
+        {
+          title: 'LLM Processor',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+            addNode('llm-processor-hop', 'LLMProcessorHop')
+          },
+          icon: RiRobotLine,
+        },
+        {
+          title: 'Conditional',
+          handleOnClick: () => {
+            // addNode('conditional-logic', 'ConditionalLogicNode')
+            addNode('conditional-hop', 'ConditionalHop')
+          },
+          icon: BiGitBranch,
+        },
+        {
+          title: 'Aggregator',
+          handleOnClick: () => {
+            addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
+          },
+          icon: BsArrowsAngleContract,
+        },
         {
           title: 'Pinecone Indexer',
           handleOnClick: () => {
@@ -616,6 +619,27 @@ data_exporters:
         },
       ],
     },
+    // {
+    //   title: 'Vector Indexer',
+    //   subtitle: 'Embed your data into your choice of vector data store for quick retrieval.',
+    //   color: 'green',
+    //   members: [
+    //     {
+    //       title: 'Pinecone Indexer',
+    //       handleOnClick: () => {
+    //         addNode('data-indexer', 'DataIndexerNode')
+    //       },
+    //       icon: GrCube,
+    //     },
+    //     {
+    //       title: 'Chroma Indexer',
+    //       handleOnClick: () => {
+    //         addNode('data-indexer', 'DataIndexerNode')
+    //       },
+    //       icon: GrAggregate,
+    //     },
+    //   ],
+    // },
     // {
     //   title: 'Data Retriever',
     //   subtitle: 'Fetches specific data subsets from the source or index.',
@@ -637,25 +661,49 @@ data_exporters:
     //     },
     //   ],
     // },
-    {
-      title: 'Control Flow',
-      subtitle: 'Control flow and logical branching.',
-      color: 'rose',
-      members: [
-        {
-          title: 'Conditional',
-          handleOnClick: () => {
-            addNode('conditional-logic', 'ConditionalLogicNode')
-          },
-          icon: BiGitBranch,
-        },
-      ],
-    },
+    // {
+    //   title: 'Control Flow',
+    //   subtitle: 'Control flow and logical branching.',
+    //   color: 'rose',
+    //   members: [
+    //     {
+    //       title: 'Conditional',
+    //       handleOnClick: () => {
+    //         addNode('conditional-logic', 'ConditionalLogicNode')
+    //       },
+    //       icon: BiGitBranch,
+    //     },
+    //   ],
+    // },
     {
       title: 'Data Destination',
       subtitle: 'Send processed data to a specified destination.',
       color: 'teal',
       members: [
+        {
+          title: 'Gmail',
+          handleOnClick: () => {
+            // addNode('data-exporter-gmail', 'DataExporterGmailNode')
+            addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
+          },
+          icon: BiLogoGmail,
+        },
+        {
+          title: 'Twilio',
+          handleOnClick: () => {
+            // addNode('data-exporter-twilio', 'DataExporterTwilioNode')
+            addNode('data-destination-twilio-hop', 'DataDestinationTwilioHop')
+          },
+          icon: SiTwilio,
+        },
+        {
+          title: 'Postgres',
+          handleOnClick: () => {
+            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+            addNode('data-destination-postgres-hop', 'DataDestinationPostgresHop')
+          },
+          icon: BiLogoPostgresql,
+        },
         {
           title: 'AWS S3',
           handleOnClick: () => {
@@ -678,13 +726,6 @@ data_exporters:
           icon: BiLogoMicrosoft,
         },
         {
-          title: 'Gmail',
-          handleOnClick: () => {
-            addNode('data-exporter-gmail', 'DataExporterGmailNode')
-          },
-          icon: BiLogoGmail,
-        },
-        {
           title: 'Airtable',
           handleOnClick: () => {
             addNode('data-exporter-gmail', 'DataExporterGmailNode')
@@ -697,20 +738,6 @@ data_exporters:
             addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
           icon: SiGooglesheets,
-        },
-        {
-          title: 'Twilio',
-          handleOnClick: () => {
-            addNode('data-exporter-twilio', 'DataExporterTwilioNode')
-          },
-          icon: SiTwilio,
-        },
-        {
-          title: 'Postgres',
-          handleOnClick: () => {
-            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
-          },
-          icon: BiLogoPostgresql,
         },
         {
           title: 'Zendesk',
@@ -742,55 +769,55 @@ data_exporters:
         },
       ],
     },
-    {
-      title: 'Events and Actions',
-      subtitle: 'Event and action based nodes.',
-      color: 'slate',
-      members: [
-        {
-          title: 'Source: S3',
-          handleOnClick: () => {
-            addNode('data-source-s3-hop', 'DataSourceS3Hop')
-          },
-          icon: BiLogoAws,
-        },
-        {
-          title: 'LLM Processor',
-          handleOnClick: () => {
-            addNode('llm-processor-hop', 'LLMProcessorHop')
-          },
-          icon: BsLightning,
-        },
-        {
-          title: 'Conditional',
-          handleOnClick: () => {
-            addNode('conditional-hop', 'ConditionalHop')
-          },
-          icon: BiGitBranch,
-        },
-        {
-          title: 'Destination: Gmail',
-          handleOnClick: () => {
-            addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
-          },
-          icon: BiLogoGmail,
-        },
-        {
-          title: 'Destination: Postgres',
-          handleOnClick: () => {
-            addNode('data-destination-postgres-hop', 'DataDestinationPostgresHop')
-          },
-          icon: BiLogoPostgresql,
-        },
-        {
-          title: 'Destination: Twilio',
-          handleOnClick: () => {
-            addNode('data-destination-twilio-hop', 'DataDestinationTwilioHop')
-          },
-          icon: SiTwilio,
-        },
-      ],
-    },
+    // {
+    //   title: 'Events and Actions',
+    //   subtitle: 'Event and action based nodes.',
+    //   color: 'slate',
+    //   members: [
+    //     {
+    //       title: 'Source: S3',
+    //       handleOnClick: () => {
+    //         addNode('data-source-s3-hop', 'DataSourceS3Hop')
+    //       },
+    //       icon: BiLogoAws,
+    //     },
+    //     {
+    //       title: 'LLM Processor',
+    //       handleOnClick: () => {
+    //         addNode('llm-processor-hop', 'LLMProcessorHop')
+    //       },
+    //       icon: BsLightning,
+    //     },
+    //     {
+    //       title: 'Conditional',
+    //       handleOnClick: () => {
+    //         addNode('conditional-hop', 'ConditionalHop')
+    //       },
+    //       icon: BiGitBranch,
+    //     },
+    //     {
+    //       title: 'Destination: Gmail',
+    //       handleOnClick: () => {
+    //         addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
+    //       },
+    //       icon: BiLogoGmail,
+    //     },
+    //     {
+    //       title: 'Destination: Postgres',
+    //       handleOnClick: () => {
+    //         addNode('data-destination-postgres-hop', 'DataDestinationPostgresHop')
+    //       },
+    //       icon: BiLogoPostgresql,
+    //     },
+    //     {
+    //       title: 'Destination: Twilio',
+    //       handleOnClick: () => {
+    //         addNode('data-destination-twilio-hop', 'DataDestinationTwilioHop')
+    //       },
+    //       icon: SiTwilio,
+    //     },
+    //   ],
+    // },
   ]
 
   const controls = [
