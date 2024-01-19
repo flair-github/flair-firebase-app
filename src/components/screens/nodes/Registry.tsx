@@ -33,6 +33,7 @@ import { LLMProcessorHopContent } from './vertical/LLMProcessorHop'
 import { DataDestinationGmailHopContent } from './vertical/DataDestinationGmailHop'
 import { DataDestinationPostgresHopContent } from './vertical/DataDestinationPostgresHop'
 import { DataDestinationTwilioHopContent } from './vertical/DataDestinationTwilioHop'
+import { ConditionalHopContent } from './vertical/ConditionalHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -70,6 +71,7 @@ export type NodeContent =
   | DataDestinationGmailHopContent
   | DataDestinationPostgresHopContent
   | DataDestinationTwilioHopContent
+  | ConditionalHopContent
 
 export interface NodeData {
   nodeId: string

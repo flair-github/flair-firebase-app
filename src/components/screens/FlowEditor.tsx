@@ -90,6 +90,7 @@ export const nodeTypes = {
   DataDestinationGmailHop,
   DataDestinationPostgresHop,
   DataDestinationTwilioHop,
+  ConditionalHop,
 }
 
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
@@ -134,6 +135,7 @@ import { DataDestinationGmailHop } from './nodes/vertical/DataDestinationGmailHo
 import { USER_ID_MODE } from '~/config'
 import { DataDestinationPostgresHop } from './nodes/vertical/DataDestinationPostgresHop'
 import { DataDestinationTwilioHop } from './nodes/vertical/DataDestinationTwilioHop'
+import { ConditionalHop } from './nodes/vertical/ConditionalHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -758,6 +760,13 @@ data_exporters:
             addNode('llm-processor-hop', 'LLMProcessorHop')
           },
           icon: BsLightning,
+        },
+        {
+          title: 'Conditional',
+          handleOnClick: () => {
+            addNode('conditional-hop', 'ConditionalHop')
+          },
+          icon: BiGitBranch,
         },
         {
           title: 'Destination: Gmail',
