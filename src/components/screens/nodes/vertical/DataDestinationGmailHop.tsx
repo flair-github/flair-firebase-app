@@ -85,7 +85,7 @@ export const DataDestinationGmailHop = ({
               height: 14,
               background: 'rgb(148 163 184)',
             }}
-            id="out"
+            id="in"
           />
         )}
         {/* {!noHandle && (
@@ -98,7 +98,7 @@ export const DataDestinationGmailHop = ({
               height: 14,
               background: 'rgb(148 163 184)',
             }}
-            id="in"
+            id="out"
           />
         )} */}
       </div>

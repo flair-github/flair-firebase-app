@@ -71,6 +71,7 @@ export const generateHop = <T extends HopContent>(config: {
           {!noHandle && topHandle && (
             <Handle
               type="target"
+              id="in"
               position={Position.Top}
               style={{
                 top: -7,
@@ -83,6 +84,7 @@ export const generateHop = <T extends HopContent>(config: {
           {!noHandle && bottomHandle && (
             <Handle
               type="source"
+              id="out"
               position={Position.Bottom}
               style={{
                 bottom: -8,
