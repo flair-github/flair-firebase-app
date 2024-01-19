@@ -10,6 +10,8 @@ import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner8, ImSpinner9 } from 'react-icons/im'
 import { Button } from '~/catalyst/button'
 import { simpleHash } from '~/lib/simpleHash'
+import { Select } from '~/catalyst/select'
+import { Input } from '~/catalyst/input'
 
 function Results() {
   const [column, setColumn] = useState('')
@@ -35,56 +37,55 @@ function Results() {
         <div className="text-lg font-medium">Executions</div>
       </div>
 
-      {/* <div className="flex items-center border-b p-3">
-          <form className="join">
-            <select
-              className={' join-item ' + 'select select-bordered '}
-              value={column}
-              onChange={event => {
-                setSubstring('')
-                setColumn(event.target.value)
-              }}>
-              <option disabled value="">
-                Column
-              </option>
-              <option value="model">Model</option>
-              <option value="status">Status</option>
-              <option value="model and status">Model and Status</option>
-              <option value="workflowRequestId">Request Id</option>
-              <option value="workflowName">Workflow Name</option>
-            </select>
-            <input
-              className="input join-item input-bordered"
-              value={substring}
-              onChange={event => setSubstring(event.target.value)}
-              placeholder="Filter"
-            />
-            <button
-              className="btn join-item"
-              onClick={e => {
-                e.preventDefault()
-                let queryOrders: [string, OrderByDirection | undefined][] = []
-                let queryFilter: [string, WhereFilterOp, any][] = [
-                  ['docExists', '==', true],
-                  ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
-                ]
-                if (column && substring) {
-                  queryFilter.push([column, '>=', substring])
-                  queryFilter.push([column, '<=', substring + '\uf8ff'])
-                  queryOrders = [[column, 'desc']]
-                }
-                setWhere(queryFilter)
-                setOrders(queryOrders)
-              }}>
-              Search
-            </button>
-          </form>
-          <div className="flex-1" />
-          <button className="btn btn-disabled gap-1" onClick={async () => {}}>
-            <div>Compare Selections</div>
-            <div className="text-xs">(soon)</div>
-          </button>
-        </div> */}
+      <div className="flex items-center border-b p-3">
+        <form className="flex gap-2">
+          <Select
+            value={column}
+            onChange={event => {
+              setSubstring('')
+              setColumn(event.target.value)
+            }}>
+            <option disabled value="">
+              Column
+            </option>
+            <option value="model">Model</option>
+            <option value="status">Status</option>
+            <option value="model and status">Model and Status</option>
+            <option value="workflowRequestId">Request Id</option>
+            <option value="workflowName">Workflow Name</option>
+          </Select>
+          <Input
+            value={substring}
+            onChange={event => setSubstring(event.target.value)}
+            placeholder="Filter"
+          />
+          <Button
+            color="blue"
+            onClick={(e: any) => {
+              e.preventDefault()
+              let queryOrders: [string, OrderByDirection | undefined][] = []
+              let queryFilter: [string, WhereFilterOp, any][] = [
+                ['docExists', '==', true],
+                ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
+              ]
+              if (column && substring) {
+                queryFilter.push([column, '>=', substring])
+                queryFilter.push([column, '<=', substring + '\uf8ff'])
+                queryOrders = [[column, 'desc']]
+              }
+              setWhere(queryFilter)
+              setOrders(queryOrders)
+            }}>
+            Search
+          </Button>
+        </form>
+        <div className="flex-1" />
+        <Button onClick={async () => {}} disabled>
+          <div>Compare Selections</div>
+          <div className="text-xs">(soon)</div>
+        </Button>
+      </div>
+
       <div className="min-h-screen overflow-x-auto bg-slate-50">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="mt-8 flow-root">
