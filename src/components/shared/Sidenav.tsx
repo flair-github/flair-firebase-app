@@ -10,7 +10,7 @@ import { FiChevronRight } from 'react-icons/fi'
 import { useAtomValue } from 'jotai'
 import { atomUserData } from '~/jotai/jotai'
 import { useAuth } from '~/lib/firebase'
-import { ImSpinner9 } from 'react-icons/im'
+import { ImSpinner8, ImSpinner9 } from 'react-icons/im'
 import { IconType } from 'react-icons'
 import clsx from 'clsx'
 
@@ -167,7 +167,7 @@ export default function Sidenav() {
       <Suspense
         fallback={
           <main className="flex grow items-center justify-center overflow-hidden">
-            <ImSpinner9 className="h-16 w-16 animate-spin text-accent" />
+            <ImSpinner8 className="h-16 w-16 animate-spin text-slate-300" />
           </main>
         }>
         <main className="grow overflow-scroll">
