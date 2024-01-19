@@ -129,6 +129,7 @@ import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 import { DataSourceS3Hop, DataSourceS3HopContent } from './nodes/vertical/DataSourceS3Hop'
 import { LLMProcessorHop } from './nodes/vertical/LLMProcessorHop'
 import { DataDestinationGmailHop } from './nodes/vertical/DataDestinationGmailHop'
+import { USER_ID_MODE } from '~/config'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -288,7 +289,7 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
         createdTimestamp: serverTimestamp() as Timestamp,
         requestTimestamp: serverTimestamp() as Timestamp,
         updatedTimestamp: serverTimestamp() as Timestamp,
-        executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
+        executorUserId: USER_ID_MODE === 'samir' ? 'IVqAyQJR4ugRGR8qL9UuB809OX82' : userData.userId,
         docExists: true,
         workflowId,
         frontendConfig: JSON.stringify(flowData),

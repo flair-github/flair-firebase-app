@@ -17,6 +17,7 @@ import { DataExporterFlairNode, dataExporterFlairDefaultContent } from './nodes/
 import { NodeContent, nodeContents } from './nodes/Registry'
 import { DataSourceS3Node, dataSourceS3DefaultContent } from './nodes/DataSourceS3'
 import { nodeTypes } from './FlowEditor'
+import { USER_ID_MODE } from '~/config'
 
 function TemplateWizard() {
   const userData = useAtomValue(atomUserData)
@@ -191,7 +192,7 @@ function TemplateWizard() {
       workflowId: ref.id,
       frontendConfig: JSON.stringify(flowData),
       workflowTitle: title || 'New Flow',
-      ownerUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82', // userData.userId,
+      ownerUserId: USER_ID_MODE === 'samir' ? 'IVqAyQJR4ugRGR8qL9UuB809OX82' : userData.userId,
     }
 
     await ref.set(newFlowData)
