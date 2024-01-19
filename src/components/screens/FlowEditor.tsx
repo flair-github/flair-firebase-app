@@ -487,34 +487,6 @@ data_exporters:
 
   const nodeClassifications = [
     {
-      title: 'Events and Actions',
-      subtitle: 'Event and action based nodes.',
-      color: 'slate',
-      members: [
-        {
-          title: 'Source: S3',
-          handleOnClick: () => {
-            addNode('data-source-s3-hop', 'DataSourceS3Hop')
-          },
-          icon: BiLogoAws,
-        },
-        {
-          title: 'LLM Processor',
-          handleOnClick: () => {
-            addNode('llm-processor-hop', 'LLMProcessorHop')
-          },
-          icon: BsLightning,
-        },
-        {
-          title: 'Destination: Gmail',
-          handleOnClick: () => {
-            addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
-          },
-          icon: BiLogoGmail,
-        },
-      ],
-    },
-    {
       title: 'LLM Processor',
       subtitle: 'Transforms your data using your choice of LLM and prompts.',
       color: 'blue',
@@ -760,6 +732,34 @@ data_exporters:
             addNode('data-exporter-api', 'DataExporterAPINode')
           },
           icon: AiFillApi,
+        },
+      ],
+    },
+    {
+      title: 'Events and Actions',
+      subtitle: 'Event and action based nodes.',
+      color: 'slate',
+      members: [
+        {
+          title: 'Source: S3',
+          handleOnClick: () => {
+            addNode('data-source-s3-hop', 'DataSourceS3Hop')
+          },
+          icon: BiLogoAws,
+        },
+        {
+          title: 'LLM Processor',
+          handleOnClick: () => {
+            addNode('llm-processor-hop', 'LLMProcessorHop')
+          },
+          icon: BsLightning,
+        },
+        {
+          title: 'Destination: Gmail',
+          handleOnClick: () => {
+            addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
+          },
+          icon: BiLogoGmail,
         },
       ],
     },
