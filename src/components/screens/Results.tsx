@@ -12,6 +12,7 @@ import { Button } from '~/catalyst/button'
 import { simpleHash } from '~/lib/simpleHash'
 import { Select } from '~/catalyst/select'
 import { Input } from '~/catalyst/input'
+import { Checkbox } from '~/catalyst/checkbox'
 
 function Results() {
   const [column, setColumn] = useState('')
@@ -97,6 +98,10 @@ function Results() {
                       <tr>
                         <th
                           scope="col"
+                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                        />
+                        <th
+                          scope="col"
                           className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                           Workflow Name
                         </th>
@@ -143,6 +148,9 @@ function Results() {
 
                         return (
                           <tr key={el.workflowResultId}>
+                            <td className="flex items-center justify-center whitespace-nowrap break-words py-4 pl-4 text-sm font-medium text-gray-900 sm:pl-6">
+                              <Checkbox className="scale-125" color="blue" />
+                            </td>
                             <td className="whitespace-nowrap break-words py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                               {el.workflowName}
                             </td>
