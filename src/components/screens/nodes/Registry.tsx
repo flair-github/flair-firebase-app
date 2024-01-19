@@ -31,6 +31,7 @@ import { DataExtractorAggregatorNodeContent } from './DataExtractorAggregatorNod
 import { DataSourceS3HopContent } from './vertical/DataSourceS3Hop'
 import { LLMProcessorHopContent } from './vertical/LLMProcessorHop'
 import { DataDestinationGmailHopContent } from './vertical/DataDestinationGmailHop'
+import { DataDestinationPostgresHopContent } from './vertical/DataDestinationPostgresHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -66,6 +67,7 @@ export type NodeContent =
   | DataSourceS3HopContent
   | LLMProcessorHopContent
   | DataDestinationGmailHopContent
+  | DataDestinationPostgresHopContent
 
 export interface NodeData {
   nodeId: string

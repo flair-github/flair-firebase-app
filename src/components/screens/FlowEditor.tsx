@@ -88,6 +88,7 @@ export const nodeTypes = {
   DataSourceS3Hop,
   LLMProcessorHop,
   DataDestinationGmailHop,
+  DataDestinationPostgresHop,
 }
 
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
@@ -130,6 +131,7 @@ import { DataSourceS3Hop, DataSourceS3HopContent } from './nodes/vertical/DataSo
 import { LLMProcessorHop } from './nodes/vertical/LLMProcessorHop'
 import { DataDestinationGmailHop } from './nodes/vertical/DataDestinationGmailHop'
 import { USER_ID_MODE } from '~/config'
+import { DataDestinationPostgresHop } from './nodes/vertical/DataDestinationPostgresHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -761,6 +763,13 @@ data_exporters:
             addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
           },
           icon: BiLogoGmail,
+        },
+        {
+          title: 'Destination: Postgres',
+          handleOnClick: () => {
+            addNode('data-destination-postgres-hop', 'DataDestinationPostgresHop')
+          },
+          icon: BiLogoPostgresql,
         },
       ],
     },
