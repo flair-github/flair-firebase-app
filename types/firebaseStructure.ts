@@ -57,6 +57,7 @@ export interface DocWorkflow extends DocRoot {
   lastSaveTimestamp: Timestamp
   workflowTitle: string
   frontendConfig: string
+  isToggleOn?: boolean
 }
 
 export interface DocWorkflowRequest extends DocRoot {

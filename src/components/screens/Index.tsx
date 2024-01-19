@@ -139,99 +139,123 @@ function Index() {
               {/* Your content */}
               <ul role="list" className="divide-y divide-gray-100">
                 {myFlows &&
-                  myFlows.map(myflow => (
-                    <li
-                      key={myflow.workflowId}
-                      className="flex items-center justify-between gap-x-6 py-5">
-                      <div className="flex min-w-0 flex-1 cursor-pointer gap-2">
-                        <div className="flex w-11 items-center justify-center">
-                          <Switch color="blue" defaultChecked />
-                        </div>
-                        <div
-                          className="flex-1"
-                          onClick={() => {
-                            openWorkflow(myflow.workflowId)
-                          }}>
-                          <div className="flex items-start gap-x-3">
-                            <p className="text-sm font-semibold leading-6 text-gray-900">
-                              {myflow.workflowTitle}
-                            </p>
-                            <p
-                              className={clsx(
-                                statuses.Running,
-                                'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset',
-                              )}>
-                              Running
-                            </p>
+                  myFlows.map(myflow => {
+                    const isToggleOn =
+                      typeof myflow.isToggleOn === 'boolean' ? myflow.isToggleOn : true
+                    const isChatbot =
+                      myflow.workflowTitle?.toLocaleLowerCase().includes('chatbot') || false
+
+                    return (
+                      <li
+                        key={myflow.workflowId}
+                        className="flex items-center justify-between gap-x-6 py-5">
+                        <div className="flex min-w-0 flex-1 cursor-pointer gap-2">
+                          <div className="flex w-11 items-center justify-center">
+                            <Switch
+                              color="blue"
+                              defaultChecked
+                              checked={isToggleOn}
+                              onChange={checked => {
+                                db.collection('workflows').doc(myflow.workflowId).update({
+                                  isToggleOn: checked,
+                                })
+                              }}
+                            />
                           </div>
-                          <div className="mt-1 flex items-center gap-x-2 text-sm leading-5 text-gray-500">
-                            <div className="flex-1 whitespace-nowrap">
-                              {myflow.workflowTitle?.toLocaleLowerCase().includes('chatbot')
-                                ? 'API Type'
-                                : 'Cron Type'}
+                          <div
+                            className="flex-1"
+                            onClick={() => {
+                              openWorkflow(myflow.workflowId)
+                            }}>
+                            <div className="flex items-start gap-x-3">
+                              <p className="text-sm font-semibold leading-6 text-gray-900">
+                                {myflow.workflowTitle}
+                              </p>
+                              {isToggleOn ? (
+                                <p
+                                  className={clsx(
+                                    statuses.Running,
+                                    'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset',
+                                  )}>
+                                  Running
+                                </p>
+                              ) : (
+                                <p
+                                  className={clsx(
+                                    statuses.Paused,
+                                    'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset',
+                                  )}>
+                                  Paused
+                                </p>
+                              )}
                             </div>
-                            <div className="flex-1 whitespace-nowrap">
-                              {myflow.workflowTitle?.toLocaleLowerCase().includes('chatbot')
-                                ? 'On Demand'
-                                : ['1d', '2d', '3d', '4d'][simpleHash(myflow.workflowTitle) % 4] +
-                                  ' Frequency'}
-                            </div>
-                            <div className="flex-1 whitespace-nowrap">
-                              Created on {myflow.createdTimestamp?.toDate().toLocaleDateString()}
-                            </div>
-                            {/* {USER_ID_MODE === 'samir' ? (
+                            <div className="mt-1 flex items-center gap-x-2 text-sm leading-5 text-gray-500">
+                              <div className="flex-1 whitespace-nowrap">
+                                {isChatbot ? 'API Type' : 'Cron Type'}
+                              </div>
+                              <div className="flex-1 whitespace-nowrap">
+                                {isChatbot
+                                  ? 'On Demand'
+                                  : ['1d', '2d', '3d', '4d'][simpleHash(myflow.workflowTitle) % 4] +
+                                    ' Frequency'}
+                              </div>
+                              <div className="flex-1 whitespace-nowrap">
+                                Created on {myflow.createdTimestamp?.toDate().toLocaleDateString()}
+                              </div>
+                              {/* {USER_ID_MODE === 'samir' ? (
                               <div className="flex-1 truncate">Created by Samir Sen</div>
                             ) : (
                               <div className="flex-1 truncate">Created by {userData?.userName}</div>
                             )} */}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex flex-none items-center gap-x-4">
-                        <a
-                          onClick={() => {
-                            openWorkflow(myflow.workflowId)
-                          }}
-                          className="hidden cursor-pointer rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">
-                          View project
-                        </a>
-                        <Menu as="div" className="relative flex-none">
-                          <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
-                            <span className="sr-only">Open options</span>
-                            <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
-                          </Menu.Button>
-                          <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-100"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95">
-                            <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <a
-                                    onClick={event => {
-                                      event.stopPropagation()
-                                      db.collection('workflows').doc(myflow.workflowId).update({
-                                        docExists: false,
-                                      })
-                                    }}
-                                    className={clsx(
-                                      active ? 'bg-gray-50' : '',
-                                      'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900',
-                                    )}>
-                                    Delete
-                                  </a>
-                                )}
-                              </Menu.Item>
-                            </Menu.Items>
-                          </Transition>
-                        </Menu>
-                      </div>
-                    </li>
-                  ))}
+                        <div className="flex flex-none items-center gap-x-4">
+                          <a
+                            onClick={() => {
+                              openWorkflow(myflow.workflowId)
+                            }}
+                            className="hidden cursor-pointer rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">
+                            View project
+                          </a>
+                          <Menu as="div" className="relative flex-none">
+                            <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
+                              <span className="sr-only">Open options</span>
+                              <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+                            </Menu.Button>
+                            <Transition
+                              as={Fragment}
+                              enter="transition ease-out duration-100"
+                              enterFrom="transform opacity-0 scale-95"
+                              enterTo="transform opacity-100 scale-100"
+                              leave="transition ease-in duration-75"
+                              leaveFrom="transform opacity-100 scale-100"
+                              leaveTo="transform opacity-0 scale-95">
+                              <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <a
+                                      onClick={event => {
+                                        event.stopPropagation()
+                                        db.collection('workflows').doc(myflow.workflowId).update({
+                                          docExists: false,
+                                        })
+                                      }}
+                                      className={clsx(
+                                        active ? 'bg-gray-50' : '',
+                                        'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900',
+                                      )}>
+                                      Delete
+                                    </a>
+                                  )}
+                                </Menu.Item>
+                              </Menu.Items>
+                            </Transition>
+                          </Menu>
+                        </div>
+                      </li>
+                    )
+                  })}
               </ul>
             </div>
           </div>
