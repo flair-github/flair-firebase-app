@@ -61,7 +61,7 @@ export const DataDestinationPostgresHop = ({
             <span className="inline-flex items-center rounded-md bg-orange-50 px-1.5 py-0.5 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-700/10">
               Destination
             </span>
-            <div className="text-lg font-medium">Insert DB rows to Postgres DB</div>
+            <div className="text-lg font-medium">Insert rows to Postgres DB</div>
           </div>
           <div className="flex-1" />
           <div
