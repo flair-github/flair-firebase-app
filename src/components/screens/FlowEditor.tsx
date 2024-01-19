@@ -288,7 +288,7 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
         createdTimestamp: serverTimestamp() as Timestamp,
         requestTimestamp: serverTimestamp() as Timestamp,
         updatedTimestamp: serverTimestamp() as Timestamp,
-        executorUserId: userData.userId,
+        executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
         docExists: true,
         workflowId,
         frontendConfig: JSON.stringify(flowData),
