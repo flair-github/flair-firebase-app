@@ -172,7 +172,8 @@ function Results() {
                             <td className="relative flex items-center justify-center whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                               <Button
                                 onClick={() => {
-                                  navigate('/result/' + el.workflowResultId)
+                                  // navigate('/result/' + el.workflowResultId)
+                                  navigate('/result/GlDkMww0Hknofhcl6MW5')
                                 }}>
                                 <HiDocumentReport /> Details
                               </Button>
