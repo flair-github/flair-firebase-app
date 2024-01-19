@@ -18,7 +18,7 @@ export interface DataDestinationSheetsHopContent {
 export const dataDestinationSheetsHopDefaultContent: DataDestinationSheetsHopContent = {
   nodeType: 'data-destination-sheets-hop',
   path: '',
-  columnMapping: '',
+  columnMapping: 'Auto-map',
 }
 
 export const DataDestinationSheetsHop = ({
@@ -55,7 +55,7 @@ export const DataDestinationSheetsHop = ({
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <img src="/images/data-sources/google-sheets.svg" width={45} height={45} />
+            <img src="/images/data-sources/google-sheets.svg" width={35} height={35} />
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-orange-50 px-1.5 py-0.5 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-700/10">
