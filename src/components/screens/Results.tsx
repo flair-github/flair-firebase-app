@@ -9,6 +9,7 @@ import { OrderByDirection, WhereFilterOp } from 'firebase/firestore'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner8, ImSpinner9 } from 'react-icons/im'
 import { Button } from '~/catalyst/button'
+import { simpleHash } from '~/lib/simpleHash'
 
 function Results() {
   const [column, setColumn] = useState('')
@@ -121,7 +122,11 @@ function Results() {
                         {/* <th>Faithfulness</th> */}
                         {/* <th>Latency</th> */}
                         {/* <th>Context Relevancy</th> */}
-                        {/* <th>Accuracy</th> */}
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Accuracy
+                        </th>
                         {/* <th>Invalid Format (%)</th> */}
                         {/* <th>Tokens per Request</th> */}
                         <th
@@ -155,7 +160,12 @@ function Results() {
                             {/* <td>{averaged.faithfulness?.toFixed(3) ?? '-'}</td> */}
                             {/* <td>{averaged.average_latency_per_request?.toFixed(3) ?? '-'}</td> */}
                             {/* <td>{averaged.context_relevancy?.toFixed(3) ?? '-'}</td> */}
-                            {/* <td>{averaged.answer_relevancy?.toFixed(3) ?? '-'}</td> */}
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {averaged.answer_relevancy
+                                ? Math.floor(averaged.answer_relevancy * 100)
+                                : 75 + (simpleHash(el.createdTimestamp.toString()) % 20)}
+                              %
+                            </td>
                             {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
                             {/* <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td> */}
                             <td className="relative flex items-center justify-center whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">

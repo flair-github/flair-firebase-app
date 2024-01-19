@@ -13,9 +13,9 @@ export function timestampToLocaleString(
 ): string {
   const date = ts.toDate() // Convert Firestore Timestamp to JavaScript Date
   return date.toLocaleString(locale, {
-    weekday: 'long', // e.g., "Sunday"
+    // weekday: 'long', // e.g., "Sunday"
     year: 'numeric', // e.g., "2023"
-    month: 'long', // e.g., "August"
+    month: 'numeric', // e.g., "August"
     day: 'numeric', // e.g., "1"
     hour: '2-digit', // e.g., "02"
     minute: '2-digit', // e.g., "15"
