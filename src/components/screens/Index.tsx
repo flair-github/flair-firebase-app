@@ -19,6 +19,7 @@ import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { TiFlowMerge } from 'react-icons/ti'
 import { Switch } from '~/catalyst/switch'
 import { USER_ID_MODE } from '~/config'
+import { simpleHash } from '~/lib/simpleHash'
 
 function Index() {
   const userData = useAtomValue(atomUserData)
@@ -189,11 +190,12 @@ function Index() {
                     <li
                       key={myflow.workflowId}
                       className="flex items-center justify-between gap-x-6 py-5">
-                      <div className="flex min-w-0 cursor-pointer gap-2">
+                      <div className="flex min-w-0 flex-1 cursor-pointer gap-2">
                         <div className="flex w-11 items-center justify-center">
                           <Switch color="blue" defaultChecked />
                         </div>
                         <div
+                          className="flex-1"
                           onClick={() => {
                             openWorkflow(myflow.workflowId)
                           }}>
@@ -209,18 +211,26 @@ function Index() {
                               Running
                             </p>
                           </div>
-                          <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-                            <p className="whitespace-nowrap">
+                          <div className="mt-1 flex items-center gap-x-2 text-sm leading-5 text-gray-500">
+                            <div className="flex-1 whitespace-nowrap">
+                              {myflow.workflowTitle?.toLocaleLowerCase().includes('chatbot')
+                                ? 'API Type'
+                                : 'Cron Type'}
+                            </div>
+                            <div className="flex-1 whitespace-nowrap">
+                              {myflow.workflowTitle?.toLocaleLowerCase().includes('chatbot')
+                                ? 'On Demand'
+                                : ['1d', '2d', '3d', '4d'][simpleHash(myflow.workflowTitle) % 4] +
+                                  ' Frequency'}
+                            </div>
+                            <div className="flex-1 whitespace-nowrap">
                               Created on {myflow.createdTimestamp?.toDate().toLocaleDateString()}
-                            </p>
-                            <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
-                              <circle cx={1} cy={1} r={1} />
-                            </svg>
-                            {USER_ID_MODE === 'samir' ? (
-                              <p className="truncate">Created by Samir Sen</p>
+                            </div>
+                            {/* {USER_ID_MODE === 'samir' ? (
+                              <div className="flex-1 truncate">Created by Samir Sen</div>
                             ) : (
-                              <p className="truncate">Created by {userData?.userName}</p>
-                            )}
+                              <div className="flex-1 truncate">Created by {userData?.userName}</div>
+                            )} */}
                           </div>
                         </div>
                       </div>
