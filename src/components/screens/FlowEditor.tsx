@@ -515,6 +515,30 @@ data_exporters:
           icon: BiLogoAws,
         },
         {
+          title: 'File Upload',
+          handleOnClick: () => {
+            // addNode('data-source-local-files', 'DataSourceLocalFilesNode')
+            addNode('data-source-files-hop', 'DataSourceFilesHop')
+          },
+          icon: FaCloudUploadAlt,
+        },
+        {
+          title: 'PostgresDB',
+          handleOnClick: () => {
+            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+            addNode('data-source-postgres-hop', 'DataSourcePostgresHop')
+          },
+          icon: BiLogoPostgresql,
+        },
+        {
+          title: 'API',
+          handleOnClick: () => {
+            // addNode('data-source-api', 'DataSourceAPINode')
+            addNode('data-source-api-hop', 'DataSourceAPIHop')
+          },
+          icon: AiFillApi,
+        },
+        {
           title: 'Google Cloud Storage',
           handleOnClick: () => {
             addNode('data-source-gcp', 'DataSourceGCPNode')
@@ -536,32 +560,11 @@ data_exporters:
           icon: BiLogoGmail,
         },
         {
-          title: 'PostgresDB',
-          handleOnClick: () => {
-            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
-          },
-          icon: BiLogoPostgresql,
-        },
-        {
           title: 'MongoDB',
           handleOnClick: () => {
             addNode('data-exporter-postgres', 'DataExporterPostgresNode')
           },
           icon: BiLogoMongodb,
-        },
-        {
-          title: 'File Upload',
-          handleOnClick: () => {
-            addNode('data-source-local-files', 'DataSourceLocalFilesNode')
-          },
-          icon: FaCloudUploadAlt,
-        },
-        {
-          title: 'API',
-          handleOnClick: () => {
-            addNode('data-source-api', 'DataSourceAPINode')
-          },
-          icon: AiFillApi,
         },
         {
           title: 'Salesforce',
@@ -713,6 +716,13 @@ data_exporters:
           icon: BiLogoPostgresql,
         },
         {
+          title: 'Google Sheets',
+          handleOnClick: () => {
+            addNode('data-destination-sheets-hop', 'DataDestinationSheetsHop')
+          },
+          icon: SiGooglesheets,
+        },
+        {
           title: 'AWS S3',
           handleOnClick: () => {
             addNode('data-exporter-s3', 'DataExporterS3Node')
@@ -739,13 +749,6 @@ data_exporters:
             addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
           icon: SiAirtable,
-        },
-        {
-          title: 'Google Sheets',
-          handleOnClick: () => {
-            addNode('data-exporter-gmail', 'DataExporterGmailNode')
-          },
-          icon: SiGooglesheets,
         },
         {
           title: 'Zendesk',
