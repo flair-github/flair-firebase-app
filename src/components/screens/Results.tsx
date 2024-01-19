@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useNavigation } from 'react-router-dom'
 import { FaRocket } from 'react-icons/fa'
 import { HiDocumentReport } from 'react-icons/hi'
 import { getAverage } from '~/lib/averager'
@@ -7,7 +7,8 @@ import { timestampToLocaleString } from './LLMOutputs'
 import { DocWorkflowResult } from 'Types/firebaseStructure'
 import { OrderByDirection, WhereFilterOp } from 'firebase/firestore'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
-import { ImSpinner9 } from 'react-icons/im'
+import { ImSpinner8, ImSpinner9 } from 'react-icons/im'
+import { Button } from '~/catalyst/button'
 
 function Results() {
   const [column, setColumn] = useState('')
@@ -17,6 +18,8 @@ function Results() {
     ['executorUserId', '==', 'IVqAyQJR4ugRGR8qL9UuB809OX82'],
   ])
   const [orders, setOrders] = useState<[string, OrderByDirection | undefined][]>([])
+
+  const navigate = useNavigate()
 
   const { items, loading, hasMore, loadMore } = usePaginatedFirestore<DocWorkflowResult>(
     'workflow_results',
@@ -31,8 +34,7 @@ function Results() {
         <div className="text-lg font-medium">Executions</div>
       </div>
 
-      <div className="container mx-4 mb-9 mt-5 w-[calc(100%-2rem)] rounded-md border">
-        <div className="flex items-center border-b p-3">
+      {/* <div className="flex items-center border-b p-3">
           <form className="join">
             <select
               className={' join-item ' + 'select select-bordered '}
@@ -46,7 +48,7 @@ function Results() {
               </option>
               <option value="model">Model</option>
               <option value="status">Status</option>
-              {/* <option value="model and status">Model and Status</option> */}
+              <option value="model and status">Model and Status</option>
               <option value="workflowRequestId">Request Id</option>
               <option value="workflowName">Workflow Name</option>
             </select>
@@ -81,85 +83,108 @@ function Results() {
             <div>Compare Selections</div>
             <div className="text-xs">(soon)</div>
           </button>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="table table-zebra">
-            {/* head */}
-            <thead>
-              <tr className="text-sm">
-                <th />
-                <th>Workflow Name</th>
-                <th>Workflow Request Id</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Model</th>
-                {/* <th>Faithfulness</th> */}
-                <th>Latency</th>
-                {/* <th>Context Relevancy</th> */}
-                <th>Accuracy</th>
-                <th>Invalid Format (%)</th>
-                <th>Tokens per Request</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map(el => {
-                const averaged = el.averageEvaluationData ?? getAverage(el.evaluationData)
+        </div> */}
+      <div className="min-h-screen overflow-x-auto bg-slate-50">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="mt-8 flow-root">
+            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <div className="overflow-hidden shadow ring-1 ring-black/5 sm:rounded-lg">
+                  <table className="min-w-full divide-y divide-gray-300">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th
+                          scope="col"
+                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                          Workflow Name
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Workflow Request Id
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Status
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Created Timestamp
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Model
+                        </th>
+                        {/* <th>Faithfulness</th> */}
+                        {/* <th>Latency</th> */}
+                        {/* <th>Context Relevancy</th> */}
+                        {/* <th>Accuracy</th> */}
+                        {/* <th>Invalid Format (%)</th> */}
+                        {/* <th>Tokens per Request</th> */}
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 bg-white">
+                      {items.map(el => {
+                        const averaged = el.averageEvaluationData ?? getAverage(el.evaluationData)
 
-                return (
-                  <tr key={el.workflowResultId}>
-                    <td>
-                      <div className="flex h-full w-full items-center justify-center">
-                        <input type="checkbox" className="checkbox" />
-                      </div>
-                    </td>
-                    <td>
-                      <div className="w-24 break-words">{el.workflowName}</div>
-                    </td>
-                    <td>
-                      <div className="w-24 break-words">{el.workflowRequestId}</div>
-                    </td>
-                    <td>
-                      <div className="w-24 break-words">{(el as any).status || 'completed'}</div>
-                    </td>
-                    <td>
-                      <div className="w-36">{timestampToLocaleString(el.createdTimestamp)}</div>
-                    </td>
-                    <td>
-                      <div className="w-24">{el.model}</div>
-                    </td>
-                    {/* <td>{averaged.faithfulness?.toFixed(3) ?? '-'}</td> */}
-                    <td>{averaged.average_latency_per_request?.toFixed(3) ?? '-'}</td>
-                    {/* <td>{averaged.context_relevancy?.toFixed(3) ?? '-'}</td> */}
-                    <td>{averaged.answer_relevancy?.toFixed(3) ?? '-'}</td>
-                    <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td>
-                    <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td>
-                    <td>
-                      <div style={{ minWidth: 250 }}>
-                        <Link
-                          className="btn m-1 bg-slate-200"
-                          to={'/result/' + el.workflowResultId}>
-                          <HiDocumentReport /> Details
-                        </Link>
-                        <a className="btn m-1 bg-slate-200" href="#" onClick={() => {}}>
-                          <FaRocket /> Deploy
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-          {hasMore ? (
-            <button className="btn mx-auto my-3 block w-36" onClick={loadMore}>
-              {loading ? (
-                <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
-              ) : (
-                'Load More'
-              )}
-            </button>
-          ) : null}
+                        return (
+                          <tr key={el.workflowResultId}>
+                            <td className="whitespace-nowrap break-words py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                              {el.workflowName}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {el.workflowRequestId}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {(el as any).status || 'completed'}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {timestampToLocaleString(el.createdTimestamp)}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {el.model}
+                            </td>
+                            {/* <td>{averaged.faithfulness?.toFixed(3) ?? '-'}</td> */}
+                            {/* <td>{averaged.average_latency_per_request?.toFixed(3) ?? '-'}</td> */}
+                            {/* <td>{averaged.context_relevancy?.toFixed(3) ?? '-'}</td> */}
+                            {/* <td>{averaged.answer_relevancy?.toFixed(3) ?? '-'}</td> */}
+                            {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
+                            {/* <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td> */}
+                            <td className="relative flex items-center justify-center whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                              <Button
+                                onClick={() => {
+                                  navigate('/result/' + el.workflowResultId)
+                                }}>
+                                <HiDocumentReport /> Details
+                              </Button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-6 flex items-center justify-center p-6">
+          {!hasMore ? null : loading ? (
+            <ImSpinner8 className="animate mx-auto h-5 w-5 animate-spin" />
+          ) : (
+            <Button color="white" onClick={loadMore}>
+              Load More
+            </Button>
+          )}
         </div>
       </div>
     </div>
