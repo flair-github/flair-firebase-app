@@ -89,6 +89,7 @@ export const nodeTypes = {
   LLMProcessorHop,
   DataDestinationGmailHop,
   DataDestinationPostgresHop,
+  DataDestinationTwilioHop,
 }
 
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
@@ -132,6 +133,7 @@ import { LLMProcessorHop } from './nodes/vertical/LLMProcessorHop'
 import { DataDestinationGmailHop } from './nodes/vertical/DataDestinationGmailHop'
 import { USER_ID_MODE } from '~/config'
 import { DataDestinationPostgresHop } from './nodes/vertical/DataDestinationPostgresHop'
+import { DataDestinationTwilioHop } from './nodes/vertical/DataDestinationTwilioHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -770,6 +772,13 @@ data_exporters:
             addNode('data-destination-postgres-hop', 'DataDestinationPostgresHop')
           },
           icon: BiLogoPostgresql,
+        },
+        {
+          title: 'Destination: Twilio',
+          handleOnClick: () => {
+            addNode('data-destination-twilio-hop', 'DataDestinationTwilioHop')
+          },
+          icon: SiTwilio,
         },
       ],
     },

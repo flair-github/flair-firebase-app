@@ -32,6 +32,7 @@ import { DataSourceS3HopContent } from './vertical/DataSourceS3Hop'
 import { LLMProcessorHopContent } from './vertical/LLMProcessorHop'
 import { DataDestinationGmailHopContent } from './vertical/DataDestinationGmailHop'
 import { DataDestinationPostgresHopContent } from './vertical/DataDestinationPostgresHop'
+import { DataDestinationTwilioHopContent } from './vertical/DataDestinationTwilioHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -68,6 +69,7 @@ export type NodeContent =
   | LLMProcessorHopContent
   | DataDestinationGmailHopContent
   | DataDestinationPostgresHopContent
+  | DataDestinationTwilioHopContent
 
 export interface NodeData {
   nodeId: string
