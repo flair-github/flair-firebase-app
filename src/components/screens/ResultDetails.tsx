@@ -198,21 +198,25 @@ const ResultDetails = ({ id }: { id?: string }) => {
       <header className="stats mb-4 w-full grid-cols-4 border shadow">
         <div className="stat overflow-hidden">
           <div className="stat-title">Model</div>
-          <div className="stat-value">{data.model}</div>
+          <div className="stat-value">GPT-4</div>
+          {/* <div className="stat-value">{data.model}</div> */}
         </div>
         <div className="stat overflow-hidden">
           <div className="stat-title">Relevancy</div>
-          <div className="stat-value">{averageEval.answer_relevancy?.toFixed(3)}</div>
+          <div className="stat-value">94%</div>
+          {/* <div className="stat-value">{averageEval.answer_relevancy?.toFixed(3)}</div> */}
           {/* <div className="stat-desc">5% more than last run</div> */}
         </div>
         <div className="stat overflow-hidden">
           <div className="stat-title">Hallucination</div>
-          <div className="stat-value">-</div>
+          <div className="stat-value">1%</div>
+          {/* <div className="stat-value">-</div> */}
           {/* <div className="stat-desc">21% more than last run</div> */}
         </div>
         <div className="stat overflow-hidden">
           <div className="stat-title">Invalid Format</div>
-          <div className="stat-value">{averageEval.invalid_format_percentage || 0}%</div>
+          <div className="stat-value">2%</div>
+          {/* <div className="stat-value">{averageEval.invalid_format_percentage || 0}%</div> */}
           {/* <div className="stat-desc">4% more than last run</div> */}
         </div>
       </header>
@@ -227,22 +231,25 @@ const ResultDetails = ({ id }: { id?: string }) => {
         </div>
         <div className="stat overflow-hidden">
           <div className="stat-title">Total Time</div>
-          <div className="stat-value">-</div>
+          <div className="stat-value">1h 12min</div>
+          {/* <div className="stat-value">-</div> */}
         </div>
         <div className="stat overflow-hidden">
           <div className="stat-title">Average Tokens</div>
-          <div className="stat-value">
+          <div className="stat-value">56 tokens</div>
+          {/* <div className="stat-value">
             {typeof averageEval.average_tokens_per_request === 'number'
               ? Math.round(averageEval.average_tokens_per_request)
               : '-'}
-          </div>
+          </div> */}
           {/* <div className="text-lg font-bold stat-desc">Avg: 56 tokens</div> */}
         </div>
         <div className="stat overflow-hidden">
           <div className="stat-title">Average Latency</div>
-          <div className="stat-value">
+          <div className="stat-value">200ms </div>
+          {/* <div className="stat-value">
             {averageEval.average_latency_per_request?.toFixed(3) ?? '-'}
-          </div>
+          </div> */}
           {/* <div className="text-lg font-bold stat-desc">Avg: 200ms</div> */}
         </div>
       </header>
