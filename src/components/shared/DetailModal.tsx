@@ -76,7 +76,7 @@ export default function DetailModal({
 
                   <article className="form-control col-span-3 w-full">
                     <div className="label">
-                      <span className="label-text">Workflow ID</span>
+                      <span className="label-text">Pipeline ID</span>
                       <button
                         className="btn btn-square btn-xs cursor-pointer"
                         onClick={() => {

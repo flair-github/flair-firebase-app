@@ -121,7 +121,7 @@ function Index() {
                     onClick={() => {
                       navigate('templates')
                     }}>
-                    Flow Templates
+                    Pipeline Templates
                   </Button>
                 </div>
               </div>
@@ -299,7 +299,7 @@ function Index() {
         <form method="dialog" className="modal-box max-w-160 divide-y">
           <header>
             <h3 className="text-lg font-bold">Welcome to Flair AI!</h3>
-            <p className="mb-2">Get started now to make powerful workflow</p>
+            <p className="mb-2">Get started now to make powerful pipeline</p>
           </header>
           <section className="grid grid-cols-2 gap-3 pt-3">
             <button
@@ -324,7 +324,7 @@ function Index() {
               </span>
               <article className="flex flex-col justify-center text-left">
                 <div className="flex items-center">
-                  <p className="font-bold">Workflow template</p>
+                  <p className="font-bold">Pipeline template</p>
                   <BsArrowLeftShort className="h-5 w-5 rotate-180" />
                 </div>
                 <p className="line-clamp-2">Ready to go template for you</p>

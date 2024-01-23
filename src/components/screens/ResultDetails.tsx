@@ -16,8 +16,8 @@ import { useCopyToClipboard } from 'react-use'
 import DetailModal from '../shared/DetailModal'
 import { WhereFilterOp } from 'firebase/firestore'
 
-const yaml = `name: 'My LLM workflow'
-description: 'Workflow that extracts information from customer support calls.'
+const yaml = `name: 'My LLM Pipeline'
+description: 'Pipeline that extracts information from customer support calls.'
 tags: ['audio-pipelines']
 frequency: '1d'
 customer_id: 'IVqAyQJR4ugRGR8qL9UuB809OX82'
@@ -170,7 +170,7 @@ const ResultDetails = ({ id }: { id?: string }) => {
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
-        <h1 className="text-3xl font-bold">{'Workflow Result'}</h1>
+        <h1 className="text-3xl font-bold">{'Pipeline Result'}</h1>
         <div className="flex-1" />
         {sharedToken ? (
           <div className="join flex w-96 items-center divide-x divide-gray-300 border bg-white shadow-sm">
@@ -376,7 +376,7 @@ const ResultDetails = ({ id }: { id?: string }) => {
         <div className="justify-left flex w-full border">
           <div className="container max-w-200 p-5">
             <div className="px-4 sm:px-0">
-              <h3 className="text-base font-bold leading-7 text-gray-900">Workflow Result</h3>
+              <h3 className="text-base font-bold leading-7 text-gray-900">Pipeline Result</h3>
               {/* <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">
                 Personal details and application.
               </p> */}

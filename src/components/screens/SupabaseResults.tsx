@@ -94,7 +94,7 @@ function PageResults() {
             <option value="status">Status</option>
             {/* <option value="model and status">Model and Status</option> */}
             <option value="workflowRequestId">Request Id</option>
-            <option value="workflowName">Workflow Name</option>
+            <option value="workflowName">Pipeline Name</option>
           </select>
           <input
             className="input join-item input-bordered"
@@ -131,8 +131,8 @@ function PageResults() {
           <thead>
             <tr>
               <th />
-              <th>Workflow Name</th>
-              <th>Workflow Request Id</th>
+              <th>Pipeline Name</th>
+              <th>Pipeline Request Id</th>
               <th>Status</th>
               <th>Created</th>
               <th>Model</th>

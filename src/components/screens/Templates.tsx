@@ -26,11 +26,11 @@ function Templates() {
         <div className="hero-content text-center">
           <div className="">
             <h1 className="text-5xl font-bold">
-              🚀 Rapidly develop workflows with ready-made templates
+              🚀 Rapidly develop pipelines with ready-made templates
             </h1>
             <p className="py-6">
               From real estate to financial service and call center data, these ready-made Flair
-              workflow templates provide inspiration with just one click. Connect them to your own
+              pipeline templates provide inspiration with just one click. Connect them to your own
               data sources and start customizing.
             </p>
             {/* <button className="btn-primary btn">Get Started</button> */}

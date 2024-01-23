@@ -348,8 +348,8 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
         async function uploadConfig() {
           const formData = new FormData()
 
-          const yamlContent = `name: 'My LLM workflow'
-description: 'Workflow that extracts information from customer support calls.'
+          const yamlContent = `name: 'My LLM Pipeline'
+description: 'Pipeline that extracts information from customer support calls.'
 tags: ['audio-pipelines']
 frequency: '1d'
 customer_id: 'IVqAyQJR4ugRGR8qL9UuB809OX82'

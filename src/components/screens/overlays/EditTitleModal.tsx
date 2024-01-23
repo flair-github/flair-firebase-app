@@ -13,11 +13,11 @@ function ExecuteModal(
   return (
     <dialog ref={ref} className="modal">
       <form method="dialog" className="modal-box">
-        <h3 className="mb-5 text-center text-lg font-bold">Edit Workflow Name</h3>
+        <h3 className="mb-5 text-center text-lg font-bold">Edit Pipeline Name</h3>
         <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
         <div className="mb-2 mt-1">
           <label className="label">
-            <span className="label-text">Workflow Name</span>
+            <span className="label-text">Pipeline Name</span>
           </label>
           <input
             className="input mb-3 w-full border-black"

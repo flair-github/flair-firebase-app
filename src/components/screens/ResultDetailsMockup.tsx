@@ -14,7 +14,7 @@ function ResultDetails() {
   return (
     <div className="container mx-auto p-4">
       <div className="mb-2 flex items-center ">
-        <h1 className="text-3xl font-bold">Customer Call Workflow #1831</h1>
+        <h1 className="text-3xl font-bold">Customer Call Pipeline #1831</h1>
         <div className="flex-1" />
         <a className="btn btn-disabled mr-2 gap-1" href="#" onClick={() => {}}>
           <FaShare />
@@ -293,7 +293,7 @@ function ResultDetails() {
         <div className="justify-left flex w-full border [height:720px]">
           <div className="container max-w-200 p-5">
             <div className="px-4 sm:px-0">
-              <h3 className="text-base font-bold leading-7 text-gray-900">Workflow Result</h3>
+              <h3 className="text-base font-bold leading-7 text-gray-900">Pipeline Result</h3>
               {/* <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">
                 Personal details and application.
               </p> */}
@@ -337,7 +337,7 @@ function ResultDetails() {
                       <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
                         <div className="flex w-0 flex-1 items-center">
                           <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
+                          <div className="ml-4 flex min-w-0 flex-1 gap-2">
                             <span className="truncate font-medium">llm_result.csv</span>
                             <span className="shrink-0 text-gray-400">2.5 MB</span>
                           </div>
@@ -354,7 +354,7 @@ function ResultDetails() {
                       <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
                         <div className="flex w-0 flex-1 items-center">
                           <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                          <div className="min-w-0 ml-4 flex flex-1 gap-2">
+                          <div className="ml-4 flex min-w-0 flex-1 gap-2">
                             <span className="truncate font-medium">evaluation_result.jsonl</span>
                             <span className="shrink-0 text-gray-400">2.6 MB</span>
                           </div>
@@ -387,8 +387,8 @@ function ResultDetails() {
 
 export default ResultDetails
 
-const yaml = `name: 'My LLM workflow'
-description: 'Workflow that extracts information from customer support calls.'
+const yaml = `name: 'My LLM Pipeline'
+description: 'Pipeline that extracts information from customer support calls.'
 tags: ['audio-pipelines']
 frequency: '1d'
 customer_id: 'IVqAyQJR4ugRGR8qL9UuB809OX82'

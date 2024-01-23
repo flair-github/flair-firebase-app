@@ -268,7 +268,7 @@ function Deployment() {
                 Column
               </option>
               <option value="model">Deployment ID</option>
-              <option value="status">Workflow Name</option>
+              <option value="status">Pipeline Name</option>
               <option value="status">Interval</option>
               <option value="workflowRequestId">Source</option>
               <option value="workflowName">Export</option>
@@ -301,7 +301,7 @@ function Deployment() {
             <tr className="text-sm">
               <th />
               <th>Deployment ID</th>
-              <th>Workflow Name</th>
+              <th>Pipeline Name</th>
               <th>Frequency</th>
               <th>Last Run Status</th>
               <th>Next Run At</th>

@@ -53,7 +53,7 @@ function Results() {
             <option value="status">Status</option>
             <option value="model and status">Model and Status</option>
             <option value="workflowRequestId">Request Id</option>
-            <option value="workflowName">Workflow Name</option>
+            <option value="workflowName">Pipeline Name</option>
           </Select>
           <Input
             value={substring}
@@ -103,12 +103,12 @@ function Results() {
                         <th
                           scope="col"
                           className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                          Workflow Name
+                          Pipeline Name
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                          Workflow Request Id
+                          Pipeline Request Id
                         </th>
                         <th
                           scope="col"

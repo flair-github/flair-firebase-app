@@ -9,8 +9,8 @@ import DeploymentToast from './overlays/DeploymentToast'
 import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 
 interface UserConfigProps {}
-const initialYamlValue = `name: 'My LLM workflow'
-description: 'Workflow that extracts information from customer support calls.'
+const initialYamlValue = `name: 'My LLM Pipeline'
+description: 'Pipeline that extracts information from customer support calls.'
 tags: ['audio-pipelines']
 frequency: '1d'
 customer_id: 'IVqAyQJR4ugRGR8qL9UuB809OX82'

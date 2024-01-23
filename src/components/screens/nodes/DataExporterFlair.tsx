@@ -57,7 +57,7 @@ export const DataExporterFlairNode = ({
       <section className={clsx(isCollapsed && 'hidden', 'px-5 pb-5')}>
         <div className="mb-2 mt-1">
           <p className="mb-2">
-            Workflow job results will be available in the <b>Results</b> page
+            Pipeline job results will be available in the <b>Results</b> page
           </p>
           {/* <a className="btn" href="#" onClick={() => {}}>
             <HiDocumentReport /> Open Results

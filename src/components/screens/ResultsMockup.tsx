@@ -24,7 +24,7 @@ function PageResults() {
             <tr>
               <th />
               <th>Job Id</th>
-              <th>Workflow</th>
+              <th>Pipeline</th>
               <th>Request Date</th>
               <th>Total Time Taken</th>
               <th>Model</th>
@@ -44,9 +44,9 @@ function PageResults() {
               </td>
               <td>#1831</td>
               <td>
-                Customer Call Workflow <br />
+                Customer Call Pipeline <br />
                 <span className="badge badge-outline whitespace-nowrap text-xs">
-                  Workflow Id: #12
+                  Pipeline Id: #12
                 </span>
               </td>
               <td>2023-06-25 10:45:30</td>
@@ -78,10 +78,10 @@ function PageResults() {
               </td>
               <td>#1830</td>
               <td>
-                Customer Call Workflow
+                Customer Call Pipeline
                 <br />
                 <span className="badge badge-outline whitespace-nowrap text-xs">
-                  Workflow Id: #12
+                  Pipeline Id: #12
                 </span>
               </td>
               <td>2023-06-24 14:30:00</td>
@@ -113,9 +113,9 @@ function PageResults() {
               </td>
               <td>#1829</td>
               <td>
-                Supply Chain Optimization Workflow <br />
+                Supply Chain Optimization Pipeline <br />
                 <span className="badge badge-outline whitespace-nowrap text-xs">
-                  Workflow Id: #3
+                  Pipeline Id: #3
                 </span>
               </td>
               <td>2023-06-24 12:00:00</td>
@@ -147,10 +147,10 @@ function PageResults() {
               </td>
               <td>#1828</td>
               <td>
-                Product Launch Process Workflow
+                Product Launch Process Pipeline
                 <br />
                 <span className="badge badge-outline whitespace-nowrap text-xs">
-                  Workflow Id: #5
+                  Pipeline Id: #5
                 </span>
               </td>
               <td>2023-06-23 16:15:00</td>
@@ -185,7 +185,7 @@ function PageResults() {
                 Financial Reporting <br />
                 <span className="badge badge-outline whitespace-nowrap text-xs">
                   {' '}
-                  Workflow Id: #6
+                  Pipeline Id: #6
                 </span>
               </td>
               <td>2023-06-23 09:30:00</td>
