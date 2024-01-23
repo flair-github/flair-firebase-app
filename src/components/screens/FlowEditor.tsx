@@ -504,7 +504,7 @@ data_exporters:
     {
       title: 'Data Source',
       subtitle: 'Load unstructured data from a data source.',
-      color: 'purple',
+      color: 'slate',
       members: [
         {
           title: 'AWS S3',
@@ -589,7 +589,7 @@ data_exporters:
     {
       title: 'Transform',
       subtitle: 'Transforms your data using your choice of LLM and prompts.',
-      color: 'blue',
+      color: 'slate',
       members: [
         {
           title: 'LLM Processor',
@@ -689,7 +689,7 @@ data_exporters:
     {
       title: 'Data Destination',
       subtitle: 'Send processed data to a specified destination.',
-      color: 'teal',
+      color: 'slate',
       members: [
         {
           title: 'Gmail',
