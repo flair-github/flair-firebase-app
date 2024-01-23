@@ -16,24 +16,24 @@ code {
     monospace;
 }
 
-.input {
+/* .input {
   font-size: 20px;
-}
+} */
 
-.label {
+/* .label {
   font-weight: bold;
   font-size: 20px;
   margin-top: 4px;
   margin-bottom: 2px;
-}
+} */
 
 /* .select {
   font-size: 20px;
 } */
 
-.textarea {
+/* .textarea {
   font-size: 20px;
-}
+} */
 
 /* .btn {
   @apply normal-case;
