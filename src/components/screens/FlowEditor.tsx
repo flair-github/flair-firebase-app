@@ -467,7 +467,7 @@ data_exporters:
         uploadConfig()
       }
 
-      setDeploymentStatus(['success', 'Your workflow has been deployed!'])
+      setDeploymentStatus(['success', 'Your pipeline has been deployed!'])
     } catch (error) {
       console.log(error)
       setDeploymentStatus(['error', 'Sorry, something went wrong.'])
@@ -899,7 +899,7 @@ data_exporters:
           executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
         })
 
-        setDeploymentStatus(['success', 'Your workflow has been run!'])
+        setDeploymentStatus(['success', 'Your pipeline has been run!'])
         setTimeout(() => {
           setDeploymentStatus(undefined)
         }, 3000)
@@ -1049,7 +1049,7 @@ data_exporters:
           setIsDeploying(true)
           await new Promise(resolve => setTimeout(resolve, 2000))
           setIsDeploying(false)
-          setDeploymentStatus(['success', 'Your workflow has been deployed!'])
+          setDeploymentStatus(['success', 'Your pipeline has been deployed!'])
           setTimeout(() => {
             setDeploymentStatus(undefined)
           }, 3000)

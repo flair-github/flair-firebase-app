@@ -20,7 +20,7 @@ const navigation: {
   icon: IconType
   children?: { name: string; href: string }[]
 }[] = [
-  { name: 'Flow', href: '/', icon: RiFlowChart },
+  { name: 'Pipelines', href: '/', icon: RiFlowChart },
   // { name: 'Deployment', href: '/deployment', icon: HiOutlineRocketLaunch },
   { name: 'Executions', href: '/result', icon: AiTwotoneExperiment },
   // { name: 'Script', href: '/transcription', icon: CgTranscript },
