@@ -1,13 +1,13 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useState } from 'react'
 import { db } from '~/lib/firebase'
-import { ImSpinner9 } from 'react-icons/im'
+import { ImSpinner8, ImSpinner9 } from 'react-icons/im'
 
 export const DeployModal = ({
-  executeFlow,
+  deployFlow,
   isDeploying,
   dialogRef,
 }: {
-  executeFlow: () => Promise<void>
+  deployFlow: () => Promise<void>
   isDeploying: boolean
   dialogRef: any
 }) => {
@@ -59,18 +59,18 @@ export const DeployModal = ({
             className="btn btn-primary mx-auto block w-36"
             onClick={async event => {
               event.preventDefault()
-              await executeFlow()
+              await deployFlow()
               dialogRef?.current?.close()
-              db.collection('workflow_results').add({
-                docExists: true,
-                averageEvaluationData: 0.86,
-                workflowName: 'NPS Survey Tool',
-                workflowRequestId: '91837235983',
-                status: 'initiated',
-                createdTimestamp: new Date(),
-                model: 'gpt-4',
-                executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
-              })
+              // db.collection('workflow_results').add({
+              //   docExists: true,
+              //   averageEvaluationData: 0.86,
+              //   workflowName: 'NPS Survey Tool',
+              //   workflowRequestId: '91837235983',
+              //   status: 'initiated',
+              //   createdTimestamp: new Date(),
+              //   model: 'gpt-4',
+              //   executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
+              // })
             }}>
             {isDeploying ? (
               <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
@@ -87,4 +87,22 @@ export const DeployModal = ({
   )
 }
 
-export default forwardRef(DeployModal)
+export const RunModal = ({ dialogRef }: { dialogRef: any }) => {
+  return (
+    <dialog ref={dialogRef} className="modal">
+      <form method="dialog" className="modal-box">
+        <h3 className="mb-5 text-center text-lg font-bold">Running Pipeline</h3>
+        {/* <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button> */}
+        <div className="mb-2 mt-1">
+          <div className="flex h-72 w-full items-center justify-center">
+            <ImSpinner8 className="h-16 w-16 animate-spin text-slate-400" />
+          </div>
+          <div />
+        </div>
+      </form>
+      <form method="dialog" className="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+  )
+}

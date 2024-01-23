@@ -50,7 +50,7 @@ import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
 import { ConditionalLogicNode } from './nodes/ConditionalLogicNode'
 import { DataExtractorAggregatorNode } from './nodes/DataExtractorAggregatorNode'
-import { DeployModal } from './overlays/ExecuteModal'
+import { DeployModal, RunModal } from './overlays/ExecuteModal'
 import JSONImporterModal from './overlays/JSONImporterModal'
 import JSONConfigModal from './overlays/JSONConfigModal'
 import DeploymentToast from './overlays/DeploymentToast'
@@ -251,6 +251,8 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   }
 
   const [isDeploying, setIsDeploying] = useState(false)
+  const runningModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
+
   const [deploymentStatus, setDeploymentStatus] = useState<['success' | 'error', string]>()
 
   const saveFlow = async (withToast = false) => {
@@ -882,7 +884,25 @@ data_exporters:
       Icon: RiArrowRightLine,
       handleOnClick: async (event: React.SyntheticEvent) => {
         event.preventDefault()
-        executeModalRef.current?.showModal()
+        runningModalRef.current?.showModal()
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        runningModalRef.current?.close()
+
+        db.collection('workflow_results').add({
+          docExists: true,
+          averageEvaluationData: 0.86,
+          workflowName: title,
+          workflowRequestId: db.collection('workflow_results').doc().id,
+          status: 'initiated',
+          createdTimestamp: new Date(),
+          model: 'gpt-4',
+          executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
+        })
+
+        setDeploymentStatus(['success', 'Your workflow has been run!'])
+        setTimeout(() => {
+          setDeploymentStatus(undefined)
+        }, 3000)
       },
     },
     {
@@ -1023,10 +1043,21 @@ data_exporters:
       </main>
 
       <DeployModal
-        executeFlow={executeFlow}
         isDeploying={isDeploying}
         dialogRef={executeModalRef}
+        deployFlow={async () => {
+          setIsDeploying(true)
+          await new Promise(resolve => setTimeout(resolve, 2000))
+          setIsDeploying(false)
+          setDeploymentStatus(['success', 'Your workflow has been deployed!'])
+          setTimeout(() => {
+            setDeploymentStatus(undefined)
+          }, 3000)
+        }}
       />
+
+      <RunModal dialogRef={runningModalRef} />
+
       <EditTitleModal
         key={title}
         isDeploying={isDeploying}
