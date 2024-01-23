@@ -869,14 +869,6 @@ data_exporters:
       },
     },
     {
-      title: 'Run',
-      Icon: RiArrowRightLine,
-      handleOnClick: async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-        executeModalRef.current?.showModal()
-      },
-    },
-    {
       title: 'Share',
       Icon: RiFileUploadLine,
       handleOnClick: async (event: React.SyntheticEvent) => {
@@ -886,7 +878,15 @@ data_exporters:
       },
     },
     {
-      title: 'Publish',
+      title: 'Run',
+      Icon: RiArrowRightLine,
+      handleOnClick: async (event: React.SyntheticEvent) => {
+        event.preventDefault()
+        executeModalRef.current?.showModal()
+      },
+    },
+    {
+      title: 'Deploy',
       Icon: AiOutlineRocket,
       handleOnClick: async (event: React.SyntheticEvent) => {
         event.preventDefault()
