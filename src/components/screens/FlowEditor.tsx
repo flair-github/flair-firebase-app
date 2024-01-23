@@ -50,7 +50,7 @@ import { DataExporterGmailNode } from './nodes/DataExporterGmail'
 import { DataRetrieverApiNode } from './nodes/DataRetrieverAPI'
 import { ConditionalLogicNode } from './nodes/ConditionalLogicNode'
 import { DataExtractorAggregatorNode } from './nodes/DataExtractorAggregatorNode'
-import ExecuteModal from './overlays/ExecuteModal'
+import { DeployModal } from './overlays/ExecuteModal'
 import JSONImporterModal from './overlays/JSONImporterModal'
 import JSONConfigModal from './overlays/JSONConfigModal'
 import DeploymentToast from './overlays/DeploymentToast'
@@ -1022,7 +1022,11 @@ data_exporters:
         </section>
       </main>
 
-      <ExecuteModal executeFlow={executeFlow} isDeploying={isDeploying} ref={executeModalRef} />
+      <DeployModal
+        executeFlow={executeFlow}
+        isDeploying={isDeploying}
+        dialogRef={executeModalRef}
+      />
       <EditTitleModal
         key={title}
         isDeploying={isDeploying}
