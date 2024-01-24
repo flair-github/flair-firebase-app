@@ -145,7 +145,7 @@ function Index() {
                     <TableRow>
                       <TableHeader className="w-[0.1%]" />
                       <TableHeader>Pipeline</TableHeader>
-                      <TableHeader className="w-[0.1%]" />
+                      <TableHeader>Status</TableHeader>
                       <TableHeader>Type</TableHeader>
                       <TableHeader>Frequency</TableHeader>
                       <TableHeader>Last Run</TableHeader>
