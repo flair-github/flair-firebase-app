@@ -82,16 +82,16 @@ const clients = [
 
 function Credentials() {
   return (
-    <div>
-      <div className="flex h-16 items-center border-b px-5">
+    <div className="bg-slate-50">
+      <div className="flex h-16 items-center border-b bg-white px-5">
         <div className="text-lg font-medium">Credentials</div>
       </div>
 
-      <div className="min-h-screen overflow-x-auto bg-slate-50">
+      <div className="min-h-screen">
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="mt-8 flow-root">
-            <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
-              <div className="-ml-4 -mt-2 mb-5 flex flex-wrap items-center justify-between sm:flex-nowrap">
+          <div className="mt-8 flow-root overflow-hidden rounded-lg border">
+            <div className="border-gray-200 bg-white px-4 py-5 sm:px-6">
+              <div className="-ml-4 -mt-2 mb-5 flex flex-wrap items-center justify-between border-b pb-5 sm:flex-nowrap">
                 <div className="ml-4 mt-2 shrink-0">
                   <button
                     type="button"
