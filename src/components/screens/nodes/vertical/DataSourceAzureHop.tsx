@@ -9,29 +9,29 @@ import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 
-export interface DataSourceS3HopContent {
-  nodeType: 'data-source-s3-hop'
+export interface DataSourceAzureHopContent {
+  nodeType: 'data-source-azure-hop'
   eventType: 'New CSV file' | 'Updated CSV file'
   importedKeys: Record<string, boolean>
 }
 
-export const dataSourceS3HopDefaultContent: DataSourceS3HopContent = {
-  nodeType: 'data-source-s3-hop',
+export const dataSourceAzureHopDefaultContent: DataSourceAzureHopContent = {
+  nodeType: 'data-source-azure-hop',
   eventType: 'New CSV file',
   importedKeys: {},
 }
 
-export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceS3HopContent>(
-    dataSourceS3HopDefaultContent,
+export const DataSourceAzureHop = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
+  const [nodeContent, setNodeContent] = useState<DataSourceAzureHopContent>(
+    dataSourceAzureHopDefaultContent,
   )
-  const [nodeFormContent, setNodeFormContent] = useState<DataSourceS3HopContent>(
-    dataSourceS3HopDefaultContent,
+  const [nodeFormContent, setNodeFormContent] = useState<DataSourceAzureHopContent>(
+    dataSourceAzureHopDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-s3-hop') {
+    if (data.initialContents.nodeType === 'data-source-azure-hop') {
       setNodeContent(cloneDeep(data.initialContents))
     }
   }, [data.initialContents])
@@ -49,13 +49,13 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <img src="/images/data-sources/s3.svg" width={45} height={45} />
+            <img src="/images/data-sources/azure.svg" width={45} height={45} />
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
               Source
             </span>
-            <div className="text-lg font-medium">Import data from S3</div>
+            <div className="text-lg font-medium">Import data from Azure Blob Storage</div>
           </div>
           <div className="flex-1" />
           <div
@@ -127,7 +127,7 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                S3 Source
+                                Azure Blob Storage Source
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new
@@ -163,7 +163,6 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                                 <option value="production">Production</option>
                                 <option value="staging-1">Staging 1</option>
                                 <option value="staging-2">Staging 2</option>
-                                <option value="my-aws">My AWS</option>
                               </Select>
                             </div>
                           </div>
@@ -202,7 +201,7 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                                       New CSV file
                                     </label>
                                     <p id="public-access-description" className="text-gray-500">
-                                      New CSV file detected in S3
+                                      New CSV file detected in Azure Blob Storage
                                     </p>
                                   </div>
                                 </div>
@@ -244,7 +243,7 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                                     aria-hidden="true"
                                   />
                                   <span className="ml-2">
-                                    Learn more about structuring CSV in S3
+                                    Learn more about structuring CSV in Azure
                                   </span>
                                 </a>
                               </div>

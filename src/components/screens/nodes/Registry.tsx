@@ -38,6 +38,10 @@ import { DataSourceAPIHopContent } from './vertical/DataSourceAPIHop'
 import { DataSourceFilesHopContent } from './vertical/DataSourceFilesHop'
 import { DataSourcePostgresHopContent } from './vertical/DataSourcePostgresHop'
 import { DataDestinationSheetsHopContent } from './vertical/DataDestinationSheetsHop'
+import { DataSourceGCSHopContent } from './vertical/DataSourceGCSHop'
+import { DataSourceAzureHopContent } from './vertical/DataSourceAzureHop'
+import { DataSourceGmailHopContent } from './vertical/DataSourceGmailHop'
+import { DataSourceMongoHopContent } from './vertical/DataSourceMongoDBHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -74,6 +78,10 @@ export type NodeContent =
   | DataSourceAPIHopContent
   | DataSourceFilesHopContent
   | DataSourcePostgresHopContent
+  | DataSourceGCSHopContent
+  | DataSourceAzureHopContent
+  | DataSourceGmailHopContent
+  | DataSourceMongoHopContent
   | LLMProcessorHopContent
   | DataDestinationGmailHopContent
   | DataDestinationPostgresHopContent

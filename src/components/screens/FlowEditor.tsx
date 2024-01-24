@@ -89,6 +89,10 @@ export const nodeTypes = {
   DataSourceAPIHop,
   DataSourceFilesHop,
   DataSourcePostgresHop,
+  DataSourceGCSHop,
+  DataSourceAzureHop,
+  DataSourceGmailHop,
+  DataSourceMongoHop,
   LLMProcessorHop,
   DataDestinationGmailHop,
   DataDestinationPostgresHop,
@@ -144,6 +148,10 @@ import { DataSourceAPIHop } from './nodes/vertical/DataSourceAPIHop'
 import { DataSourceFilesHop } from './nodes/vertical/DataSourceFilesHop'
 import { DataSourcePostgresHop } from './nodes/vertical/DataSourcePostgresHop'
 import { DataDestinationSheetsHop } from './nodes/vertical/DataDestinationSheetsHop'
+import { DataSourceGCSHop } from './nodes/vertical/DataSourceGCSHop'
+import { DataSourceAzureHop } from './nodes/vertical/DataSourceAzureHop'
+import { DataSourceGmailHop } from './nodes/vertical/DataSourceGmailHop'
+import { DataSourceMongoHop } from './nodes/vertical/DataSourceMongoDBHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -543,28 +551,28 @@ data_exporters:
         {
           title: 'Google Cloud Storage',
           handleOnClick: () => {
-            addNode('data-source-gcp', 'DataSourceGCPNode')
+            addNode('data-source-gcs-hop', 'DataSourceGCSHop')
           },
           icon: BiLogoGoogle,
         },
         {
           title: 'Azure Blob Storage',
           handleOnClick: () => {
-            addNode('data-source-azure', 'DataSourceAzureNode')
+            addNode('data-source-azure-hop', 'DataSourceAzureHop')
           },
           icon: BiLogoMicrosoft,
         },
         {
           title: 'Gmail',
           handleOnClick: () => {
-            addNode('data-source-email', 'DataSourceEmailNode')
+            addNode('data-source-gmail-hop', 'DataSourceGmailHop')
           },
           icon: BiLogoGmail,
         },
         {
           title: 'MongoDB',
           handleOnClick: () => {
-            addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+            addNode('data-source-mongo-hop', 'DataSourceMongoHop')
           },
           icon: BiLogoMongodb,
         },

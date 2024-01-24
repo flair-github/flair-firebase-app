@@ -9,29 +9,29 @@ import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 
-export interface DataSourceS3HopContent {
-  nodeType: 'data-source-s3-hop'
-  eventType: 'New CSV file' | 'Updated CSV file'
+export interface DataSourceGmailHopContent {
+  nodeType: 'data-source-gmail-hop'
+  tags: string
   importedKeys: Record<string, boolean>
 }
 
-export const dataSourceS3HopDefaultContent: DataSourceS3HopContent = {
-  nodeType: 'data-source-s3-hop',
-  eventType: 'New CSV file',
+export const dataSourceGmailHopDefaultContent: DataSourceGmailHopContent = {
+  nodeType: 'data-source-gmail-hop',
+  tags: '',
   importedKeys: {},
 }
 
-export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceS3HopContent>(
-    dataSourceS3HopDefaultContent,
+export const DataSourceGmailHop = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
+  const [nodeContent, setNodeContent] = useState<DataSourceGmailHopContent>(
+    dataSourceGmailHopDefaultContent,
   )
-  const [nodeFormContent, setNodeFormContent] = useState<DataSourceS3HopContent>(
-    dataSourceS3HopDefaultContent,
+  const [nodeFormContent, setNodeFormContent] = useState<DataSourceGmailHopContent>(
+    dataSourceGmailHopDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-s3-hop') {
+    if (data.initialContents.nodeType === 'data-source-gmail-hop') {
       setNodeContent(cloneDeep(data.initialContents))
     }
   }, [data.initialContents])
@@ -49,13 +49,13 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <img src="/images/data-sources/s3.svg" width={45} height={45} />
+            <img src="/images/data-sources/gmail.svg" width={45} height={45} />
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
               Source
             </span>
-            <div className="text-lg font-medium">Import data from S3</div>
+            <div className="text-lg font-medium">Import data from Gmail</div>
           </div>
           <div className="flex-1" />
           <div
@@ -127,7 +127,7 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                S3 Source
+                                Gmail Source
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new
@@ -160,96 +160,40 @@ export const DataSourceS3Hop = ({ data, noHandle }: { data: NodeData; noHandle?:
                             </div>
                             <div className="sm:col-span-2">
                               <Select name="status">
-                                <option value="production">Production</option>
-                                <option value="staging-1">Staging 1</option>
-                                <option value="staging-2">Staging 2</option>
-                                <option value="my-aws">My AWS</option>
+                                <option value="contact">contact@company.com</option>
+                                <option value="marketing">marketing@company.com</option>
                               </Select>
                             </div>
                           </div>
 
-                          {/* Event Type */}
-                          <fieldset className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div
-                              className="text-sm font-medium leading-6 text-gray-900"
-                              aria-hidden="true">
-                              Event Type
+                          {/* Tags */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Tags
+                              </label>
                             </div>
-                            <div className="space-y-5 sm:col-span-2">
-                              <div className="space-y-5 sm:mt-0">
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex h-6 items-center">
-                                    <input
-                                      id="public-access"
-                                      name="privacy"
-                                      aria-describedby="public-access-description"
-                                      type="radio"
-                                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.eventType === 'New CSV file'}
-                                      onClick={() => {
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.eventType = 'New CSV file'
-                                          return newFormContent
-                                        })
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm leading-6">
-                                    <label
-                                      htmlFor="public-access"
-                                      className="font-medium text-gray-900">
-                                      New CSV file
-                                    </label>
-                                    <p id="public-access-description" className="text-gray-500">
-                                      New CSV file detected in S3
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex h-6 items-center">
-                                    <input
-                                      id="restricted-access"
-                                      name="privacy"
-                                      aria-describedby="restricted-access-description"
-                                      type="radio"
-                                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.eventType === 'Updated CSV file'}
-                                      onClick={() => {
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.eventType = 'Updated CSV file'
-                                          return newFormContent
-                                        })
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm leading-6">
-                                    <label
-                                      htmlFor="restricted-access"
-                                      className="font-medium text-gray-900">
-                                      Updated CSV file
-                                    </label>
-                                    <p id="restricted-access-description" className="text-gray-500">
-                                      An existing CSV file is updated
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                              <hr className="border-gray-200" />
-                              <div className="flex text-sm">
-                                <a className="group inline-flex items-center text-gray-500 hover:text-gray-900">
-                                  <QuestionMarkCircleIcon
-                                    className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                    aria-hidden="true"
-                                  />
-                                  <span className="ml-2">
-                                    Learn more about structuring CSV in S3
-                                  </span>
-                                </a>
-                              </div>
+                            <div className="sm:col-span-2">
+                              <input
+                                type="text"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={nodeFormContent.tags}
+                                onChange={e => {
+                                  const newText = e.target.value
+
+                                  if (typeof newText !== 'string') {
+                                    return
+                                  }
+
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.tags = newText
+                                    return newFormContent
+                                  })
+                                }}
+                              />
                             </div>
-                          </fieldset>
+                          </div>
                         </div>
                       </div>
 
