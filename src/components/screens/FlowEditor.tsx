@@ -100,6 +100,7 @@ export const nodeTypes = {
   DataDestinationSheetsHop,
   ConditionalHop,
   AggregatorHop,
+  DataIndexerHop,
 }
 
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
@@ -154,6 +155,7 @@ import { DataSourceAzureHop } from './nodes/vertical/DataSourceAzureHop'
 import { DataSourceGmailHop } from './nodes/vertical/DataSourceGmailHop'
 import { DataSourceMongoHop } from './nodes/vertical/DataSourceMongoDBHop'
 import { AggregatorHop } from './nodes/vertical/AggregatorHop'
+import { DataIndexerHop } from './nodes/vertical/DataIndexerHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -627,9 +629,9 @@ data_exporters:
           icon: GrAggregate,
         },
         {
-          title: 'Indexer',
+          title: 'Data Indexer',
           handleOnClick: () => {
-            addNode('data-indexer', 'DataIndexerNode')
+            addNode('data-indexer-hop', 'DataIndexerHop')
           },
           icon: GrCube,
         },

@@ -43,6 +43,7 @@ import { DataSourceAzureHopContent } from './vertical/DataSourceAzureHop'
 import { DataSourceGmailHopContent } from './vertical/DataSourceGmailHop'
 import { DataSourceMongoHopContent } from './vertical/DataSourceMongoDBHop'
 import { AggregatorHopContent } from './vertical/AggregatorHop'
+import { DataIndexerHopContent } from './vertical/DataIndexerHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -90,6 +91,7 @@ export type NodeContent =
   | DataDestinationSheetsHopContent
   | ConditionalHopContent
   | AggregatorHopContent
+  | DataIndexerHopContent
 
 export interface NodeData {
   nodeId: string
