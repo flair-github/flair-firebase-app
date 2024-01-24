@@ -99,6 +99,7 @@ export const nodeTypes = {
   DataDestinationTwilioHop,
   DataDestinationSheetsHop,
   ConditionalHop,
+  AggregatorHop,
 }
 
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
@@ -152,6 +153,7 @@ import { DataSourceGCSHop } from './nodes/vertical/DataSourceGCSHop'
 import { DataSourceAzureHop } from './nodes/vertical/DataSourceAzureHop'
 import { DataSourceGmailHop } from './nodes/vertical/DataSourceGmailHop'
 import { DataSourceMongoHop } from './nodes/vertical/DataSourceMongoDBHop'
+import { AggregatorHop } from './nodes/vertical/AggregatorHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -620,24 +622,24 @@ data_exporters:
         {
           title: 'Aggregator',
           handleOnClick: () => {
-            addNode('data-extractor-aggregator', 'DataExtractorAggregatorNode')
+            addNode('aggregator-hop', 'AggregatorHop')
           },
-          icon: BsArrowsAngleContract,
+          icon: GrAggregate,
         },
         {
-          title: 'Pinecone Indexer',
+          title: 'Indexer',
           handleOnClick: () => {
             addNode('data-indexer', 'DataIndexerNode')
           },
           icon: GrCube,
         },
-        {
-          title: 'Chroma Indexer',
-          handleOnClick: () => {
-            addNode('data-indexer', 'DataIndexerNode')
-          },
-          icon: GrAggregate,
-        },
+        // {
+        //   title: 'Chroma Indexer',
+        //   handleOnClick: () => {
+        //     addNode('data-indexer', 'DataIndexerNode')
+        //   },
+        //   icon: GrAggregate,
+        // },
       ],
     },
     // {

@@ -9,28 +9,27 @@ import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 import { TiFlowMerge } from 'react-icons/ti'
+import { GrAggregate } from 'react-icons/gr'
 
-export interface ConditionalHopContent {
-  nodeType: 'conditional-hop'
-  formula: string
+export interface AggregatorHopContent {
+  nodeType: 'aggregator-hop'
+  column: string
 }
 
-export const conditionalHopDefaultContent: ConditionalHopContent = {
-  nodeType: 'conditional-hop',
-  formula: '',
+export const aggregatorHopDefaultContent: AggregatorHopContent = {
+  nodeType: 'aggregator-hop',
+  column: '',
 }
 
-export const ConditionalHop = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
-  const [nodeContent, setNodeContent] = useState<ConditionalHopContent>(
-    conditionalHopDefaultContent,
-  )
-  const [nodeFormContent, setNodeFormContent] = useState<ConditionalHopContent>(
-    conditionalHopDefaultContent,
+export const AggregatorHop = ({ data, noHandle }: { data: NodeData; noHandle?: boolean }) => {
+  const [nodeContent, setNodeContent] = useState<AggregatorHopContent>(aggregatorHopDefaultContent)
+  const [nodeFormContent, setNodeFormContent] = useState<AggregatorHopContent>(
+    aggregatorHopDefaultContent,
   )
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'conditional-hop') {
+    if (data.initialContents.nodeType === 'aggregator-hop') {
       setNodeContent(cloneDeep(data.initialContents))
     }
   }, [data.initialContents])
@@ -48,16 +47,16 @@ export const ConditionalHop = ({ data, noHandle }: { data: NodeData; noHandle?: 
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <TiFlowMerge size={40} className="text-slate-600" />
+            <GrAggregate size={40} className="text-slate-600" />
           </div>
           <div className="flex-1">
             <span className="inline-flex items-center rounded-md bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
               Transform
             </span>
-            <div className="text-lg font-medium">Conditional</div>
+            <div className="text-lg font-medium">Aggregator</div>
             <div className="flex font-mono font-medium">
-              <div className="flex-1">true</div>
-              <div className="flex-1">false</div>
+              <div className="flex-1">description</div>
+              <div className="flex-1">data</div>
             </div>
           </div>
           <div
@@ -93,7 +92,7 @@ export const ConditionalHop = ({ data, noHandle }: { data: NodeData; noHandle?: 
               height: 14,
               background: 'rgb(148 163 184)',
             }}
-            id="out-true"
+            id="out-description"
           />
         )}
         {!noHandle && (
@@ -107,7 +106,7 @@ export const ConditionalHop = ({ data, noHandle }: { data: NodeData; noHandle?: 
               height: 14,
               background: 'rgb(148 163 184)',
             }}
-            id="out-false"
+            id="out-data"
           />
         )}
       </div>
@@ -144,7 +143,7 @@ export const ConditionalHop = ({ data, noHandle }: { data: NodeData; noHandle?: 
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                Conditional
+                                Aggregator
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new
@@ -166,18 +165,18 @@ export const ConditionalHop = ({ data, noHandle }: { data: NodeData; noHandle?: 
 
                         {/* Divider container */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
-                          {/* Formula */}
+                          {/* Table Name */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Formula
+                                Column
                               </label>
                             </div>
                             <div className="sm:col-span-2">
-                              <textarea
-                                rows={8}
-                                className="block w-full rounded-md border-0 py-1.5 font-mono text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.formula}
+                              <input
+                                type="text"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={nodeFormContent.column}
                                 onChange={e => {
                                   const newText = e.target.value
 
@@ -187,7 +186,7 @@ export const ConditionalHop = ({ data, noHandle }: { data: NodeData; noHandle?: 
 
                                   setNodeFormContent(prev => {
                                     const newFormContent = cloneDeep(prev)
-                                    newFormContent.formula = newText
+                                    newFormContent.column = newText
                                     return newFormContent
                                   })
                                 }}
