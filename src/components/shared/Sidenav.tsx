@@ -13,6 +13,8 @@ import { useAuth } from '~/lib/firebase'
 import { ImSpinner8, ImSpinner9 } from 'react-icons/im'
 import { IconType } from 'react-icons'
 import clsx from 'clsx'
+import { FaKey } from 'react-icons/fa6'
+import { PiKeyDuotone } from 'react-icons/pi'
 
 const navigation: {
   name: string
@@ -23,7 +25,7 @@ const navigation: {
   { name: 'Pipelines', href: '/', icon: RiFlowChart },
   // { name: 'Deployment', href: '/deployment', icon: HiOutlineRocketLaunch },
   { name: 'Executions', href: '/result', icon: AiTwotoneExperiment },
-  // { name: 'Script', href: '/transcription', icon: CgTranscript },
+  { name: 'Credentials', href: '/credentials', icon: PiKeyDuotone },
   // {
   //   name: 'Debug',
   //   icon: VscDebugLineByLine,
