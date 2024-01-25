@@ -1,6 +1,8 @@
 import React, { forwardRef, useState } from 'react'
 import { db } from '~/lib/firebase'
 import { ImSpinner8, ImSpinner9 } from 'react-icons/im'
+import { Select } from '~/catalyst/select'
+import { Field, Label } from '~/catalyst/fieldset'
 
 export const DeployModal = ({
   deployFlow,
@@ -18,59 +20,58 @@ export const DeployModal = ({
       <form method="dialog" className="modal-box">
         <h3 className="mb-5 text-center text-lg font-bold">Deployment Options</h3>
         <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
-        <div className="mb-2 mt-1">
-          <label className="label">
-            <span className="label-text font-bold">Run Every</span>
-          </label>
-          <select
-            className="select mb-3 w-full border-black"
-            value={currentEvery}
-            onChange={e => {
-              setCurrentEvery(e.target.value)
-            }}>
-            <option value={'1h'}>1h</option>
-            <option value={'2h'}>1d</option>
-            <option value={'4h'}>1d</option>
-            <option value={'8h'}>8h</option>
-            <option value={'1d'}>1d</option>
-            <option value={'2d'}>2d</option>
-            <option value={'3d'}>3d</option>
-            <option value={'7d'}>7d</option>
-          </select>
+        <div className="mb-2 mt-1 flex flex-col gap-4">
+          <Field>
+            <Label>Run Every</Label>
+            <Select
+              value={currentEvery}
+              onChange={e => {
+                setCurrentEvery(e.target.value)
+              }}>
+              <option value={'1h'}>1h</option>
+              <option value={'2h'}>1d</option>
+              <option value={'4h'}>1d</option>
+              <option value={'8h'}>8h</option>
+              <option value={'1d'}>1d</option>
+              <option value={'2d'}>2d</option>
+              <option value={'3d'}>3d</option>
+              <option value={'7d'}>7d</option>
+            </Select>
+          </Field>
           {(currentEvery === '1d' ||
             currentEvery === '2d' ||
             currentEvery === '3d' ||
             currentEvery === '7d') && (
             <>
-              <label className="label">
-                <span className="label-text font-bold">at</span>
-              </label>
-              <select className="select mb-3 w-full border-black">
-                <option value={'12am'}>12:00 am</option>
-                <option value={'1am'}>1:00 am</option>
-                <option value={'2am'}>2:00 am</option>
-                <option value={'3am'}>3:00 am</option>
-                <option value={'4am'}>4:00 am</option>
-                <option value={'5am'}>5:00 am</option>
-                <option value={'6am'}>6:00 am</option>
-                <option value={'7am'}>7:00 am</option>
-                <option value={'8am'}>8:00 am</option>
-                <option value={'9am'}>9:00 am</option>
-                <option value={'10am'}>10:00 am</option>
-                <option value={'11am'}>11:00 am</option>
-                <option value={'12pm'}>12:00 pm</option>
-                <option value={'1pm'}>1:00 pm</option>
-                <option value={'2pm'}>2:00 pm</option>
-                <option value={'3pm'}>3:00 pm</option>
-                <option value={'4pm'}>4:00 pm</option>
-                <option value={'5pm'}>5:00 pm</option>
-                <option value={'6pm'}>6:00 pm</option>
-                <option value={'7pm'}>7:00 pm</option>
-                <option value={'8pm'}>8:00 pm</option>
-                <option value={'9pm'}>9:00 pm</option>
-                <option value={'10pm'}>10:00 pm</option>
-                <option value={'11pm'}>11:00 pm</option>
-              </select>
+              <Field>
+                <Label>at</Label>
+                <Select>
+                  <option value={'12am'}>12:00 am</option>
+                  <option value={'1am'}>1:00 am</option>
+                  <option value={'2am'}>2:00 am</option>
+                  <option value={'3am'}>3:00 am</option>
+                  <option value={'4am'}>4:00 am</option>
+                  <option value={'5am'}>5:00 am</option>
+                  <option value={'6am'}>6:00 am</option>
+                  <option value={'7am'}>7:00 am</option>
+                  <option value={'8am'}>8:00 am</option>
+                  <option value={'9am'}>9:00 am</option>
+                  <option value={'10am'}>10:00 am</option>
+                  <option value={'11am'}>11:00 am</option>
+                  <option value={'12pm'}>12:00 pm</option>
+                  <option value={'1pm'}>1:00 pm</option>
+                  <option value={'2pm'}>2:00 pm</option>
+                  <option value={'3pm'}>3:00 pm</option>
+                  <option value={'4pm'}>4:00 pm</option>
+                  <option value={'5pm'}>5:00 pm</option>
+                  <option value={'6pm'}>6:00 pm</option>
+                  <option value={'7pm'}>7:00 pm</option>
+                  <option value={'8pm'}>8:00 pm</option>
+                  <option value={'9pm'}>9:00 pm</option>
+                  <option value={'10pm'}>10:00 pm</option>
+                  <option value={'11pm'}>11:00 pm</option>
+                </Select>
+              </Field>
             </>
           )}
           <button
