@@ -11,13 +11,17 @@ import { nodeContents, type NodeData } from '../Registry'
 
 export interface DataSourceAzureHopContent {
   nodeType: 'data-source-azure-hop'
-  eventType: 'New CSV file' | 'Updated CSV file'
+  fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
+  bucket: string
+  path: string
   importedKeys: Record<string, boolean>
 }
 
 export const dataSourceAzureHopDefaultContent: DataSourceAzureHopContent = {
   nodeType: 'data-source-azure-hop',
-  eventType: 'New CSV file',
+  fileType: 'csv',
+  bucket: '',
+  path: '',
   importedKeys: {},
 }
 
@@ -167,88 +171,105 @@ export const DataSourceAzureHop = ({ data, noHandle }: { data: NodeData; noHandl
                             </div>
                           </div>
 
-                          {/* Event Type */}
-                          <fieldset className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div
-                              className="text-sm font-medium leading-6 text-gray-900"
-                              aria-hidden="true">
-                              Event Type
+                          {/* Bucket */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Bucket
+                              </label>
                             </div>
-                            <div className="space-y-5 sm:col-span-2">
-                              <div className="space-y-5 sm:mt-0">
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex h-6 items-center">
-                                    <input
-                                      id="public-access"
-                                      name="privacy"
-                                      aria-describedby="public-access-description"
-                                      type="radio"
-                                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.eventType === 'New CSV file'}
-                                      onClick={() => {
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.eventType = 'New CSV file'
-                                          return newFormContent
-                                        })
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm leading-6">
-                                    <label
-                                      htmlFor="public-access"
-                                      className="font-medium text-gray-900">
-                                      New CSV file
-                                    </label>
-                                    <p id="public-access-description" className="text-gray-500">
-                                      New CSV file detected in Azure Blob Storage
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex h-6 items-center">
-                                    <input
-                                      id="restricted-access"
-                                      name="privacy"
-                                      aria-describedby="restricted-access-description"
-                                      type="radio"
-                                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
-                                      checked={nodeFormContent.eventType === 'Updated CSV file'}
-                                      onClick={() => {
-                                        setNodeFormContent(prev => {
-                                          const newFormContent = cloneDeep(prev)
-                                          newFormContent.eventType = 'Updated CSV file'
-                                          return newFormContent
-                                        })
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm leading-6">
-                                    <label
-                                      htmlFor="restricted-access"
-                                      className="font-medium text-gray-900">
-                                      Updated CSV file
-                                    </label>
-                                    <p id="restricted-access-description" className="text-gray-500">
-                                      An existing CSV file is updated
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                              <hr className="border-gray-200" />
-                              <div className="flex text-sm">
-                                <a className="group inline-flex items-center text-gray-500 hover:text-gray-900">
-                                  <QuestionMarkCircleIcon
-                                    className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                    aria-hidden="true"
-                                  />
-                                  <span className="ml-2">
-                                    Learn more about structuring CSV in Azure
-                                  </span>
-                                </a>
-                              </div>
+                            <div className="sm:col-span-2">
+                              <input
+                                type="text"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={nodeFormContent.bucket}
+                                onChange={e => {
+                                  const newText = e.target.value
+
+                                  if (typeof newText !== 'string') {
+                                    return
+                                  }
+
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.bucket = newText
+                                    return newFormContent
+                                  })
+                                }}
+                              />
                             </div>
-                          </fieldset>
+                          </div>
+
+                          {/* Path */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Path
+                              </label>
+                            </div>
+                            <div className="sm:col-span-2">
+                              <input
+                                type="text"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={nodeFormContent.path}
+                                onChange={e => {
+                                  const newText = e.target.value
+
+                                  if (typeof newText !== 'string') {
+                                    return
+                                  }
+
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.path = newText
+                                    return newFormContent
+                                  })
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* File Type */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label
+                                htmlFor="project-name"
+                                className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                File Type
+                              </label>
+                            </div>
+                            <div className="sm:col-span-2">
+                              <Select
+                                name="status"
+                                onChange={e => {
+                                  const newVal = e.target
+                                    .value as DataSourceAzureHopContent['fileType']
+
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.fileType = newVal
+                                    return newFormContent
+                                  })
+                                }}>
+                                <option
+                                  value={'csv' satisfies DataSourceAzureHopContent['fileType']}>
+                                  csv
+                                </option>
+                                <option
+                                  value={'mp3' satisfies DataSourceAzureHopContent['fileType']}>
+                                  mp3
+                                </option>
+                                <option
+                                  value={'pdf' satisfies DataSourceAzureHopContent['fileType']}>
+                                  pdf
+                                </option>
+                                <option
+                                  value={'txt' satisfies DataSourceAzureHopContent['fileType']}>
+                                  txt
+                                </option>
+                              </Select>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
