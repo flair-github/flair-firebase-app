@@ -941,9 +941,9 @@ data_exporters:
       Icon: RiArrowRightLine,
       handleOnClick: async (event: React.SyntheticEvent) => {
         event.preventDefault()
-        runningModalRef.current?.showModal()
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        runningModalRef.current?.close()
+        // runningModalRef.current?.showModal()
+        // await new Promise(resolve => setTimeout(resolve, 2000))
+        // runningModalRef.current?.close()
 
         db.collection('workflow_results').add({
           docExists: true,
@@ -956,7 +956,7 @@ data_exporters:
           executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
         })
 
-        setDeploymentStatus(['success', 'Your pipeline has been run!'])
+        setDeploymentStatus(['success', 'Your pipeline has been initiated!'])
         setTimeout(() => {
           setDeploymentStatus(undefined)
         }, 3000)
