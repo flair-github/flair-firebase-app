@@ -1,11 +1,14 @@
 import React from 'react'
+import { ImSpinner8 } from 'react-icons/im'
+import { FaCheckCircle } from 'react-icons/fa'
+import { useRightIconMode } from '../utils/useRightIconMode'
 import { Dialog, Transition } from '@headlessui/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import cloneDeep from 'lodash/cloneDeep'
 import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
-import { Handle, Position } from 'reactflow'
+import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
@@ -31,16 +34,20 @@ export const dataDestinationZendeskHopDefaultContent: DataDestinationZendeskHopC
 export const DataDestinationZendeskHop = ({
   data,
   noHandle,
+  yPos,
 }: {
   data: NodeData
   noHandle?: boolean
-}) => {
+} & NodeProps) => {
   const [nodeContent, setNodeContent] = useState<DataDestinationZendeskHopContent>(
     dataDestinationZendeskHopDefaultContent,
   )
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationZendeskHopContent>(
     dataDestinationZendeskHopDefaultContent,
   )
+
+  // Right animation
+  const { rightIconMode } = useRightIconMode(yPos)
 
   // Initial data
   useEffect(() => {
@@ -77,7 +84,13 @@ export const DataDestinationZendeskHop = ({
               setOpen(true)
               setNodeFormContent(cloneDeep(nodeContent))
             }}>
-            <FaEllipsisH />
+            {rightIconMode === 'ellipsis' && <FaEllipsisH />}
+            {rightIconMode === 'spinner' && (
+              <ImSpinner8 className="animate h-full w-full animate-spin opacity-80" />
+            )}
+            {rightIconMode === 'check' && (
+              <FaCheckCircle className="h-full w-full text-emerald-400" />
+            )}
           </div>
         </div>
         {!noHandle && (

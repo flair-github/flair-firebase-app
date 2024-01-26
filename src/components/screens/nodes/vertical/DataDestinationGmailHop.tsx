@@ -1,11 +1,14 @@
 import React from 'react'
+import { ImSpinner8 } from 'react-icons/im'
+import { FaCheckCircle } from 'react-icons/fa'
+import { useRightIconMode } from '../utils/useRightIconMode'
 import { Dialog, Transition } from '@headlessui/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import cloneDeep from 'lodash/cloneDeep'
 import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
-import { Handle, Position } from 'reactflow'
+import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 
@@ -26,16 +29,20 @@ export const dataDestinationGmailHopDefaultContent: DataDestinationGmailHopConte
 export const DataDestinationGmailHop = ({
   data,
   noHandle,
+  yPos,
 }: {
   data: NodeData
   noHandle?: boolean
-}) => {
+} & NodeProps) => {
   const [nodeContent, setNodeContent] = useState<DataDestinationGmailHopContent>(
     dataDestinationGmailHopDefaultContent,
   )
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationGmailHopContent>(
     dataDestinationGmailHopDefaultContent,
   )
+
+  // Right animation
+  const { rightIconMode } = useRightIconMode(yPos)
 
   // Initial data
   useEffect(() => {
@@ -72,7 +79,13 @@ export const DataDestinationGmailHop = ({
               setOpen(true)
               setNodeFormContent(cloneDeep(nodeContent))
             }}>
-            <FaEllipsisH />
+            {rightIconMode === 'ellipsis' && <FaEllipsisH />}
+            {rightIconMode === 'spinner' && (
+              <ImSpinner8 className="animate h-full w-full animate-spin opacity-80" />
+            )}
+            {rightIconMode === 'check' && (
+              <FaCheckCircle className="h-full w-full text-emerald-400" />
+            )}
           </div>
         </div>
         {!noHandle && (
