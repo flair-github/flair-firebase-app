@@ -48,6 +48,8 @@ import { DataDestinationS3HopContent } from './vertical/DataDestinationS3Hop'
 import { DataDestinationGCSHopContent } from './vertical/DataDestinationGCSHop'
 import { DataDestinationAzureHopContent } from './vertical/DataDestinationAzureHop'
 import { DataDestinationAPIHopContent } from './vertical/DataDestinationAPIHop'
+import { DataDestinationSalesforceHopContent } from './vertical/DataDestinationSalesforceHop'
+import { DataDestinationZendeskHopContent } from './vertical/DataDestinationZendeskHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -97,6 +99,8 @@ export type NodeContent =
   | DataDestinationGCSHopContent
   | DataDestinationAzureHopContent
   | DataDestinationAPIHopContent
+  | DataDestinationZendeskHopContent
+  | DataDestinationSalesforceHopContent
   | ConditionalHopContent
   | AggregatorHopContent
   | DataIndexerHopContent

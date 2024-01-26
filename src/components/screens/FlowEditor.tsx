@@ -102,6 +102,8 @@ export const nodeTypes = {
   DataDestinationGCSHop,
   DataDestinationAzureHop,
   DataDestinationAPIHop,
+  DataDestinationZendeskHop,
+  DataDestinationSalesforceHop,
   ConditionalHop,
   AggregatorHop,
   DataIndexerHop,
@@ -164,6 +166,8 @@ import { DataDestinationS3Hop } from './nodes/vertical/DataDestinationS3Hop'
 import { DataDestinationGCSHop } from './nodes/vertical/DataDestinationGCSHop'
 import { DataDestinationAzureHop } from './nodes/vertical/DataDestinationAzureHop'
 import { DataDestinationAPIHop } from './nodes/vertical/DataDestinationAPIHop'
+import { DataDestinationZendeskHop } from './nodes/vertical/DataDestinationZendeskHop'
+import { DataDestinationSalesforceHop } from './nodes/vertical/DataDestinationSalesforceHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -775,14 +779,14 @@ data_exporters:
         {
           title: 'Zendesk',
           handleOnClick: () => {
-            addNode('data-exporter-zendesk', 'DataExporterZendeskNode')
+            addNode('data-destination-zendesk-hop', 'DataDestinationZendeskHop')
           },
           icon: SiZendesk,
         },
         {
           title: 'Salesforce',
           handleOnClick: () => {
-            addNode('data-exporter-salesforce', 'DataExporterSalesforceNode')
+            addNode('data-destination-salesforce-hop', 'DataDestinationSalesforceHop')
           },
           icon: FaSalesforce,
         },
