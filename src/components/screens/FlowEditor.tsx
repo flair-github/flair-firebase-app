@@ -16,7 +16,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css'
 import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
-import { atom, useAtom, useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { Link, useParams } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
@@ -168,6 +168,7 @@ import { DataDestinationAzureHop } from './nodes/vertical/DataDestinationAzureHo
 import { DataDestinationAPIHop } from './nodes/vertical/DataDestinationAPIHop'
 import { DataDestinationZendeskHop } from './nodes/vertical/DataDestinationZendeskHop'
 import { DataDestinationSalesforceHop } from './nodes/vertical/DataDestinationSalesforceHop'
+import { dummyRunners } from './nodes/utils/useRightIconMode'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -183,8 +184,34 @@ const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   }
 }
 
+function findPositionExtremes(elements: Nodes) {
+  let minY = Infinity,
+    maxY = -Infinity // For top-most and bottom-most Y
+  let minX = Infinity,
+    maxX = -Infinity // For left-most and right-most X
+
+  elements.forEach(element => {
+    const { x, y } = element.position // Destructure to get x and y values
+
+    // Update minY and maxY for Y positions
+    minY = Math.min(minY, y)
+    maxY = Math.max(maxY, y)
+
+    // Update minX and maxX for X positions
+    minX = Math.min(minX, x)
+    maxX = Math.max(maxX, x)
+  })
+
+  // Return the extremes
+  return { topMostY: minY, bottomMostY: maxY, leftMostX: minX, rightMostX: maxX }
+}
+
+export const borderPosAtom = atom<ReturnType<typeof findPositionExtremes> | undefined>(undefined)
+
 export const nodesAtom = atom<Nodes>([])
 export const edgesAtom = atom<Edges>([])
+
+export const dummyRunSymbol = atom<number | undefined>(undefined)
 
 export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   const userData = useAtomValue(atomUserData)
@@ -193,6 +220,11 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   const [title, setTitle] = useState<string>('')
 
   const { workflowId, workflowRequestId } = useParams()
+
+  const setBorderPosAtom = useSetAtom(borderPosAtom)
+  useEffect(() => {
+    setBorderPosAtom(findPositionExtremes(nodes))
+  }, [nodes, setBorderPosAtom])
 
   // Load initial
   useEffect(() => {
@@ -928,6 +960,10 @@ data_exporters:
         setTimeout(() => {
           setDeploymentStatus(undefined)
         }, 3000)
+
+        console.log('dummyRunners.current size', dummyRunners.current.size)
+
+        dummyRunners.current.forEach(func => func())
       },
     },
     {
