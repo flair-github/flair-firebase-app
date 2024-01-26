@@ -796,6 +796,7 @@ data_exporters:
             // addNode('data-exporter-gmail', 'DataExporterGmailNode')
           },
           icon: SiAirtable,
+          disabled: true,
         },
         // {
         //   title: 'Power BI',
