@@ -44,6 +44,9 @@ import { DataSourceGmailHopContent } from './vertical/DataSourceGmailHop'
 import { DataSourceMongoHopContent } from './vertical/DataSourceMongoDBHop'
 import { AggregatorHopContent } from './vertical/AggregatorHop'
 import { DataIndexerHopContent } from './vertical/DataIndexerHop'
+import { DataDestinationS3HopContent } from './vertical/DataDestinationS3Hop'
+import { DataDestinationGCSHopContent } from './vertical/DataDestinationGCSHop'
+import { DataDestinationAzureHopContent } from './vertical/DataDestinationAzureHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -89,6 +92,9 @@ export type NodeContent =
   | DataDestinationPostgresHopContent
   | DataDestinationTwilioHopContent
   | DataDestinationSheetsHopContent
+  | DataDestinationS3HopContent
+  | DataDestinationGCSHopContent
+  | DataDestinationAzureHopContent
   | ConditionalHopContent
   | AggregatorHopContent
   | DataIndexerHopContent

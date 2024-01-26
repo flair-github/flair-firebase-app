@@ -98,6 +98,9 @@ export const nodeTypes = {
   DataDestinationPostgresHop,
   DataDestinationTwilioHop,
   DataDestinationSheetsHop,
+  DataDestinationS3Hop,
+  DataDestinationGCSHop,
+  DataDestinationAzureHop,
   ConditionalHop,
   AggregatorHop,
   DataIndexerHop,
@@ -156,6 +159,9 @@ import { DataSourceGmailHop } from './nodes/vertical/DataSourceGmailHop'
 import { DataSourceMongoHop } from './nodes/vertical/DataSourceMongoDBHop'
 import { AggregatorHop } from './nodes/vertical/AggregatorHop'
 import { DataIndexerHop } from './nodes/vertical/DataIndexerHop'
+import { DataDestinationS3Hop } from './nodes/vertical/DataDestinationS3Hop'
+import { DataDestinationGCSHop } from './nodes/vertical/DataDestinationGCSHop'
+import { DataDestinationAzureHop } from './nodes/vertical/DataDestinationAzureHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -739,21 +745,21 @@ data_exporters:
         {
           title: 'AWS S3',
           handleOnClick: () => {
-            addNode('data-exporter-s3', 'DataExporterS3Node')
+            addNode('data-destination-s3-hop', 'DataDestinationS3Hop')
           },
           icon: BiLogoAws,
         },
         {
           title: 'Google Cloud Storage',
           handleOnClick: () => {
-            addNode('data-exporter-gcp', 'DataExporterGCPNode')
+            addNode('data-destination-gcs-hop', 'DataDestinationGCSHop')
           },
           icon: BiLogoGoogle,
         },
         {
           title: 'Azure Blob Storage',
           handleOnClick: () => {
-            addNode('data-exporter-azure', 'DataExporterAzureNode')
+            addNode('data-destination-azure-hop', 'DataDestinationAzureHop')
           },
           icon: BiLogoMicrosoft,
         },
