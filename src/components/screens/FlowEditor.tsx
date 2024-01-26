@@ -101,6 +101,7 @@ export const nodeTypes = {
   DataDestinationS3Hop,
   DataDestinationGCSHop,
   DataDestinationAzureHop,
+  DataDestinationAPIHop,
   ConditionalHop,
   AggregatorHop,
   DataIndexerHop,
@@ -162,6 +163,7 @@ import { DataIndexerHop } from './nodes/vertical/DataIndexerHop'
 import { DataDestinationS3Hop } from './nodes/vertical/DataDestinationS3Hop'
 import { DataDestinationGCSHop } from './nodes/vertical/DataDestinationGCSHop'
 import { DataDestinationAzureHop } from './nodes/vertical/DataDestinationAzureHop'
+import { DataDestinationAPIHop } from './nodes/vertical/DataDestinationAPIHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -764,11 +766,11 @@ data_exporters:
           icon: BiLogoMicrosoft,
         },
         {
-          title: 'Airtable',
+          title: 'API',
           handleOnClick: () => {
-            addNode('data-exporter-gmail', 'DataExporterGmailNode')
+            addNode('data-destination-api-hop', 'DataDestinationAPIHop')
           },
-          icon: SiAirtable,
+          icon: AiFillApi,
         },
         {
           title: 'Zendesk',
@@ -784,6 +786,13 @@ data_exporters:
           },
           icon: FaSalesforce,
         },
+        {
+          title: 'Airtable',
+          handleOnClick: () => {
+            // addNode('data-exporter-gmail', 'DataExporterGmailNode')
+          },
+          icon: SiAirtable,
+        },
         // {
         //   title: 'Power BI',
         //   handleOnClick: () => {
@@ -791,13 +800,6 @@ data_exporters:
         //   },
         //   icon: SiPowerbi,
         // },
-        {
-          title: 'API',
-          handleOnClick: () => {
-            addNode('data-exporter-api', 'DataExporterAPINode')
-          },
-          icon: AiFillApi,
-        },
       ],
     },
     // {

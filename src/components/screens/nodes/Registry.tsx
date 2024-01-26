@@ -47,6 +47,7 @@ import { DataIndexerHopContent } from './vertical/DataIndexerHop'
 import { DataDestinationS3HopContent } from './vertical/DataDestinationS3Hop'
 import { DataDestinationGCSHopContent } from './vertical/DataDestinationGCSHop'
 import { DataDestinationAzureHopContent } from './vertical/DataDestinationAzureHop'
+import { DataDestinationAPIHopContent } from './vertical/DataDestinationAPIHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -95,6 +96,7 @@ export type NodeContent =
   | DataDestinationS3HopContent
   | DataDestinationGCSHopContent
   | DataDestinationAzureHopContent
+  | DataDestinationAPIHopContent
   | ConditionalHopContent
   | AggregatorHopContent
   | DataIndexerHopContent
