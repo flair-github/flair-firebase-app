@@ -9,6 +9,7 @@ import { Handle, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 import { TiFlowMerge } from 'react-icons/ti'
+import { Badge } from '~/catalyst/badge'
 
 export interface ConditionalHopContent {
   nodeType: 'conditional-hop'
@@ -164,7 +165,24 @@ export const ConditionalHop = ({ data, noHandle }: { data: NodeData; noHandle?: 
                           </div>
                         </div>
 
-                        {/* Divider container */}
+                        <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Columns */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Inputs
+                              </label>
+                            </div>
+                            <div className="flex flex-wrap gap-2 sm:col-span-2">
+                              <Badge color="blue">motivation</Badge>
+                              <Badge color="blue">summary</Badge>
+                              <Badge color="blue">outcome</Badge>
+                              <Badge color="blue">sentiment</Badge>
+                              <Badge color="blue">location</Badge>
+                            </div>
+                          </div>
+                        </div>
+
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
                           {/* Formula */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
