@@ -7,7 +7,9 @@ export const dummyRunners = { current: new Set<() => void>() }
 
 export const useRightIconMode = (yPos: number) => {
   const borderPos = useAtomValue(borderPosAtom)
+  const [didRunOnce, setDidOnceRun] = useState(false)
   const [rightIconMode, setRightIconMode] = useState<'ellipsis' | 'spinner' | 'check'>('ellipsis')
+
   const run = useCallback(async () => {
     if (!borderPos) {
       setRightIconMode('ellipsis')
@@ -21,6 +23,7 @@ export const useRightIconMode = (yPos: number) => {
     setRightIconMode('spinner')
     await new Promise(resolve => setTimeout(resolve, spinnerDuration))
     setRightIconMode('check')
+    setDidOnceRun(true)
     await new Promise(resolve => setTimeout(resolve, checkDuration))
     setRightIconMode('ellipsis')
   }, [borderPos, yPos])
@@ -33,5 +36,5 @@ export const useRightIconMode = (yPos: number) => {
     }
   }, [run])
 
-  return { rightIconMode }
+  return { rightIconMode, didRunOnce }
 }

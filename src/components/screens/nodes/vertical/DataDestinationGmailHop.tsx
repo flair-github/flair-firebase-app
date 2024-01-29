@@ -42,7 +42,7 @@ export const DataDestinationGmailHop = ({
   )
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   // Initial data
   useEffect(() => {
@@ -114,6 +114,17 @@ export const DataDestinationGmailHop = ({
             id="out"
           />
         )} */}
+
+        {/* Result */}
+        {didRunOnce && rightIconMode !== 'spinner' && (
+          <div className="mt-3 border-t pt-2">
+            <div className="font-medium">Result</div>
+            <div className="flex">
+              <div className="flex-1">543 Emails sent</div>
+              <div className="text-blue-500">See mails</div>
+            </div>
+          </div>
+        )}
       </div>
 
       <Transition.Root show={open} as={Fragment}>

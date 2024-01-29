@@ -11,6 +11,7 @@ import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
+import { PiTableBold } from 'react-icons/pi'
 
 export interface DataDestinationSheetsHopContent {
   nodeType: 'data-destination-sheets-hop'
@@ -40,7 +41,7 @@ export const DataDestinationSheetsHop = ({
   )
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   // Initial data
   useEffect(() => {
@@ -112,6 +113,33 @@ export const DataDestinationSheetsHop = ({
             id="out"
           />
         )} */}
+
+        {/* Result */}
+        {didRunOnce && rightIconMode !== 'spinner' && (
+          <div className="mt-3 border-t pt-2">
+            <div className="mb-2 font-medium">Result</div>
+            <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
+              <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                <div className="flex w-0 flex-1 items-center">
+                  <PiTableBold className="h-5 w-5 shrink-0 text-gray-400" />
+                  <div className="ml-4 flex min-w-0 flex-1 gap-2 overflow-hidden">
+                    <p className="truncate font-medium">FUB call metadata</p>
+                  </div>
+                </div>
+                <div className="ml-4 shrink-0">
+                  <a
+                    target="_blank"
+                    href={
+                      'https://docs.google.com/spreadsheets/d/19uYCfSJF3j7hVz4tDtQSwIKuq-6LoegEGq9ctYKOhLA/edit#gid=0'
+                    }
+                    className="font-medium text-primary hover:text-primary/80">
+                    Open
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
 
       <Transition.Root show={open} as={Fragment}>
