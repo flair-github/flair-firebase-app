@@ -189,7 +189,7 @@ function Index() {
                               <Badge color="yellow">Paused</Badge>
                             )}
                           </TableCell>
-                          <TableCell>{isChatbot ? 'Schedule' : 'API'}</TableCell>
+                          <TableCell>{isChatbot ? 'API' : 'Schedule'}</TableCell>
                           <TableCell>
                             {isChatbot
                               ? 'On Demand'
