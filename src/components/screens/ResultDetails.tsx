@@ -255,17 +255,17 @@ const ResultDetails = ({ id }: { id?: string }) => {
       </header>
       <nav className="tabs-boxed tabs mb-2 w-full justify-center">
         <a
-          className={`tab tab-lg font-bold ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
+          className={`tab-lg tab font-bold ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('evaluation')}>
           Evaluation
         </a>
         <a
-          className={`tab tab-lg font-bold ${activeTab === 'result' ? 'tab-active' : ''}`}
+          className={`tab-lg tab font-bold ${activeTab === 'result' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('result')}>
           Result
         </a>
         <a
-          className={`tab tab-lg font-bold ${activeTab === 'config' ? 'tab-active' : ''}`}
+          className={`tab-lg tab font-bold ${activeTab === 'config' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('config')}>
           Config
         </a>
