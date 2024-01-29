@@ -61,7 +61,7 @@ export const DataDestinationGmailHop = ({
 
   return (
     <>
-      <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
+      <div className="w-[800px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
             <img src="/images/data-sources/gmail.svg" width={45} height={45} />
@@ -120,8 +120,55 @@ export const DataDestinationGmailHop = ({
           <div className="mt-3 border-t pt-2">
             <div className="font-medium">Result</div>
             <div className="flex">
-              <div className="flex-1">543 Emails sent</div>
-              <div className="text-blue-500">See mails</div>
+              <div className="flex flex-col gap-2">
+                <p>Dear [Recipient's Name],</p>
+
+                <p>
+                  I hope this message finds you well! I'm thrilled to present an exclusive
+                  opportunity that's just become available in the heart of [Location]. This stunning
+                  property offers the perfect blend of comfort, style, and convenience, making it an
+                  ideal choice for anyone looking to elevate their living experience.
+                </p>
+
+                <h3>Features at a Glance:</h3>
+                <ul>
+                  <li>
+                    <strong>Spacious Layout:</strong> Enjoy ample space with [number] bedrooms and
+                    [number] bathrooms, perfect for family living or entertaining guests.
+                  </li>
+                  <li>
+                    <strong>Modern Amenities:</strong> From a state-of-the-art kitchen to a
+                    beautifully landscaped garden, every detail has been thoughtfully designed for
+                    your comfort.
+                  </li>
+                  <li>
+                    <strong>Prime Location:</strong> Situated in a desirable neighborhood, you're
+                    just minutes away from top-rated schools, shopping, dining, and entertainment
+                    options.
+                  </li>
+                </ul>
+
+                <p>
+                  <strong>Special Offer:</strong> For a limited time, we're offering exclusive
+                  viewing appointments to our valued clients. This is your chance to experience
+                  firsthand what makes this property so special.
+                </p>
+
+                <p>
+                  <strong>Act Now:</strong> Properties in this sought-after area are rare and highly
+                  coveted. Don't miss your chance to make this dream home yours. Contact us today to
+                  schedule your personal tour and take the first step towards your new beginning.
+                </p>
+
+                <p>Warmest regards,</p>
+                <p>
+                  [Your Name]
+                  <br />
+                  [Your Contact Information]
+                  <br />
+                  [Your Real Estate Agency]
+                </p>
+              </div>
             </div>
           </div>
         )}
