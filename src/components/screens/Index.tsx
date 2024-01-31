@@ -22,6 +22,7 @@ import { USER_ID_MODE } from '~/config'
 import { simpleHash } from '~/lib/simpleHash'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/catalyst/table'
 import { Badge } from '~/catalyst/badge'
+import { convertToKebab } from '~/lib/utils'
 
 function Index() {
   const userData = useAtomValue(atomUserData)
@@ -191,9 +192,16 @@ function Index() {
                           </TableCell>
                           <TableCell>{isChatbot ? 'API' : 'Schedule'}</TableCell>
                           <TableCell>
-                            {isChatbot
-                              ? 'On Demand'
-                              : ['1d', '2d', '3d', '4d'][simpleHash(myflow.workflowTitle) % 4]}
+                            {isChatbot && (
+                              <div>
+                                <div>On Demand</div>
+                                <div className="text-xs">
+                                  api.flairlabs.ai/company/{convertToKebab(myflow.workflowTitle)}
+                                </div>
+                              </div>
+                            )}
+                            {!isChatbot &&
+                              ['1d', '2d', '3d', '4d'][simpleHash(myflow.workflowTitle) % 4]}
                           </TableCell>
                           <TableCell>
                             {myflow.createdTimestamp?.toDate().toLocaleDateString()}
