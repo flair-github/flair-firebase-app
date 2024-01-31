@@ -13,15 +13,24 @@ import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 import { TiFlowMerge } from 'react-icons/ti'
 import { Badge } from '~/catalyst/badge'
+import { Button } from '~/catalyst/button'
+import { v4 } from 'uuid'
+import { Input } from '~/catalyst/input'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/catalyst/table'
 
 export interface ConditionalHopContent {
   nodeType: 'conditional-hop'
-  formula: string
+  conditions: {
+    conditionId: string
+    column: string
+    operator: 'is' | 'is not' | 'contains' | 'does not contain' | 'is empty' | 'is not empty'
+    value: string | number
+  }[]
 }
 
 export const conditionalHopDefaultContent: ConditionalHopContent = {
   nodeType: 'conditional-hop',
-  formula: '',
+  conditions: [],
 }
 
 export const ConditionalHop = ({
@@ -42,7 +51,7 @@ export const ConditionalHop = ({
   // Initial data
   useEffect(() => {
     if (data.initialContents.nodeType === 'conditional-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
+      setNodeContent(cloneDeep({ ...conditionalHopDefaultContent, ...data.initialContents }))
     }
   }, [data.initialContents])
 
@@ -202,30 +211,111 @@ export const ConditionalHop = ({
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
                           {/* Formula */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div>
-                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Formula
-                              </label>
-                            </div>
-                            <div className="sm:col-span-2">
-                              <textarea
-                                rows={8}
-                                className="block w-full rounded-md border-0 py-1.5 font-mono text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.formula}
-                                onChange={e => {
-                                  const newText = e.target.value
+                            <div className="sm:col-span-3">
+                              <Table dense>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableHeader className="">Column</TableHeader>
+                                    <TableHeader className="">Operator</TableHeader>
+                                    <TableHeader className="">Value</TableHeader>
+                                  </TableRow>
+                                </TableHead>
 
-                                  if (typeof newText !== 'string') {
-                                    return
-                                  }
+                                <TableBody>
+                                  {nodeFormContent.conditions.map((row, i) => {
+                                    return (
+                                      <TableRow key={row.conditionId}>
+                                        <TableCell>
+                                          <Input
+                                            value={row.column}
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.conditions[i].column = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </TableCell>
+                                        <TableCell>
+                                          <Select
+                                            value={row.operator}
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.conditions[i].operator =
+                                                  newText as any
+                                                return newFormContent
+                                              })
+                                            }}>
+                                            <option value="is">is</option>
+                                            <option value="is not">is not</option>
+                                            <option value="contains">contains</option>
+                                            <option value="does not contain">
+                                              does not contain
+                                            </option>
+                                            <option value="is empty">is empty</option>
+                                            <option value="is not empty">is not empty</option>
+                                          </Select>
+                                        </TableCell>
+                                        <TableCell>
+                                          <Input
+                                            value={row.value}
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.conditions[i].value = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </TableCell>
+                                      </TableRow>
+                                    )
+                                  })}
+                                </TableBody>
+                              </Table>
+                              <div className="mt-2" />
+                              <Button
+                                color="blue"
+                                onClick={() => {
+                                  const conditionId = v4()
 
                                   setNodeFormContent(prev => {
                                     const newFormContent = cloneDeep(prev)
-                                    newFormContent.formula = newText
+                                    newFormContent.conditions = [
+                                      ...newFormContent.conditions,
+                                      {
+                                        conditionId,
+                                        column: '',
+                                        operator: 'is',
+                                        value: '',
+                                      },
+                                    ]
+
                                     return newFormContent
                                   })
-                                }}
-                              />
+                                }}>
+                                Add
+                              </Button>
                             </div>
                           </div>
                         </div>

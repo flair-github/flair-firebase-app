@@ -107,6 +107,7 @@ export const nodeTypes = {
   ConditionalHop,
   AggregatorHop,
   DataIndexerHop,
+  DataSourceURLScraperHop,
 }
 
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
@@ -133,7 +134,7 @@ import {
   BiLogoPostgresql,
   BiLogoSlack,
 } from 'react-icons/bi'
-import { FaCloudUploadAlt, FaSalesforce } from 'react-icons/fa'
+import { FaCloudUploadAlt, FaSalesforce, FaSearch } from 'react-icons/fa'
 import { SiPowerbi, SiZendesk, SiAirtable, SiGooglesheets, SiTwilio } from 'react-icons/si'
 import { GiConvergenceTarget } from 'react-icons/gi'
 import { GrAggregate, GrFormClose, GrCube } from 'react-icons/gr'
@@ -169,6 +170,7 @@ import { DataDestinationAPIHop } from './nodes/vertical/DataDestinationAPIHop'
 import { DataDestinationZendeskHop } from './nodes/vertical/DataDestinationZendeskHop'
 import { DataDestinationSalesforceHop } from './nodes/vertical/DataDestinationSalesforceHop'
 import { dummyRunners } from './nodes/utils/useRightIconMode'
+import { DataSourceURLScraperHop } from './nodes/vertical/DataSourceURLScraperHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -228,6 +230,8 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
 
   // Load initial
   useEffect(() => {
+    setNodes([])
+    setEdges([])
     ;(async () => {
       if (typeof workflowId !== 'string') {
         return
@@ -251,6 +255,11 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
         setEdges(newEdges)
       }
     })()
+
+    return () => {
+      setNodes([])
+      setEdges([])
+    }
   }, [workflowId, workflowRequestId, setEdges, setNodes])
 
   const onNodesChange = useCallback(
@@ -625,6 +634,13 @@ data_exporters:
           icon: BiLogoMongodb,
         },
         {
+          title: 'URL Scraper',
+          handleOnClick: () => {
+            addNode('data-source-url-scraper-hop', 'DataSourceURLScraperHop')
+          },
+          icon: FaSearch,
+        },
+        {
           title: 'Salesforce',
           handleOnClick: () => {},
           disabled: true,
@@ -665,15 +681,15 @@ data_exporters:
           },
           icon: BiGitBranch,
         },
+        // {
+        //   title: 'Aggregator',
+        //   handleOnClick: () => {
+        //     addNode('aggregator-hop', 'AggregatorHop')
+        //   },
+        //   icon: GrAggregate,
+        // },
         {
-          title: 'Aggregator',
-          handleOnClick: () => {
-            addNode('aggregator-hop', 'AggregatorHop')
-          },
-          icon: GrAggregate,
-        },
-        {
-          title: 'Data Indexer',
+          title: 'Knowledge Base',
           handleOnClick: () => {
             addNode('data-indexer-hop', 'DataIndexerHop')
           },

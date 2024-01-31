@@ -23,6 +23,21 @@ export function timestampToLocaleString(
   })
 }
 
+export function timestampToLocaleDateOnly(
+  ts: Timestamp,
+  locale: string = 'en-US',
+  options?: Intl.DateTimeFormatOptions,
+): string {
+  const date = ts.toDate() // Convert Firestore Timestamp to JavaScript Date
+  return date.toLocaleString(locale, {
+    // weekday: 'long', // e.g., "Sunday"
+    year: 'numeric', // e.g., "2023"
+    month: 'numeric', // e.g., "August"
+    day: 'numeric', // e.g., "1"
+    ...options, // Allow custom options
+  })
+}
+
 function downloadObjectAsJson(exportObj: any, fileName: string): void {
   const dataStr =
     'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj, null, 2))

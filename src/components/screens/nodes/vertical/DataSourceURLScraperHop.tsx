@@ -11,22 +11,31 @@ import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
-import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
-import { AiFillApi } from 'react-icons/ai'
+import { TiFlowMerge } from 'react-icons/ti'
+import { Badge } from '~/catalyst/badge'
+import { Button } from '~/catalyst/button'
+import { v4 } from 'uuid'
+import { Input } from '~/catalyst/input'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/catalyst/table'
+import { FaSearch } from 'react-icons/fa'
 
-export interface DataDestinationAPIHopContent {
-  nodeType: 'data-destination-api-hop'
-  headers: string
-  body: string
+export interface DataSourceURLScraperHopContent {
+  nodeType: 'data-source-url-scraper-hop'
+  url: string
+  queries: {
+    queryId: string
+    column: string
+    prompt: string
+  }[]
 }
 
-export const dataDestinationAPIHopDefaultContent: DataDestinationAPIHopContent = {
-  nodeType: 'data-destination-api-hop',
-  headers: '',
-  body: '',
+export const dataSourceURLScraperHopDefaultContent: DataSourceURLScraperHopContent = {
+  nodeType: 'data-source-url-scraper-hop',
+  url: '',
+  queries: [],
 }
 
-export const DataDestinationAPIHop = ({
+export const DataSourceURLScraperHop = ({
   data,
   noHandle,
   yPos,
@@ -34,11 +43,11 @@ export const DataDestinationAPIHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataDestinationAPIHopContent>(
-    dataDestinationAPIHopDefaultContent,
+  const [nodeContent, setNodeContent] = useState<DataSourceURLScraperHopContent>(
+    dataSourceURLScraperHopDefaultContent,
   )
-  const [nodeFormContent, setNodeFormContent] = useState<DataDestinationAPIHopContent>(
-    dataDestinationAPIHopDefaultContent,
+  const [nodeFormContent, setNodeFormContent] = useState<DataSourceURLScraperHopContent>(
+    dataSourceURLScraperHopDefaultContent,
   )
 
   // Right animation
@@ -46,7 +55,7 @@ export const DataDestinationAPIHop = ({
 
   // Initial data
   useEffect(() => {
-    if (data.initialContents.nodeType === 'data-destination-api-hop') {
+    if (data.initialContents.nodeType === 'data-source-url-scraper-hop') {
       setNodeContent(cloneDeep(data.initialContents))
     }
   }, [data.initialContents])
@@ -64,13 +73,13 @@ export const DataDestinationAPIHop = ({
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <AiFillApi size={40} className="text-slate-600" />
+            <FaSearch size={40} className="text-slate-600" />
           </div>
           <div>
-            <span className="inline-flex items-center rounded-md bg-orange-50 px-1.5 py-0.5 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-700/10">
-              Destination
+            <span className="inline-flex items-center rounded-md bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+              Source
             </span>
-            <div className="text-lg font-medium">Export data to an API</div>
+            <div className="text-lg font-medium">Scrape URL through prompts</div>
           </div>
           <div className="flex-1" />
           <div
@@ -101,7 +110,7 @@ export const DataDestinationAPIHop = ({
             id="in"
           />
         )}
-        {/* {!noHandle && (
+        {!noHandle && (
           <Handle
             type="source"
             position={Position.Bottom}
@@ -113,7 +122,7 @@ export const DataDestinationAPIHop = ({
             }}
             id="out"
           />
-        )} */}
+        )}
       </div>
 
       <Transition.Root show={open} as={Fragment}>
@@ -148,7 +157,7 @@ export const DataDestinationAPIHop = ({
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                API Response
+                                API Source
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new
@@ -170,18 +179,17 @@ export const DataDestinationAPIHop = ({
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
-                          {/* Headers */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Headers
+                                URL
                               </label>
                             </div>
-                            <div className="sm:col-span-2">
-                              <textarea
-                                rows={3}
-                                className="block w-full rounded-md border-0 py-1.5 font-mono text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.headers}
+                            <div className="flex items-center sm:col-span-2">
+                              <input
+                                type="text"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={nodeFormContent.url}
                                 onChange={e => {
                                   const newText = e.target.value
 
@@ -191,7 +199,7 @@ export const DataDestinationAPIHop = ({
 
                                   setNodeFormContent(prev => {
                                     const newFormContent = cloneDeep(prev)
-                                    newFormContent.headers = newText
+                                    newFormContent.url = newText
                                     return newFormContent
                                   })
                                 }}
@@ -199,32 +207,83 @@ export const DataDestinationAPIHop = ({
                             </div>
                           </div>
 
-                          {/* Body */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div>
-                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Body
-                              </label>
-                            </div>
-                            <div className="sm:col-span-2">
-                              <textarea
-                                rows={5}
-                                className="block w-full rounded-md border-0 py-1.5 font-mono text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.body}
-                                onChange={e => {
-                                  const newText = e.target.value
+                            <div className="sm:col-span-3">
+                              <Table dense>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableHeader className="w-[30%]">Column</TableHeader>
+                                    <TableHeader className="w-[70%]">Prompt</TableHeader>
+                                  </TableRow>
+                                </TableHead>
 
-                                  if (typeof newText !== 'string') {
-                                    return
-                                  }
+                                <TableBody>
+                                  {nodeFormContent.queries.map((row, i) => {
+                                    return (
+                                      <TableRow key={row.queryId}>
+                                        <TableCell>
+                                          <Input
+                                            value={row.column}
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.queries[i].column = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </TableCell>
+                                        <TableCell>
+                                          <Input
+                                            value={row.prompt}
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.queries[i].prompt = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </TableCell>
+                                      </TableRow>
+                                    )
+                                  })}
+                                </TableBody>
+                              </Table>
+                              <div className="mt-2" />
+                              <Button
+                                color="blue"
+                                onClick={() => {
+                                  const queryId = v4()
 
                                   setNodeFormContent(prev => {
                                     const newFormContent = cloneDeep(prev)
-                                    newFormContent.body = newText
+                                    newFormContent.queries = [
+                                      ...newFormContent.queries,
+                                      {
+                                        queryId,
+                                        column: '',
+                                        prompt: '',
+                                      },
+                                    ]
+
                                     return newFormContent
                                   })
-                                }}
-                              />
+                                }}>
+                                Add
+                              </Button>
                             </div>
                           </div>
                         </div>

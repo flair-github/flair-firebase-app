@@ -71,7 +71,7 @@ export const DataIndexerHop = ({
             <span className="inline-flex items-center rounded-md bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
               Transform
             </span>
-            <div className="text-lg font-medium">Data Indexer</div>
+            <div className="text-lg font-medium">Knowledge Base</div>
           </div>
           <div className="flex-1" />
           <div
@@ -149,7 +149,7 @@ export const DataIndexerHop = ({
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                Data Indexer
+                                Knowledge Base
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new

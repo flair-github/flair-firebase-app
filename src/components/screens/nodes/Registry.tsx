@@ -50,6 +50,7 @@ import { DataDestinationAzureHopContent } from './vertical/DataDestinationAzureH
 import { DataDestinationAPIHopContent } from './vertical/DataDestinationAPIHop'
 import { DataDestinationSalesforceHopContent } from './vertical/DataDestinationSalesforceHop'
 import { DataDestinationZendeskHopContent } from './vertical/DataDestinationZendeskHop'
+import { DataSourceURLScraperHopContent } from './vertical/DataSourceURLScraperHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -104,6 +105,7 @@ export type NodeContent =
   | ConditionalHopContent
   | AggregatorHopContent
   | DataIndexerHopContent
+  | DataSourceURLScraperHopContent
 
 export interface NodeData {
   nodeId: string
