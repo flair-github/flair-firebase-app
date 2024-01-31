@@ -248,7 +248,7 @@ export const DataSourceAPIHop = ({
                                 onChange={ev => {
                                   setNodeFormContent(prev => {
                                     const newFormContent = cloneDeep(prev)
-                                    newFormContent.fileType = ev.target.value as any
+                                    newFormContent.method = ev.target.value as any
                                     return newFormContent
                                   })
                                 }}>
