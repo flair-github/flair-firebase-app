@@ -334,7 +334,7 @@ export const LLMProcessorHop = ({
                                         </Field>
                                         <Field>
                                           <Label>Context</Label>
-                                          <Textarea
+                                          <Select
                                             value={el.context}
                                             onChange={e => {
                                               const newText = e.target.value
@@ -348,8 +348,14 @@ export const LLMProcessorHop = ({
                                                 newFormContent.columns[index].context = newText
                                                 return newFormContent
                                               })
-                                            }}
-                                          />
+                                            }}>
+                                            <option value="knowledge-base-1">
+                                              knowledge-base-1
+                                            </option>
+                                            <option value="knowledge-base-2">
+                                              knowledge-base-2
+                                            </option>
+                                          </Select>
                                         </Field>
                                         <Field>
                                           <Label>Prompt</Label>
