@@ -261,13 +261,13 @@ export const ConditionalHop = ({
                                               })
                                             }}>
                                             <option value="is">is</option>
-                                            <option value="is-not">is not</option>
+                                            <option value="is not">is not</option>
                                             <option value="contains">contains</option>
-                                            <option value="does-not-contain">
+                                            <option value="does not contain">
                                               does not contain
                                             </option>
-                                            <option value="is-empty">is empty</option>
-                                            <option value="is-not-empty">is not empty</option>
+                                            <option value="is empty">is empty</option>
+                                            <option value="is not empty">is not empty</option>
                                           </Select>
                                         </TableCell>
                                         <TableCell>
