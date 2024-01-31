@@ -28,7 +28,6 @@ type ColumnContent =
       type: 'text'
       promptStrategy: string
       model: string
-      instruction: string
       importedKeys: Record<string, boolean>
       prompt: string
       context: string
@@ -39,7 +38,6 @@ type ColumnContent =
       type: 'list'
       promptStrategy: string
       model: string
-      instruction: string
       importedKeys: Record<string, boolean>
       prompt: string
       context: string
@@ -51,7 +49,6 @@ type ColumnContent =
       options: string
       promptStrategy: string
       model: string
-      instruction: string
       importedKeys: Record<string, boolean>
       prompt: string
       context: string
@@ -64,7 +61,6 @@ type ColumnContent =
       max: number
       promptStrategy: string
       model: string
-      instruction: string
       importedKeys: Record<string, boolean>
       prompt: string
       context: string
@@ -331,25 +327,6 @@ export const LLMProcessorHop = ({
                                               setNodeFormContent(prev => {
                                                 const newFormContent = cloneDeep(prev)
                                                 newFormContent.columns[index].name = newText
-                                                return newFormContent
-                                              })
-                                            }}
-                                          />
-                                        </Field>
-                                        <Field>
-                                          <Label>Instruction</Label>
-                                          <Textarea
-                                            value={el.instruction}
-                                            onChange={e => {
-                                              const newText = e.target.value
-
-                                              if (typeof newText !== 'string') {
-                                                return
-                                              }
-
-                                              setNodeFormContent(prev => {
-                                                const newFormContent = cloneDeep(prev)
-                                                newFormContent.columns[index].instruction = newText
                                                 return newFormContent
                                               })
                                             }}
@@ -686,7 +663,6 @@ export const LLMProcessorHop = ({
                                     type: 'text',
                                     promptStrategy: 'default',
                                     model: 'gpt-3.5-turbo',
-                                    instruction: '',
                                     name: '',
                                     prompt: '',
                                     context: '',
