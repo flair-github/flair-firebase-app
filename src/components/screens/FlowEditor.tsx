@@ -228,6 +228,8 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
 
   // Load initial
   useEffect(() => {
+    setNodes([])
+    setEdges([])
     ;(async () => {
       if (typeof workflowId !== 'string') {
         return
@@ -251,6 +253,11 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
         setEdges(newEdges)
       }
     })()
+
+    return () => {
+      setNodes([])
+      setEdges([])
+    }
   }, [workflowId, workflowRequestId, setEdges, setNodes])
 
   const onNodesChange = useCallback(
