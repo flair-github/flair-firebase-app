@@ -680,7 +680,7 @@ data_exporters:
         //   icon: GrAggregate,
         // },
         {
-          title: 'Data Indexer',
+          title: 'Knowledge Base',
           handleOnClick: () => {
             addNode('data-indexer-hop', 'DataIndexerHop')
           },
