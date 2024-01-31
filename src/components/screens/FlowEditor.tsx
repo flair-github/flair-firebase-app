@@ -672,13 +672,13 @@ data_exporters:
           },
           icon: BiGitBranch,
         },
-        {
-          title: 'Aggregator',
-          handleOnClick: () => {
-            addNode('aggregator-hop', 'AggregatorHop')
-          },
-          icon: GrAggregate,
-        },
+        // {
+        //   title: 'Aggregator',
+        //   handleOnClick: () => {
+        //     addNode('aggregator-hop', 'AggregatorHop')
+        //   },
+        //   icon: GrAggregate,
+        // },
         {
           title: 'Data Indexer',
           handleOnClick: () => {
