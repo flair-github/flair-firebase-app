@@ -16,18 +16,12 @@ import { AiFillApi } from 'react-icons/ai'
 
 export interface DataDestinationAPIHopContent {
   nodeType: 'data-destination-api-hop'
-  fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
-  url: string
-  method: string
   headers: string
   body: string
 }
 
 export const dataDestinationAPIHopDefaultContent: DataDestinationAPIHopContent = {
   nodeType: 'data-destination-api-hop',
-  fileType: 'csv',
-  url: '',
-  method: 'GET',
   headers: '',
   body: '',
 }
@@ -176,92 +170,6 @@ export const DataDestinationAPIHop = ({
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
-                          {/* File Type */}
-                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div>
-                              <label
-                                htmlFor="project-name"
-                                className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                File Type
-                              </label>
-                            </div>
-                            <div className="sm:col-span-2">
-                              <Select
-                                name="status"
-                                value={nodeFormContent.fileType}
-                                onChange={ev => {
-                                  setNodeFormContent(prev => {
-                                    const newFormContent = cloneDeep(prev)
-                                    newFormContent.fileType = ev.target.value as any
-                                    return newFormContent
-                                  })
-                                }}>
-                                <option value="csv">csv</option>
-                                <option value="txt">txt</option>
-                                <option value="pdf">pdf</option>
-                                <option value="mp3">mp3</option>
-                              </Select>
-                            </div>
-                          </div>
-
-                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div>
-                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                URL
-                              </label>
-                            </div>
-                            <div className="sm:col-span-2">
-                              <input
-                                type="text"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.url}
-                                onChange={e => {
-                                  const newText = e.target.value
-
-                                  if (typeof newText !== 'string') {
-                                    return
-                                  }
-
-                                  setNodeFormContent(prev => {
-                                    const newFormContent = cloneDeep(prev)
-                                    newFormContent.url = newText
-                                    return newFormContent
-                                  })
-                                }}
-                              />
-                            </div>
-                          </div>
-
-                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div>
-                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Method
-                              </label>
-                            </div>
-                            <div className="sm:col-span-2">
-                              <Select
-                                name="status"
-                                value={nodeFormContent.method}
-                                onChange={ev => {
-                                  setNodeFormContent(prev => {
-                                    const newFormContent = cloneDeep(prev)
-                                    newFormContent.fileType = ev.target.value as any
-                                    return newFormContent
-                                  })
-                                }}>
-                                <option value="GET">GET</option>
-                                <option value="HEAD">HEAD</option>
-                                <option value="POST">POST</option>
-                                <option value="PUT">PUT</option>
-                                <option value="DELETE">DELETE</option>
-                                <option value="CONNECT">CONNECT</option>
-                                <option value="OPTIONS">OPTIONS</option>
-                                <option value="TRACE">TRACE</option>
-                                <option value="PATCH">PATCH</option>
-                              </Select>
-                            </div>
-                          </div>
-
                           {/* Headers */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
