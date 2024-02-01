@@ -206,7 +206,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
           {/* <div className="stat-value text-2xl">{data.model}</div> */}
         </div>
         <div className="stat overflow-hidden">
-          <div className="stat-title">Relevancy</div>
+          <div className="stat-title">Accuracy</div>
           <div className="stat-value text-2xl">94%</div>
           {/* <div className="stat-value text-2xl">{averageEval.answer_relevancy?.toFixed(3)}</div> */}
           {/* <div className="stat-desc">5% more than last run</div> */}
