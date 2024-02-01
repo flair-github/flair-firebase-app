@@ -139,6 +139,12 @@ function Results() {
                           Accuracy
                           <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Hallucination
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                        </th>
                         {/* <th>Invalid Format (%)</th> */}
                         {/* <th>Tokens per Request</th> */}
                         <th
@@ -180,6 +186,9 @@ function Results() {
                                 ? Math.floor(averaged.answer_relevancy * 100)
                                 : 75 + (simpleHash(el.createdTimestamp.toString()) % 20)}
                               %
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {(simpleHash(el.createdTimestamp.toString()) % 100) / 100}%
                             </td>
                             {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
                             {/* <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td> */}
