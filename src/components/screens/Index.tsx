@@ -132,7 +132,7 @@ function Index() {
 
         <main className="-mt-32">
           <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-            <div className="rounded-lg bg-white px-5 py-2 shadow sm:px-6">
+            <div className="overflow-x-hidden rounded-lg bg-white px-5 py-2 shadow sm:px-6">
               {!myFlows && (
                 <div className="flex h-72 w-full items-center justify-center">
                   <ImSpinner8 className="h-16 w-16 animate-spin text-slate-400" />
@@ -193,11 +193,8 @@ function Index() {
                           <TableCell>{isChatbot ? 'API' : 'Schedule'}</TableCell>
                           <TableCell>
                             {isChatbot && (
-                              <div>
-                                <div>On Demand</div>
-                                <div className="text-xs">
-                                  api.flairlabs.ai/company/{convertToKebab(myflow.workflowTitle)}
-                                </div>
+                              <div className="text-sm">
+                                api.flairlabs.ai/company/{convertToKebab(myflow.workflowTitle)}
                               </div>
                             )}
                             {!isChatbot &&

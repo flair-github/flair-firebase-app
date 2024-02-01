@@ -19,6 +19,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { callCenterData } from '~/constants/callCenterData'
 import { Checkbox } from '~/catalyst/checkbox'
 import { Button } from '~/catalyst/button'
+import { TbCaretUpDownFilled } from 'react-icons/tb'
+import { FaFilter } from 'react-icons/fa6'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -206,7 +208,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
           {/* <div className="stat-value text-2xl">{data.model}</div> */}
         </div>
         <div className="stat overflow-hidden">
-          <div className="stat-title">Relevancy</div>
+          <div className="stat-title">Accuracy</div>
           <div className="stat-value text-2xl">94%</div>
           {/* <div className="stat-value text-2xl">{averageEval.answer_relevancy?.toFixed(3)}</div> */}
           {/* <div className="stat-desc">5% more than last run</div> */}
@@ -268,11 +270,11 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
           onClick={() => setActiveTab('result')}>
           Result
         </a>
-        <a
+        {/* <a
           className={`tab-lg tab font-bold ${activeTab === 'config' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('config')}>
           Config
-        </a>
+        </a> */}
       </nav>
       {activeTab === 'evaluation' && (
         <div className="overflow-scroll">
@@ -281,7 +283,13 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
               <Button color="blue">Retrain model</Button>
             </div>
             <div className="flex-1" />
-            <div className="form-control w-80">
+            <div className="justify-items flex items-center">
+              <Button color="white">
+                <FaFilter />
+                Filter
+              </Button>
+            </div>
+            {/* <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">LLM Output Column</span>
               </label>
@@ -293,12 +301,11 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                 <option value="">All</option>
                 {(data?.evaluationData ? Object.keys(data.evaluationData) : []).map(item => (
                   <option key={item} value={item}>
-                    {/* {snakeToTitle(item)} */}
                     {item}
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             {/* <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">Similarity Score</span>
@@ -331,24 +338,74 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
             <TableHead>
               <TableRow>
                 <TableHeader className="w-[0.1%]" />
-                <TableHeader>Filename</TableHeader>
-                <TableHeader>Transcript</TableHeader>
-                <TableHeader>Summary</TableHeader>
-                <TableHeader>Outcome</TableHeader>
-                <TableHeader>Call Type</TableHeader>
-                <TableHeader>Call Type Reason</TableHeader>
-                <TableHeader>Call Type Confidence</TableHeader>
-                <TableHeader>Used Proper Introduction</TableHeader>
-                <TableHeader>Identified Call Reason</TableHeader>
-                <TableHeader>Demonstrated Effective Listening</TableHeader>
-                <TableHeader>Expressed Proper Empathy</TableHeader>
-                <TableHeader>Used Professional Language</TableHeader>
-                <TableHeader>Used Accurate Grammar</TableHeader>
-                <TableHeader>Provided Accurate Information</TableHeader>
-                <TableHeader>Rudeness/Dishonesty/Fraud</TableHeader>
-                <TableHeader>Call Flow Followed</TableHeader>
-                <TableHeader>Call Flow Followed Reason</TableHeader>
-                <TableHeader>Score</TableHeader>
+                <TableHeader>
+                  Filename <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Transcript{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Summary <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Outcome <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Type{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Type Reason{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Type Confidence{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Used Proper Introduction{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Identified Call Reason{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Demonstrated Effective Listening{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Expressed Proper Empathy{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Used Professional Language{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Used Accurate Grammar{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Provided Accurate Information{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Rudeness/Dishonesty/Fraud{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Flow Followed{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Flow Followed Reason{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Score <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
               </TableRow>
             </TableHead>
             <TableBody>

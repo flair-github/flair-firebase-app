@@ -13,6 +13,7 @@ import { simpleHash } from '~/lib/simpleHash'
 import { Select } from '~/catalyst/select'
 import { Input } from '~/catalyst/input'
 import { Checkbox } from '~/catalyst/checkbox'
+import { TbCaretUpDownFilled } from 'react-icons/tb'
 
 function Results() {
   const [column, setColumn] = useState('')
@@ -81,10 +82,10 @@ function Results() {
           </Button>
         </form>
         <div className="flex-1" />
-        <Button onClick={async () => {}} disabled>
+        {/* <Button onClick={async () => {}} disabled>
           <div>Compare Selections</div>
           <div className="text-xs">(soon)</div>
-        </Button>
+        </Button> */}
       </div>
 
       <div className="min-h-screen overflow-x-auto bg-slate-50">
@@ -104,6 +105,7 @@ function Results() {
                           scope="col"
                           className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                           Pipeline Name
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
                         <th
                           scope="col"
@@ -114,16 +116,19 @@ function Results() {
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                           Status
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                           Created Timestamp
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                           Model
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
                         {/* <th>Faithfulness</th> */}
                         {/* <th>Latency</th> */}
@@ -132,6 +137,13 @@ function Results() {
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                           Accuracy
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Hallucination
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
                         {/* <th>Invalid Format (%)</th> */}
                         {/* <th>Tokens per Request</th> */}
@@ -174,6 +186,9 @@ function Results() {
                                 ? Math.floor(averaged.answer_relevancy * 100)
                                 : 75 + (simpleHash(el.createdTimestamp.toString()) % 20)}
                               %
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {(simpleHash(el.createdTimestamp.toString()) % 100) / 100}%
                             </td>
                             {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
                             {/* <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td> */}
