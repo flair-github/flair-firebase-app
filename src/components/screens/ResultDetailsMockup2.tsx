@@ -19,6 +19,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { callCenterData } from '~/constants/callCenterData'
 import { Checkbox } from '~/catalyst/checkbox'
 import { Button } from '~/catalyst/button'
+import { TbCaretUpDownFilled } from 'react-icons/tb'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -330,24 +331,74 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
             <TableHead>
               <TableRow>
                 <TableHeader className="w-[0.1%]" />
-                <TableHeader>Filename</TableHeader>
-                <TableHeader>Transcript</TableHeader>
-                <TableHeader>Summary</TableHeader>
-                <TableHeader>Outcome</TableHeader>
-                <TableHeader>Call Type</TableHeader>
-                <TableHeader>Call Type Reason</TableHeader>
-                <TableHeader>Call Type Confidence</TableHeader>
-                <TableHeader>Used Proper Introduction</TableHeader>
-                <TableHeader>Identified Call Reason</TableHeader>
-                <TableHeader>Demonstrated Effective Listening</TableHeader>
-                <TableHeader>Expressed Proper Empathy</TableHeader>
-                <TableHeader>Used Professional Language</TableHeader>
-                <TableHeader>Used Accurate Grammar</TableHeader>
-                <TableHeader>Provided Accurate Information</TableHeader>
-                <TableHeader>Rudeness/Dishonesty/Fraud</TableHeader>
-                <TableHeader>Call Flow Followed</TableHeader>
-                <TableHeader>Call Flow Followed Reason</TableHeader>
-                <TableHeader>Score</TableHeader>
+                <TableHeader>
+                  Filename <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Transcript{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Summary <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Outcome <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Type{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Type Reason{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Type Confidence{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Used Proper Introduction{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Identified Call Reason{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Demonstrated Effective Listening{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Expressed Proper Empathy{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Used Professional Language{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Used Accurate Grammar{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Provided Accurate Information{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Rudeness/Dishonesty/Fraud{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Flow Followed{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Call Flow Followed Reason{' '}
+                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
+                <TableHeader>
+                  Score <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                </TableHeader>
               </TableRow>
             </TableHead>
             <TableBody>
