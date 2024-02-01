@@ -268,11 +268,11 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
           onClick={() => setActiveTab('result')}>
           Result
         </a>
-        <a
+        {/* <a
           className={`tab-lg tab font-bold ${activeTab === 'config' ? 'tab-active' : ''}`}
           onClick={() => setActiveTab('config')}>
           Config
-        </a>
+        </a> */}
       </nav>
       {activeTab === 'evaluation' && (
         <div className="overflow-scroll">
