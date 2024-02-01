@@ -73,7 +73,11 @@ export default function Sidenav() {
           onClick={() => {
             navigate('/')
           }}>
-          <img className="h-8 w-auto" src="/images/flair-logo.svg" alt="Flair Logo" />
+          {isMini ? (
+            <img className="h-8 w-auto" src="/images/f-logo.svg" alt="Flair Logo" />
+          ) : (
+            <img className="h-8 w-auto" src="/images/flair-logo.svg" alt="Flair Logo" />
+          )}
         </div>
         <nav className="flex flex-1 flex-col">
           <ul role="list" className="flex flex-1 flex-col gap-y-7">
