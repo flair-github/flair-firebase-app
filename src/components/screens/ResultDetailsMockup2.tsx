@@ -281,7 +281,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
               <Button color="blue">Retrain model</Button>
             </div>
             <div className="flex-1" />
-            <div className="form-control w-80">
+            {/* <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">LLM Output Column</span>
               </label>
@@ -293,12 +293,11 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                 <option value="">All</option>
                 {(data?.evaluationData ? Object.keys(data.evaluationData) : []).map(item => (
                   <option key={item} value={item}>
-                    {/* {snakeToTitle(item)} */}
                     {item}
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             {/* <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">Similarity Score</span>
