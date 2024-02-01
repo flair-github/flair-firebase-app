@@ -74,7 +74,7 @@ export default function Sidenav() {
             navigate('/')
           }}>
           {isMini ? (
-            <img className="h-8 w-auto" src="/images/f-logo.svg" alt="Flair Logo" />
+            <img className="h-10 w-auto" src="/images/f-logo.svg" alt="Flair Logo" />
           ) : (
             <img className="h-8 w-auto" src="/images/flair-logo.svg" alt="Flair Logo" />
           )}
