@@ -20,6 +20,7 @@ import { callCenterData } from '~/constants/callCenterData'
 import { Checkbox } from '~/catalyst/checkbox'
 import { Button } from '~/catalyst/button'
 import { TbCaretUpDownFilled } from 'react-icons/tb'
+import { FaFilter } from 'react-icons/fa6'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -282,6 +283,12 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
               <Button color="blue">Retrain model</Button>
             </div>
             <div className="flex-1" />
+            <div className="justify-items flex items-center">
+              <Button color="white">
+                <FaFilter />
+                Filter
+              </Button>
+            </div>
             {/* <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">LLM Output Column</span>
