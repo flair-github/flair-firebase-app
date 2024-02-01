@@ -193,11 +193,8 @@ function Index() {
                           <TableCell>{isChatbot ? 'API' : 'Schedule'}</TableCell>
                           <TableCell>
                             {isChatbot && (
-                              <div>
-                                <div>On Demand</div>
-                                <div className="text-xs">
-                                  api.flairlabs.ai/company/{convertToKebab(myflow.workflowTitle)}
-                                </div>
+                              <div className="text-sm">
+                                api.flairlabs.ai/company/{convertToKebab(myflow.workflowTitle)}
                               </div>
                             )}
                             {!isChatbot &&
