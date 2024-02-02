@@ -1,7 +1,7 @@
 import { Dialog } from '@headlessui/react'
 import { useAtom } from 'jotai'
 import React from 'react'
-import Modal from '~/components/ui/modal'
+import { Modal } from '~/components/ui/modal'
 import { edgesAtom, nodesAtom } from '../FlowEditor'
 
 function JSONImporterModal({
@@ -20,13 +20,14 @@ function JSONImporterModal({
 
   return (
     <Modal
-      isOpen={isJsonImportModalShown}
-      onClose={() => {
+      shown={isJsonImportModalShown}
+      size="md"
+      onClickBackdrop={() => {
         setIsJsonImportModalShown(false)
       }}>
-      <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+      <div className="text-lg font-medium leading-6 text-gray-900">
         Import JSON Configuration File
-      </Dialog.Title>
+      </div>
 
       <div>
         {/* <Form.Control
