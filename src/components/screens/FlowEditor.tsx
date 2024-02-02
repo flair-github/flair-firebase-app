@@ -125,6 +125,7 @@ import Menu from './editor/Menu'
 import { PiCaretDoubleLeft, PiCaretDoubleRight, PiMicrosoftOutlookLogoFill } from 'react-icons/pi'
 import EditTitleModal from './overlays/EditTitleModal'
 import {
+  BiCalendar,
   BiGitBranch,
   BiLogoAws,
   BiLogoGmail,
@@ -142,6 +143,7 @@ import {
   BsArrowsAngleContract,
   BsFillCloudHaze2Fill,
   BsLightning,
+  BsPeople,
   BsThunderbolt,
 } from 'react-icons/bs'
 import { MdEmail, MdThunderstorm } from 'react-icons/md'
@@ -171,6 +173,7 @@ import { DataDestinationZendeskHop } from './nodes/vertical/DataDestinationZende
 import { DataDestinationSalesforceHop } from './nodes/vertical/DataDestinationSalesforceHop'
 import { dummyRunners } from './nodes/utils/useRightIconMode'
 import { DataSourceURLScraperHop } from './nodes/vertical/DataSourceURLScraperHop'
+import { FaBoltLightning } from 'react-icons/fa6'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -569,7 +572,7 @@ data_exporters:
 
   const nodeClassifications = [
     {
-      title: 'Data Source',
+      title: 'Input',
       subtitle: 'Load unstructured data from a data source.',
       color: 'slate',
       members: [
@@ -661,33 +664,10 @@ data_exporters:
       ],
     },
     {
-      title: 'Transform',
-      subtitle: 'Transforms your data using your choice of LLM and prompts.',
+      title: 'Knowledge Base',
+      subtitle: 'Embed your data into your choice of vector data store for quick retrieval.',
       color: 'slate',
       members: [
-        {
-          title: 'LLM Processor',
-          handleOnClick: () => {
-            // addNode('llm-processor', 'LLMProcessorNode')
-            addNode('llm-processor-hop', 'LLMProcessorHop')
-          },
-          icon: RiRobotLine,
-        },
-        {
-          title: 'Conditional',
-          handleOnClick: () => {
-            // addNode('conditional-logic', 'ConditionalLogicNode')
-            addNode('conditional-hop', 'ConditionalHop')
-          },
-          icon: BiGitBranch,
-        },
-        // {
-        //   title: 'Aggregator',
-        //   handleOnClick: () => {
-        //     addNode('aggregator-hop', 'AggregatorHop')
-        //   },
-        //   icon: GrAggregate,
-        // },
         {
           title: 'Knowledge Base',
           handleOnClick: () => {
@@ -695,6 +675,13 @@ data_exporters:
           },
           icon: GrCube,
         },
+        // {
+        //   title: 'Pinecone Indexer',
+        //   handleOnClick: () => {
+        //     addNode('data-indexer', 'DataIndexerNode')
+        //   },
+        //   icon: GrCube,
+        // },
         // {
         //   title: 'Chroma Indexer',
         //   handleOnClick: () => {
@@ -704,27 +691,156 @@ data_exporters:
         // },
       ],
     },
-    // {
-    //   title: 'Vector Indexer',
-    //   subtitle: 'Embed your data into your choice of vector data store for quick retrieval.',
-    //   color: 'green',
-    //   members: [
-    //     {
-    //       title: 'Pinecone Indexer',
-    //       handleOnClick: () => {
-    //         addNode('data-indexer', 'DataIndexerNode')
-    //       },
-    //       icon: GrCube,
-    //     },
-    //     {
-    //       title: 'Chroma Indexer',
-    //       handleOnClick: () => {
-    //         addNode('data-indexer', 'DataIndexerNode')
-    //       },
-    //       icon: GrAggregate,
-    //     },
-    //   ],
-    // },
+    {
+      title: 'Integrations',
+      subtitle: 'Integrate external systems',
+      color: 'slate',
+      members: [
+        {
+          title: 'Calendar',
+          handleOnClick: () => {
+            // addNode('data-indexer-hop', 'DataIndexerHop')
+          },
+          icon: BiCalendar,
+        },
+        {
+          title: 'CRM',
+          handleOnClick: () => {
+            // addNode('data-indexer-hop', 'DataIndexerHop')
+          },
+          icon: BsPeople,
+        },
+        {
+          title: 'API',
+          handleOnClick: () => {
+            // addNode('data-source-api-hop', 'DataSourceAPIHop')
+          },
+          icon: AiFillApi,
+        },
+        // {
+        //   title: 'Conditional',
+        //   handleOnClick: () => {
+        //     // addNode('conditional-logic', 'ConditionalLogicNode')
+        //     addNode('conditional-hop', 'ConditionalHop')
+        //   },
+        //   icon: BiGitBranch,
+        // },
+        // {
+        //   title: 'Aggregator',
+        //   handleOnClick: () => {
+        //     addNode('aggregator-hop', 'AggregatorHop')
+        //   },
+        //   icon: GrAggregate,
+        // },
+        // {
+        //   title: 'Knowledge Base',
+        //   handleOnClick: () => {
+        //     addNode('data-indexer-hop', 'DataIndexerHop')
+        //   },
+        //   icon: GrCube,
+        // },
+        // {
+        //   title: 'Chroma Indexer',
+        //   handleOnClick: () => {
+        //     addNode('data-indexer', 'DataIndexerNode')
+        //   },
+        //   icon: GrAggregate,
+        // },
+      ],
+    },
+    {
+      title: 'LLMs',
+      subtitle: 'Transforms your data using your choice of LLM and prompts.',
+      color: 'slate',
+      members: [
+        {
+          title: 'Open AI',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+            addNode('llm-processor-hop', 'LLMProcessorHop')
+          },
+          icon: GrCube,
+        },
+        {
+          title: 'Anthropic',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+          },
+          icon: GrCube,
+        },
+        {
+          title: 'Google',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+          },
+          icon: GrCube,
+        },
+        {
+          title: 'Meta',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+          },
+          icon: GrCube,
+        },
+        {
+          title: 'Mistral',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+          },
+          icon: GrCube,
+        },
+        {
+          title: 'Mosaic',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+          },
+          icon: GrCube,
+        },
+        {
+          title: 'Replicate',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+          },
+          icon: GrCube,
+        },
+        {
+          title: 'Hugging Face',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+          },
+          icon: GrCube,
+        },
+        // {
+        //   title: 'Conditional',
+        //   handleOnClick: () => {
+        //     // addNode('conditional-logic', 'ConditionalLogicNode')
+        //     addNode('conditional-hop', 'ConditionalHop')
+        //   },
+        //   icon: BiGitBranch,
+        // },
+        // {
+        //   title: 'Aggregator',
+        //   handleOnClick: () => {
+        //     addNode('aggregator-hop', 'AggregatorHop')
+        //   },
+        //   icon: GrAggregate,
+        // },
+        // {
+        //   title: 'Knowledge Base',
+        //   handleOnClick: () => {
+        //     addNode('data-indexer-hop', 'DataIndexerHop')
+        //   },
+        //   icon: GrCube,
+        // },
+        // {
+        //   title: 'Chroma Indexer',
+        //   handleOnClick: () => {
+        //     addNode('data-indexer', 'DataIndexerNode')
+        //   },
+        //   icon: GrAggregate,
+        // },
+      ],
+    },
     // {
     //   title: 'Data Retriever',
     //   subtitle: 'Fetches specific data subsets from the source or index.',
@@ -746,22 +862,23 @@ data_exporters:
     //     },
     //   ],
     // },
-    // {
-    //   title: 'Control Flow',
-    //   subtitle: 'Control flow and logical branching.',
-    //   color: 'rose',
-    //   members: [
-    //     {
-    //       title: 'Conditional',
-    //       handleOnClick: () => {
-    //         addNode('conditional-logic', 'ConditionalLogicNode')
-    //       },
-    //       icon: BiGitBranch,
-    //     },
-    //   ],
-    // },
     {
-      title: 'Data Destination',
+      title: 'Control Flow',
+      subtitle: 'Control flow and logical branching.',
+      color: 'slate',
+      members: [
+        {
+          title: 'Conditional',
+          handleOnClick: () => {
+            // addNode('conditional-logic', 'ConditionalLogicNode')
+            addNode('conditional-hop', 'ConditionalHop')
+          },
+          icon: BiGitBranch,
+        },
+      ],
+    },
+    {
+      title: 'Output',
       subtitle: 'Send processed data to a specified destination.',
       color: 'slate',
       members: [
