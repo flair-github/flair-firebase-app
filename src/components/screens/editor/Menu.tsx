@@ -47,20 +47,12 @@ export interface IAsideProps {
     title: string
     subtitle: string
     color: string
-    members: (
-      | {
-          title: string
-          handleOnClick: () => void
-          disabled?: undefined
-          icon: IconType
-        }
-      | {
-          title: string
-          handleOnClick: () => void
-          disabled: boolean
-          icon: IconType
-        }
-    )[]
+    members: {
+      title: string
+      handleOnClick: () => void
+      disabled?: boolean
+      icon: IconType | string
+    }[]
   }[]
 }
 
@@ -111,7 +103,17 @@ export default function Menu({ nodeClassifications }: IAsideProps) {
                             'flex h-16 w-full items-center justify-center rounded-none transition-colors ' +
                             colorClasses[1]
                           }>
-                          <member.icon className="h-12 w-12" />
+                          {typeof member.icon === 'string' ? (
+                            <img
+                              src={member.icon}
+                              width={75}
+                              height={75}
+                              className="h-12 w-12"
+                              // style={{ filter: 'grayscale(100%)' }}
+                            />
+                          ) : (
+                            <member.icon className="h-12 w-12" />
+                          )}
                         </div>
                         <div className="line-clamp-2 flex grow items-center justify-center">
                           <p> {member.title + (member.disabled ? ' (soon)' : '')}</p>

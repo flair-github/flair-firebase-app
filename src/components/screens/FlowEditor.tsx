@@ -121,7 +121,7 @@ import {
   AiFillMinusSquare,
   AiOutlineNodeIndex,
 } from 'react-icons/ai'
-import Menu from './editor/Menu'
+import Menu, { IAsideProps } from './editor/Menu'
 import { PiCaretDoubleLeft, PiCaretDoubleRight, PiMicrosoftOutlookLogoFill } from 'react-icons/pi'
 import EditTitleModal from './overlays/EditTitleModal'
 import {
@@ -570,7 +570,7 @@ data_exporters:
 
   const allowInteraction = useAtomValue(jotaiAllowInteraction)
 
-  const nodeClassifications = [
+  const nodeClassifications: IAsideProps['nodeClassifications'] = [
     {
       title: 'Input',
       subtitle: 'Load unstructured data from a data source.',
@@ -765,7 +765,7 @@ data_exporters:
             // addNode('llm-processor', 'LLMProcessorNode')
             addNode('llm-processor-hop', 'LLMProcessorHop')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/open-ai.svg',
         },
         {
           title: 'Anthropic',
@@ -779,7 +779,7 @@ data_exporters:
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/google.svg',
         },
         {
           title: 'Meta',
