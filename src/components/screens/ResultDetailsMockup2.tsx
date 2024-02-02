@@ -21,6 +21,7 @@ import { Checkbox } from '~/catalyst/checkbox'
 import { Button } from '~/catalyst/button'
 import { TbCaretUpDownFilled } from 'react-icons/tb'
 import { FaFilter } from 'react-icons/fa6'
+import { Input } from '~/catalyst/input'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -279,15 +280,19 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
       {activeTab === 'evaluation' && (
         <div className="overflow-scroll">
           <div className="mb-3 flex space-x-2">
-            <div className="justify-items flex items-center">
-              <Button color="blue">Retrain model</Button>
-            </div>
-            <div className="flex-1" />
-            <div className="justify-items flex items-center">
+            <div className="justify-items flex items-center gap-2">
               <Button color="white">
                 <FaFilter />
                 Filter
               </Button>
+              <Input placeholder="Search" />
+              <Button color="blue" onClick={(e: any) => {}}>
+                Search
+              </Button>
+            </div>
+            <div className="flex-1" />
+            <div className="justify-items flex items-center">
+              <Button color="blue">Retrain model</Button>
             </div>
             {/* <div className="form-control w-80">
               <label className="label">
