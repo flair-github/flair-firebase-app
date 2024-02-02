@@ -585,30 +585,6 @@ data_exporters:
           icon: BiLogoAws,
         },
         {
-          title: 'File Upload',
-          handleOnClick: () => {
-            // addNode('data-source-local-files', 'DataSourceLocalFilesNode')
-            addNode('data-source-files-hop', 'DataSourceFilesHop')
-          },
-          icon: FaCloudUploadAlt,
-        },
-        {
-          title: 'PostgresDB',
-          handleOnClick: () => {
-            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
-            addNode('data-source-postgres-hop', 'DataSourcePostgresHop')
-          },
-          icon: BiLogoPostgresql,
-        },
-        {
-          title: 'API',
-          handleOnClick: () => {
-            // addNode('data-source-api', 'DataSourceAPINode')
-            addNode('data-source-api-hop', 'DataSourceAPIHop')
-          },
-          icon: AiFillApi,
-        },
-        {
           title: 'Google Cloud Storage',
           handleOnClick: () => {
             addNode('data-source-gcs-hop', 'DataSourceGCSHop')
@@ -630,19 +606,48 @@ data_exporters:
           icon: BiLogoGmail,
         },
         {
-          title: 'MongoDB',
-          handleOnClick: () => {
-            addNode('data-source-mongo-hop', 'DataSourceMongoHop')
-          },
-          icon: BiLogoMongodb,
-        },
-        {
           title: 'URL Scraper',
           handleOnClick: () => {
             addNode('data-source-url-scraper-hop', 'DataSourceURLScraperHop')
           },
           icon: FaSearch,
         },
+        {
+          title: 'API',
+          handleOnClick: () => {
+            // addNode('data-source-api', 'DataSourceAPINode')
+            addNode('data-source-api-hop', 'DataSourceAPIHop')
+          },
+          icon: AiFillApi,
+        },
+        {
+          title: 'Slack',
+          handleOnClick: () => {},
+          icon: BiLogoSlack,
+        },
+        {
+          title: 'File Upload',
+          handleOnClick: () => {
+            // addNode('data-source-local-files', 'DataSourceLocalFilesNode')
+            addNode('data-source-files-hop', 'DataSourceFilesHop')
+          },
+          icon: FaCloudUploadAlt,
+        },
+        {
+          title: 'PostgresDB',
+          handleOnClick: () => {
+            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+            addNode('data-source-postgres-hop', 'DataSourcePostgresHop')
+          },
+          icon: BiLogoPostgresql,
+        },
+        // {
+        //   title: 'MongoDB',
+        //   handleOnClick: () => {
+        //     addNode('data-source-mongo-hop', 'DataSourceMongoHop')
+        //   },
+        //   icon: BiLogoMongodb,
+        // },
         {
           title: 'Salesforce',
           handleOnClick: () => {},
@@ -655,12 +660,6 @@ data_exporters:
           disabled: true,
           icon: SiZendesk,
         },
-        {
-          title: 'Slack',
-          handleOnClick: () => {},
-          disabled: true,
-          icon: BiLogoSlack,
-        },
       ],
     },
     {
@@ -669,7 +668,14 @@ data_exporters:
       color: 'slate',
       members: [
         {
-          title: 'Knowledge Base',
+          title: 'Pinecone',
+          handleOnClick: () => {
+            addNode('data-indexer-hop', 'DataIndexerHop')
+          },
+          icon: GrCube,
+        },
+        {
+          title: 'Chroma',
           handleOnClick: () => {
             addNode('data-indexer-hop', 'DataIndexerHop')
           },
@@ -883,37 +889,6 @@ data_exporters:
       color: 'slate',
       members: [
         {
-          title: 'Gmail',
-          handleOnClick: () => {
-            // addNode('data-exporter-gmail', 'DataExporterGmailNode')
-            addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
-          },
-          icon: BiLogoGmail,
-        },
-        {
-          title: 'Twilio',
-          handleOnClick: () => {
-            // addNode('data-exporter-twilio', 'DataExporterTwilioNode')
-            addNode('data-destination-twilio-hop', 'DataDestinationTwilioHop')
-          },
-          icon: SiTwilio,
-        },
-        {
-          title: 'Postgres',
-          handleOnClick: () => {
-            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
-            addNode('data-destination-postgres-hop', 'DataDestinationPostgresHop')
-          },
-          icon: BiLogoPostgresql,
-        },
-        {
-          title: 'Google Sheets',
-          handleOnClick: () => {
-            addNode('data-destination-sheets-hop', 'DataDestinationSheetsHop')
-          },
-          icon: SiGooglesheets,
-        },
-        {
           title: 'AWS S3',
           handleOnClick: () => {
             addNode('data-destination-s3-hop', 'DataDestinationS3Hop')
@@ -935,11 +910,42 @@ data_exporters:
           icon: BiLogoMicrosoft,
         },
         {
+          title: 'Gmail',
+          handleOnClick: () => {
+            // addNode('data-exporter-gmail', 'DataExporterGmailNode')
+            addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
+          },
+          icon: BiLogoGmail,
+        },
+        {
+          title: 'Google Sheets',
+          handleOnClick: () => {
+            addNode('data-destination-sheets-hop', 'DataDestinationSheetsHop')
+          },
+          icon: SiGooglesheets,
+        },
+        {
+          title: 'Twilio',
+          handleOnClick: () => {
+            // addNode('data-exporter-twilio', 'DataExporterTwilioNode')
+            addNode('data-destination-twilio-hop', 'DataDestinationTwilioHop')
+          },
+          icon: SiTwilio,
+        },
+        {
           title: 'API',
           handleOnClick: () => {
             addNode('data-destination-api-hop', 'DataDestinationAPIHop')
           },
           icon: AiFillApi,
+        },
+        {
+          title: 'Postgres',
+          handleOnClick: () => {
+            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+            addNode('data-destination-postgres-hop', 'DataDestinationPostgresHop')
+          },
+          icon: BiLogoPostgresql,
         },
         {
           title: 'Zendesk',
