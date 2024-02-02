@@ -19,7 +19,6 @@ export interface DataSourceAPIHopContent {
   fileType: 'txt' | 'csv' | 'mp3' | 'pdf'
   url: string
   method: string
-  headers: string
   body: string
 }
 
@@ -28,7 +27,6 @@ export const dataSourceAPIHopDefaultContent: DataSourceAPIHopContent = {
   fileType: 'csv',
   url: '',
   method: 'GET',
-  headers: '',
   body: '',
 }
 
@@ -262,35 +260,6 @@ export const DataSourceAPIHop = ({
                                 <option value="TRACE">TRACE</option>
                                 <option value="PATCH">PATCH</option>
                               </Select>
-                            </div>
-                          </div>
-
-                          {/* Headers */}
-                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div>
-                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Headers
-                              </label>
-                            </div>
-                            <div className="sm:col-span-2">
-                              <textarea
-                                rows={3}
-                                className="block w-full rounded-md border-0 py-1.5 font-mono text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.headers}
-                                onChange={e => {
-                                  const newText = e.target.value
-
-                                  if (typeof newText !== 'string') {
-                                    return
-                                  }
-
-                                  setNodeFormContent(prev => {
-                                    const newFormContent = cloneDeep(prev)
-                                    newFormContent.headers = newText
-                                    return newFormContent
-                                  })
-                                }}
-                              />
                             </div>
                           </div>
 
