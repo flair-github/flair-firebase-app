@@ -278,7 +278,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
         </a> */}
       </nav>
       {activeTab === 'evaluation' && (
-        <div className="overflow-scroll">
+        <div>
           <div className="mb-3 flex space-x-2">
             <div className="justify-items flex items-center gap-2">
               <Button color="white">
@@ -339,112 +339,189 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
           </div>
 
           {/* Table */}
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableHeader className="w-[0.1%]" />
-                <TableHeader>
-                  Filename <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Transcript{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Summary <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Outcome <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Type{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Type Reason{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Type Confidence{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Used Proper Introduction{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Identified Call Reason{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Demonstrated Effective Listening{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Expressed Proper Empathy{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Used Professional Language{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Used Accurate Grammar{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Provided Accurate Information{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Rudeness/Dishonesty/Fraud{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Flow Followed{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Flow Followed Reason{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Score <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {callCenterData.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Checkbox color="blue" />
-                  </TableCell>
-                  <TableCell className="text-wrap font-medium">{row.filename}</TableCell>
-                  <TableCell className="text-wrap">
-                    <div className="w-[400px]">{row.transcript}</div>
-                  </TableCell>
-                  <TableCell className="text-wrap">
-                    <div className="w-[400px]">{row.summary}</div>
-                  </TableCell>
-                  <TableCell className="text-wrap">{row.outcome}</TableCell>
-                  <TableCell className="text-wrap">{row.call_type}</TableCell>
-                  <TableCell className="text-wrap">{row.call_type_reason}</TableCell>
-                  <TableCell className="text-wrap">{row.call_type_confidence}</TableCell>
-                  <TableCell>{row.used_proper_introduction}</TableCell>
-                  <TableCell>{row.identified_call_reason}</TableCell>
-                  <TableCell>{row.demonstrate_effective_listening}</TableCell>
-                  <TableCell>{row.expressed_proper_empathy}</TableCell>
-                  <TableCell className="text-wrap">{row.used_professional_language}</TableCell>
-                  <TableCell className="text-wrap">{row.used_accurate_grammar}</TableCell>
-                  <TableCell className="text-wrap">{row.provided_accurate_information}</TableCell>
-                  <TableCell className="text-wrap">{row.rudeness_dishonesty_fraud}</TableCell>
-                  <TableCell className="text-wrap">{row.call_flow_followed}</TableCell>
-                  <TableCell className="text-wrap">{row.call_flow_followed_reason}</TableCell>
-                  <TableCell className="text-wrap">{row.score}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <div className="overflow-x-auto overflow-y-hidden px-1">
+            <div className="mt-8 flow-root">
+              <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <div className="overflow-hidden shadow ring-1 ring-black/5 sm:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-300">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="w-[0.1%] whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          />
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Filename{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Transcript{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Summary{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Outcome{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Call Type{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Call Type Reason{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Call Type Confidence{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Used Proper Introduction{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Identified Call Reason{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Demonstrated Effective Listening{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Expressed Proper Empathy{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Used Professional Language{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Used Accurate Grammar{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Provided Accurate Information{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Rudeness/Dishonesty/Fraud{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Call Flow Followed{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Call Flow Followed Reason{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            Score{' '}
+                            <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 bg-white">
+                        {callCenterData.map((row, index) => (
+                          <tr key={index}>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              <Checkbox color="blue" />
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">{row.filename}</td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              <div className="w-[400px]">{row.transcript}</div>
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              <div className="w-[400px]">{row.summary}</div>
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">{row.outcome}</td>
+                            <td className="px-3 py-4 text-sm text-gray-500">{row.call_type}</td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.call_type_reason}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.call_type_confidence}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.used_proper_introduction}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.identified_call_reason}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.demonstrate_effective_listening}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.expressed_proper_empathy}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.used_professional_language}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.used_accurate_grammar}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.provided_accurate_information}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.rudeness_dishonesty_fraud}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.call_flow_followed}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {row.call_flow_followed_reason}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">{row.score}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* {hasMore ? (
             <button className="btn mx-auto my-3 block w-36" onClick={loadMore}>
