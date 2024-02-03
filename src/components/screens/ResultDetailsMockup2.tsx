@@ -22,6 +22,7 @@ import { Button } from '~/catalyst/button'
 import { TbCaretUpDownFilled } from 'react-icons/tb'
 import { FaFilter } from 'react-icons/fa6'
 import { Input } from '~/catalyst/input'
+import clsx from 'clsx'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -135,6 +136,8 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   useEffect(() => {
     setSharedToken(data?.shared_token ?? '')
   }, [data])
+
+  const [editMode, setEditMode] = useState<Set<number>>(new Set())
 
   if (!data) {
     return <></>
@@ -292,7 +295,9 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
             </div>
             <div className="flex-1" />
             <div className="justify-items flex items-center">
-              <Button color="blue">Retrain model</Button>
+              <Button color="blue" disabled={editMode.size === 0}>
+                Retrain model
+              </Button>
             </div>
             {/* <div className="form-control w-80">
               <label className="label">
@@ -465,54 +470,157 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                         {callCenterData.map((row, index) => (
                           <tr key={index}>
                             <td className="px-3 py-4 text-sm text-gray-500">
-                              <Checkbox color="blue" />
+                              <Checkbox
+                                color="blue"
+                                onChange={checked => {
+                                  if (checked) {
+                                    setEditMode(prev => {
+                                      const newSet = new Set(prev)
+                                      newSet.add(index)
+                                      return newSet
+                                    })
+                                  } else {
+                                    setEditMode(prev => {
+                                      const newSet = new Set(prev)
+                                      newSet.delete(index)
+                                      return newSet
+                                    })
+                                  }
+                                }}
+                              />
                             </td>
                             <td className="px-3 py-4 text-sm text-gray-500">{row.filename}</td>
                             <td className="px-3 py-4 text-sm text-gray-500">
                               <div className="w-[400px]">{row.transcript}</div>
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               <div className="w-[400px]">{row.summary}</div>
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">{row.outcome}</td>
-                            <td className="px-3 py-4 text-sm text-gray-500">{row.call_type}</td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
+                              {row.outcome}
+                            </td>
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
+                              {row.call_type}
+                            </td>
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.call_type_reason}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.call_type_confidence}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.used_proper_introduction}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.identified_call_reason}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.demonstrate_effective_listening}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.expressed_proper_empathy}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.used_professional_language}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.used_accurate_grammar}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.provided_accurate_information}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.rudeness_dishonesty_fraud}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.call_flow_followed}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
                               {row.call_flow_followed_reason}
                             </td>
-                            <td className="px-3 py-4 text-sm text-gray-500">{row.score}</td>
+                            <td
+                              className={clsx(
+                                'px-3 py-4 text-sm text-gray-500',
+                                editMode.has(index) && 'bg-yellow-100',
+                              )}
+                              contentEditable={editMode.has(index)}>
+                              {row.score}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
