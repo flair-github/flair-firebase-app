@@ -97,10 +97,10 @@ function Results() {
                   <table className="min-w-full divide-y divide-gray-300">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th
+                        {/* <th
                           scope="col"
                           className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                        />
+                        /> */}
                         <th
                           scope="col"
                           className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
@@ -160,9 +160,9 @@ function Results() {
 
                         return (
                           <tr key={el.workflowResultId}>
-                            <td className="flex items-center justify-center whitespace-nowrap break-words py-4 pl-4 text-sm font-medium text-gray-900 sm:pl-6">
+                            {/* <td className="flex items-center justify-center whitespace-nowrap break-words py-4 pl-4 text-sm font-medium text-gray-900 sm:pl-6">
                               <Checkbox className="scale-125" color="blue" />
-                            </td>
+                            </td> */}
                             <td className="whitespace-nowrap break-words py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                               {el.workflowName}
                             </td>
