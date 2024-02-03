@@ -149,16 +149,35 @@ export default function Sidenav() {
             </li>
 
             <li className="-mx-6 mt-auto">
+              <ul role="list" className="mx-4 space-y-1">
+                <li>
+                  <Link
+                    to={'/settings'}
+                    className={classNames(
+                      isActive(location.pathname, '/settings')
+                        ? 'bg-gray-100'
+                        : 'hover:bg-gray-100',
+                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700',
+                    )}>
+                    <AiOutlineSetting
+                      className="h-6 w-6 shrink-0 text-gray-400"
+                      aria-hidden="true"
+                    />
+                    {!isMini && 'Settings'}
+                  </Link>
+                </li>
+              </ul>
+
               <div
-                className="flex cursor-pointer items-center gap-x-4 px-5 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+                className="flex cursor-pointer items-center gap-x-3 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
                 onClick={handleSignOut}>
                 {isHover ? (
-                  <RiLogoutCircleLine className="h-8 w-8" />
+                  <RiLogoutCircleLine className="h-6 w-6" />
                 ) : (
                   <img
-                    className="h-8 w-8 rounded-full bg-gray-50"
+                    className="h-6 w-6 rounded-full bg-gray-50"
                     src={userData?.userPhotoUrl}
                     alt="user image"
                   />
