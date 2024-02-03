@@ -772,7 +772,7 @@ data_exporters:
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/anthropic.svg',
         },
         {
           title: 'Google',
@@ -786,35 +786,35 @@ data_exporters:
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/meta.svg',
         },
         {
           title: 'Mistral',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/mistral-ai.svg',
         },
         {
           title: 'Mosaic',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/mosaic.svg',
         },
         {
           title: 'Replicate',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/replicate.svg',
         },
         {
           title: 'Hugging Face',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/hugging-face.svg',
         },
         // {
         //   title: 'Conditional',
