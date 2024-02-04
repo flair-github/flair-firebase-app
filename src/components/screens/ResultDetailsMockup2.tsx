@@ -1,8 +1,8 @@
-import React, { useMemo, SyntheticEvent, useEffect } from 'react'
+import React, { useMemo, SyntheticEvent, useEffect, useRef, LegacyRef } from 'react'
 import { useState } from 'react'
-import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
+import { FaShare, FaCloudDownloadAlt, FaCheckCircle } from 'react-icons/fa'
 import { PiFileCsvFill, PiTableBold } from 'react-icons/pi'
-import { ImFilesEmpty } from 'react-icons/im'
+import { ImFilesEmpty, ImSpinner8 } from 'react-icons/im'
 import { CodeBlock } from 'react-code-blocks'
 import useFirestoreDoc from '~/lib/useFirestoreDoc'
 import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
@@ -120,12 +120,12 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
     [resultId, columnName],
   )
 
-  const {
-    items,
-    loading: outputLoading,
-    hasMore,
-    loadMore,
-  } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, where)
+  // const {
+  //   items,
+  //   loading: outputLoading,
+  //   hasMore,
+  //   loadMore,
+  // } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, where)
 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
@@ -143,6 +143,9 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
     { name: 'Evaluation', href: '#', current: activeTab === 'Evaluation' },
     { name: 'Result', href: '#', current: activeTab === 'Result' },
   ]
+
+  const runningModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
+  const [runningModalStep, setRunningModalStep] = useState<number>(1)
 
   if (!data) {
     return <></>
@@ -270,7 +273,30 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
               </div>
               <div className="flex-1" />
               <div className="justify-items flex items-center">
-                <Button color="blue" disabled={editMode.size === 0}>
+                <Button
+                  color="blue"
+                  disabled={editMode.size === 0}
+                  onClick={async () => {
+                    runningModalRef.current?.showModal()
+                    setRunningModalStep(1)
+                    await new Promise(resolve => setTimeout(resolve, 3000))
+                    setRunningModalStep(2)
+                    await new Promise(resolve => setTimeout(resolve, 3000))
+                    setRunningModalStep(3)
+                    await new Promise(resolve => setTimeout(resolve, 2000))
+                    runningModalRef.current?.close()
+
+                    db.collection('workflow_results').add({
+                      docExists: true,
+                      averageEvaluationData: 0.86,
+                      workflowName: 'Model Retraining',
+                      workflowRequestId: db.collection('workflow_results').doc().id,
+                      status: 'initiated',
+                      createdTimestamp: new Date(),
+                      model: 'gpt-4',
+                      executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
+                    })
+                  }}>
                   Retrain model
                 </Button>
               </div>
@@ -750,8 +776,37 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
       {selectedRow ? (
         <DetailModal key={selectedRow?.id} open={isOpen} setOpen={setIsOpen} item={selectedRow} />
       ) : null}
+
+      <RunModal dialogRef={runningModalRef} step={runningModalStep} />
     </div>
   )
 }
 
 export default ResultDetailsMockup2
+
+export const RunModal = ({ dialogRef, step }: { dialogRef: any; step: number }) => {
+  return (
+    <dialog ref={dialogRef} className="modal">
+      <form method="dialog" className="modal-box">
+        <h3 className="mb-5 text-center text-lg font-bold">
+          {step === 1 && 'Automatically updating prompts'}
+          {step === 2 && 'Deploying'}
+          {step === 3 && 'Done'}
+        </h3>
+        {/* <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button> */}
+        <div className="mb-2 mt-1">
+          <div className="flex h-32 w-full items-center justify-center">
+            {(step === 1 || step === 2) && (
+              <ImSpinner8 className="h-16 w-16 animate-spin text-slate-400" />
+            )}
+            {step === 3 && <FaCheckCircle className="h-16 w-16 text-slate-400" />}
+          </div>
+          <div />
+        </div>
+      </form>
+      <form method="dialog" className="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+  )
+}
