@@ -23,6 +23,8 @@ import { TbCaretUpDownFilled } from 'react-icons/tb'
 import { FaFilter } from 'react-icons/fa6'
 import { Input } from '~/catalyst/input'
 import clsx from 'clsx'
+import { useAtom } from 'jotai'
+import { resultDataAtom } from './Results'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -120,6 +122,8 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
     [resultId, columnName],
   )
 
+  const [resultData, setResultData] = useAtom(resultDataAtom)
+
   // const {
   //   items,
   //   loading: outputLoading,
@@ -188,7 +192,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   return (
     <div className="container mx-auto bg-slate-50">
       <div className="flex h-[68px] flex-none items-center border-b bg-white px-[20px]">
-        <div className="text-[20px] font-medium">Execution Result</div>
+        <div className="text-[20px] font-medium">Execution Result: {resultData?.workflowName}</div>
         <div className="flex-1" />
       </div>
 
@@ -287,7 +291,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                     db.collection('workflow_results').add({
                       docExists: true,
                       averageEvaluationData: 0.86,
-                      workflowName: 'Model Retraining',
+                      workflowName: resultData?.workflowName,
                       workflowRequestId: db.collection('workflow_results').doc().id,
                       status: 'initiated',
                       createdTimestamp: new Date(),

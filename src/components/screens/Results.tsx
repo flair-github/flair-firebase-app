@@ -14,9 +14,9 @@ import { Select } from '~/catalyst/select'
 import { Input } from '~/catalyst/input'
 import { Checkbox } from '~/catalyst/checkbox'
 import { TbCaretUpDownFilled } from 'react-icons/tb'
-import { atom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 
-// const resultData = atom<any>()
+export const resultDataAtom = atom<DocWorkflowResult | undefined>(undefined)
 
 function Results() {
   const [column, setColumn] = useState('')
@@ -35,6 +35,8 @@ function Results() {
     where as [string, WhereFilterOp, string][],
     orders,
   )
+
+  const [resultData, setResultData] = useAtom(resultDataAtom)
 
   return (
     <div>
@@ -201,7 +203,9 @@ function Results() {
                               <Button
                                 onClick={() => {
                                   // navigate('/result/' + el.workflowResultId)
+
                                   navigate('/result/GlDkMww0Hknofhcl6MW5')
+                                  setResultData(el)
                                 }}>
                                 <HiDocumentReport /> Details
                               </Button>
