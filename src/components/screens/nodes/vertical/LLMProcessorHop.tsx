@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ImSpinner8 } from 'react-icons/im'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
@@ -20,6 +20,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { Button } from '~/catalyst/button'
 import { Text } from '~/catalyst/text'
 import { FaBoltLightning } from 'react-icons/fa6'
+import { useAtomValue } from 'jotai'
+import { nodesAtom } from '../../FlowEditor'
 
 type ColumnContent =
   | {
@@ -92,6 +94,11 @@ export const LLMProcessorHop = ({
   const [nodeFormContent, setNodeFormContent] = useState<LLMProcessorHopContent>(
     llmProcessorHopDefaultContent,
   )
+
+  const nodes = useAtomValue(nodesAtom)
+  const dataIndexers = useMemo(() => {
+    return nodes.filter(el => el.type === 'DataIndexerHop')
+  }, [nodes])
 
   // Right animation
   const { rightIconMode } = useRightIconMode(yPos)
@@ -349,9 +356,16 @@ export const LLMProcessorHop = ({
                                                 return newFormContent
                                               })
                                             }}>
-                                            <option value="knowledge-base-1">
-                                              knowledge-base-1
-                                            </option>
+                                            {dataIndexers.length === 0 && (
+                                              <option value="knowledge-base-1" disabled>
+                                                No Knowledge Base Available
+                                              </option>
+                                            )}
+                                            {dataIndexers.length >= 1 && (
+                                              <option value="knowledge-base-1">
+                                                knowledge-base-1
+                                              </option>
+                                            )}
                                           </Select>
                                         </Field>
                                         <Field>
