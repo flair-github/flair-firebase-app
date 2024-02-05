@@ -15,7 +15,7 @@ import { GrCube } from 'react-icons/gr'
 
 export interface DataIndexerHopContent {
   nodeType: 'data-indexer-hop'
-  embeddingType: 'bert' | 'cohere' | 'gpt'
+  embeddingType: string
   indexStrategy: 'default' | 'HyDE'
   vectorStore: 'pinecone' | 'faiss' | 'local'
 }
@@ -201,8 +201,34 @@ export const DataIndexerHop = ({
                                   cohere
                                 </option>
                                 <option
-                                  value={'gpt' satisfies DataIndexerHopContent['embeddingType']}>
-                                  gpt
+                                  value={
+                                    'gpt-3.5-turbo' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  gpt-3.5-turbo
+                                </option>
+                                <option
+                                  value={
+                                    'gpt4-1106-preview' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  gpt4-1106-preview
+                                </option>
+                                <option
+                                  value={
+                                    'text-embedding-ada-002' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  text-embedding-ada-002
+                                </option>
+                                <option
+                                  value={
+                                    'text-embedding-3' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  text-embedding-3
+                                </option>
+                                <option
+                                  value={
+                                    'text-embedding-2' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  text-embedding-2
                                 </option>
                               </Select>
                             </div>
