@@ -27,6 +27,7 @@ import { Modal } from '../ui/modal'
 import { PiChatBold, PiEnvelope, PiFileText, PiHeadset, PiPhoneCallFill } from 'react-icons/pi'
 import { RiNotificationBadgeFill } from 'react-icons/ri'
 import { FaEnvelope, FaMagnifyingGlass } from 'react-icons/fa6'
+import { REAL_ESTATE_PIPELINE } from '~/constants/flowSamples'
 
 function Index() {
   const userData = useAtomValue(atomUserData)
@@ -57,14 +58,9 @@ function Index() {
     }
   }, [userData?.userId])
 
-  const createNewFlow = () => {
-    const titleInput = window.document.getElementById('flow-title-field') as HTMLInputElement
-    const title = titleInput?.value || 'New Flow'
+  const [createNewFlowTitle, setCreateNewFlowTitle] = useState('')
 
-    if (titleInput) {
-      titleInput.value = ''
-    }
-
+  const createNewFlow = async (frontendConfig: string) => {
     if (!userData?.userId) {
       return
     }
@@ -76,17 +72,19 @@ function Index() {
       lastSaveTimestamp: serverTimestamp() as Timestamp,
       docExists: true,
       workflowId: ref.id,
-      frontendConfig: '',
-      workflowTitle: title || 'New Flow',
+      frontendConfig,
+      workflowTitle: createNewFlowTitle || 'New Flow',
       ownerUserId: USER_ID_MODE === 'samir' ? 'IVqAyQJR4ugRGR8qL9UuB809OX82' : userData.userId,
     }
 
-    ref.set(newFlowData)
+    await ref.set(newFlowData)
+    setCreateNewFlowTitle('')
 
     // TODO: Continue to flow editor
   }
 
   const [showNewFlowModal, setShowNewFlowModal] = useState(false)
+  const [showNewFlowModalFromDescription, setShowNewFlowModalFromDescription] = useState(false)
   const navigate = useNavigate()
 
   const openWorkflow = (workflowId: string) => {
@@ -318,7 +316,7 @@ function Index() {
       {/* New Flow Modal */}
       <dialog className={['modal', showNewFlowModal ? 'modal-open' : ''].join(' ')}>
         <form method="dialog" className="modal-box">
-          <h3 className="text-lg font-bold">Create New Flow</h3>
+          <h3 className="text-lg font-bold">Create New Pipeline</h3>
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text">Flow Title</span>
@@ -326,13 +324,14 @@ function Index() {
             <input
               type="text"
               placeholder="Flow Title"
-              id="flow-title-field"
               className="input input-bordered w-full"
+              value={createNewFlowTitle}
+              onChange={ev => setCreateNewFlowTitle(ev.target.value)}
               onKeyDown={e => {
                 if (e.key === 'Enter') {
                   e.preventDefault()
                   setShowNewFlowModal(false)
-                  createNewFlow()
+                  createNewFlow('')
                 }
               }}
             />
@@ -349,7 +348,60 @@ function Index() {
               className="btn btn-primary"
               onClick={() => {
                 setShowNewFlowModal(false)
-                createNewFlow()
+                createNewFlow('')
+              }}>
+              Create
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      {/* New Flow Modal from description */}
+      <dialog className={['modal', showNewFlowModalFromDescription ? 'modal-open' : ''].join(' ')}>
+        <form method="dialog" className="modal-box">
+          <h3 className="text-lg font-bold">Create New Pipeline from Description</h3>
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Title</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Flow Title"
+              className="input input-bordered w-full"
+              value={createNewFlowTitle}
+              onChange={ev => setCreateNewFlowTitle(ev.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  setShowNewFlowModalFromDescription(false)
+                  createNewFlow(REAL_ESTATE_PIPELINE)
+                }
+              }}
+            />
+          </div>
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Description</span>
+            </label>
+            <textarea
+              rows={5}
+              placeholder="Flow Title"
+              className="input input-bordered h-[200px] w-full"
+            />
+          </div>
+          <div className="modal-action">
+            <button
+              className="btn"
+              onClick={() => {
+                setShowNewFlowModalFromDescription(false)
+              }}>
+              Close
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setShowNewFlowModalFromDescription(false)
+                createNewFlow(REAL_ESTATE_PIPELINE)
               }}>
               Create
             </button>
@@ -409,7 +461,14 @@ function Index() {
             <p className="my-3 text-sm text-gray-500">
               or generate automated pipeline from a text description
             </p>
-            <Button color="blue">Start from Description</Button>
+            <Button
+              color="blue"
+              onClick={() => {
+                setShowNewFlowModalFromDescription(true)
+                setAddAgentModal(false)
+              }}>
+              Start from Description
+            </Button>
           </div>
         </div>
       </Modal>
