@@ -14,6 +14,9 @@ import { Select } from '~/catalyst/select'
 import { Input } from '~/catalyst/input'
 import { Checkbox } from '~/catalyst/checkbox'
 import { TbCaretUpDownFilled } from 'react-icons/tb'
+import { atom } from 'jotai'
+
+// const resultData = atom<any>()
 
 function Results() {
   const [column, setColumn] = useState('')

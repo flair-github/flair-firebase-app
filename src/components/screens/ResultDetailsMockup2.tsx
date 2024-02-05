@@ -218,9 +218,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
           <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
               <dt className="truncate text-sm font-medium text-gray-500">Request Time</dt>
-              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-                {timestampToLocaleDateOnly(data.createdTimestamp)}
-              </dd>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">2/5/2024</dd>
             </div>
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
               <dt className="truncate text-sm font-medium text-gray-500">Total Time</dt>
@@ -465,6 +463,18 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                               Score{' '}
                               <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                             </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Hallucination Detected
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Invalid Format
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 bg-white">
@@ -621,6 +631,20 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                                 )}
                                 contentEditable={editMode.has(index)}>
                                 {row.score}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}>
+                                No
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}>
+                                No
                               </td>
                             </tr>
                           ))}
