@@ -352,9 +352,6 @@ export const LLMProcessorHop = ({
                                             <option value="knowledge-base-1">
                                               knowledge-base-1
                                             </option>
-                                            <option value="knowledge-base-2">
-                                              knowledge-base-2
-                                            </option>
                                           </Select>
                                         </Field>
                                         <Field>
