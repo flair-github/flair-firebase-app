@@ -59,6 +59,7 @@ function Index() {
   }, [userData?.userId])
 
   const [createNewFlowTitle, setCreateNewFlowTitle] = useState('')
+  const [showCreateFlowSpinner, setShowCreateFlowSpinner] = useState(false)
 
   const createNewFlow = async (frontendConfig: string) => {
     if (!userData?.userId) {
@@ -79,6 +80,12 @@ function Index() {
 
     await ref.set(newFlowData)
     setCreateNewFlowTitle('')
+
+    if (createNewFlowTitle.length > 1) {
+      setShowCreateFlowSpinner(true)
+      await new Promise(resolve => setTimeout(resolve, 10000))
+      setShowCreateFlowSpinner(false)
+    }
 
     // TODO: Continue to flow editor
   }
@@ -360,52 +367,63 @@ function Index() {
       <dialog className={['modal', showNewFlowModalFromDescription ? 'modal-open' : ''].join(' ')}>
         <form method="dialog" className="modal-box">
           <h3 className="text-lg font-bold">Create New Pipeline from Description</h3>
-          <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text">Title</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Flow Title"
-              className="input input-bordered w-full"
-              value={createNewFlowTitle}
-              onChange={ev => setCreateNewFlowTitle(ev.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  e.preventDefault()
-                  setShowNewFlowModalFromDescription(false)
-                  createNewFlow(REAL_ESTATE_PIPELINE)
-                }
-              }}
-            />
-          </div>
-          <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text">Description</span>
-            </label>
-            <textarea
-              rows={5}
-              placeholder="Flow Title"
-              className="input input-bordered h-[200px] w-full"
-            />
-          </div>
-          <div className="modal-action">
-            <button
-              className="btn"
-              onClick={() => {
-                setShowNewFlowModalFromDescription(false)
-              }}>
-              Close
-            </button>
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setShowNewFlowModalFromDescription(false)
-                createNewFlow(REAL_ESTATE_PIPELINE)
-              }}>
-              Create
-            </button>
-          </div>
+          {!showCreateFlowSpinner && (
+            <>
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Title</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Flow Title"
+                  className="input input-bordered w-full"
+                  value={createNewFlowTitle}
+                  onChange={ev => setCreateNewFlowTitle(ev.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      setShowNewFlowModalFromDescription(false)
+                      createNewFlow(REAL_ESTATE_PIPELINE)
+                    }
+                  }}
+                />
+              </div>
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Description</span>
+                </label>
+                <textarea
+                  rows={5}
+                  placeholder="Flow Title"
+                  className="input input-bordered h-[200px] w-full"
+                />
+              </div>
+              <div className="modal-action">
+                <button
+                  className="btn"
+                  onClick={() => {
+                    setShowNewFlowModalFromDescription(false)
+                  }}>
+                  Close
+                </button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    createNewFlow(REAL_ESTATE_PIPELINE)
+                    setTimeout(() => {
+                      setShowNewFlowModalFromDescription(false)
+                    }, 6000)
+                  }}>
+                  Create
+                </button>
+              </div>
+            </>
+          )}
+          {showCreateFlowSpinner && (
+            <div className="flex h-32 w-full items-center justify-center">
+              <ImSpinner8 className="h-16 w-16 animate-spin text-slate-400" />
+            </div>
+          )}
         </form>
       </dialog>
 
