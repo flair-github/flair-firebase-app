@@ -14,6 +14,9 @@ import { Select } from '~/catalyst/select'
 import { Input } from '~/catalyst/input'
 import { Checkbox } from '~/catalyst/checkbox'
 import { TbCaretUpDownFilled } from 'react-icons/tb'
+import { atom, useAtom } from 'jotai'
+
+export const resultDataAtom = atom<DocWorkflowResult | undefined>(undefined)
 
 function Results() {
   const [column, setColumn] = useState('')
@@ -32,6 +35,8 @@ function Results() {
     where as [string, WhereFilterOp, string][],
     orders,
   )
+
+  const [resultData, setResultData] = useAtom(resultDataAtom)
 
   return (
     <div>
@@ -97,10 +102,10 @@ function Results() {
                   <table className="min-w-full divide-y divide-gray-300">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th
+                        {/* <th
                           scope="col"
                           className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                        />
+                        /> */}
                         <th
                           scope="col"
                           className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
@@ -160,9 +165,9 @@ function Results() {
 
                         return (
                           <tr key={el.workflowResultId}>
-                            <td className="flex items-center justify-center whitespace-nowrap break-words py-4 pl-4 text-sm font-medium text-gray-900 sm:pl-6">
+                            {/* <td className="flex items-center justify-center whitespace-nowrap break-words py-4 pl-4 text-sm font-medium text-gray-900 sm:pl-6">
                               <Checkbox className="scale-125" color="blue" />
-                            </td>
+                            </td> */}
                             <td className="whitespace-nowrap break-words py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                               {el.workflowName}
                             </td>
@@ -170,7 +175,9 @@ function Results() {
                               {el.workflowRequestId}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {(el as any).status || 'completed'}
+                              {Date.now() - el.createdTimestamp.toMillis() < 60 * 60 * 1000
+                                ? 'Initiated'
+                                : 'Completed'}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {timestampToLocaleString(el.createdTimestamp)}
@@ -188,7 +195,7 @@ function Results() {
                               %
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {(simpleHash(el.createdTimestamp.toString()) % 100) / 100}%
+                              {(simpleHash(el.createdTimestamp.toString()) % 70) / 10}%
                             </td>
                             {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
                             {/* <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td> */}
@@ -196,7 +203,9 @@ function Results() {
                               <Button
                                 onClick={() => {
                                   // navigate('/result/' + el.workflowResultId)
+
                                   navigate('/result/GlDkMww0Hknofhcl6MW5')
+                                  setResultData(el)
                                 }}>
                                 <HiDocumentReport /> Details
                               </Button>

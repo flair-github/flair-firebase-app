@@ -12,10 +12,10 @@ import { BsArrowLeftShort, BsThreeDots } from 'react-icons/bs'
 import { ImFileEmpty, ImSpinner8, ImSpinner9 } from 'react-icons/im'
 import { Button } from '~/catalyst/button'
 import clsx from 'clsx'
-import { FaChevronRight } from 'react-icons/fa'
+import { FaChevronRight, FaTasks } from 'react-icons/fa'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
+import { ChevronRightIcon, EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { TiFlowMerge } from 'react-icons/ti'
 import { Switch } from '~/catalyst/switch'
 import { USER_ID_MODE } from '~/config'
@@ -23,6 +23,11 @@ import { simpleHash } from '~/lib/simpleHash'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/catalyst/table'
 import { Badge } from '~/catalyst/badge'
 import { convertToKebab } from '~/lib/utils'
+import { Modal } from '../ui/modal'
+import { PiChatBold, PiEnvelope, PiFileText, PiHeadset, PiPhoneCallFill } from 'react-icons/pi'
+import { RiNotificationBadgeFill } from 'react-icons/ri'
+import { FaEnvelope, FaMagnifyingGlass } from 'react-icons/fa6'
+import { REAL_ESTATE_PIPELINE } from '~/constants/flowSamples'
 
 function Index() {
   const userData = useAtomValue(atomUserData)
@@ -53,14 +58,10 @@ function Index() {
     }
   }, [userData?.userId])
 
-  const createNewFlow = () => {
-    const titleInput = window.document.getElementById('flow-title-field') as HTMLInputElement
-    const title = titleInput?.value || 'New Flow'
+  const [createNewFlowTitle, setCreateNewFlowTitle] = useState('')
+  const [showCreateFlowSpinner, setShowCreateFlowSpinner] = useState(false)
 
-    if (titleInput) {
-      titleInput.value = ''
-    }
-
+  const createNewFlow = async (frontendConfig: string) => {
     if (!userData?.userId) {
       return
     }
@@ -72,17 +73,25 @@ function Index() {
       lastSaveTimestamp: serverTimestamp() as Timestamp,
       docExists: true,
       workflowId: ref.id,
-      frontendConfig: '',
-      workflowTitle: title || 'New Flow',
+      frontendConfig,
+      workflowTitle: createNewFlowTitle || 'New Flow',
       ownerUserId: USER_ID_MODE === 'samir' ? 'IVqAyQJR4ugRGR8qL9UuB809OX82' : userData.userId,
     }
 
-    ref.set(newFlowData)
+    await ref.set(newFlowData)
+    setCreateNewFlowTitle('')
+
+    if (createNewFlowTitle.length > 1) {
+      setShowCreateFlowSpinner(true)
+      await new Promise(resolve => setTimeout(resolve, 10000))
+      setShowCreateFlowSpinner(false)
+    }
 
     // TODO: Continue to flow editor
   }
 
   const [showNewFlowModal, setShowNewFlowModal] = useState(false)
+  const [showNewFlowModalFromDescription, setShowNewFlowModalFromDescription] = useState(false)
   const navigate = useNavigate()
 
   const openWorkflow = (workflowId: string) => {
@@ -98,6 +107,60 @@ function Index() {
     'In progress': 'text-gray-600 bg-gray-50 ring-gray-500/10',
     Paused: 'text-yellow-800 bg-yellow-50 ring-yellow-600/20',
   }
+
+  const [addAgentModal, setAddAgentModal] = useState(false)
+
+  const items = [
+    {
+      name: 'Real Estate Lead Enrichment',
+      description: 'Enrich lead data with motivations, sentiments, buying intents, and more',
+      onClick: () => {},
+      iconColor: 'bg-blue-500',
+      icon: PiPhoneCallFill, // Assuming PiPhoneCallFill is a predefined icon component
+      grayedOut: false,
+    },
+    {
+      name: 'Action Item Extraction',
+      description: 'Extract actionable items from meetings, conversations, and documents',
+      onClick: () => {},
+      iconColor: 'bg-green-500',
+      icon: FaTasks, // Placeholder icon component
+      grayedOut: false,
+    },
+    {
+      name: 'Chatbot',
+      description: 'Interactive AI-powered chatbots for customer service and engagement',
+      onClick: () => {},
+      iconColor: 'bg-yellow-500',
+      icon: PiChatBold, // Placeholder icon component
+      grayedOut: false,
+    },
+    {
+      name: 'Call Center QA Grading',
+      description:
+        'Quality assurance grading for call center interactions to ensure service excellence',
+      onClick: () => {},
+      iconColor: 'bg-red-500',
+      icon: PiHeadset, // Placeholder icon component
+      grayedOut: false,
+    },
+    {
+      name: 'Email Categorization',
+      description: 'Automate the sorting and categorization of incoming emails for efficiency',
+      onClick: () => {},
+      iconColor: 'bg-purple-500',
+      icon: PiEnvelope, // Placeholder icon component
+      grayedOut: false,
+    },
+    {
+      name: 'Invoice Processing',
+      description: 'Streamline the processing of invoices for faster payment cycles and accuracy',
+      onClick: () => {},
+      iconColor: 'bg-orange-500',
+      icon: PiFileText, // Placeholder icon component
+      grayedOut: false,
+    },
+  ]
 
   return (
     <>
@@ -120,7 +183,7 @@ function Index() {
                   <Button
                     color="zinc"
                     onClick={() => {
-                      navigate('templates')
+                      setAddAgentModal(true)
                     }}>
                     Pipeline Templates
                   </Button>
@@ -149,7 +212,7 @@ function Index() {
                       <TableHeader>Status</TableHeader>
                       <TableHeader>Type</TableHeader>
                       <TableHeader>Frequency</TableHeader>
-                      <TableHeader>Last Run</TableHeader>
+                      <TableHeader>Created Date</TableHeader>
                       <TableHeader className="w-[0.1%]" />
                     </TableRow>
                   </TableHead>
@@ -260,7 +323,7 @@ function Index() {
       {/* New Flow Modal */}
       <dialog className={['modal', showNewFlowModal ? 'modal-open' : ''].join(' ')}>
         <form method="dialog" className="modal-box">
-          <h3 className="text-lg font-bold">Create New Flow</h3>
+          <h3 className="text-lg font-bold">Create New Pipeline</h3>
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text">Flow Title</span>
@@ -268,13 +331,14 @@ function Index() {
             <input
               type="text"
               placeholder="Flow Title"
-              id="flow-title-field"
               className="input input-bordered w-full"
+              value={createNewFlowTitle}
+              onChange={ev => setCreateNewFlowTitle(ev.target.value)}
               onKeyDown={e => {
                 if (e.key === 'Enter') {
                   e.preventDefault()
                   setShowNewFlowModal(false)
-                  createNewFlow()
+                  createNewFlow('')
                 }
               }}
             />
@@ -291,13 +355,141 @@ function Index() {
               className="btn btn-primary"
               onClick={() => {
                 setShowNewFlowModal(false)
-                createNewFlow()
+                createNewFlow('')
               }}>
               Create
             </button>
           </div>
         </form>
       </dialog>
+
+      {/* New Flow Modal from description */}
+      <dialog className={['modal', showNewFlowModalFromDescription ? 'modal-open' : ''].join(' ')}>
+        <form method="dialog" className="modal-box">
+          <h3 className="text-lg font-bold">Create New Pipeline from Description</h3>
+          {!showCreateFlowSpinner && (
+            <>
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Title</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Flow Title"
+                  className="input input-bordered w-full"
+                  value={createNewFlowTitle}
+                  onChange={ev => setCreateNewFlowTitle(ev.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      setShowNewFlowModalFromDescription(false)
+                      createNewFlow(REAL_ESTATE_PIPELINE)
+                    }
+                  }}
+                />
+              </div>
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Description</span>
+                </label>
+                <textarea
+                  rows={5}
+                  placeholder="Flow Title"
+                  className="input input-bordered h-[200px] w-full"
+                />
+              </div>
+              <div className="modal-action">
+                <button
+                  className="btn"
+                  onClick={() => {
+                    setShowNewFlowModalFromDescription(false)
+                  }}>
+                  Close
+                </button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    createNewFlow(REAL_ESTATE_PIPELINE)
+                    setTimeout(() => {
+                      setShowNewFlowModalFromDescription(false)
+                    }, 6000)
+                  }}>
+                  Create
+                </button>
+              </div>
+            </>
+          )}
+          {showCreateFlowSpinner && (
+            <div className="flex h-32 w-full items-center justify-center">
+              <ImSpinner8 className="h-16 w-16 animate-spin text-slate-400" />
+            </div>
+          )}
+        </form>
+      </dialog>
+
+      <Modal
+        shown={addAgentModal}
+        size="md"
+        onClickBackdrop={() => {
+          setAddAgentModal(false)
+        }}>
+        <div className="mx-auto">
+          <h2 className="text-base font-semibold leading-6 text-gray-900">Start from a Template</h2>
+          <p className="mt-1 text-sm text-gray-500">
+            Get started by selecting a template or start from an empty project.
+          </p>
+          <ul role="list" className="mt-6 divide-y divide-gray-200 border-y border-gray-200">
+            {items.map((item, itemIdx) => (
+              <li key={itemIdx}>
+                <div
+                  className={clsx(
+                    'group relative flex items-start space-x-3 py-4',
+                    item.grayedOut && 'opacity-50',
+                  )}>
+                  <div className="shrink-0">
+                    <span
+                      className={clsx(
+                        item.iconColor,
+                        'inline-flex h-10 w-10 items-center justify-center rounded-lg',
+                      )}>
+                      <item.icon className="h-6 w-6 text-white" aria-hidden="true" />
+                    </span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-medium text-gray-900">
+                      <a className="cursor-pointer" onClick={item.onClick}>
+                        <span className="absolute inset-0" aria-hidden="true" />
+                        {item.name}
+                      </a>
+                    </div>
+                    <p className="text-sm text-gray-500">{item.description}</p>
+                  </div>
+                  <div className="shrink-0 self-center">
+                    <ChevronRightIcon
+                      className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                      aria-hidden="true"
+                    />
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex flex-col items-center justify-center">
+            <p className="my-3 text-sm text-gray-500">
+              or generate automated pipeline from a text description
+            </p>
+            <Button
+              color="blue"
+              onClick={() => {
+                setShowNewFlowModalFromDescription(true)
+                setAddAgentModal(false)
+              }}>
+              Start from Description
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Onboarding Modal */}
       {/* <dialog ref={onboardingModal} className="modal">

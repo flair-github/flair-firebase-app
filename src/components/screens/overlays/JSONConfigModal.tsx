@@ -1,7 +1,7 @@
 import { Dialog } from '@headlessui/react'
 import React from 'react'
 import { CodeBlock } from 'react-code-blocks'
-import Modal from '~/components/ui/modal'
+import { Modal } from '~/components/ui/modal'
 
 function JSONConfigModal({
   isJsonModalShown,
@@ -14,13 +14,12 @@ function JSONConfigModal({
 }) {
   return (
     <Modal
-      isOpen={isJsonModalShown}
-      onClose={() => {
+      shown={isJsonModalShown}
+      size="md"
+      onClickBackdrop={() => {
         setIsJsonModalShown(false)
       }}>
-      <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-        JSON Configuration File
-      </Dialog.Title>
+      <div className="text-lg font-medium leading-6 text-gray-900">JSON Configuration File</div>
       <div className="mt-2">
         <p className="text-sm text-gray-500">Here is the config file based on the current flow.</p>
       </div>

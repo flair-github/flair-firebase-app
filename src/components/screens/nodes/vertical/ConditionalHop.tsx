@@ -17,6 +17,7 @@ import { Button } from '~/catalyst/button'
 import { v4 } from 'uuid'
 import { Input } from '~/catalyst/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/catalyst/table'
+import { GrFormClose } from 'react-icons/gr'
 
 export interface ConditionalHopContent {
   nodeType: 'conditional-hop'
@@ -218,6 +219,7 @@ export const ConditionalHop = ({
                                     <TableHeader className="">Column</TableHeader>
                                     <TableHeader className="">Operator</TableHeader>
                                     <TableHeader className="">Value</TableHeader>
+                                    <TableHeader className="w-[0.1%]" />
                                   </TableRow>
                                 </TableHead>
 
@@ -287,6 +289,27 @@ export const ConditionalHop = ({
                                               })
                                             }}
                                           />
+                                        </TableCell>
+                                        <TableCell>
+                                          {/* Delete Button */}
+                                          <div
+                                            className="flex cursor-pointer items-center justify-center"
+                                            onClick={() => {
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.conditions =
+                                                  newFormContent.conditions.filter(
+                                                    val => val.conditionId !== row.conditionId,
+                                                  )
+                                                return newFormContent
+                                              })
+                                            }}>
+                                            <div
+                                              className="flex items-center justify-center"
+                                              style={{ width: 22, height: 32 }}>
+                                              <GrFormClose style={{ color: '#6c757d' }} />
+                                            </div>
+                                          </div>
                                         </TableCell>
                                       </TableRow>
                                     )

@@ -1,8 +1,8 @@
-import React, { useMemo, SyntheticEvent, useEffect } from 'react'
+import React, { useMemo, SyntheticEvent, useEffect, useRef, LegacyRef } from 'react'
 import { useState } from 'react'
-import { FaShare, FaCloudDownloadAlt } from 'react-icons/fa'
+import { FaShare, FaCloudDownloadAlt, FaCheckCircle } from 'react-icons/fa'
 import { PiFileCsvFill, PiTableBold } from 'react-icons/pi'
-import { ImFilesEmpty } from 'react-icons/im'
+import { ImFilesEmpty, ImSpinner8 } from 'react-icons/im'
 import { CodeBlock } from 'react-code-blocks'
 import useFirestoreDoc from '~/lib/useFirestoreDoc'
 import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
@@ -21,6 +21,10 @@ import { Checkbox } from '~/catalyst/checkbox'
 import { Button } from '~/catalyst/button'
 import { TbCaretUpDownFilled } from 'react-icons/tb'
 import { FaFilter } from 'react-icons/fa6'
+import { Input } from '~/catalyst/input'
+import clsx from 'clsx'
+import { useAtom } from 'jotai'
+import { resultDataAtom } from './Results'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -101,7 +105,7 @@ const getFilenameFromURL = (urlString: string, defaultName: string): string => {
 }
 
 const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
-  const [activeTab, setActiveTab] = useState<'config' | 'evaluation' | 'result'>('evaluation')
+  const [activeTab, setActiveTab] = useState<'Evaluation' | 'Result'>('Evaluation')
   const resultId =
     id ?? window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
   const [sharedToken, setSharedToken] = useState('')
@@ -118,12 +122,14 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
     [resultId, columnName],
   )
 
-  const {
-    items,
-    loading: outputLoading,
-    hasMore,
-    loadMore,
-  } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, where)
+  const [resultData, setResultData] = useAtom(resultDataAtom)
+
+  // const {
+  //   items,
+  //   loading: outputLoading,
+  //   hasMore,
+  //   loadMore,
+  // } = usePaginatedFirestore<DocLLMOutput>('llm_outputs', 10, where)
 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState<DocLLMOutput>()
@@ -134,6 +140,16 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   useEffect(() => {
     setSharedToken(data?.shared_token ?? '')
   }, [data])
+
+  const [editMode, setEditMode] = useState<Set<number>>(new Set())
+
+  const tabs = [
+    { name: 'Evaluation', href: '#', current: activeTab === 'Evaluation' },
+    { name: 'Result', href: '#', current: activeTab === 'Result' },
+  ]
+
+  const runningModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
+  const [runningModalStep, setRunningModalStep] = useState<number>(1)
 
   if (!data) {
     return <></>
@@ -174,122 +190,119 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="mb-2 flex items-center ">
-        <h1 className="text-3xl font-bold">{'Pipeline Result'}</h1>
+    <div className="container mx-auto bg-slate-50">
+      <div className="flex h-[68px] flex-none items-center border-b bg-white px-[20px]">
+        <div className="text-[20px] font-medium">Execution Result: {resultData?.workflowName}</div>
         <div className="flex-1" />
-        {sharedToken ? (
-          <div className="join flex w-96 items-center divide-x divide-gray-300 border bg-white shadow-sm">
-            <h5 className="truncate px-3">
-              {window.location.origin + '?shared_token=' + sharedToken}
-            </h5>
-            <button
-              className="btn btn-outline join-item border-0"
-              onClick={() =>
-                copyToClipboard(window.location.origin + '?shared_token=' + sharedToken)
-              }>
-              <AiOutlineCopy className="h-6 w-6" />
-            </button>
-          </div>
-        ) : (
-          <button
-            disabled={sharing}
-            className={'btn gap-2 ' + (sharing && 'btn-disabled')}
-            onClick={shareHandler}>
-            {sharing ? <ImSpinner9 className="animate-spin" /> : <FaShare />}
-            <div>{sharing ? 'Preparing..' : 'Share'}</div>
-          </button>
-        )}
       </div>
-      <header className="stats mb-4 w-full grid-cols-4 border shadow">
-        <div className="stat overflow-hidden">
-          <div className="stat-title">Model</div>
-          <div className="stat-value text-2xl">GPT-4</div>
-          {/* <div className="stat-value text-2xl">{data.model}</div> */}
-        </div>
-        <div className="stat overflow-hidden">
-          <div className="stat-title">Accuracy</div>
-          <div className="stat-value text-2xl">94%</div>
-          {/* <div className="stat-value text-2xl">{averageEval.answer_relevancy?.toFixed(3)}</div> */}
-          {/* <div className="stat-desc">5% more than last run</div> */}
-        </div>
-        <div className="stat overflow-hidden">
-          <div className="stat-title">Hallucination</div>
-          <div className="stat-value text-2xl">1%</div>
-          {/* <div className="stat-value text-2xl">-</div> */}
-          {/* <div className="stat-desc">21% more than last run</div> */}
-        </div>
-        <div className="stat overflow-hidden">
-          <div className="stat-title">Invalid Format</div>
-          <div className="stat-value text-2xl">2%</div>
-          {/* <div className="stat-value text-2xl">{averageEval.invalid_format_percentage || 0}%</div> */}
-          {/* <div className="stat-desc">4% more than last run</div> */}
-        </div>
-      </header>
-      <header className="stats mb-4 w-full grid-cols-4 border shadow">
-        <div className="stat overflow-hidden">
-          <div className="stat-title">Request Time</div>
-          <div className="stat-value text-2xl">
-            {timestampToLocaleString(data.createdTimestamp)}
-            {/* <div className="text-3xl">2023/06/25</div>
-            <div className="stat-desc text-lg font-bold">10:45:30</div> */}
-          </div>
-        </div>
-        <div className="stat overflow-hidden">
-          <div className="stat-title">Total Time</div>
-          <div className="stat-value text-2xl">1h 12min</div>
-          {/* <div className="stat-value text-2xl">-</div> */}
-        </div>
-        <div className="stat overflow-hidden">
-          <div className="stat-title">Average Tokens</div>
-          <div className="stat-value text-2xl">56 tokens</div>
-          {/* <div className="stat-value text-2xl">
-            {typeof averageEval.average_tokens_per_request === 'number'
-              ? Math.round(averageEval.average_tokens_per_request)
-              : '-'}
-          </div> */}
-          {/* <div className="text-lg font-bold stat-desc">Avg: 56 tokens</div> */}
-        </div>
-        <div className="stat overflow-hidden">
-          <div className="stat-title">Average Latency</div>
-          <div className="stat-value text-2xl">200ms </div>
-          {/* <div className="stat-value text-2xl">
-            {averageEval.average_latency_per_request?.toFixed(3) ?? '-'}
-          </div> */}
-          {/* <div className="text-lg font-bold stat-desc">Avg: 200ms</div> */}
-        </div>
-      </header>
-      <nav className="tabs-boxed tabs mb-2 w-full justify-center">
-        <a
-          className={`tab-lg tab font-bold ${activeTab === 'evaluation' ? 'tab-active' : ''}`}
-          onClick={() => setActiveTab('evaluation')}>
-          Evaluation
-        </a>
-        <a
-          className={`tab-lg tab font-bold ${activeTab === 'result' ? 'tab-active' : ''}`}
-          onClick={() => setActiveTab('result')}>
-          Result
-        </a>
-        {/* <a
-          className={`tab-lg tab font-bold ${activeTab === 'config' ? 'tab-active' : ''}`}
-          onClick={() => setActiveTab('config')}>
-          Config
-        </a> */}
-      </nav>
-      {activeTab === 'evaluation' && (
-        <div className="overflow-scroll">
-          <div className="mb-3 flex space-x-2">
-            <div className="justify-items flex items-center">
-              <Button color="blue">Retrain model</Button>
+
+      <div className="p-4">
+        <div>
+          <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
+            <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">Model</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">GPT-4</dd>
             </div>
-            <div className="flex-1" />
-            <div className="justify-items flex items-center">
-              <Button color="white">
-                <FaFilter />
-                Filter
-              </Button>
+            <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">Accuracy</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">94%</dd>
             </div>
-            {/* <div className="form-control w-80">
+            <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">Hallucination</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">1%</dd>
+            </div>
+            <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">Invalid Format</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">2%</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div>
+          <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
+            <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">Request Time</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">2/5/2024</dd>
+            </div>
+            <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">Total Time</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">1h 12min</dd>
+            </div>
+            <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">Average Tokens</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+                56 tokens
+              </dd>
+            </div>
+            <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">Average Latency</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">200ms</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div className="my-4 border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+            {tabs.map(tab => (
+              <a
+                key={tab.name}
+                onClick={() => setActiveTab(tab.name as any)}
+                className={clsx(
+                  tab.current
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                  'cursor-pointer whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium',
+                )}
+                aria-current={tab.current ? 'page' : undefined}>
+                {tab.name}
+              </a>
+            ))}
+          </nav>
+        </div>
+
+        {activeTab === 'Evaluation' && (
+          <div>
+            <div className="flex space-x-2">
+              <div className="justify-items flex items-center gap-2">
+                <Button color="white">
+                  <FaFilter />
+                  Filter
+                </Button>
+                <Input placeholder="Search" />
+                <Button color="blue" onClick={(e: any) => {}}>
+                  Search
+                </Button>
+              </div>
+              <div className="flex-1" />
+              <div className="justify-items flex items-center">
+                <Button
+                  color="blue"
+                  disabled={editMode.size === 0}
+                  onClick={async () => {
+                    runningModalRef.current?.showModal()
+                    setRunningModalStep(1)
+                    await new Promise(resolve => setTimeout(resolve, 3000))
+                    setRunningModalStep(2)
+                    await new Promise(resolve => setTimeout(resolve, 3000))
+                    setRunningModalStep(3)
+                    await new Promise(resolve => setTimeout(resolve, 2000))
+                    runningModalRef.current?.close()
+
+                    db.collection('workflow_results').add({
+                      docExists: true,
+                      averageEvaluationData: 0.86,
+                      workflowName: resultData?.workflowName,
+                      workflowRequestId: db.collection('workflow_results').doc().id,
+                      status: 'initiated',
+                      createdTimestamp: new Date(),
+                      model: 'gpt-4',
+                      executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
+                    })
+                  }}>
+                  Retrain model
+                </Button>
+              </div>
+              {/* <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">LLM Output Column</span>
               </label>
@@ -306,7 +319,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                 ))}
               </select>
             </div> */}
-            {/* <div className="form-control w-80">
+              {/* <div className="form-control w-80">
               <label className="label">
                 <span className="label-text">Similarity Score</span>
               </label>
@@ -331,117 +344,323 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                 <option>4</option>
               </select>
             </div> */}
-          </div>
+            </div>
 
-          {/* Table */}
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableHeader className="w-[0.1%]" />
-                <TableHeader>
-                  Filename <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Transcript{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Summary <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Outcome <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Type{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Type Reason{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Type Confidence{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Used Proper Introduction{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Identified Call Reason{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Demonstrated Effective Listening{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Expressed Proper Empathy{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Used Professional Language{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Used Accurate Grammar{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Provided Accurate Information{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Rudeness/Dishonesty/Fraud{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Flow Followed{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Call Flow Followed Reason{' '}
-                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-                <TableHeader>
-                  Score <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                </TableHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {callCenterData.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Checkbox color="blue" />
-                  </TableCell>
-                  <TableCell className="text-wrap font-medium">{row.filename}</TableCell>
-                  <TableCell className="text-wrap">
-                    <div className="w-[400px]">{row.transcript}</div>
-                  </TableCell>
-                  <TableCell className="text-wrap">
-                    <div className="w-[400px]">{row.summary}</div>
-                  </TableCell>
-                  <TableCell className="text-wrap">{row.outcome}</TableCell>
-                  <TableCell className="text-wrap">{row.call_type}</TableCell>
-                  <TableCell className="text-wrap">{row.call_type_reason}</TableCell>
-                  <TableCell className="text-wrap">{row.call_type_confidence}</TableCell>
-                  <TableCell>{row.used_proper_introduction}</TableCell>
-                  <TableCell>{row.identified_call_reason}</TableCell>
-                  <TableCell>{row.demonstrate_effective_listening}</TableCell>
-                  <TableCell>{row.expressed_proper_empathy}</TableCell>
-                  <TableCell className="text-wrap">{row.used_professional_language}</TableCell>
-                  <TableCell className="text-wrap">{row.used_accurate_grammar}</TableCell>
-                  <TableCell className="text-wrap">{row.provided_accurate_information}</TableCell>
-                  <TableCell className="text-wrap">{row.rudeness_dishonesty_fraud}</TableCell>
-                  <TableCell className="text-wrap">{row.call_flow_followed}</TableCell>
-                  <TableCell className="text-wrap">{row.call_flow_followed_reason}</TableCell>
-                  <TableCell className="text-wrap">{row.score}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+            {/* Table */}
+            <div className="-mx-4 overflow-x-auto overflow-y-hidden px-4">
+              <div className="mt-5 flow-root">
+                <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
+                  <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <div className="overflow-hidden shadow ring-1 ring-black/5 sm:rounded-lg">
+                      <table className="min-w-full divide-y divide-gray-300">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th
+                              scope="col"
+                              className="w-[0.1%] whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            />
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Filename{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Transcript{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Summary{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Outcome{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Call Type{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Call Type Reason{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Call Type Confidence{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Used Proper Introduction{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Identified Call Reason{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Demonstrated Effective Listening{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Expressed Proper Empathy{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Used Professional Language{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Used Accurate Grammar{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Provided Accurate Information{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Rudeness/Dishonesty/Fraud{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Call Flow Followed{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Call Flow Followed Reason{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Score{' '}
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Hallucination Detected
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                            <th
+                              scope="col"
+                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              Invalid Format
+                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 bg-white">
+                          {callCenterData.map((row, index) => (
+                            <tr key={index}>
+                              <td className="px-3 py-4 text-sm text-gray-500">
+                                <Checkbox
+                                  color="blue"
+                                  onChange={checked => {
+                                    if (checked) {
+                                      setEditMode(prev => {
+                                        const newSet = new Set(prev)
+                                        newSet.add(index)
+                                        return newSet
+                                      })
+                                    } else {
+                                      setEditMode(prev => {
+                                        const newSet = new Set(prev)
+                                        newSet.delete(index)
+                                        return newSet
+                                      })
+                                    }
+                                  }}
+                                />
+                              </td>
+                              <td className="px-3 py-4 text-sm text-gray-500">{row.filename}</td>
+                              <td className="px-3 py-4 text-sm text-gray-500">
+                                <div className="w-[400px]">{row.transcript}</div>
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                <div className="w-[400px]">{row.summary}</div>
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.outcome}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.call_type}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.call_type_reason}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.call_type_confidence}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.used_proper_introduction}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.identified_call_reason}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.demonstrate_effective_listening}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.expressed_proper_empathy}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.used_professional_language}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.used_accurate_grammar}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.provided_accurate_information}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.rudeness_dishonesty_fraud}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.call_flow_followed}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.call_flow_followed_reason}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}
+                                contentEditable={editMode.has(index)}>
+                                {row.score}
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}>
+                                No
+                              </td>
+                              <td
+                                className={clsx(
+                                  'px-3 py-4 text-sm text-gray-500',
+                                  editMode.has(index) && 'bg-yellow-100',
+                                )}>
+                                No
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          {/* {hasMore ? (
+            {/* {hasMore ? (
             <button className="btn mx-auto my-3 block w-36" onClick={loadMore}>
               {outputLoading ? (
                 <ImSpinner9 className="animate mx-auto h-5 w-5 animate-spin" />
@@ -450,34 +669,38 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
               )}
             </button>
           ) : null} */}
-        </div>
-      )}
-      {activeTab === 'result' && (
-        <div className="justify-left flex w-full border">
-          <div className="container max-w-200 p-5">
-            <div className="px-4 sm:px-0">
-              <h3 className="text-base font-bold leading-7 text-gray-900">Pipeline Result</h3>
-              {/* <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">
+          </div>
+        )}
+        {activeTab === 'Result' && (
+          <div className="justify-left flex w-full border bg-white">
+            <div className="container max-w-200 p-5">
+              <div className="px-4 sm:px-0">
+                <h3 className="text-base font-bold leading-7 text-gray-900">Pipeline Result</h3>
+                {/* <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">
                 Personal details and application.
               </p> */}
-            </div>
-            <div className="mt-6 border-t border-gray-100">
-              <dl className="divide-y divide-gray-100">
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">Storage Location</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">S3</dd>
-                </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">Result Type</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    CSV
-                  </dd>
-                </div>
-                {/* Output files */}
-                <section className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">Output Files</dt>
-                  <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {/* {data?.outputData && (
+              </div>
+              <div className="mt-6 border-t border-gray-100">
+                <dl className="divide-y divide-gray-100">
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">
+                      Storage Location
+                    </dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      S3
+                    </dd>
+                  </div>
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">Result Type</dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      CSV
+                    </dd>
+                  </div>
+                  {/* Output files */}
+                  <section className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">Output Files</dt>
+                    <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      {/* {data?.outputData && (
                       <ul
                         role="list"
                         className="divide-y divide-gray-100 rounded-md border border-gray-200">
@@ -507,88 +730,111 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                         ))}
                       </ul>
                     )} */}
-                    <ul
-                      role="list"
-                      className="divide-y divide-gray-100 rounded-md border border-gray-200">
-                      <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                        <div className="flex w-0 flex-1 items-center">
-                          <PiTableBold className="h-5 w-5 shrink-0 text-gray-400" />
-                          <div className="ml-4 flex min-w-0 flex-1 gap-2 overflow-hidden">
-                            <p className="truncate font-medium">call_center_grading_partial_1_27</p>
-                          </div>
-                        </div>
-                        <div className="ml-4 shrink-0">
-                          <a
-                            target="_blank"
-                            href={
-                              'https://docs.google.com/spreadsheets/d/1QzgPwvy4Ws1OHJ8geUvdoyUufU--nEkc1w9KHFNG3IE/edit#gid=1720787933'
-                            }
-                            className="font-medium text-primary hover:text-primary/80">
-                            Open
-                          </a>
-                        </div>
-                      </li>
-                    </ul>
-                  </dd>
-                </section>
-                {/* Result files */}
-                <section className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">Evaluation Files</dt>
-                  <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {data?.resultData && (
                       <ul
                         role="list"
-                        className="divide-y divide-gray-100 rounded-md border border-gray-200 empty:hidden">
-                        {Object.entries(data.resultData).map(([key, url]) => (
-                          <li
-                            key={key}
-                            className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                            <div className="flex w-0 flex-1 items-center">
-                              <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
-                              <div
-                                className="ml-4 flex min-w-0 flex-1 gap-2 overflow-hidden"
-                                style={{ direction: 'rtl' }}>
-                                <p className="truncate font-medium">
-                                  {getFilenameFromURL(url, key)}
-                                </p>
-                              </div>
+                        className="divide-y divide-gray-100 rounded-md border border-gray-200">
+                        <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                          <div className="flex w-0 flex-1 items-center">
+                            <PiTableBold className="h-5 w-5 shrink-0 text-gray-400" />
+                            <div className="ml-4 flex min-w-0 flex-1 gap-2 overflow-hidden">
+                              <p className="truncate font-medium">
+                                call_center_grading_partial_1_27
+                              </p>
                             </div>
-                            <div className="ml-4 shrink-0">
-                              <a
-                                target="_blank"
-                                href={url as string}
-                                className="font-medium text-primary hover:text-primary/80">
-                                Download
-                              </a>
-                            </div>
-                          </li>
-                        ))}
+                          </div>
+                          <div className="ml-4 shrink-0">
+                            <a
+                              target="_blank"
+                              href={
+                                'https://docs.google.com/spreadsheets/d/1QzgPwvy4Ws1OHJ8geUvdoyUufU--nEkc1w9KHFNG3IE/edit#gid=1720787933'
+                              }
+                              className="font-medium text-primary hover:text-primary/80">
+                              Open
+                            </a>
+                          </div>
+                        </li>
                       </ul>
-                    )}
-                  </dd>
-                </section>
-              </dl>
+                    </dd>
+                  </section>
+                  {/* Result files */}
+                  <section className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">
+                      Evaluation Files
+                    </dt>
+                    <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      {data?.resultData && (
+                        <ul
+                          role="list"
+                          className="divide-y divide-gray-100 rounded-md border border-gray-200 empty:hidden">
+                          {Object.entries(data.resultData).map(([key, url]) => (
+                            <li
+                              key={key}
+                              className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                              <div className="flex w-0 flex-1 items-center">
+                                <PiFileCsvFill className="h-5 w-5 shrink-0 text-gray-400" />
+                                <div
+                                  className="ml-4 flex min-w-0 flex-1 gap-2 overflow-hidden"
+                                  style={{ direction: 'rtl' }}>
+                                  <p className="truncate font-medium">
+                                    {getFilenameFromURL(url, key)}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="ml-4 shrink-0">
+                                <a
+                                  target="_blank"
+                                  href={url as string}
+                                  className="font-medium text-primary hover:text-primary/80">
+                                  Download
+                                </a>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </dd>
+                  </section>
+                </dl>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {activeTab === 'config' && (
-        <div className="relative w-full overflow-y-auto border font-mono">
-          <CodeBlock text={yaml} language="yaml" showLineNumbers={true} wrapLines />
-          <button
-            className="btn absolute right-3 top-3"
-            onClick={() => {
-              downloadYAML(yaml)
-            }}>
-            <FaCloudDownloadAlt /> Download
-          </button>
-        </div>
-      )}
+        )}
+      </div>
+
       {selectedRow ? (
         <DetailModal key={selectedRow?.id} open={isOpen} setOpen={setIsOpen} item={selectedRow} />
       ) : null}
+
+      <RunModal dialogRef={runningModalRef} step={runningModalStep} />
     </div>
   )
 }
 
 export default ResultDetailsMockup2
+
+export const RunModal = ({ dialogRef, step }: { dialogRef: any; step: number }) => {
+  return (
+    <dialog ref={dialogRef} className="modal">
+      <form method="dialog" className="modal-box">
+        <h3 className="mb-5 text-center text-lg font-bold">
+          {step === 1 && 'Automatically updating prompts'}
+          {step === 2 && 'Deploying'}
+          {step === 3 && 'Done'}
+        </h3>
+        {/* <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button> */}
+        <div className="mb-2 mt-1">
+          <div className="flex h-32 w-full items-center justify-center">
+            {(step === 1 || step === 2) && (
+              <ImSpinner8 className="h-16 w-16 animate-spin text-slate-400" />
+            )}
+            {step === 3 && <FaCheckCircle className="h-16 w-16 text-slate-400" />}
+          </div>
+          <div />
+        </div>
+      </form>
+      <form method="dialog" className="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+  )
+}

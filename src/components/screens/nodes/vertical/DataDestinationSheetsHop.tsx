@@ -16,12 +16,14 @@ import { PiTableBold } from 'react-icons/pi'
 export interface DataDestinationSheetsHopContent {
   nodeType: 'data-destination-sheets-hop'
   path: string
+  sheetName: string
   columnMapping: string
 }
 
 export const dataDestinationSheetsHopDefaultContent: DataDestinationSheetsHopContent = {
   nodeType: 'data-destination-sheets-hop',
   path: '',
+  sheetName: '',
   columnMapping: 'Auto-map',
 }
 
@@ -117,7 +119,32 @@ export const DataDestinationSheetsHop = ({
         {/* Result */}
         {didRunOnce && rightIconMode !== 'spinner' && (
           <div className="mt-3 border-t pt-2">
-            <div className="mb-2 font-medium">Result</div>
+            <div className="mb-2 font-medium">Row Result</div>
+            <pre className="mb-1 overflow-x-auto whitespace-pre-wrap text-xs">
+              {`{
+  "filename": "1133390.txt",
+  "motivation": "Looking to sell quickly, possibly to an investor",
+  "sentiment": "Neutral",
+  "talk_time": 0.54,
+  "talk_over": [],
+  "location": ["College Grove"],
+  "bed_count": "NA",
+  "bath_count": "NA",
+  "property_type": "NA",
+  "home_preferences": [],
+  "budget": "NA",
+  "appointment_asked": "YES",
+  "appointment_date": "12 o'clock today",
+  "lead_type_asked": "YES",
+  "lead_type": "Seller",
+  "objections": ["wants to sell to an investor"],
+  "objection_handling": "The agent mentioned a guaranteed offer program and a cash offer program to appeal to the prospect's interest in selling to an investor.",
+  "follow_ups": [
+    "Send a three-way text introduction to the College Grove agent",
+    "Have the agent call around 12 o'clock today and leave a message if the prospect doesn't answer"
+  ]
+}`}
+            </pre>
             <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
               <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
                 <div className="flex w-0 flex-1 items-center">
@@ -234,6 +261,35 @@ export const DataDestinationSheetsHop = ({
                                   setNodeFormContent(prev => {
                                     const newFormContent = cloneDeep(prev)
                                     newFormContent.path = newText
+                                    return newFormContent
+                                  })
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Sheet Name */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Sheet Name
+                              </label>
+                            </div>
+                            <div className="sm:col-span-2">
+                              <input
+                                type="text"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={nodeFormContent.sheetName}
+                                onChange={e => {
+                                  const newText = e.target.value
+
+                                  if (typeof newText !== 'string') {
+                                    return
+                                  }
+
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.sheetName = newText
                                     return newFormContent
                                   })
                                 }}

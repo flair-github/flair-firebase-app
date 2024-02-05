@@ -121,7 +121,7 @@ import {
   AiFillMinusSquare,
   AiOutlineNodeIndex,
 } from 'react-icons/ai'
-import Menu from './editor/Menu'
+import Menu, { IAsideProps } from './editor/Menu'
 import { PiCaretDoubleLeft, PiCaretDoubleRight, PiMicrosoftOutlookLogoFill } from 'react-icons/pi'
 import EditTitleModal from './overlays/EditTitleModal'
 import {
@@ -570,7 +570,7 @@ data_exporters:
 
   const allowInteraction = useAtomValue(jotaiAllowInteraction)
 
-  const nodeClassifications = [
+  const nodeClassifications: IAsideProps['nodeClassifications'] = [
     {
       title: 'Input',
       subtitle: 'Load unstructured data from a data source.',
@@ -583,30 +583,6 @@ data_exporters:
             addNode('data-source-s3-hop', 'DataSourceS3Hop')
           },
           icon: BiLogoAws,
-        },
-        {
-          title: 'File Upload',
-          handleOnClick: () => {
-            // addNode('data-source-local-files', 'DataSourceLocalFilesNode')
-            addNode('data-source-files-hop', 'DataSourceFilesHop')
-          },
-          icon: FaCloudUploadAlt,
-        },
-        {
-          title: 'PostgresDB',
-          handleOnClick: () => {
-            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
-            addNode('data-source-postgres-hop', 'DataSourcePostgresHop')
-          },
-          icon: BiLogoPostgresql,
-        },
-        {
-          title: 'API',
-          handleOnClick: () => {
-            // addNode('data-source-api', 'DataSourceAPINode')
-            addNode('data-source-api-hop', 'DataSourceAPIHop')
-          },
-          icon: AiFillApi,
         },
         {
           title: 'Google Cloud Storage',
@@ -630,19 +606,48 @@ data_exporters:
           icon: BiLogoGmail,
         },
         {
-          title: 'MongoDB',
-          handleOnClick: () => {
-            addNode('data-source-mongo-hop', 'DataSourceMongoHop')
-          },
-          icon: BiLogoMongodb,
-        },
-        {
           title: 'URL Scraper',
           handleOnClick: () => {
             addNode('data-source-url-scraper-hop', 'DataSourceURLScraperHop')
           },
           icon: FaSearch,
         },
+        {
+          title: 'API',
+          handleOnClick: () => {
+            // addNode('data-source-api', 'DataSourceAPINode')
+            addNode('data-source-api-hop', 'DataSourceAPIHop')
+          },
+          icon: AiFillApi,
+        },
+        {
+          title: 'Slack',
+          handleOnClick: () => {},
+          icon: BiLogoSlack,
+        },
+        {
+          title: 'File Upload',
+          handleOnClick: () => {
+            // addNode('data-source-local-files', 'DataSourceLocalFilesNode')
+            addNode('data-source-files-hop', 'DataSourceFilesHop')
+          },
+          icon: FaCloudUploadAlt,
+        },
+        {
+          title: 'PostgresDB',
+          handleOnClick: () => {
+            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+            addNode('data-source-postgres-hop', 'DataSourcePostgresHop')
+          },
+          icon: BiLogoPostgresql,
+        },
+        // {
+        //   title: 'MongoDB',
+        //   handleOnClick: () => {
+        //     addNode('data-source-mongo-hop', 'DataSourceMongoHop')
+        //   },
+        //   icon: BiLogoMongodb,
+        // },
         {
           title: 'Salesforce',
           handleOnClick: () => {},
@@ -655,12 +660,6 @@ data_exporters:
           disabled: true,
           icon: SiZendesk,
         },
-        {
-          title: 'Slack',
-          handleOnClick: () => {},
-          disabled: true,
-          icon: BiLogoSlack,
-        },
       ],
     },
     {
@@ -669,11 +668,18 @@ data_exporters:
       color: 'slate',
       members: [
         {
-          title: 'Knowledge Base',
+          title: 'Pinecone',
           handleOnClick: () => {
             addNode('data-indexer-hop', 'DataIndexerHop')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/pinecone.svg',
+        },
+        {
+          title: 'Chroma',
+          handleOnClick: () => {
+            // addNode('data-indexer-hop', 'DataIndexerHop')
+          },
+          icon: '/images/data-sources/chroma.svg',
         },
         // {
         //   title: 'Pinecone Indexer',
@@ -759,56 +765,56 @@ data_exporters:
             // addNode('llm-processor', 'LLMProcessorNode')
             addNode('llm-processor-hop', 'LLMProcessorHop')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/open-ai.svg',
         },
         {
           title: 'Anthropic',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/anthropic.svg',
         },
         {
           title: 'Google',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/google.svg',
         },
         {
           title: 'Meta',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/meta.svg',
         },
         {
           title: 'Mistral',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/mistral-ai.svg',
         },
         {
           title: 'Mosaic',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/mosaic.svg',
         },
         {
           title: 'Replicate',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/replicate.svg',
         },
         {
           title: 'Hugging Face',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/hugging-face.svg',
         },
         // {
         //   title: 'Conditional',
@@ -883,37 +889,6 @@ data_exporters:
       color: 'slate',
       members: [
         {
-          title: 'Gmail',
-          handleOnClick: () => {
-            // addNode('data-exporter-gmail', 'DataExporterGmailNode')
-            addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
-          },
-          icon: BiLogoGmail,
-        },
-        {
-          title: 'Twilio',
-          handleOnClick: () => {
-            // addNode('data-exporter-twilio', 'DataExporterTwilioNode')
-            addNode('data-destination-twilio-hop', 'DataDestinationTwilioHop')
-          },
-          icon: SiTwilio,
-        },
-        {
-          title: 'Postgres',
-          handleOnClick: () => {
-            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
-            addNode('data-destination-postgres-hop', 'DataDestinationPostgresHop')
-          },
-          icon: BiLogoPostgresql,
-        },
-        {
-          title: 'Google Sheets',
-          handleOnClick: () => {
-            addNode('data-destination-sheets-hop', 'DataDestinationSheetsHop')
-          },
-          icon: SiGooglesheets,
-        },
-        {
           title: 'AWS S3',
           handleOnClick: () => {
             addNode('data-destination-s3-hop', 'DataDestinationS3Hop')
@@ -935,11 +910,42 @@ data_exporters:
           icon: BiLogoMicrosoft,
         },
         {
+          title: 'Gmail',
+          handleOnClick: () => {
+            // addNode('data-exporter-gmail', 'DataExporterGmailNode')
+            addNode('data-destination-gmail-hop', 'DataDestinationGmailHop')
+          },
+          icon: BiLogoGmail,
+        },
+        {
+          title: 'Google Sheets',
+          handleOnClick: () => {
+            addNode('data-destination-sheets-hop', 'DataDestinationSheetsHop')
+          },
+          icon: SiGooglesheets,
+        },
+        {
+          title: 'Twilio',
+          handleOnClick: () => {
+            // addNode('data-exporter-twilio', 'DataExporterTwilioNode')
+            addNode('data-destination-twilio-hop', 'DataDestinationTwilioHop')
+          },
+          icon: SiTwilio,
+        },
+        {
           title: 'API',
           handleOnClick: () => {
             addNode('data-destination-api-hop', 'DataDestinationAPIHop')
           },
           icon: AiFillApi,
+        },
+        {
+          title: 'Postgres',
+          handleOnClick: () => {
+            // addNode('data-exporter-postgres', 'DataExporterPostgresNode')
+            addNode('data-destination-postgres-hop', 'DataDestinationPostgresHop')
+          },
+          icon: BiLogoPostgresql,
         },
         {
           title: 'Zendesk',

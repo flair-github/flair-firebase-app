@@ -1,46 +1,27 @@
-import React, { type FC, Fragment, type ReactNode } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import React from 'react'
+React
+import clsx from 'clsx'
+import { FC } from 'react'
 
-interface ModalProps {
-  isOpen: boolean
-  onClose: () => void
-  children: ReactNode
-}
-
-const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
+export const Modal: FC<{
+  shown: boolean
+  onClickBackdrop?: () => void
+  children?: React.ReactNode
+  size?: 'sm' | 'md'
+}> = ({ shown, onClickBackdrop, children, size = 'sm' }) => {
   return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={onClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0">
-          <div className="fixed inset-0 bg-black/25" />
-        </Transition.Child>
-
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95">
-              <Dialog.Panel className="max-w-3xl w-full overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                {children}
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition>
+    <div className={clsx(['modal', shown && 'modal-open'])}>
+      <div className={clsx('modal-box', size === 'md' && 'w-[1024px] max-w-[100vw]')}>
+        {onClickBackdrop && (
+          <button
+            className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
+            onClick={onClickBackdrop}>
+            ✕
+          </button>
+        )}
+        {children}
+      </div>
+      <div className="modal-backdrop" onClick={onClickBackdrop} />
+    </div>
   )
 }
-
-export default Modal

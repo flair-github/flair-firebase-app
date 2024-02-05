@@ -13,16 +13,15 @@ import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
 import { AiFillApi } from 'react-icons/ai'
+import { PiTableBold } from 'react-icons/pi'
 
 export interface DataDestinationAPIHopContent {
   nodeType: 'data-destination-api-hop'
-  headers: string
   body: string
 }
 
 export const dataDestinationAPIHopDefaultContent: DataDestinationAPIHopContent = {
   nodeType: 'data-destination-api-hop',
-  headers: '',
   body: '',
 }
 
@@ -42,7 +41,7 @@ export const DataDestinationAPIHop = ({
   )
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   // Initial data
   useEffect(() => {
@@ -114,6 +113,18 @@ export const DataDestinationAPIHop = ({
             id="out"
           />
         )} */}
+
+        {/* Result */}
+        {didRunOnce && rightIconMode !== 'spinner' && (
+          <div className="mt-3 border-t pt-2">
+            <div className="mb-2 font-medium">Response</div>
+            <pre className="mb-1 overflow-x-auto whitespace-pre-wrap text-xs">
+              {`{
+  "reply": "Sure, I'd be happy to help with whatever you need. Whether you have a specific question, need information on a particular topic, or require assistance with a task, feel free to let me know. I'm here to provide support, offer explanations, or engage in a discussion on a wide range of subjects. Just share with me what's on your mind, and we'll take it from there!",
+}`}
+            </pre>
+          </div>
+        )}
       </div>
 
       <Transition.Root show={open} as={Fragment}>
@@ -170,35 +181,6 @@ export const DataDestinationAPIHop = ({
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
-                          {/* Headers */}
-                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                            <div>
-                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Headers
-                              </label>
-                            </div>
-                            <div className="sm:col-span-2">
-                              <textarea
-                                rows={3}
-                                className="block w-full rounded-md border-0 py-1.5 font-mono text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={nodeFormContent.headers}
-                                onChange={e => {
-                                  const newText = e.target.value
-
-                                  if (typeof newText !== 'string') {
-                                    return
-                                  }
-
-                                  setNodeFormContent(prev => {
-                                    const newFormContent = cloneDeep(prev)
-                                    newFormContent.headers = newText
-                                    return newFormContent
-                                  })
-                                }}
-                              />
-                            </div>
-                          </div>
-
                           {/* Body */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>

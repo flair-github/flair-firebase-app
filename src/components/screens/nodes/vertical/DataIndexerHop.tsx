@@ -15,8 +15,8 @@ import { GrCube } from 'react-icons/gr'
 
 export interface DataIndexerHopContent {
   nodeType: 'data-indexer-hop'
-  embeddingType: 'bert' | 'cohere' | 'gpt'
-  indexStrategy: 'default' | 'HyDE'
+  embeddingType: string
+  indexStrategy: string
   vectorStore: 'pinecone' | 'faiss' | 'local'
 }
 
@@ -65,13 +65,13 @@ export const DataIndexerHop = ({
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <GrCube size={40} className="text-slate-600" />
+            <img src="/images/data-sources/pinecone.svg" width={45} height={45} />
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
               Transform
             </span>
-            <div className="text-lg font-medium">Knowledge Base</div>
+            <div className="text-lg font-medium">Knowledge Base (Pinecone)</div>
           </div>
           <div className="flex-1" />
           <div
@@ -201,8 +201,34 @@ export const DataIndexerHop = ({
                                   cohere
                                 </option>
                                 <option
-                                  value={'gpt' satisfies DataIndexerHopContent['embeddingType']}>
-                                  gpt
+                                  value={
+                                    'gpt-3.5-turbo' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  gpt-3.5-turbo
+                                </option>
+                                <option
+                                  value={
+                                    'gpt4-1106-preview' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  gpt4-1106-preview
+                                </option>
+                                <option
+                                  value={
+                                    'text-embedding-ada-002' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  text-embedding-ada-002
+                                </option>
+                                <option
+                                  value={
+                                    'text-embedding-3' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  text-embedding-3
+                                </option>
+                                <option
+                                  value={
+                                    'text-embedding-2' satisfies DataIndexerHopContent['embeddingType']
+                                  }>
+                                  text-embedding-2
                                 </option>
                               </Select>
                             </div>
@@ -239,11 +265,15 @@ export const DataIndexerHop = ({
                                   value={'HyDE' satisfies DataIndexerHopContent['indexStrategy']}>
                                   HyDE
                                 </option>
+                                <option
+                                  value={'Hybrid' satisfies DataIndexerHopContent['indexStrategy']}>
+                                  Hybrid
+                                </option>
                               </Select>
                             </div>
                           </div>
 
-                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                          {/* <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label
                                 htmlFor="project-name"
@@ -278,7 +308,7 @@ export const DataIndexerHop = ({
                                 </option>
                               </Select>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ImSpinner8 } from 'react-icons/im'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
@@ -20,6 +20,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { Button } from '~/catalyst/button'
 import { Text } from '~/catalyst/text'
 import { FaBoltLightning } from 'react-icons/fa6'
+import { useAtomValue } from 'jotai'
+import { nodesAtom } from '../../FlowEditor'
 
 type ColumnContent =
   | {
@@ -93,6 +95,11 @@ export const LLMProcessorHop = ({
     llmProcessorHopDefaultContent,
   )
 
+  const nodes = useAtomValue(nodesAtom)
+  const dataIndexers = useMemo(() => {
+    return nodes.filter(el => el.type === 'DataIndexerHop')
+  }, [nodes])
+
   // Right animation
   const { rightIconMode } = useRightIconMode(yPos)
 
@@ -116,13 +123,13 @@ export const LLMProcessorHop = ({
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <FaBoltLightning size={40} className="text-slate-600" />
+            <img src="/images/data-sources/open-ai.svg" width={45} height={45} />
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
               Transform
             </span>
-            <div className="text-lg font-medium">LLM Processor</div>
+            <div className="text-lg font-medium">OpenAI LLM Processor</div>
             <div>
               {nodeContent.columns.length} Prompt{nodeContent.columns.length >= 2 && 's'}
             </div>
@@ -203,7 +210,7 @@ export const LLMProcessorHop = ({
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                LLM Processor
+                                OpenAI LLM Processor
                               </Dialog.Title>
                               {/* <p className="text-sm text-gray-500">
                                 Get started by filling in the information below to create your new
@@ -349,12 +356,16 @@ export const LLMProcessorHop = ({
                                                 return newFormContent
                                               })
                                             }}>
-                                            <option value="knowledge-base-1">
-                                              knowledge-base-1
-                                            </option>
-                                            <option value="knowledge-base-2">
-                                              knowledge-base-2
-                                            </option>
+                                            {dataIndexers.length === 0 && (
+                                              <option value="knowledge-base-1" disabled>
+                                                No Knowledge Base Available
+                                              </option>
+                                            )}
+                                            {dataIndexers.length >= 1 && (
+                                              <option value="knowledge-base-1">
+                                                knowledge-base-1
+                                              </option>
+                                            )}
                                           </Select>
                                         </Field>
                                         <Field>
@@ -466,17 +477,21 @@ export const LLMProcessorHop = ({
                                                 return newFormContent
                                               })
                                             }}>
-                                            <option
-                                              value={
-                                                'gpt-3.5-turbo' satisfies ColumnContent['model']
-                                              }>
-                                              gpt-3.5-turbo
-                                            </option>
-                                            <option
-                                              value={'gpt-4' satisfies ColumnContent['model']}>
-                                              gpt-4
-                                            </option>
-                                            <option
+                                            {[
+                                              'gpt- 4-0125-preview',
+                                              'gpt-4-turbo-preview',
+                                              'gpt-4-1106-preview',
+                                              'gpt-4-32k',
+                                              'gpt-3.5-turbo-0125',
+                                              'gpt-3.5-turbo',
+                                              'gpt-3.5-turbo-1106',
+                                            ].map(model => (
+                                              <option
+                                                value={model satisfies ColumnContent['model']}>
+                                                {model}
+                                              </option>
+                                            ))}
+                                            {/* <option
                                               value={'falcon-40b' satisfies ColumnContent['model']}>
                                               falcon-40b
                                             </option>
@@ -490,7 +505,7 @@ export const LLMProcessorHop = ({
                                             </option>
                                             <option value={'bard' satisfies ColumnContent['model']}>
                                               Bard
-                                            </option>
+                                            </option> */}
                                           </Select>
                                         </Field>
                                         <Field>
