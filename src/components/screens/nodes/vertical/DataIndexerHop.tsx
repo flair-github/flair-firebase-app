@@ -65,13 +65,13 @@ export const DataIndexerHop = ({
       <div className="w-[400px] rounded-md border border-slate-300 bg-white p-3 shadow-md">
         <div className="flex items-center gap-4">
           <div className="flex w-10 items-center justify-center">
-            <GrCube size={40} className="text-slate-600" />
+            <img src="/images/data-sources/pinecone.svg" width={45} height={45} />
           </div>
           <div>
             <span className="inline-flex items-center rounded-md bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
               Transform
             </span>
-            <div className="text-lg font-medium">Knowledge Base</div>
+            <div className="text-lg font-medium">Knowledge Base (Pinecone)</div>
           </div>
           <div className="flex-1" />
           <div
@@ -243,7 +243,7 @@ export const DataIndexerHop = ({
                             </div>
                           </div>
 
-                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                          {/* <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label
                                 htmlFor="project-name"
@@ -278,7 +278,7 @@ export const DataIndexerHop = ({
                                 </option>
                               </Select>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
 
