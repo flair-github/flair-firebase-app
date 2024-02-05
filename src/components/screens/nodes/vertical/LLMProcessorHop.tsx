@@ -477,16 +477,20 @@ export const LLMProcessorHop = ({
                                                 return newFormContent
                                               })
                                             }}>
-                                            <option
-                                              value={
-                                                'gpt-3.5-turbo' satisfies ColumnContent['model']
-                                              }>
-                                              gpt-3.5-turbo
-                                            </option>
-                                            <option
-                                              value={'gpt-4' satisfies ColumnContent['model']}>
-                                              gpt-4
-                                            </option>
+                                            {[
+                                              'gpt- 4-0125-preview',
+                                              'gpt-4-turbo-preview',
+                                              'gpt-4-1106-preview',
+                                              'gpt-4-32k',
+                                              'gpt-3.5-turbo-0125',
+                                              'gpt-3.5-turbo',
+                                              'gpt-3.5-turbo-1106',
+                                            ].map(model => (
+                                              <option
+                                                value={model satisfies ColumnContent['model']}>
+                                                {model}
+                                              </option>
+                                            ))}
                                             {/* <option
                                               value={'falcon-40b' satisfies ColumnContent['model']}>
                                               falcon-40b
