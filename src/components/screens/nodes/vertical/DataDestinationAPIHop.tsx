@@ -13,6 +13,7 @@ import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
 import { AiFillApi } from 'react-icons/ai'
+import { PiTableBold } from 'react-icons/pi'
 
 export interface DataDestinationAPIHopContent {
   nodeType: 'data-destination-api-hop'
@@ -40,7 +41,7 @@ export const DataDestinationAPIHop = ({
   )
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   // Initial data
   useEffect(() => {
@@ -112,6 +113,18 @@ export const DataDestinationAPIHop = ({
             id="out"
           />
         )} */}
+
+        {/* Result */}
+        {didRunOnce && rightIconMode !== 'spinner' && (
+          <div className="mt-3 border-t pt-2">
+            <div className="mb-2 font-medium">Response</div>
+            <pre className="mb-1 overflow-x-auto whitespace-pre-wrap text-xs">
+              {`{
+  "reply": "Sure, I'd be happy to help with whatever you need. Whether you have a specific question, need information on a particular topic, or require assistance with a task, feel free to let me know. I'm here to provide support, offer explanations, or engage in a discussion on a wide range of subjects. Just share with me what's on your mind, and we'll take it from there!",
+}`}
+            </pre>
+          </div>
+        )}
       </div>
 
       <Transition.Root show={open} as={Fragment}>
