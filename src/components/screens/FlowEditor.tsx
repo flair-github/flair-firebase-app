@@ -672,14 +672,14 @@ data_exporters:
           handleOnClick: () => {
             addNode('data-indexer-hop', 'DataIndexerHop')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/pinecone.svg',
         },
         {
           title: 'Chroma',
           handleOnClick: () => {
-            addNode('data-indexer-hop', 'DataIndexerHop')
+            // addNode('data-indexer-hop', 'DataIndexerHop')
           },
-          icon: GrCube,
+          icon: '/images/data-sources/chroma.svg',
         },
         // {
         //   title: 'Pinecone Indexer',
