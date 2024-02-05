@@ -16,7 +16,7 @@ import { GrCube } from 'react-icons/gr'
 export interface DataIndexerHopContent {
   nodeType: 'data-indexer-hop'
   embeddingType: string
-  indexStrategy: 'default' | 'HyDE'
+  indexStrategy: string
   vectorStore: 'pinecone' | 'faiss' | 'local'
 }
 
@@ -264,6 +264,10 @@ export const DataIndexerHop = ({
                                 <option
                                   value={'HyDE' satisfies DataIndexerHopContent['indexStrategy']}>
                                   HyDE
+                                </option>
+                                <option
+                                  value={'Hybrid' satisfies DataIndexerHopContent['indexStrategy']}>
+                                  Hybrid
                                 </option>
                               </Select>
                             </div>

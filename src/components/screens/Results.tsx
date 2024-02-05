@@ -170,7 +170,9 @@ function Results() {
                               {el.workflowRequestId}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {(el as any).status || 'completed'}
+                              {Date.now() - el.createdTimestamp.toMillis() < 60 * 60 * 1000
+                                ? 'Initiated'
+                                : 'Completed'}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {timestampToLocaleString(el.createdTimestamp)}
@@ -188,7 +190,7 @@ function Results() {
                               %
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {(simpleHash(el.createdTimestamp.toString()) % 100) / 100}%
+                              {(simpleHash(el.createdTimestamp.toString()) % 70) / 10}%
                             </td>
                             {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
                             {/* <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td> */}

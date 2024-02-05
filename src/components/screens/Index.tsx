@@ -149,7 +149,7 @@ function Index() {
                       <TableHeader>Status</TableHeader>
                       <TableHeader>Type</TableHeader>
                       <TableHeader>Frequency</TableHeader>
-                      <TableHeader>Last Run</TableHeader>
+                      <TableHeader>Created Date</TableHeader>
                       <TableHeader className="w-[0.1%]" />
                     </TableRow>
                   </TableHead>
