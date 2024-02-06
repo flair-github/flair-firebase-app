@@ -30,6 +30,8 @@ export const setupFirebase = () => {
   }
 }
 
+export const func = firebase.functions()
+
 let auth: Auth
 let firestore: ReturnType<typeof getFirestore>
 let storage: ReturnType<typeof getStorage>
