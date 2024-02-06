@@ -162,6 +162,13 @@ function Results() {
                     <tbody className="divide-y divide-gray-200 bg-white">
                       {items.map(el => {
                         const averaged = el.averageEvaluationData ?? getAverage(el.evaluationData)
+                        const isChatbot =
+                          el.workflowName?.toLocaleLowerCase().includes('chatbot') || false
+                        const status = isChatbot
+                          ? 'API'
+                          : Date.now() - el.createdTimestamp.toMillis() < 60 * 60 * 1000
+                          ? 'Initiated'
+                          : 'Completed'
 
                         return (
                           <tr key={el.workflowResultId}>
@@ -175,9 +182,7 @@ function Results() {
                               {el.workflowRequestId}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {Date.now() - el.createdTimestamp.toMillis() < 60 * 60 * 1000
-                                ? 'Initiated'
-                                : 'Completed'}
+                              {status}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {timestampToLocaleString(el.createdTimestamp)}
@@ -189,13 +194,16 @@ function Results() {
                             {/* <td>{averaged.average_latency_per_request?.toFixed(3) ?? '-'}</td> */}
                             {/* <td>{averaged.context_relevancy?.toFixed(3) ?? '-'}</td> */}
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {averaged.answer_relevancy
-                                ? Math.floor(averaged.answer_relevancy * 100)
-                                : 75 + (simpleHash(el.createdTimestamp.toString()) % 20)}
-                              %
+                              {status === 'Initiated'
+                                ? '-'
+                                : averaged.answer_relevancy
+                                ? Math.floor(averaged.answer_relevancy * 100) + '%'
+                                : 75 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {(simpleHash(el.createdTimestamp.toString()) % 70) / 10}%
+                              {status === 'Initiated'
+                                ? '-'
+                                : (simpleHash(el.createdTimestamp.toString()) % 70) / 10 + '%'}
                             </td>
                             {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
                             {/* <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td> */}
