@@ -969,6 +969,11 @@ data_exporters:
           icon: SiAirtable,
           disabled: true,
         },
+        {
+          title: 'Slack',
+          handleOnClick: () => {},
+          icon: BiLogoSlack,
+        },
         // {
         //   title: 'Power BI',
         //   handleOnClick: () => {
