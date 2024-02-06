@@ -340,6 +340,25 @@ export const LLMProcessorHop = ({
                                           />
                                         </Field>
                                         <Field>
+                                          <Label>Prompt</Label>
+                                          <Textarea
+                                            value={el.prompt}
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.columns[index].prompt = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </Field>
+                                        <Field>
                                           <Label>Context</Label>
                                           <Select
                                             value={el.context}
@@ -367,25 +386,6 @@ export const LLMProcessorHop = ({
                                               </option>
                                             )}
                                           </Select>
-                                        </Field>
-                                        <Field>
-                                          <Label>Prompt</Label>
-                                          <Textarea
-                                            value={el.prompt}
-                                            onChange={e => {
-                                              const newText = e.target.value
-
-                                              if (typeof newText !== 'string') {
-                                                return
-                                              }
-
-                                              setNodeFormContent(prev => {
-                                                const newFormContent = cloneDeep(prev)
-                                                newFormContent.columns[index].prompt = newText
-                                                return newFormContent
-                                              })
-                                            }}
-                                          />
                                         </Field>
                                         <Field>
                                           <Label>Prompt Strategy</Label>
