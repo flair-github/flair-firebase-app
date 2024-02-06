@@ -29,8 +29,8 @@ export const DeployModal = ({
                 setCurrentEvery(e.target.value)
               }}>
               <option value={'1h'}>1h</option>
-              <option value={'2h'}>1d</option>
-              <option value={'4h'}>1d</option>
+              <option value={'2h'}>2h</option>
+              <option value={'4h'}>4h</option>
               <option value={'8h'}>8h</option>
               <option value={'1d'}>1d</option>
               <option value={'2d'}>2d</option>
