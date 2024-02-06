@@ -186,14 +186,14 @@ function Index() {
                     onClick={() => {
                       setShowNewFlowModal(true)
                     }}>
-                    + Empty Pipeline
+                    + New Pipeline
                   </Button>
                   <Button
                     color="zinc"
                     onClick={() => {
                       setShowNewFlowModalFromDescription(true)
                     }}>
-                    + Auto Pipeline
+                    + Pipeline Templates
                   </Button>
                 </div>
               </div>
