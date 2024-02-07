@@ -37,7 +37,7 @@ export const helloWorld = onCall(
 
     try {
       const stream = await openai.beta.chat.completions.stream({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4',
         messages: [{ role: 'user', content: req.data.content }],
         stream: true,
       })
