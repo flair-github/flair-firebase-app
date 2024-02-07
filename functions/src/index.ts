@@ -31,14 +31,14 @@ export const helloWorld = onCall(
       throw new HttpsError('unauthenticated', 'The function must be called while authenticated.')
     }
 
-    if (typeof req.data.query !== 'string') {
+    if (typeof req.data.content !== 'string') {
       throw new HttpsError('invalid-argument', 'No query.')
     }
 
     try {
       const stream = await openai.beta.chat.completions.stream({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: req.data.query }],
+        messages: [{ role: 'user', content: req.data.content }],
         stream: true,
       })
 
