@@ -174,7 +174,7 @@ function Results() {
                           ? 'Initiated'
                           : 'Completed'
                         const isOld =
-                          el.createdTimestamp.toDate() < new Date('2024-02-01T00:00:00.000Z')
+                          el.createdTimestamp.toDate() < new Date('2024-02-05T00:00:00.000Z')
 
                         return (
                           <tr key={el.workflowResultId}>
@@ -203,7 +203,7 @@ function Results() {
                               {status === 'Initiated' || status === 'Scheduled'
                                 ? '-'
                                 : isOld
-                                ? 40 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'
+                                ? 50 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'
                                 : averaged.answer_relevancy
                                 ? Math.floor(averaged.answer_relevancy * 100) + '%'
                                 : 75 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'}
@@ -211,6 +211,8 @@ function Results() {
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {status === 'Initiated' || status === 'Scheduled'
                                 ? '-'
+                                : isOld
+                                ? (simpleHash(el.createdTimestamp.toString()) % 70) / 10 + 10 + '%'
                                 : (simpleHash(el.createdTimestamp.toString()) % 70) / 10 + '%'}
                             </td>
                             {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
