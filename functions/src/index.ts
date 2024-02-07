@@ -7,14 +7,9 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import { HttpsError, onCall } from 'firebase-functions/v2/https'
 import * as logger from 'firebase-functions/logger'
-import OpenAI from 'openai'
-import { OPEN_AI_API_KEY } from './config'
-
-const openai = new OpenAI({
-  apiKey: OPEN_AI_API_KEY, // This is the default and can be omitted
-})
+import { HttpsError, onCall } from 'firebase-functions/v2/https'
+import { chat } from './modules/chat'
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -35,45 +30,8 @@ export const helloWorld = onCall(
       throw new HttpsError('invalid-argument', 'No query.')
     }
 
-    try {
-      const stream = await openai.beta.chat.completions.stream({
-        model: 'gpt-4',
-        messages: [{ role: 'user', content: req.data.content }],
-        stream: true,
-      })
+    const res = await chat(req.data.content)
 
-      stream.on('content', (delta, snapshot) => {
-        process.stdout.write(delta)
-      })
-
-      // or, equivalently:
-      for await (const chunk of stream) {
-        process.stdout.write(chunk.choices[0]?.delta?.content || '')
-      }
-
-      const chatCompletion = await stream.finalChatCompletion()
-      console.log(chatCompletion)
-
-      return chatCompletion
-    } catch (error) {
-      console.error('Error calling OpenAI API:', error)
-      throw new HttpsError('internal', 'Error calling OpenAI API')
-    }
-
-    // Call flairchain API
-    // {
-    //   /** Document Id */
-    //   workflowRequestId: string
-
-    //   executorUserId: string
-    //   workflowId: string
-
-    //   status: 'requested' | 'initiated' | 'completed'
-
-    //   requestTimestamp: Timestamp
-
-    //   frontendConfig: string
-    //   generatedConfig: string
-    // }
+    return res
   },
 )
