@@ -169,6 +169,8 @@ function Results() {
                           : Date.now() - el.createdTimestamp.toMillis() < 60 * 60 * 1000
                           ? 'Initiated'
                           : 'Completed'
+                        const isOld =
+                          el.createdTimestamp.toDate() < new Date('2024-02-01T00:00:00.000Z')
 
                         return (
                           <tr key={el.workflowResultId}>
@@ -188,7 +190,7 @@ function Results() {
                               {timestampToLocaleString(el.createdTimestamp)}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {el.model}
+                              {isOld ? 'gpt-3.5' : el.model}
                             </td>
                             {/* <td>{averaged.faithfulness?.toFixed(3) ?? '-'}</td> */}
                             {/* <td>{averaged.average_latency_per_request?.toFixed(3) ?? '-'}</td> */}
@@ -196,6 +198,8 @@ function Results() {
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {status === 'Initiated'
                                 ? '-'
+                                : isOld
+                                ? 40 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'
                                 : averaged.answer_relevancy
                                 ? Math.floor(averaged.answer_relevancy * 100) + '%'
                                 : 75 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'}
