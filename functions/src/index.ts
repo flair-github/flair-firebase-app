@@ -12,7 +12,7 @@ import * as logger from 'firebase-functions/logger'
 import OpenAI from 'openai'
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // This is the default and can be omitted
+  apiKey: '', // This is the default and can be omitted
 })
 
 // Start writing functions
@@ -27,12 +27,25 @@ export const helloWorld = onCall({}, async req => {
   }
 
   try {
-    const response = await openai.chat.completions.create({
+    const stream = await openai.beta.chat.completions.stream({
+      model: 'gpt-4',
       messages: [{ role: 'user', content: 'Say this is a test' }],
-      model: 'gpt-3.5-turbo',
+      stream: true,
     })
 
-    return { response: '' }
+    stream.on('content', (delta, snapshot) => {
+      process.stdout.write(delta)
+    })
+
+    // or, equivalently:
+    for await (const chunk of stream) {
+      process.stdout.write(chunk.choices[0]?.delta?.content || '')
+    }
+
+    const chatCompletion = await stream.finalChatCompletion()
+    console.log(chatCompletion)
+
+    return chatCompletion
   } catch (error) {
     console.error('Error calling OpenAI API:', error)
     throw new HttpsError('internal', 'Error calling OpenAI API')

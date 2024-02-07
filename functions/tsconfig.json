@@ -7,11 +7,15 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
   "compileOnSave": true,
   "exclude": [
     "node_modules",
+    "../node_modules",
     "babel.config.js",
     "metro.config.js",
     "jest.config.js",
@@ -19,5 +23,5 @@
   "include": [
     "src"
   ],
-  "extends": "../tsconfig.json"
+  // "extends": "../tsconfig.json"
 }
