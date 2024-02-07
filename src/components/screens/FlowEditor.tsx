@@ -1116,6 +1116,17 @@ data_exporters:
       handleOnClick: async (event: React.SyntheticEvent) => {
         event.preventDefault()
         executeModalRef.current?.showModal()
+
+        db.collection('workflow_results').add({
+          docExists: true,
+          averageEvaluationData: 0.86,
+          workflowName: title,
+          workflowRequestId: db.collection('workflow_results').doc().id,
+          status: 'scheduled',
+          createdTimestamp: new Date(),
+          model: 'gpt-4',
+          executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
+        })
       },
     },
   ]
