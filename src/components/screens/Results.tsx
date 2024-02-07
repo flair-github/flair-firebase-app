@@ -164,9 +164,13 @@ function Results() {
                         const averaged = el.averageEvaluationData ?? getAverage(el.evaluationData)
                         const isChatbot =
                           el.workflowName?.toLocaleLowerCase().includes('chatbot') || false
+                        const isLessThanOneHour =
+                          Date.now() - el.createdTimestamp.toMillis() < 60 * 60 * 1000
                         const status = isChatbot
                           ? 'API'
-                          : Date.now() - el.createdTimestamp.toMillis() < 60 * 60 * 1000
+                          : isLessThanOneHour && el.status === 'scheduled'
+                          ? 'Scheduled'
+                          : isLessThanOneHour
                           ? 'Initiated'
                           : 'Completed'
                         const isOld =
@@ -196,7 +200,7 @@ function Results() {
                             {/* <td>{averaged.average_latency_per_request?.toFixed(3) ?? '-'}</td> */}
                             {/* <td>{averaged.context_relevancy?.toFixed(3) ?? '-'}</td> */}
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {status === 'Initiated'
+                              {status === 'Initiated' || status === 'Scheduled'
                                 ? '-'
                                 : isOld
                                 ? 40 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'
@@ -205,7 +209,7 @@ function Results() {
                                 : 75 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {status === 'Initiated'
+                              {status === 'Initiated' || status === 'Scheduled'
                                 ? '-'
                                 : (simpleHash(el.createdTimestamp.toString()) % 70) / 10 + '%'}
                             </td>
