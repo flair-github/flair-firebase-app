@@ -2,11 +2,15 @@ import { FirebaseApp, initializeApp } from 'firebase/app'
 import { getAuth, Auth, connectAuthEmulator } from 'firebase/auth'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import { connectStorageEmulator, getStorage } from 'firebase/storage'
+import { getFunctions } from 'firebase/functions'
+
 import firebase from 'firebase/compat/app'
 // Required for side-effects
 import 'firebase/compat/firestore'
+import 'firebase/compat/functions'
 
 let firebaseApp: FirebaseApp
+export let functions: ReturnType<typeof getFunctions>
 const useEmulator = () => import.meta.env.VITE_USE_FIREBASE_EMULATOR
 
 const getFirebaseOptions = () => ({
@@ -25,12 +29,13 @@ export const db = firebase.firestore()
 export const setupFirebase = () => {
   try {
     firebaseApp = initializeApp(getFirebaseOptions())
+    functions = getFunctions(firebaseApp)
   } catch (error) {
     console.error({ error })
   }
 }
 
-export const func = firebase.functions()
+// export const func = firebase.functions()
 
 let auth: Auth
 let firestore: ReturnType<typeof getFirestore>

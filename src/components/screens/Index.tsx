@@ -66,24 +66,32 @@ function Index() {
       return
     }
 
-    const ref = db.collection('workflows').doc()
-    const newFlowData: DocWorkflow = {
-      createdTimestamp: serverTimestamp() as Timestamp,
-      updatedTimestamp: serverTimestamp() as Timestamp,
-      lastSaveTimestamp: serverTimestamp() as Timestamp,
-      docExists: true,
-      workflowId: ref.id,
-      frontendConfig,
-      workflowTitle: createNewFlowTitle || 'New Flow',
-      ownerUserId: USER_ID_MODE === 'samir' ? 'IVqAyQJR4ugRGR8qL9UuB809OX82' : userData.userId,
-    }
+    try {
+      setShowCreateFlowSpinner(false)
+      if (frontendConfig.length > 1) {
+        setShowCreateFlowSpinner(true)
+      }
 
-    await ref.set(newFlowData)
-    setCreateNewFlowTitle('')
+      const ref = db.collection('workflows').doc()
+      const newFlowData: DocWorkflow = {
+        createdTimestamp: serverTimestamp() as Timestamp,
+        updatedTimestamp: serverTimestamp() as Timestamp,
+        lastSaveTimestamp: serverTimestamp() as Timestamp,
+        docExists: true,
+        workflowId: ref.id,
+        frontendConfig,
+        workflowTitle: createNewFlowTitle || 'New Flow',
+        ownerUserId: USER_ID_MODE === 'samir' ? 'IVqAyQJR4ugRGR8qL9UuB809OX82' : userData.userId,
+      }
 
-    if (createNewFlowTitle.length > 1) {
-      setShowCreateFlowSpinner(true)
-      await new Promise(resolve => setTimeout(resolve, 10000))
+      await ref.set(newFlowData)
+      setCreateNewFlowTitle('')
+
+      if (frontendConfig.length > 1) {
+        await new Promise(resolve => setTimeout(resolve, 11000))
+        setShowCreateFlowSpinner(false)
+      }
+    } catch (e) {
       setShowCreateFlowSpinner(false)
     }
 
@@ -178,14 +186,14 @@ function Index() {
                     onClick={() => {
                       setShowNewFlowModal(true)
                     }}>
-                    + Add Pipeline
+                    + New Pipeline
                   </Button>
                   <Button
                     color="zinc"
                     onClick={() => {
-                      setAddAgentModal(true)
+                      setShowNewFlowModalFromDescription(true)
                     }}>
-                    Pipeline Templates
+                    + Pipeline Templates
                   </Button>
                 </div>
               </div>
@@ -343,7 +351,7 @@ function Index() {
               }}
             />
           </div>
-          <div className="modal-action">
+          <div className="modal-action flex items-center justify-center">
             <button
               className="btn"
               onClick={() => {
@@ -364,18 +372,20 @@ function Index() {
       </dialog>
 
       {/* New Flow Modal from description */}
-      <dialog className={['modal', showNewFlowModalFromDescription ? 'modal-open' : ''].join(' ')}>
-        <form method="dialog" className="modal-box">
-          <h3 className="text-lg font-bold">Create New Pipeline from Description</h3>
+      <Modal
+        shown={showNewFlowModalFromDescription}
+        onClickBackdrop={() => setShowNewFlowModalFromDescription(false)}>
+        <div>
+          <h3 className="text-lg font-bold">Auto Pipeline</h3>
           {!showCreateFlowSpinner && (
             <>
-              <div className="form-control w-full">
+              <div className="form-control my-1 w-full">
                 <label className="label">
                   <span className="label-text">Title</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="Flow Title"
+                  placeholder=""
                   className="input input-bordered w-full"
                   value={createNewFlowTitle}
                   onChange={ev => setCreateNewFlowTitle(ev.target.value)}
@@ -388,33 +398,26 @@ function Index() {
                   }}
                 />
               </div>
-              <div className="form-control w-full">
+              <div className="form-control my-1 w-full">
                 <label className="label">
                   <span className="label-text">Description</span>
                 </label>
                 <textarea
                   rows={5}
-                  placeholder="Flow Title"
+                  placeholder=""
                   className="input input-bordered h-[200px] w-full"
                 />
               </div>
-              <div className="modal-action">
-                <button
-                  className="btn"
-                  onClick={() => {
-                    setShowNewFlowModalFromDescription(false)
-                  }}>
-                  Close
-                </button>
+              <div className="modal-action flex items-center justify-center">
                 <button
                   className="btn btn-primary"
                   onClick={() => {
                     createNewFlow(REAL_ESTATE_PIPELINE)
                     setTimeout(() => {
                       setShowNewFlowModalFromDescription(false)
-                    }, 6000)
+                    }, 8000)
                   }}>
-                  Create
+                  Create a new pipeline <span className="text-2xl">✨</span>
                 </button>
               </div>
             </>
@@ -424,8 +427,8 @@ function Index() {
               <ImSpinner8 className="h-16 w-16 animate-spin text-slate-400" />
             </div>
           )}
-        </form>
-      </dialog>
+        </div>
+      </Modal>
 
       <Modal
         shown={addAgentModal}

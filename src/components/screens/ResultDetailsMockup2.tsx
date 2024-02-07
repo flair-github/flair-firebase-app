@@ -487,6 +487,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                               <td className="px-3 py-4 text-sm text-gray-500">
                                 <Checkbox
                                   color="blue"
+                                  checked={editMode.has(index)}
                                   onChange={checked => {
                                     if (checked) {
                                       setEditMode(prev => {
@@ -504,139 +505,78 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                                   }}
                                 />
                               </td>
-                              <td className="px-3 py-4 text-sm text-gray-500">{row.filename}</td>
-                              <td className="px-3 py-4 text-sm text-gray-500">
-                                <div className="w-[400px]">{row.transcript}</div>
-                              </td>
                               <td
+                                onClick={() => {
+                                  setEditMode(prev => {
+                                    const newSet = new Set(prev)
+                                    newSet.add(index)
+                                    return newSet
+                                  })
+                                }}
                                 className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                <div className="w-[400px]">{row.summary}</div>
+                                  'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                  !editMode.has(index) && 'truncate',
+                                )}>
+                                {row.filename}
                               </td>
                               <td
+                                onClick={() => {
+                                  setEditMode(prev => {
+                                    const newSet = new Set(prev)
+                                    newSet.add(index)
+                                    return newSet
+                                  })
+                                }}
                                 className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.outcome}
+                                  'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                  !editMode.has(index) && 'truncate',
+                                )}>
+                                {row.transcript}{' '}
                               </td>
+                              {[
+                                row.summary,
+                                row.outcome,
+                                row.call_type,
+                                row.call_type_reason,
+                                row.call_type_confidence,
+                                row.used_proper_introduction,
+                                row.identified_call_reason,
+                                row.demonstrate_effective_listening,
+                                row.expressed_proper_empathy,
+                                row.used_professional_language,
+                                row.used_accurate_grammar,
+                                row.provided_accurate_information,
+                                row.rudeness_dishonesty_fraud,
+                                row.call_flow_followed,
+                                row.call_flow_followed_reason,
+                                row.score,
+                              ].map((el, i) => (
+                                <td
+                                  key={i}
+                                  onClick={() => {
+                                    setEditMode(prev => {
+                                      const newSet = new Set(prev)
+                                      newSet.add(index)
+                                      return newSet
+                                    })
+                                  }}
+                                  className={clsx(
+                                    'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                    !editMode.has(index) && 'truncate',
+                                    editMode.has(index) && 'bg-yellow-100',
+                                  )}
+                                  contentEditable={editMode.has(index)}>
+                                  {el}
+                                </td>
+                              ))}
                               <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.call_type}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.call_type_reason}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.call_type_confidence}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.used_proper_introduction}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.identified_call_reason}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.demonstrate_effective_listening}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.expressed_proper_empathy}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.used_professional_language}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.used_accurate_grammar}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.provided_accurate_information}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.rudeness_dishonesty_fraud}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.call_flow_followed}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.call_flow_followed_reason}
-                              </td>
-                              <td
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}
-                                contentEditable={editMode.has(index)}>
-                                {row.score}
-                              </td>
-                              <td
+                                onClick={() => {
+                                  setEditMode(prev => {
+                                    const newSet = new Set(prev)
+                                    newSet.add(index)
+                                    return newSet
+                                  })
+                                }}
                                 className={clsx(
                                   'px-3 py-4 text-sm text-gray-500',
                                   editMode.has(index) && 'bg-yellow-100',
@@ -644,6 +584,13 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                                 No
                               </td>
                               <td
+                                onClick={() => {
+                                  setEditMode(prev => {
+                                    const newSet = new Set(prev)
+                                    newSet.add(index)
+                                    return newSet
+                                  })
+                                }}
                                 className={clsx(
                                   'px-3 py-4 text-sm text-gray-500',
                                   editMode.has(index) && 'bg-yellow-100',

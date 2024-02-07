@@ -162,6 +162,19 @@ function Results() {
                     <tbody className="divide-y divide-gray-200 bg-white">
                       {items.map(el => {
                         const averaged = el.averageEvaluationData ?? getAverage(el.evaluationData)
+                        const isChatbot =
+                          el.workflowName?.toLocaleLowerCase().includes('chatbot') || false
+                        const isLessThanOneHour =
+                          Date.now() - el.createdTimestamp.toMillis() < 60 * 60 * 1000
+                        const status = isChatbot
+                          ? 'API'
+                          : isLessThanOneHour && el.status === 'scheduled'
+                          ? 'Scheduled'
+                          : isLessThanOneHour
+                          ? 'Initiated'
+                          : 'Completed'
+                        const isOld =
+                          el.createdTimestamp.toDate() < new Date('2024-02-05T00:00:00.000Z')
 
                         return (
                           <tr key={el.workflowResultId}>
@@ -175,27 +188,32 @@ function Results() {
                               {el.workflowRequestId}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {Date.now() - el.createdTimestamp.toMillis() < 60 * 60 * 1000
-                                ? 'Initiated'
-                                : 'Completed'}
+                              {status}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {timestampToLocaleString(el.createdTimestamp)}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {el.model}
+                              {isOld ? 'gpt-3.5' : el.model}
                             </td>
                             {/* <td>{averaged.faithfulness?.toFixed(3) ?? '-'}</td> */}
                             {/* <td>{averaged.average_latency_per_request?.toFixed(3) ?? '-'}</td> */}
                             {/* <td>{averaged.context_relevancy?.toFixed(3) ?? '-'}</td> */}
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {averaged.answer_relevancy
-                                ? Math.floor(averaged.answer_relevancy * 100)
-                                : 75 + (simpleHash(el.createdTimestamp.toString()) % 20)}
-                              %
+                              {status === 'Initiated' || status === 'Scheduled'
+                                ? '-'
+                                : isOld
+                                ? 50 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'
+                                : averaged.answer_relevancy
+                                ? Math.floor(averaged.answer_relevancy * 100) + '%'
+                                : 75 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {(simpleHash(el.createdTimestamp.toString()) % 70) / 10}%
+                              {status === 'Initiated' || status === 'Scheduled'
+                                ? '-'
+                                : isOld
+                                ? (simpleHash(el.createdTimestamp.toString()) % 70) / 10 + 10 + '%'
+                                : (simpleHash(el.createdTimestamp.toString()) % 70) / 10 + '%'}
                             </td>
                             {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
                             {/* <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td> */}

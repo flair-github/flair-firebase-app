@@ -7,33 +7,31 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import { onCall } from 'firebase-functions/v2/https'
 import * as logger from 'firebase-functions/logger'
+import { HttpsError, onCall } from 'firebase-functions/v2/https'
+import { chat } from './modules/chat'
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
-export const helloWorld = onCall({}, req => {
-  logger.info('Hello logs!', { structuredData: true })
+export const helloWorld = onCall(
+  {
+    region: 'us-central1',
+  },
+  async req => {
+    logger.info('Hello logs!', { structuredData: true })
 
-  return {
-    message: 'Hello from Firebase!',
-    queryLength: req.data.query?.length || 0,
-  }
+    // Ensure the request is made from an authenticated user
+    if (!req.auth) {
+      throw new HttpsError('unauthenticated', 'The function must be called while authenticated.')
+    }
 
-  // Call flairchain API
-  // {
-  //   /** Document Id */
-  //   workflowRequestId: string
+    if (typeof req.data.content !== 'string') {
+      throw new HttpsError('invalid-argument', 'No query.')
+    }
 
-  //   executorUserId: string
-  //   workflowId: string
+    const res = await chat(req.data.content)
 
-  //   status: 'requested' | 'initiated' | 'completed'
-
-  //   requestTimestamp: Timestamp
-
-  //   frontendConfig: string
-  //   generatedConfig: string
-  // }
-})
+    return res
+  },
+)

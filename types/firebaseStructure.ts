@@ -115,6 +115,7 @@ export interface DocWorkflowResult {
   updatedTimestamp: Timestamp
   createdTimestamp: Timestamp
   completionTimestamp: Timestamp
+  status?: string
 }
 
 export interface AverageEvaluationData {

@@ -20,7 +20,7 @@ import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { Link, useParams } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
-import { db } from '~/lib/firebase'
+import { db, functions } from '~/lib/firebase'
 import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from './nodes/Registry'
 import { v4 } from 'uuid'
 
@@ -174,6 +174,7 @@ import { DataDestinationSalesforceHop } from './nodes/vertical/DataDestinationSa
 import { dummyRunners } from './nodes/utils/useRightIconMode'
 import { DataSourceURLScraperHop } from './nodes/vertical/DataSourceURLScraperHop'
 import { FaBoltLightning } from 'react-icons/fa6'
+import { httpsCallable } from 'firebase/functions'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -216,6 +217,8 @@ export const borderPosAtom = atom<ReturnType<typeof findPositionExtremes> | unde
 export const nodesAtom = atom<Nodes>([])
 export const edgesAtom = atom<Edges>([])
 
+export const apiResultAtom = atom<string>('')
+
 export const dummyRunSymbol = atom<number | undefined>(undefined)
 
 export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
@@ -223,6 +226,8 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   const [nodes, setNodes] = useAtom(nodesAtom)
   const [edges, setEdges] = useAtom(edgesAtom)
   const [title, setTitle] = useState<string>('')
+
+  const setApiResult = useSetAtom(apiResultAtom)
 
   const { workflowId, workflowRequestId } = useParams()
 
@@ -969,6 +974,11 @@ data_exporters:
           icon: SiAirtable,
           disabled: true,
         },
+        {
+          title: 'Slack',
+          handleOnClick: () => {},
+          icon: BiLogoSlack,
+        },
         // {
         //   title: 'Power BI',
         //   handleOnClick: () => {
@@ -1095,6 +1105,48 @@ data_exporters:
           executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
         })
 
+        setApiResult('')
+
+        function replacePlaceholders(template: string, values: Record<string, string>) {
+          return template.replace(/{{(.*?)}}/g, (match, key) => values[key] || match)
+        }
+
+        let testPayload: Record<string, string> | undefined
+        let prompt: string | undefined
+        for (const [key, node] of Object.entries(nodeContents.current)) {
+          if (node.nodeType === 'data-source-api-hop') {
+            console.log('node.testPayload', node.testPayload)
+            testPayload = JSON.parse(node.testPayload)
+          }
+
+          if (node.nodeType === 'llm-processor-hop') {
+            for (const x of node.columns) {
+              if (x.name === 'response') {
+                prompt = x.prompt
+              }
+            }
+          }
+        }
+
+        if (typeof testPayload !== 'object' || typeof prompt !== 'string') {
+          throw new Error("can't get testPayload or prompt")
+        }
+
+        const content = replacePlaceholders(prompt, testPayload)
+
+        const callHelloWorld = httpsCallable(functions, 'helloWorld')
+
+        console.log({ content })
+        callHelloWorld({ content })
+          .then(result => {
+            // Read result of the Cloud Function.
+            setApiResult((result.data as any).choices[0].message.content)
+            console.log('result.data', result.data)
+          })
+          .catch(e => {
+            console.log('error', e)
+          })
+
         setDeploymentStatus(['success', 'Your pipeline has been initiated!'])
         setTimeout(() => {
           setDeploymentStatus(undefined)
@@ -1102,7 +1154,7 @@ data_exporters:
 
         console.log('dummyRunners.current size', dummyRunners.current.size)
 
-        dummyRunners.current.forEach(func => func())
+        dummyRunners.current.forEach(dummyRunnerFunc => dummyRunnerFunc())
       },
     },
     {
@@ -1111,6 +1163,17 @@ data_exporters:
       handleOnClick: async (event: React.SyntheticEvent) => {
         event.preventDefault()
         executeModalRef.current?.showModal()
+
+        db.collection('workflow_results').add({
+          docExists: true,
+          averageEvaluationData: 0.86,
+          workflowName: title,
+          workflowRequestId: db.collection('workflow_results').doc().id,
+          status: 'scheduled',
+          createdTimestamp: new Date(),
+          model: 'gpt-4',
+          executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
+        })
       },
     },
   ]

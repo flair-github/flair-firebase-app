@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ImSpinner8 } from 'react-icons/im'
-import { FaCheckCircle } from 'react-icons/fa'
+import { FaCheckCircle, FaQuestionCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
 import { Dialog, Transition } from '@headlessui/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
@@ -33,6 +33,7 @@ type ColumnContent =
       importedKeys: Record<string, boolean>
       prompt: string
       context: string
+      examples: string
     }
   | {
       columnId: string
@@ -43,6 +44,7 @@ type ColumnContent =
       importedKeys: Record<string, boolean>
       prompt: string
       context: string
+      examples: string
     }
   | {
       columnId: string
@@ -54,6 +56,7 @@ type ColumnContent =
       importedKeys: Record<string, boolean>
       prompt: string
       context: string
+      examples: string
     }
   | {
       name: string
@@ -66,6 +69,7 @@ type ColumnContent =
       importedKeys: Record<string, boolean>
       prompt: string
       context: string
+      examples: string
     }
 
 export interface LLMProcessorHopContent {
@@ -321,7 +325,10 @@ export const LLMProcessorHop = ({
                                       <Text>Further configurations for the prompt</Text>
                                       <FieldGroup>
                                         <Field>
-                                          <Label>Column Name</Label>
+                                          <Label>
+                                            Column Name{' '}
+                                            <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
+                                          </Label>
                                           <Input
                                             value={el.name}
                                             onChange={e => {
@@ -340,7 +347,33 @@ export const LLMProcessorHop = ({
                                           />
                                         </Field>
                                         <Field>
-                                          <Label>Context</Label>
+                                          <Label>
+                                            Prompt{' '}
+                                            <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
+                                          </Label>
+                                          <Textarea
+                                            value={el.prompt}
+                                            rows={4}
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.columns[index].prompt = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </Field>
+                                        <Field>
+                                          <Label>
+                                            Context{' '}
+                                            <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
+                                          </Label>
                                           <Select
                                             value={el.context}
                                             onChange={e => {
@@ -369,26 +402,10 @@ export const LLMProcessorHop = ({
                                           </Select>
                                         </Field>
                                         <Field>
-                                          <Label>Prompt</Label>
-                                          <Textarea
-                                            value={el.prompt}
-                                            onChange={e => {
-                                              const newText = e.target.value
-
-                                              if (typeof newText !== 'string') {
-                                                return
-                                              }
-
-                                              setNodeFormContent(prev => {
-                                                const newFormContent = cloneDeep(prev)
-                                                newFormContent.columns[index].prompt = newText
-                                                return newFormContent
-                                              })
-                                            }}
-                                          />
-                                        </Field>
-                                        <Field>
-                                          <Label>Prompt Strategy</Label>
+                                          <Label>
+                                            Prompt Strategy{' '}
+                                            <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
+                                          </Label>
                                           <Select
                                             value={el.promptStrategy}
                                             onChange={e => {
@@ -462,7 +479,34 @@ export const LLMProcessorHop = ({
                                           </Select>
                                         </Field>
                                         <Field>
-                                          <Label>Model</Label>
+                                          <Label>
+                                            Examples{' '}
+                                            <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
+                                          </Label>
+                                          <Textarea
+                                            value={el.examples}
+                                            rows={4}
+                                            placeholder='"input1","result1"&#10;"input2","result2"&#10;"input3","result3"&#10;'
+                                            onChange={e => {
+                                              const newText = e.target.value
+
+                                              if (typeof newText !== 'string') {
+                                                return
+                                              }
+
+                                              setNodeFormContent(prev => {
+                                                const newFormContent = cloneDeep(prev)
+                                                newFormContent.columns[index].examples = newText
+                                                return newFormContent
+                                              })
+                                            }}
+                                          />
+                                        </Field>
+                                        <Field>
+                                          <Label>
+                                            Model{' '}
+                                            <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
+                                          </Label>
                                           <Select
                                             value={el.model}
                                             onChange={e => {
@@ -478,7 +522,7 @@ export const LLMProcessorHop = ({
                                               })
                                             }}>
                                             {[
-                                              'gpt- 4-0125-preview',
+                                              'gpt-4-0125-preview',
                                               'gpt-4-turbo-preview',
                                               'gpt-4-1106-preview',
                                               'gpt-4-32k',
@@ -509,7 +553,10 @@ export const LLMProcessorHop = ({
                                           </Select>
                                         </Field>
                                         <Field>
-                                          <Label>Column Type</Label>
+                                          <Label>
+                                            Column Type{' '}
+                                            <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
+                                          </Label>
                                           <Select
                                             value={el.type}
                                             onChange={e => {
@@ -688,6 +735,7 @@ export const LLMProcessorHop = ({
                                     prompt: '',
                                     context: '',
                                     importedKeys: {},
+                                    examples: '',
                                   },
                                 ]
 
