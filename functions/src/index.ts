@@ -19,52 +19,61 @@ const openai = new OpenAI({
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
-export const helloWorld = onCall({}, async req => {
-  logger.info('Hello logs!', { structuredData: true })
+export const helloWorld = onCall(
+  {
+    region: 'us-central1',
+  },
+  async req => {
+    logger.info('Hello logs!', { structuredData: true })
 
-  // Ensure the request is made from an authenticated user
-  if (!req.auth) {
-    throw new HttpsError('unauthenticated', 'The function must be called while authenticated.')
-  }
-
-  try {
-    const stream = await openai.beta.chat.completions.stream({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: 'Say this is a test' }],
-      stream: true,
-    })
-
-    stream.on('content', (delta, snapshot) => {
-      process.stdout.write(delta)
-    })
-
-    // or, equivalently:
-    for await (const chunk of stream) {
-      process.stdout.write(chunk.choices[0]?.delta?.content || '')
+    // Ensure the request is made from an authenticated user
+    if (!req.auth) {
+      throw new HttpsError('unauthenticated', 'The function must be called while authenticated.')
     }
 
-    const chatCompletion = await stream.finalChatCompletion()
-    console.log(chatCompletion)
+    if (typeof req.data.query !== 'string') {
+      throw new HttpsError('invalid-argument', 'No query.')
+    }
 
-    return chatCompletion
-  } catch (error) {
-    console.error('Error calling OpenAI API:', error)
-    throw new HttpsError('internal', 'Error calling OpenAI API')
-  }
+    try {
+      const stream = await openai.beta.chat.completions.stream({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: req.data.query }],
+        stream: true,
+      })
 
-  // Call flairchain API
-  // {
-  //   /** Document Id */
-  //   workflowRequestId: string
+      stream.on('content', (delta, snapshot) => {
+        process.stdout.write(delta)
+      })
 
-  //   executorUserId: string
-  //   workflowId: string
+      // or, equivalently:
+      for await (const chunk of stream) {
+        process.stdout.write(chunk.choices[0]?.delta?.content || '')
+      }
 
-  //   status: 'requested' | 'initiated' | 'completed'
+      const chatCompletion = await stream.finalChatCompletion()
+      console.log(chatCompletion)
 
-  //   requestTimestamp: Timestamp
+      return chatCompletion
+    } catch (error) {
+      console.error('Error calling OpenAI API:', error)
+      throw new HttpsError('internal', 'Error calling OpenAI API')
+    }
 
-  //   frontendConfig: string
-  //   generatedConfig: string
-  // }
-})
+    // Call flairchain API
+    // {
+    //   /** Document Id */
+    //   workflowRequestId: string
+
+    //   executorUserId: string
+    //   workflowId: string
+
+    //   status: 'requested' | 'initiated' | 'completed'
+
+    //   requestTimestamp: Timestamp
+
+    //   frontendConfig: string
+    //   generatedConfig: string
+    // }
+  },
+)
