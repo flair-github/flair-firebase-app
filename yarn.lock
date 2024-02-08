@@ -2109,76 +2109,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/functions-js@npm:^2.1.5":
-  version: 2.1.5
-  resolution: "@supabase/functions-js@npm:2.1.5"
-  dependencies:
-    "@supabase/node-fetch": ^2.6.14
-  checksum: f2ab8636af8d982270b61631a5120369ca10db101b4298da71be892e5d91a8ddaddcf7f51079ad0fe24731a15892b21bd7dbe41b997da9d4b90e4326d09632c8
-  languageName: node
-  linkType: hard
-
-"@supabase/gotrue-js@npm:^2.60.0":
-  version: 2.62.0
-  resolution: "@supabase/gotrue-js@npm:2.62.0"
-  dependencies:
-    "@supabase/node-fetch": ^2.6.14
-  checksum: 7df7078c7eb2b99658cc924fa41ae95305ba9e29fd8a56541adbe6901133a370ecda1d40553e27bcd8e782fb8f4a1c13b79ff4422af51bdcb5d614a10779340b
-  languageName: node
-  linkType: hard
-
-"@supabase/node-fetch@npm:^2.6.14":
-  version: 2.6.15
-  resolution: "@supabase/node-fetch@npm:2.6.15"
-  dependencies:
-    whatwg-url: ^5.0.0
-  checksum: 9673b49236a56df49eb7ea5cb789cf4e8b1393069b84b4964ac052995e318a34872f428726d128f232139e17c3375a531e45e99edd3e96a25cce60d914b53879
-  languageName: node
-  linkType: hard
-
-"@supabase/postgrest-js@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "@supabase/postgrest-js@npm:1.9.0"
-  dependencies:
-    "@supabase/node-fetch": ^2.6.14
-  checksum: bf38139685901e9b96f97ac0bef6282352ebfd41c198174fd2109f109ee431f1eb2c8b68fa32c49fecb751a27358fd5790a03cda9bd4100bd16e2034aea7e419
-  languageName: node
-  linkType: hard
-
-"@supabase/realtime-js@npm:^2.8.4":
-  version: 2.9.1
-  resolution: "@supabase/realtime-js@npm:2.9.1"
-  dependencies:
-    "@supabase/node-fetch": ^2.6.14
-    "@types/phoenix": ^1.5.4
-    ws: ^8.14.2
-  checksum: a1cf7e216251f8c17d0084c5185ee8f71979c4a8df818eca9404b6739463fa276b4b1ab4f648de0105426e7cc2aba3eadd317972a8d28ca2e31752ae91cfe370
-  languageName: node
-  linkType: hard
-
-"@supabase/storage-js@npm:^2.5.4":
-  version: 2.5.5
-  resolution: "@supabase/storage-js@npm:2.5.5"
-  dependencies:
-    "@supabase/node-fetch": ^2.6.14
-  checksum: 4470499113c15e1124d99048eef0097c7ba431d728e351519ee26948775171d6c6bb41156f8ffb3860009b82b93809af01c9d075ece6000f783f59ce9fd00ee8
-  languageName: node
-  linkType: hard
-
-"@supabase/supabase-js@npm:^2.33.1":
-  version: 2.39.2
-  resolution: "@supabase/supabase-js@npm:2.39.2"
-  dependencies:
-    "@supabase/functions-js": ^2.1.5
-    "@supabase/gotrue-js": ^2.60.0
-    "@supabase/node-fetch": ^2.6.14
-    "@supabase/postgrest-js": ^1.9.0
-    "@supabase/realtime-js": ^2.8.4
-    "@supabase/storage-js": ^2.5.4
-  checksum: ce60a2a160db87813aba05166f87e5ace81d237c32db53442a4204b520ff7a4e73566c1cffaa89ac25c4c098f3df1aeebcdc189559d2e075bdb6bc1a343c03ac
-  languageName: node
-  linkType: hard
-
 "@swc/helpers@npm:^0.5.0":
   version: 0.5.3
   resolution: "@swc/helpers@npm:0.5.3"
@@ -2649,13 +2579,6 @@ __metadata:
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
   checksum: 5bf62eec37c332ad10059252fc0dab7e7da730764869c980b0714777ad3d065e490627be9f40fc52f238ffa3ac4199b19de4127196910576c2fe34dd47c7a470
-  languageName: node
-  linkType: hard
-
-"@types/phoenix@npm:^1.5.4":
-  version: 1.6.4
-  resolution: "@types/phoenix@npm:1.6.4"
-  checksum: 0f13849602db6d9a2a4b9d96386c45471acedf2bc3d6bf6b3289876fa73f0fe0e84c8466bd55c4f2763d33e142e5311c220820fed9ac2a21d9126f1f70a7338f
   languageName: node
   linkType: hard
 
@@ -11687,7 +11610,6 @@ __metadata:
     "@headlessui/tailwindcss": ^0.2.0
     "@heroicons/react": ^2.1.1
     "@react-native-community/eslint-config": ^3.2.0
-    "@supabase/supabase-js": ^2.33.1
     "@tailwindcss/forms": ^0.5.7
     "@types/lodash": ^4.14.202
     "@types/react": 18.2.47
@@ -12053,21 +11975,6 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: c3c100a181b731f40b7f2fddf004aa023f79d64f489706a28bc23ff88e87f6a64b3c6651fbec3a84a53960b75159574d7a7385709847a62ddb7ad6af76f49138
-  languageName: node
-  linkType: hard
-
-"ws@npm:^8.14.2":
-  version: 8.16.0
-  resolution: "ws@npm:8.16.0"
-  peerDependencies:
-    bufferutil: ^4.0.1
-    utf-8-validate: ">=5.0.2"
-  peerDependenciesMeta:
-    bufferutil:
-      optional: true
-    utf-8-validate:
-      optional: true
-  checksum: feb3eecd2bae82fa8a8beef800290ce437d8b8063bdc69712725f21aef77c49cb2ff45c6e5e7fce622248f9c7abaee506bae0a9064067ffd6935460c7357321b
   languageName: node
   linkType: hard
 
