@@ -25,6 +25,7 @@ import { Input } from '~/catalyst/input'
 import clsx from 'clsx'
 import { useAtom } from 'jotai'
 import { resultDataAtom } from './Results'
+import { chatbotData } from '~/constants/chatbotData'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -123,6 +124,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   )
 
   const [resultData, setResultData] = useAtom(resultDataAtom)
+  const isChatbot = resultData?.workflowName?.toLocaleLowerCase().includes('chatbot') || false
 
   // const {
   //   items,
@@ -354,251 +356,391 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                     <div className="overflow-hidden shadow ring-1 ring-black/5 sm:rounded-lg">
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
-                          <tr>
-                            <th
-                              scope="col"
-                              className="w-[0.1%] whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                            />
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Filename{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Transcript{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Summary{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Outcome{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Call Type{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Call Type Reason{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Call Type Confidence{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Used Proper Introduction{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Identified Call Reason{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Demonstrated Effective Listening{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Expressed Proper Empathy{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Used Professional Language{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Used Accurate Grammar{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Provided Accurate Information{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Rudeness/Dishonesty/Fraud{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Call Flow Followed{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Call Flow Followed Reason{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Score{' '}
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Hallucination Detected
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                            <th
-                              scope="col"
-                              className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Invalid Format
-                              <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                            </th>
-                          </tr>
+                          {isChatbot ? (
+                            <tr>
+                              <th
+                                scope="col"
+                                className="w-[0.1%] whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                              />
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Input{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Retrieved Context{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Output{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Hallucination{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Invalid Format{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                            </tr>
+                          ) : (
+                            <tr>
+                              <th
+                                scope="col"
+                                className="w-[0.1%] whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                              />
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Filename{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Transcript{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Summary{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Outcome{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Call Type{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Call Type Reason{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Call Type Confidence{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Used Proper Introduction{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Identified Call Reason{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Demonstrated Effective Listening{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Expressed Proper Empathy{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Used Professional Language{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Used Accurate Grammar{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Provided Accurate Information{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Rudeness/Dishonesty/Fraud{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Call Flow Followed{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Call Flow Followed Reason{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Score{' '}
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Hallucination Detected
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                              <th
+                                scope="col"
+                                className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Invalid Format
+                                <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                              </th>
+                            </tr>
+                          )}{' '}
                         </thead>
                         <tbody className="divide-y divide-gray-200 bg-white">
-                          {callCenterData.map((row, index) => (
-                            <tr key={index}>
-                              <td className="px-3 py-4 text-sm text-gray-500">
-                                <Checkbox
-                                  color="blue"
-                                  checked={editMode.has(index)}
-                                  onChange={checked => {
-                                    if (checked) {
+                          {isChatbot
+                            ? chatbotData.map((row, index) => (
+                                <tr key={index}>
+                                  <td className="px-3 py-4 text-sm text-gray-500">
+                                    <Checkbox
+                                      color="blue"
+                                      checked={editMode.has(index)}
+                                      onChange={checked => {
+                                        if (checked) {
+                                          setEditMode(prev => {
+                                            const newSet = new Set(prev)
+                                            newSet.add(index)
+                                            return newSet
+                                          })
+                                        } else {
+                                          setEditMode(prev => {
+                                            const newSet = new Set(prev)
+                                            newSet.delete(index)
+                                            return newSet
+                                          })
+                                        }
+                                      }}
+                                    />
+                                  </td>
+                                  <td
+                                    onClick={() => {
                                       setEditMode(prev => {
                                         const newSet = new Set(prev)
                                         newSet.add(index)
                                         return newSet
                                       })
-                                    } else {
+                                    }}
+                                    className={clsx(
+                                      'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                      !editMode.has(index) && 'truncate',
+                                    )}>
+                                    {row.input}
+                                  </td>
+                                  <td
+                                    onClick={() => {
                                       setEditMode(prev => {
                                         const newSet = new Set(prev)
-                                        newSet.delete(index)
+                                        newSet.add(index)
                                         return newSet
                                       })
-                                    }
-                                  }}
-                                />
-                              </td>
-                              <td
-                                onClick={() => {
-                                  setEditMode(prev => {
-                                    const newSet = new Set(prev)
-                                    newSet.add(index)
-                                    return newSet
-                                  })
-                                }}
-                                className={clsx(
-                                  'max-w-80 px-3 py-4 text-sm text-gray-500',
-                                  !editMode.has(index) && 'truncate',
-                                )}>
-                                {row.filename}
-                              </td>
-                              <td
-                                onClick={() => {
-                                  setEditMode(prev => {
-                                    const newSet = new Set(prev)
-                                    newSet.add(index)
-                                    return newSet
-                                  })
-                                }}
-                                className={clsx(
-                                  'max-w-80 px-3 py-4 text-sm text-gray-500',
-                                  !editMode.has(index) && 'truncate',
-                                )}>
-                                {row.transcript}{' '}
-                              </td>
-                              {[
-                                row.summary,
-                                row.outcome,
-                                row.call_type,
-                                row.call_type_reason,
-                                row.call_type_confidence,
-                                row.used_proper_introduction,
-                                row.identified_call_reason,
-                                row.demonstrate_effective_listening,
-                                row.expressed_proper_empathy,
-                                row.used_professional_language,
-                                row.used_accurate_grammar,
-                                row.provided_accurate_information,
-                                row.rudeness_dishonesty_fraud,
-                                row.call_flow_followed,
-                                row.call_flow_followed_reason,
-                                row.score,
-                              ].map((el, i) => (
-                                <td
-                                  key={i}
-                                  onClick={() => {
-                                    setEditMode(prev => {
-                                      const newSet = new Set(prev)
-                                      newSet.add(index)
-                                      return newSet
-                                    })
-                                  }}
-                                  className={clsx(
-                                    'max-w-80 px-3 py-4 text-sm text-gray-500',
-                                    !editMode.has(index) && 'truncate',
-                                    editMode.has(index) && 'bg-yellow-100',
-                                  )}
-                                  contentEditable={editMode.has(index)}>
-                                  {el}
-                                </td>
+                                    }}
+                                    className={clsx(
+                                      'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                      !editMode.has(index) && 'truncate',
+                                    )}>
+                                    {row.retrievedContext}{' '}
+                                  </td>
+                                  {[row.output].map((el, i) => (
+                                    <td
+                                      key={i}
+                                      onClick={() => {
+                                        setEditMode(prev => {
+                                          const newSet = new Set(prev)
+                                          newSet.add(index)
+                                          return newSet
+                                        })
+                                      }}
+                                      className={clsx(
+                                        'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                        !editMode.has(index) && 'truncate',
+                                        editMode.has(index) && 'bg-yellow-100',
+                                      )}
+                                      contentEditable={editMode.has(index)}>
+                                      {el}
+                                    </td>
+                                  ))}
+                                  <td
+                                    onClick={() => {
+                                      setEditMode(prev => {
+                                        const newSet = new Set(prev)
+                                        newSet.add(index)
+                                        return newSet
+                                      })
+                                    }}
+                                    className={clsx(
+                                      'px-3 py-4 text-sm text-gray-500',
+                                      editMode.has(index) && 'bg-yellow-100',
+                                    )}>
+                                    No
+                                  </td>
+                                  <td
+                                    onClick={() => {
+                                      setEditMode(prev => {
+                                        const newSet = new Set(prev)
+                                        newSet.add(index)
+                                        return newSet
+                                      })
+                                    }}
+                                    className={clsx(
+                                      'px-3 py-4 text-sm text-gray-500',
+                                      editMode.has(index) && 'bg-yellow-100',
+                                    )}>
+                                    No
+                                  </td>
+                                </tr>
+                              ))
+                            : callCenterData.map((row, index) => (
+                                <tr key={index}>
+                                  <td className="px-3 py-4 text-sm text-gray-500">
+                                    <Checkbox
+                                      color="blue"
+                                      checked={editMode.has(index)}
+                                      onChange={checked => {
+                                        if (checked) {
+                                          setEditMode(prev => {
+                                            const newSet = new Set(prev)
+                                            newSet.add(index)
+                                            return newSet
+                                          })
+                                        } else {
+                                          setEditMode(prev => {
+                                            const newSet = new Set(prev)
+                                            newSet.delete(index)
+                                            return newSet
+                                          })
+                                        }
+                                      }}
+                                    />
+                                  </td>
+                                  <td
+                                    onClick={() => {
+                                      setEditMode(prev => {
+                                        const newSet = new Set(prev)
+                                        newSet.add(index)
+                                        return newSet
+                                      })
+                                    }}
+                                    className={clsx(
+                                      'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                      !editMode.has(index) && 'truncate',
+                                    )}>
+                                    {row.filename}
+                                  </td>
+                                  <td
+                                    onClick={() => {
+                                      setEditMode(prev => {
+                                        const newSet = new Set(prev)
+                                        newSet.add(index)
+                                        return newSet
+                                      })
+                                    }}
+                                    className={clsx(
+                                      'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                      !editMode.has(index) && 'truncate',
+                                    )}>
+                                    {row.transcript}{' '}
+                                  </td>
+                                  {[
+                                    row.summary,
+                                    row.outcome,
+                                    row.call_type,
+                                    row.call_type_reason,
+                                    row.call_type_confidence,
+                                    row.used_proper_introduction,
+                                    row.identified_call_reason,
+                                    row.demonstrate_effective_listening,
+                                    row.expressed_proper_empathy,
+                                    row.used_professional_language,
+                                    row.used_accurate_grammar,
+                                    row.provided_accurate_information,
+                                    row.rudeness_dishonesty_fraud,
+                                    row.call_flow_followed,
+                                    row.call_flow_followed_reason,
+                                    row.score,
+                                  ].map((el, i) => (
+                                    <td
+                                      key={i}
+                                      onClick={() => {
+                                        setEditMode(prev => {
+                                          const newSet = new Set(prev)
+                                          newSet.add(index)
+                                          return newSet
+                                        })
+                                      }}
+                                      className={clsx(
+                                        'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                        !editMode.has(index) && 'truncate',
+                                        editMode.has(index) && 'bg-yellow-100',
+                                      )}
+                                      contentEditable={editMode.has(index)}>
+                                      {el}
+                                    </td>
+                                  ))}
+                                  <td
+                                    onClick={() => {
+                                      setEditMode(prev => {
+                                        const newSet = new Set(prev)
+                                        newSet.add(index)
+                                        return newSet
+                                      })
+                                    }}
+                                    className={clsx(
+                                      'px-3 py-4 text-sm text-gray-500',
+                                      editMode.has(index) && 'bg-yellow-100',
+                                    )}>
+                                    No
+                                  </td>
+                                  <td
+                                    onClick={() => {
+                                      setEditMode(prev => {
+                                        const newSet = new Set(prev)
+                                        newSet.add(index)
+                                        return newSet
+                                      })
+                                    }}
+                                    className={clsx(
+                                      'px-3 py-4 text-sm text-gray-500',
+                                      editMode.has(index) && 'bg-yellow-100',
+                                    )}>
+                                    No
+                                  </td>
+                                </tr>
                               ))}
-                              <td
-                                onClick={() => {
-                                  setEditMode(prev => {
-                                    const newSet = new Set(prev)
-                                    newSet.add(index)
-                                    return newSet
-                                  })
-                                }}
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}>
-                                No
-                              </td>
-                              <td
-                                onClick={() => {
-                                  setEditMode(prev => {
-                                    const newSet = new Set(prev)
-                                    newSet.add(index)
-                                    return newSet
-                                  })
-                                }}
-                                className={clsx(
-                                  'px-3 py-4 text-sm text-gray-500',
-                                  editMode.has(index) && 'bg-yellow-100',
-                                )}>
-                                No
-                              </td>
-                            </tr>
-                          ))}
                         </tbody>
                       </table>
                     </div>
@@ -618,6 +760,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
           ) : null} */}
           </div>
         )}
+
         {activeTab === 'Result' && (
           <div className="justify-left flex w-full border bg-white">
             <div className="container max-w-200 p-5">
