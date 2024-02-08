@@ -13,15 +13,21 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "baseUrl": "./src",
-    "outDir": "lib",
+    "outDir": "./dist",
     "sourceMap": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
+    "paths": {
+      "Types/*": [
+        "../../types/*"
+      ],
+    }
   },
   "compileOnSave": true,
   "include": [
-    "./src"
+    "./src",
+    "../types"
   ],
   // "extends": "../tsconfig.json"
 }
