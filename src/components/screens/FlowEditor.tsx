@@ -221,7 +221,9 @@ export const apiResultAtom = atom<string>('')
 
 export const dummyRunSymbol = atom<number | undefined>(undefined)
 
-export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
+export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
+  viewOnlyFrontEndConfig,
+}) => {
   const userData = useAtomValue(atomUserData)
   const [nodes, setNodes] = useAtom(nodesAtom)
   const [edges, setEdges] = useAtom(edgesAtom)
@@ -240,6 +242,15 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   useEffect(() => {
     setNodes([])
     setEdges([])
+
+    if (viewOnlyFrontEndConfig) {
+      const { nodes: newNodes, edges: newEdges } = JSON.parse(viewOnlyFrontEndConfig)
+      setTitle('Flow')
+      setNodes(newNodes)
+      setEdges(newEdges)
+      return
+    }
+
     ;(async () => {
       if (typeof workflowId !== 'string') {
         return
@@ -268,7 +279,7 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
       setNodes([])
       setEdges([])
     }
-  }, [workflowId, workflowRequestId, setEdges, setNodes])
+  }, [workflowId, workflowRequestId, setEdges, setNodes, viewOnlyFrontEndConfig])
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
@@ -1208,17 +1219,22 @@ data_exporters:
 
   const [expanded, setExpanded] = useState(true)
 
-  return viewOnly ? (
+  return viewOnlyFrontEndConfig ? (
     <>
       <ReactFlow
-        elementsSelectable={false}
+        elementsSelectable={true}
         nodesConnectable={false}
         nodesDraggable={false}
-        zoomOnScroll={true}
-        panOnScroll={true}
-        zoomOnDoubleClick={true}
-        panOnDrag={true}
+        zoomOnScroll={false}
+        panOnScroll={false}
+        zoomOnDoubleClick={false}
+        panOnDrag={false}
         selectionOnDrag={false}
+        onInit={instance => {
+          setTimeout(() => {
+            instance.fitView()
+          }, 100)
+        }}
         nodes={nodes}
         onNodesChange={onNodesChange}
         edges={edges}
@@ -1233,16 +1249,8 @@ data_exporters:
           background: '#F0F0F0',
         }}>
         <Background />
-        <Controls position="bottom-right" />
+        <Controls position="bottom-right" showZoom={false} showInteractive={false} />
       </ReactFlow>
-      <div className="absolute right-3 top-3 z-10 flex flex-col items-end space-y-3">
-        <div className="join w-fit bg-white shadow">
-          <Link className="btn btn-outline join-item" to={'/editor/' + workflowId}>
-            <AiOutlineEdit className="h-6 w-6" />
-            Edit
-          </Link>
-        </div>
-      </div>
     </>
   ) : (
     <>

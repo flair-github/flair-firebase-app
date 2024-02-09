@@ -26,6 +26,7 @@ import clsx from 'clsx'
 import { useAtom } from 'jotai'
 import { resultDataAtom } from './Results'
 import { chatbotData } from '~/constants/chatbotData'
+import FlowEditor from './FlowEditor'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -106,7 +107,7 @@ const getFilenameFromURL = (urlString: string, defaultName: string): string => {
 }
 
 const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
-  const [activeTab, setActiveTab] = useState<'Evaluation' | 'Result'>('Evaluation')
+  const [activeTab, setActiveTab] = useState<'Evaluation' | 'Result' | 'Pipeline'>('Evaluation')
   const resultId =
     id ?? window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
   const [sharedToken, setSharedToken] = useState('')
@@ -152,6 +153,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   const tabs = [
     { name: 'Evaluation', href: '#', current: activeTab === 'Evaluation' },
     { name: 'Result', href: '#', current: activeTab === 'Result' },
+    { name: 'Pipeline', href: '#', current: activeTab === 'Pipeline' },
   ]
 
   const runningModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
@@ -290,6 +292,14 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
             ))}
           </nav>
         </div>
+
+        {activeTab === 'Pipeline' && workflowData?.frontendConfig && (
+          <div>
+            <div className="h-[600px] w-full">
+              <FlowEditor viewOnlyFrontEndConfig={workflowData.frontendConfig} />
+            </div>
+          </div>
+        )}
 
         {activeTab === 'Evaluation' && (
           <div>
