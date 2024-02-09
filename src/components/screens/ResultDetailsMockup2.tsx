@@ -113,15 +113,16 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
 
   const [data] = useFirestoreDoc<DocWorkflowResult>('workflow_results', resultId as string)
   const [columnName, setColumnName] = useState<string>()
-  const where: [string, WhereFilterOp, string][] = useMemo(
-    () => [
-      ...([['workflowResultId', '==', resultId]] as [string, WhereFilterOp, string][]),
-      ...(columnName
-        ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
-        : []),
-    ],
-    [resultId, columnName],
-  )
+  const whereConditions = useMemo(() => {
+    const conditions: [string, WhereFilterOp, string][] = [['workflowResultId', '==', resultId]]
+
+    if (columnName) {
+      const columnCondition: [string, WhereFilterOp, string] = ['columnName', '==', columnName]
+      conditions.push(columnCondition)
+    }
+
+    return conditions
+  }, [resultId, columnName]) // Dependencies for useMemo, recompute when these change.
 
   const [resultData, setResultData] = useAtom(resultDataAtom)
   const isChatbot = resultData?.workflowName?.toLocaleLowerCase().includes('chatbot') || false
