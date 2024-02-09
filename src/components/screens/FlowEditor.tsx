@@ -1139,24 +1139,22 @@ data_exporters:
           }
         }
 
-        if (typeof testPayload !== 'object' || typeof prompt !== 'string') {
-          throw new Error("can't get testPayload or prompt")
+        if (typeof testPayload === 'object' && typeof prompt === 'string') {
+          const content = replacePlaceholders(prompt, testPayload)
+
+          const callHelloWorld = httpsCallable(functions, 'helloWorld')
+
+          console.log({ content })
+          callHelloWorld({ content })
+            .then(result => {
+              // Read result of the Cloud Function.
+              setApiResult((result.data as any).choices[0].message.content)
+              console.log('result.data', result.data)
+            })
+            .catch(e => {
+              console.log('error', e)
+            })
         }
-
-        const content = replacePlaceholders(prompt, testPayload)
-
-        const callHelloWorld = httpsCallable(functions, 'helloWorld')
-
-        console.log({ content })
-        callHelloWorld({ content })
-          .then(result => {
-            // Read result of the Cloud Function.
-            setApiResult((result.data as any).choices[0].message.content)
-            console.log('result.data', result.data)
-          })
-          .catch(e => {
-            console.log('error', e)
-          })
 
         setDeploymentStatus(['success', 'Your pipeline has been initiated!'])
         setTimeout(() => {
