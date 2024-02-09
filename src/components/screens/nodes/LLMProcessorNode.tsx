@@ -1,7 +1,7 @@
 import React, { type MutableRefObject, useEffect, useState } from 'react'
 import { GrFormClose } from 'react-icons/gr'
 import { Handle, Position } from 'reactflow'
-import { type NodeData, nodeContents, jotaiAllowInteraction } from './Registry'
+import { type NodeData, nodeContents } from './Registry'
 import { v4 } from 'uuid'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { NodeHeader } from '~/components/shared/NodeHeader'
@@ -75,7 +75,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
   const [columnNames, setColumnNames] = useState<Record<string, string>>({})
   // We must introduce above "columnNames" state to prevent circular dependency between "columns" local state and "nodeExportedKeys" jotai state
   const [exportedKeys, setExportedKeys] = useState<LLMProcessorNodeContent['exportedKeys']>({})
-  const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
+  // const setAllowInteraction = useSetAtom(jotaiAllowInteraction)
 
   // Initial data
   useEffect(() => {
@@ -239,7 +239,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
               <button
                 className="btn text-lg"
                 onClick={() => {
-                  setAllowInteraction(false)
+                  // setAllowInteraction(false)
                   ;(window as any)['advanced-options-' + el.columnId].showModal()
                 }}>
                 Advanced
@@ -604,7 +604,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
                   <button
                     className="btn"
                     onClick={() => {
-                      setAllowInteraction(true)
+                      // setAllowInteraction(true)
                     }}>
                     Close
                   </button>
@@ -648,7 +648,7 @@ export const LLMProcessorNode = ({ data, noHandle }: { data: NodeData; noHandle?
               },
             ])
             setTimeout(() => {
-              setAllowInteraction(false)
+              // setAllowInteraction(false)
               ;(window as any)['advanced-options-' + colId].showModal()
             }, 50)
           }}>

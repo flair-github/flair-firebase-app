@@ -21,7 +21,7 @@ import { Link, useParams } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db, functions } from '~/lib/firebase'
-import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from './nodes/Registry'
+import { Edges, NodeContent, Nodes, nodeContents } from './nodes/Registry'
 import { v4 } from 'uuid'
 
 import { DataExtractorNode } from './nodes/DataExtractorNode'
@@ -583,8 +583,6 @@ data_exporters:
   }
 
   const executeModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
-
-  const allowInteraction = useAtomValue(jotaiAllowInteraction)
 
   const nodeClassifications: IAsideProps['nodeClassifications'] = [
     {
@@ -1287,14 +1285,6 @@ data_exporters:
           </aside>
           <Controller controls={controls} />
           <ReactFlow
-            elementsSelectable={allowInteraction}
-            nodesConnectable={allowInteraction}
-            nodesDraggable={allowInteraction}
-            zoomOnScroll={allowInteraction}
-            panOnScroll={allowInteraction}
-            zoomOnDoubleClick={allowInteraction}
-            panOnDrag={allowInteraction}
-            selectionOnDrag={allowInteraction}
             defaultViewport={{ x: 650, y: 500, zoom: 0.5 }} // set the default zoom and sizing of the graph
             nodes={nodes}
             onNodesChange={onNodesChange}
