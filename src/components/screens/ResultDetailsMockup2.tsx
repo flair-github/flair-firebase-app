@@ -163,8 +163,6 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   useEffect(() => {
     const workflowId = resultData?.workflowId
 
-    console.log('workflowId', workflowId)
-
     if (!workflowId) {
       return
     }
@@ -175,8 +173,6 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
       .onSnapshot(snap => {
         const data: DocWorkflow | undefined = snap?.data() as any
         setWorkflowData(data)
-
-        console.log('workflow data', data)
       })
 
     return () => {
@@ -293,10 +289,10 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
           </nav>
         </div>
 
-        {activeTab === 'Pipeline' && workflowData?.frontendConfig && (
+        {activeTab === 'Pipeline' && resultData?.frontendConfig && (
           <div>
             <div className="h-[600px] w-full">
-              <FlowEditor viewOnlyFrontEndConfig={workflowData.frontendConfig} />
+              <FlowEditor viewOnlyFrontEndConfig={resultData.frontendConfig} />
             </div>
           </div>
         )}
