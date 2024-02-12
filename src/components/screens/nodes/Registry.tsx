@@ -118,5 +118,3 @@ export type Edges = Edge[]
 export const nodeContents: MutableRefObject<{ [nodeId: string]: NodeContent }> = {
   current: {},
 }
-
-export const jotaiAllowInteraction = atom(true)

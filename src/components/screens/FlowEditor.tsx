@@ -21,7 +21,7 @@ import { Link, useParams } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db, functions } from '~/lib/firebase'
-import { Edges, NodeContent, Nodes, jotaiAllowInteraction, nodeContents } from './nodes/Registry'
+import { Edges, NodeContent, Nodes, nodeContents } from './nodes/Registry'
 import { v4 } from 'uuid'
 
 import { DataExtractorNode } from './nodes/DataExtractorNode'
@@ -221,7 +221,9 @@ export const apiResultAtom = atom<string>('')
 
 export const dummyRunSymbol = atom<number | undefined>(undefined)
 
-export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
+export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
+  viewOnlyFrontEndConfig,
+}) => {
   const userData = useAtomValue(atomUserData)
   const [nodes, setNodes] = useAtom(nodesAtom)
   const [edges, setEdges] = useAtom(edgesAtom)
@@ -240,6 +242,15 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
   useEffect(() => {
     setNodes([])
     setEdges([])
+
+    if (viewOnlyFrontEndConfig) {
+      const { nodes: newNodes, edges: newEdges } = JSON.parse(viewOnlyFrontEndConfig)
+      setTitle('Flow')
+      setNodes(newNodes)
+      setEdges(newEdges)
+      return
+    }
+
     ;(async () => {
       if (typeof workflowId !== 'string') {
         return
@@ -268,7 +279,7 @@ export const FlowEditor: React.FC<{ viewOnly?: boolean }> = ({ viewOnly }) => {
       setNodes([])
       setEdges([])
     }
-  }, [workflowId, workflowRequestId, setEdges, setNodes])
+  }, [workflowId, workflowRequestId, setEdges, setNodes, viewOnlyFrontEndConfig])
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
@@ -572,8 +583,6 @@ data_exporters:
   }
 
   const executeModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
-
-  const allowInteraction = useAtomValue(jotaiAllowInteraction)
 
   const nodeClassifications: IAsideProps['nodeClassifications'] = [
     {
@@ -1099,6 +1108,8 @@ data_exporters:
           averageEvaluationData: 0.86,
           workflowName: title,
           workflowRequestId: db.collection('workflow_results').doc().id,
+          frontendConfig: JSON.stringify(getFrontendConfig()),
+          workflowId: workflowId || '',
           status: 'initiated',
           createdTimestamp: new Date(),
           model: 'gpt-4',
@@ -1128,24 +1139,22 @@ data_exporters:
           }
         }
 
-        if (typeof testPayload !== 'object' || typeof prompt !== 'string') {
-          throw new Error("can't get testPayload or prompt")
+        if (typeof testPayload === 'object' && typeof prompt === 'string') {
+          const content = replacePlaceholders(prompt, testPayload)
+
+          const callHelloWorld = httpsCallable(functions, 'helloWorld')
+
+          console.log({ content })
+          callHelloWorld({ content })
+            .then(result => {
+              // Read result of the Cloud Function.
+              setApiResult((result.data as any).choices[0].message.content)
+              console.log('result.data', result.data)
+            })
+            .catch(e => {
+              console.log('error', e)
+            })
         }
-
-        const content = replacePlaceholders(prompt, testPayload)
-
-        const callHelloWorld = httpsCallable(functions, 'helloWorld')
-
-        console.log({ content })
-        callHelloWorld({ content })
-          .then(result => {
-            // Read result of the Cloud Function.
-            setApiResult((result.data as any).choices[0].message.content)
-            console.log('result.data', result.data)
-          })
-          .catch(e => {
-            console.log('error', e)
-          })
 
         setDeploymentStatus(['success', 'Your pipeline has been initiated!'])
         setTimeout(() => {
@@ -1169,6 +1178,8 @@ data_exporters:
           averageEvaluationData: 0.86,
           workflowName: title,
           workflowRequestId: db.collection('workflow_results').doc().id,
+          frontendConfig: JSON.stringify(getFrontendConfig()),
+          workflowId: workflowId || '',
           status: 'scheduled',
           createdTimestamp: new Date(),
           model: 'gpt-4',
@@ -1206,17 +1217,22 @@ data_exporters:
 
   const [expanded, setExpanded] = useState(true)
 
-  return viewOnly ? (
+  return viewOnlyFrontEndConfig ? (
     <>
       <ReactFlow
-        elementsSelectable={false}
+        elementsSelectable={true}
         nodesConnectable={false}
         nodesDraggable={false}
-        zoomOnScroll={true}
-        panOnScroll={true}
-        zoomOnDoubleClick={true}
-        panOnDrag={true}
+        zoomOnScroll={false}
+        panOnScroll={false}
+        zoomOnDoubleClick={false}
+        panOnDrag={false}
         selectionOnDrag={false}
+        onInit={instance => {
+          setTimeout(() => {
+            instance.fitView()
+          }, 100)
+        }}
         nodes={nodes}
         onNodesChange={onNodesChange}
         edges={edges}
@@ -1231,16 +1247,8 @@ data_exporters:
           background: '#F0F0F0',
         }}>
         <Background />
-        <Controls position="bottom-right" />
+        <Controls position="bottom-right" showZoom={false} showInteractive={false} />
       </ReactFlow>
-      <div className="absolute right-3 top-3 z-10 flex flex-col items-end space-y-3">
-        <div className="join w-fit bg-white shadow">
-          <Link className="btn btn-outline join-item" to={'/editor/' + workflowId}>
-            <AiOutlineEdit className="h-6 w-6" />
-            Edit
-          </Link>
-        </div>
-      </div>
     </>
   ) : (
     <>
@@ -1277,14 +1285,6 @@ data_exporters:
           </aside>
           <Controller controls={controls} />
           <ReactFlow
-            elementsSelectable={allowInteraction}
-            nodesConnectable={allowInteraction}
-            nodesDraggable={allowInteraction}
-            zoomOnScroll={allowInteraction}
-            panOnScroll={allowInteraction}
-            zoomOnDoubleClick={allowInteraction}
-            panOnDrag={allowInteraction}
-            selectionOnDrag={allowInteraction}
             defaultViewport={{ x: 650, y: 500, zoom: 0.5 }} // set the default zoom and sizing of the graph
             nodes={nodes}
             onNodesChange={onNodesChange}

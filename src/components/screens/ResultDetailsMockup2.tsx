@@ -5,7 +5,7 @@ import { PiFileCsvFill, PiTableBold } from 'react-icons/pi'
 import { ImFilesEmpty, ImSpinner8 } from 'react-icons/im'
 import { CodeBlock } from 'react-code-blocks'
 import useFirestoreDoc from '~/lib/useFirestoreDoc'
-import { DocLLMOutput, DocWorkflowResult } from 'Types/firebaseStructure'
+import { DocLLMOutput, DocWorkflow, DocWorkflowResult } from 'Types/firebaseStructure'
 import usePaginatedFirestore from '~/lib/usePaginatedFirestore'
 import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineCopy, AiOutlineExpand } from 'react-icons/ai'
@@ -26,6 +26,7 @@ import clsx from 'clsx'
 import { useAtom } from 'jotai'
 import { resultDataAtom } from './Results'
 import { chatbotData } from '~/constants/chatbotData'
+import FlowEditor from './FlowEditor'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -106,22 +107,26 @@ const getFilenameFromURL = (urlString: string, defaultName: string): string => {
 }
 
 const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
-  const [activeTab, setActiveTab] = useState<'Evaluation' | 'Result'>('Evaluation')
+  const [activeTab, setActiveTab] = useState<'Evaluation' | 'Result' | 'Pipeline'>('Evaluation')
   const resultId =
     id ?? window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
   const [sharedToken, setSharedToken] = useState('')
 
-  const [data] = useFirestoreDoc<DocWorkflowResult>('workflow_results', resultId as string)
-  const [columnName, setColumnName] = useState<string>()
-  const where: [string, WhereFilterOp, string][] = useMemo(
-    () => [
-      ...([['workflowResultId', '==', resultId]] as [string, WhereFilterOp, string][]),
-      ...(columnName
-        ? ([['columnName', '==', columnName]] as [string, WhereFilterOp, string][])
-        : []),
-    ],
-    [resultId, columnName],
+  const [workflowResultData] = useFirestoreDoc<DocWorkflowResult>(
+    'workflow_results',
+    resultId as string,
   )
+  const [columnName, setColumnName] = useState<string>()
+  const whereConditions = useMemo(() => {
+    const conditions: [string, WhereFilterOp, string][] = [['workflowResultId', '==', resultId]]
+
+    if (columnName) {
+      const columnCondition: [string, WhereFilterOp, string] = ['columnName', '==', columnName]
+      conditions.push(columnCondition)
+    }
+
+    return conditions
+  }, [resultId, columnName]) // Dependencies for useMemo, recompute when these change.
 
   const [resultData, setResultData] = useAtom(resultDataAtom)
   const isChatbot = resultData?.workflowName?.toLocaleLowerCase().includes('chatbot') || false
@@ -140,24 +145,46 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   const [sharing, setSharing] = useState(false)
 
   useEffect(() => {
-    setSharedToken(data?.shared_token ?? '')
-  }, [data])
+    setSharedToken(workflowResultData?.shared_token ?? '')
+  }, [workflowResultData])
 
   const [editMode, setEditMode] = useState<Set<number>>(new Set())
 
   const tabs = [
     { name: 'Evaluation', href: '#', current: activeTab === 'Evaluation' },
     { name: 'Result', href: '#', current: activeTab === 'Result' },
+    { name: 'Pipeline', href: '#', current: activeTab === 'Pipeline' },
   ]
 
   const runningModalRef: LegacyRef<HTMLDialogElement> = useRef(null)
   const [runningModalStep, setRunningModalStep] = useState<number>(1)
 
-  if (!data) {
+  const [workflowData, setWorkflowData] = useState<DocWorkflow>()
+  useEffect(() => {
+    const workflowId = resultData?.workflowId
+
+    if (!workflowId) {
+      return
+    }
+
+    const unsub = db
+      .collection('workflows')
+      .doc(workflowId)
+      .onSnapshot(snap => {
+        const data: DocWorkflow | undefined = snap?.data() as any
+        setWorkflowData(data)
+      })
+
+    return () => {
+      unsub()
+    }
+  }, [resultData?.workflowId])
+
+  if (!workflowResultData) {
     return <></>
   }
 
-  const averageEval = data.averageEvaluationData
+  const averageEval = workflowResultData.averageEvaluationData
   const shareHandler = async (event: SyntheticEvent<HTMLButtonElement, MouseEvent>) => {
     try {
       setSharing(true)
@@ -261,6 +288,14 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
             ))}
           </nav>
         </div>
+
+        {activeTab === 'Pipeline' && resultData?.frontendConfig && (
+          <div>
+            <div className="h-[600px] w-full">
+              <FlowEditor viewOnlyFrontEndConfig={resultData.frontendConfig} />
+            </div>
+          </div>
+        )}
 
         {activeTab === 'Evaluation' && (
           <div>
@@ -852,11 +887,11 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                       Evaluation Files
                     </dt>
                     <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      {data?.resultData && (
+                      {workflowResultData?.resultData && (
                         <ul
                           role="list"
                           className="divide-y divide-gray-100 rounded-md border border-gray-200 empty:hidden">
-                          {Object.entries(data.resultData).map(([key, url]) => (
+                          {Object.entries(workflowResultData.resultData).map(([key, url]) => (
                             <li
                               key={key}
                               className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
