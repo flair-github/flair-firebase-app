@@ -11,9 +11,10 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, nodeContentsAtom, type NodeData } from '../Registry'
+import { nodeContents, allNodeContentsAtom, type NodeData } from '../Registry'
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
 import { AiFillApi } from 'react-icons/ai'
+import { useNodeContent } from '../utils/hooks'
 
 export interface DataSourceAPIHopContent {
   nodeType: 'data-source-api-hop'
@@ -41,30 +42,18 @@ export const DataSourceAPIHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceAPIHopContent>(
-    dataSourceAPIHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent } = useNodeContent<DataSourceAPIHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: dataSourceAPIHopDefaultContent,
+    initialContent: data.initialContents,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataSourceAPIHopContent>(
     dataSourceAPIHopDefaultContent,
   )
 
   // Right animation
   const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-api-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  const [nodeContentsState, setNodeContentsState] = useAtom(nodeContentsAtom)
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-    setNodeContentsState({ ...nodeContents.current })
-  }, [data.nodeId, nodeContent, setNodeContentsState])
 
   const [open, setOpen] = useState(false)
 

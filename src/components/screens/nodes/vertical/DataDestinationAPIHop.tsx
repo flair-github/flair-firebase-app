@@ -11,12 +11,13 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, nodeContentsAtom, type NodeData } from '../Registry'
+import { nodeContents, allNodeContentsAtom, type NodeData } from '../Registry'
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
 import { AiFillApi } from 'react-icons/ai'
 import { PiTableBold } from 'react-icons/pi'
 import { useAtomValue } from 'jotai'
 import { apiResultAtom } from '../../FlowEditor'
+import { useNodeContent } from '../utils/hooks'
 
 export interface DataDestinationAPIHopContent {
   nodeType: 'data-destination-api-hop'
@@ -36,30 +37,18 @@ export const DataDestinationAPIHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataDestinationAPIHopContent>(
-    dataDestinationAPIHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent } = useNodeContent<DataDestinationAPIHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: dataDestinationAPIHopDefaultContent,
+    initialContent: data.initialContents,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationAPIHopContent>(
     dataDestinationAPIHopDefaultContent,
   )
 
   // Right animation
   const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-destination-api-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  const [nodeContentsState, setNodeContentsState] = useAtom(nodeContentsAtom)
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-    setNodeContentsState({ ...nodeContents.current })
-  }, [data.nodeId, nodeContent, setNodeContentsState])
 
   const [open, setOpen] = useState(false)
 

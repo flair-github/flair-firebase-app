@@ -11,7 +11,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, nodeContentsAtom, type NodeData } from '../Registry'
+import { nodeContents, allNodeContentsAtom, type NodeData } from '../Registry'
 import { TiFlowMerge } from 'react-icons/ti'
 import { Badge } from '~/catalyst/badge'
 import { Button } from '~/catalyst/button'
@@ -19,6 +19,7 @@ import { v4 } from 'uuid'
 import { Input } from '~/catalyst/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/catalyst/table'
 import { GrFormClose } from 'react-icons/gr'
+import { useNodeContent } from '../utils/hooks'
 
 export interface ConditionalHopContent {
   nodeType: 'conditional-hop'
@@ -40,30 +41,18 @@ export const ConditionalHop = ({
   noHandle,
   yPos,
 }: { data: NodeData; noHandle?: boolean } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<ConditionalHopContent>(
-    conditionalHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent } = useNodeContent<ConditionalHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: conditionalHopDefaultContent,
+    initialContent: data.initialContents,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<ConditionalHopContent>(
     conditionalHopDefaultContent,
   )
 
   // Right animation
   const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'conditional-hop') {
-      setNodeContent(cloneDeep({ ...conditionalHopDefaultContent, ...data.initialContents }))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  const [nodeContentsState, setNodeContentsState] = useAtom(nodeContentsAtom)
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-    setNodeContentsState({ ...nodeContents.current })
-  }, [data.nodeId, nodeContent, setNodeContentsState])
 
   const [open, setOpen] = useState(false)
 

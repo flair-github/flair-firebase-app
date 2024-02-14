@@ -1,0 +1,31 @@
+import { useAtom } from 'jotai'
+import { cloneDeep } from 'lodash'
+import { useEffect, useState } from 'react'
+import { NodeContent, allNodeContentsAtom, nodeContents } from '../Registry'
+
+export const useNodeContent = <T extends NodeContent>({
+  nodeId,
+  initialContent,
+  defaultContent,
+}: {
+  nodeId: string
+  initialContent: T
+  defaultContent: T
+}) => {
+  const [nodeContent, setNodeContent] = useState<T>(defaultContent)
+
+  // Initial data
+  useEffect(() => {
+    setNodeContent(cloneDeep(initialContent))
+  }, [initialContent, setNodeContent])
+
+  // Copy node data to cache
+  const [allNodeContents, setAllNodeContents] = useAtom(allNodeContentsAtom)
+  useEffect(() => {
+    const cache = cloneDeep(nodeContent)
+    nodeContents.current[nodeId] = cache
+    setAllNodeContents({ ...nodeContents.current })
+  }, [nodeId, nodeContent, setAllNodeContents])
+
+  return { nodeContent, setNodeContent }
+}

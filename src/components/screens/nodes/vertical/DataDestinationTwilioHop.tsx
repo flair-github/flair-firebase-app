@@ -11,7 +11,8 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, nodeContentsAtom, type NodeData } from '../Registry'
+import { nodeContents, allNodeContentsAtom, type NodeData } from '../Registry'
+import { useNodeContent } from '../utils/hooks'
 
 export interface DataDestinationTwilioHopContent {
   nodeType: 'data-destination-twilio-hop'
@@ -32,30 +33,18 @@ export const DataDestinationTwilioHop = ({
   noHandle,
   yPos,
 }: { data: NodeData; noHandle?: boolean } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataDestinationTwilioHopContent>(
-    dataDestinationTwilioHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent } = useNodeContent<DataDestinationTwilioHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: dataDestinationTwilioHopDefaultContent,
+    initialContent: data.initialContents,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationTwilioHopContent>(
     dataDestinationTwilioHopDefaultContent,
   )
 
   // Right animation
   const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-destination-twilio-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  const [nodeContentsState, setNodeContentsState] = useAtom(nodeContentsAtom)
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-    setNodeContentsState({ ...nodeContents.current })
-  }, [data.nodeId, nodeContent, setNodeContentsState])
 
   const [open, setOpen] = useState(false)
 

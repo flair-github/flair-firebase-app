@@ -11,8 +11,9 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaCloudUploadAlt, FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, nodeContentsAtom, type NodeData } from '../Registry'
+import { nodeContents, allNodeContentsAtom, type NodeData } from '../Registry'
 import { FaFolder } from 'react-icons/fa6'
+import { useNodeContent } from '../utils/hooks'
 
 export interface DataSourceFilesHopContent {
   nodeType: 'data-source-files-hop'
@@ -32,30 +33,18 @@ export const DataSourceFilesHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceFilesHopContent>(
-    dataSourceFilesHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent } = useNodeContent<DataSourceFilesHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: dataSourceFilesHopDefaultContent,
+    initialContent: data.initialContents,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataSourceFilesHopContent>(
     dataSourceFilesHopDefaultContent,
   )
 
   // Right animation
   const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-files-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  const [nodeContentsState, setNodeContentsState] = useAtom(nodeContentsAtom)
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-    setNodeContentsState({ ...nodeContents.current })
-  }, [data.nodeId, nodeContent, setNodeContentsState])
 
   const [open, setOpen] = useState(false)
 

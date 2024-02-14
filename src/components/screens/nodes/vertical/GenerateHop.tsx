@@ -11,13 +11,14 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, nodeContentsAtom, type NodeData } from '../Registry'
+import { nodeContents, allNodeContentsAtom, type NodeData, NodeContent } from '../Registry'
+import { useNodeContent } from '../utils/hooks'
 
 interface HopContent {
   nodeType: string
 }
 
-export const generateHop = <T extends HopContent>(config: {
+export const generateHop = <T extends NodeContent>(config: {
   defaultContent: T
   topHandle: boolean
   bottomHandle: boolean
@@ -47,24 +48,16 @@ export const generateHop = <T extends HopContent>(config: {
     data: NodeData
     noHandle?: boolean
   } & NodeProps) => {
-    const [nodeContent, setNodeContent] = useState<T>(defaultContent)
+    const { nodeContent, setNodeContent } = useNodeContent<T>({
+      nodeId: data.nodeId,
+      defaultContent: defaultContent,
+      initialContent: data.initialContents,
+    })
+
     const [nodeFormContent, setNodeFormContent] = useState<T>(defaultContent)
 
     // Right animation
     const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
-
-    // Initial data
-    useEffect(() => {
-      if (data.initialContents.nodeType === defaultContent.nodeType) {
-        setNodeContent(cloneDeep(data.initialContents) as any)
-      }
-    }, [data.initialContents])
-
-    // Copy node data to cache
-    useEffect(() => {
-      const cache = cloneDeep(nodeContent) as T
-      nodeContents.current[data.nodeId] = cache as any
-    }, [data.nodeId, nodeContent])
 
     const [open, setOpen] = useState(false)
 

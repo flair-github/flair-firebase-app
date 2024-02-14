@@ -10,7 +10,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, nodeContentsAtom, type NodeData } from '../Registry'
+import { nodeContents, allNodeContentsAtom, type NodeData } from '../Registry'
 import { GrFormClose } from 'react-icons/gr'
 import { v4 } from 'uuid'
 import { Description, Field, FieldGroup, Fieldset, Label, Legend } from '~/catalyst/fieldset'
@@ -22,6 +22,7 @@ import { Text } from '~/catalyst/text'
 import { FaBoltLightning } from 'react-icons/fa6'
 import { useAtom, useAtomValue } from 'jotai'
 import { nodesAtom } from '../../FlowEditor'
+import { useNodeContent } from '../utils/hooks'
 
 type ColumnContent =
   | {
@@ -92,9 +93,12 @@ export const LLMProcessorHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<LLMProcessorHopContent>(
-    llmProcessorHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent } = useNodeContent<LLMProcessorHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: llmProcessorHopDefaultContent,
+    initialContent: data.initialContents,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<LLMProcessorHopContent>(
     llmProcessorHopDefaultContent,
   )
@@ -106,21 +110,6 @@ export const LLMProcessorHop = ({
 
   // Right animation
   const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'llm-processor-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  const [nodeContentsState, setNodeContentsState] = useAtom(nodeContentsAtom)
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-    setNodeContentsState({ ...nodeContents.current })
-  }, [data.nodeId, nodeContent, setNodeContentsState])
 
   const [open, setOpen] = useState(false)
 
