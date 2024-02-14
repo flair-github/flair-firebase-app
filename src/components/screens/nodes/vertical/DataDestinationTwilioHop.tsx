@@ -11,7 +11,8 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, allNodeContentsAtom, type NodeData } from '../Registry'
+import { type NodeData } from '../Registry'
+
 import { useNodeContent } from '../utils/hooks'
 
 export interface DataDestinationTwilioHopContent {

@@ -11,7 +11,8 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaCloudUploadAlt, FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, allNodeContentsAtom, type NodeData } from '../Registry'
+import { type NodeData } from '../Registry'
+
 import { FaFolder } from 'react-icons/fa6'
 import { useNodeContent } from '../utils/hooks'
 
