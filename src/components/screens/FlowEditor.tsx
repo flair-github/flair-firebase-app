@@ -21,7 +21,7 @@ import { Link, useParams } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db, functions } from '~/lib/firebase'
-import { Edges, NodeContent, Nodes, nodeContents } from './nodes/Registry'
+import { Edges, NodeContent, Nodes, allNodeContentsAtom, nodeContents } from './nodes/Registry'
 import { v4 } from 'uuid'
 
 import { DataExtractorNode } from './nodes/DataExtractorNode'
@@ -237,6 +237,42 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
   useEffect(() => {
     setBorderPosAtom(findPositionExtremes(nodes))
   }, [nodes, setBorderPosAtom])
+
+  useEffect(() => {
+    const parentsData = Object.fromEntries(nodes.map<[string, string[]]>(node => [node.id, []]))
+
+    for (const edge of edges) {
+      if (!parentsData[edge.target]) {
+        parentsData[edge.target] = []
+      }
+
+      parentsData[edge.target].push(edge.source)
+    }
+
+    function getAncestors(data: Record<string, string[]>, id: string, ancestors: string[] = []) {
+      // Base case: if no parent exists, return current ancestors
+      if (!data[id]) {
+        return ancestors
+      }
+
+      // Add current id to ancestors
+      ancestors.push(id)
+
+      // Recursively call for each parent, merging their ancestors
+      for (const parent of data[id]) {
+        ancestors = getAncestors(data, parent, ancestors)
+      }
+
+      return ancestors
+    }
+
+    const ancestorsData: Record<string, string[]> = {}
+    for (const id in parentsData) {
+      ancestorsData[id] = getAncestors(parentsData, id)
+    }
+
+    console.log('ancestorsData', ancestorsData)
+  }, [edges, nodes])
 
   // Load initial
   useEffect(() => {
