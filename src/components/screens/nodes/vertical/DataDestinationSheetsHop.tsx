@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAtom } from 'jotai'
 import { ImSpinner8 } from 'react-icons/im'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
@@ -10,7 +11,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, type NodeData } from '../Registry'
+import { nodeContents, nodeContentsAtom, type NodeData } from '../Registry'
 import { PiTableBold } from 'react-icons/pi'
 
 export interface DataDestinationSheetsHopContent {
@@ -53,10 +54,12 @@ export const DataDestinationSheetsHop = ({
   }, [data.initialContents])
 
   // Copy node data to cache
+  const [nodeContentsState, setNodeContentsState] = useAtom(nodeContentsAtom)
   useEffect(() => {
     const cache = cloneDeep(nodeContent)
     nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, nodeContent])
+    setNodeContentsState({ ...nodeContents.current })
+  }, [data.nodeId, nodeContent, setNodeContentsState])
 
   const [open, setOpen] = useState(false)
 

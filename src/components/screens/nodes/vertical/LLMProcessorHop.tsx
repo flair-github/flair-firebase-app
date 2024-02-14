@@ -10,7 +10,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, type NodeData } from '../Registry'
+import { nodeContents, nodeContentsAtom, type NodeData } from '../Registry'
 import { GrFormClose } from 'react-icons/gr'
 import { v4 } from 'uuid'
 import { Description, Field, FieldGroup, Fieldset, Label, Legend } from '~/catalyst/fieldset'
@@ -20,7 +20,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { Button } from '~/catalyst/button'
 import { Text } from '~/catalyst/text'
 import { FaBoltLightning } from 'react-icons/fa6'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { nodesAtom } from '../../FlowEditor'
 
 type ColumnContent =
@@ -115,10 +115,12 @@ export const LLMProcessorHop = ({
   }, [data.initialContents])
 
   // Copy node data to cache
+  const [nodeContentsState, setNodeContentsState] = useAtom(nodeContentsAtom)
   useEffect(() => {
     const cache = cloneDeep(nodeContent)
     nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, nodeContent])
+    setNodeContentsState({ ...nodeContents.current })
+  }, [data.nodeId, nodeContent, setNodeContentsState])
 
   const [open, setOpen] = useState(false)
 
