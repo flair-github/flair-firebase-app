@@ -43,7 +43,7 @@ export const DataDestinationS3Hop = ({
   )
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   // Initial data
   useEffect(() => {
