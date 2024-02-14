@@ -226,6 +226,8 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
 }) => {
   const userData = useAtomValue(atomUserData)
   const [nodes, setNodes] = useAtom(nodesAtom)
+  const nodeIds = JSON.stringify(nodes.map(node => node.id))
+
   const [edges, setEdges] = useAtom(edgesAtom)
   const [title, setTitle] = useState<string>('')
 
@@ -239,7 +241,9 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
   }, [nodes, setBorderPosAtom])
 
   useEffect(() => {
-    const parentsData = Object.fromEntries(nodes.map<[string, string[]]>(node => [node.id, []]))
+    const parentsData = Object.fromEntries(
+      (JSON.parse(nodeIds) as string[]).map<[string, string[]]>(nodeId => [nodeId, []]),
+    )
 
     for (const edge of edges) {
       if (!parentsData[edge.target]) {
@@ -272,7 +276,7 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
     }
 
     console.log('ancestorsData', ancestorsData)
-  }, [edges, nodes])
+  }, [edges, nodeIds])
 
   // Load initial
   useEffect(() => {
