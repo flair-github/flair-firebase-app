@@ -11,7 +11,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { type NodeData } from '../Registry'
+import { allExportedColumnsAtom, type NodeData } from '../Registry'
 
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
 import { AiFillApi } from 'react-icons/ai'
@@ -48,6 +48,23 @@ export const DataSourceAPIHop = ({
     defaultContent: dataSourceAPIHopDefaultContent,
     initialContent: data.initialContents,
   })
+
+  // Store Exported Columns
+  const [allExportedColumns, setAllExportedColumns] = useAtom(allExportedColumnsAtom)
+  useEffect(() => {
+    let pairs: Record<string, any>
+
+    try {
+      pairs = JSON.parse(nodeContent.body)
+    } catch (e) {
+      pairs = {}
+    }
+
+    setAllExportedColumns(prev => ({
+      ...prev,
+      [data.nodeId]: pairs,
+    }))
+  }, [data.nodeId, nodeContent, setAllExportedColumns])
 
   const [nodeFormContent, setNodeFormContent] = useState<DataSourceAPIHopContent>(
     dataSourceAPIHopDefaultContent,

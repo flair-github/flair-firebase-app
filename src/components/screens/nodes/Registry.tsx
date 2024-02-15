@@ -120,3 +120,4 @@ export const nodeContents: MutableRefObject<{ [nodeId: string]: NodeContent }> =
 }
 
 export const allNodeContentsAtom = atom<{ [nodeId: string]: NodeContent }>({})
+export const allExportedColumnsAtom = atom<{ [nodeId: string]: { [x: string]: string } }>({})

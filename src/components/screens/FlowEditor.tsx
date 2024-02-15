@@ -21,7 +21,14 @@ import { Link, useParams } from 'react-router-dom'
 import { FLOW_SAMPLE_2 } from '~/constants/flowSamples'
 import { atomUserData } from '~/jotai/jotai'
 import { db, functions } from '~/lib/firebase'
-import { Edges, NodeContent, Nodes, allNodeContentsAtom, nodeContents } from './nodes/Registry'
+import {
+  Edges,
+  NodeContent,
+  Nodes,
+  allExportedColumnsAtom,
+  allNodeContentsAtom,
+  nodeContents,
+} from './nodes/Registry'
 import { v4 } from 'uuid'
 
 import { DataExtractorNode } from './nodes/DataExtractorNode'
@@ -282,6 +289,18 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
 
     setAncestorsData(newAncestorsData)
   }, [edges, nodeIds, setAncestorsData])
+
+  const [allExportedColumns, setAllExportedColumns] = useAtom(allExportedColumnsAtom)
+  useEffect(() => {
+    const cleanedAllExportedColumns = Object.fromEntries(
+      (JSON.parse(nodeIds) as string[]).map<[string, { [x: string]: any }]>(nodeId => [
+        nodeId,
+        allExportedColumns[nodeId],
+      ]),
+    )
+
+    console.log('cleanedAllExportedColumns', cleanedAllExportedColumns)
+  }, [allExportedColumns, nodeIds])
 
   // Load initial
   useEffect(() => {
