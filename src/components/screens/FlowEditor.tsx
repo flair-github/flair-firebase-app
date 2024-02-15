@@ -219,6 +219,8 @@ export const edgesAtom = atom<Edges>([])
 
 export const apiResultAtom = atom<string>('')
 
+export const ancestorsDataAtom = atom<Record<string, string[]>>({})
+
 export const dummyRunSymbol = atom<number | undefined>(undefined)
 
 export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
@@ -240,6 +242,7 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
     setBorderPosAtom(findPositionExtremes(nodes))
   }, [nodes, setBorderPosAtom])
 
+  const [ancestorsData, setAncestorsData] = useAtom(ancestorsDataAtom)
   useEffect(() => {
     const parentsData = Object.fromEntries(
       (JSON.parse(nodeIds) as string[]).map<[string, string[]]>(nodeId => [nodeId, []]),
@@ -270,13 +273,15 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
       return ancestors
     }
 
-    const ancestorsData: Record<string, string[]> = {}
+    const newAncestorsData: Record<string, string[]> = {}
     for (const id in parentsData) {
-      ancestorsData[id] = getAncestors(parentsData, id)
+      newAncestorsData[id] = getAncestors(parentsData, id)
     }
 
-    console.log('ancestorsData', ancestorsData)
-  }, [edges, nodeIds])
+    console.log('ancestorsData', newAncestorsData)
+
+    setAncestorsData(newAncestorsData)
+  }, [edges, nodeIds, setAncestorsData])
 
   // Load initial
   useEffect(() => {

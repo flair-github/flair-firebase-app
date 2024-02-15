@@ -2,6 +2,7 @@ import { useAtom } from 'jotai'
 import { cloneDeep } from 'lodash'
 import { useEffect, useState } from 'react'
 import { NodeContent, allNodeContentsAtom, nodeContents } from '../Registry'
+import { ancestorsDataAtom } from '../../FlowEditor'
 
 export const useNodeContent = <T extends NodeContent>({
   nodeId,
@@ -27,5 +28,7 @@ export const useNodeContent = <T extends NodeContent>({
     setAllNodeContents({ ...nodeContents.current })
   }, [nodeId, nodeContent, setAllNodeContents])
 
-  return { nodeContent, setNodeContent }
+  const [ancestorsData] = useAtom(ancestorsDataAtom)
+
+  return { nodeContent, setNodeContent, ancestorsData }
 }
