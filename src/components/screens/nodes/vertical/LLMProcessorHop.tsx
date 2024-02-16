@@ -10,7 +10,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { type NodeData } from '../Registry'
+import { nodeContents, type NodeData } from '../Registry'
 
 import { GrFormClose } from 'react-icons/gr'
 import { v4 } from 'uuid'
@@ -87,6 +87,10 @@ export const llmProcessorHopDefaultContent: LLMProcessorHopContent = {
   exportedKeys: {},
 }
 
+const exportedColumnsGen = (content: LLMProcessorHopContent) => {
+  return Object.fromEntries(content.columns.map(column => [column.name, true]))
+}
+
 export const LLMProcessorHop = ({
   data,
   noHandle,
@@ -99,6 +103,7 @@ export const LLMProcessorHop = ({
     nodeId: data.nodeId,
     defaultContent: llmProcessorHopDefaultContent,
     initialContent: data.initialContents,
+    exportedColumnsGen,
   })
 
   const [nodeFormContent, setNodeFormContent] = useState<LLMProcessorHopContent>(
