@@ -17,8 +17,10 @@ export const useNodeContent = <T extends NodeContent>({
 
   // Initial data
   useEffect(() => {
-    setNodeContent(cloneDeep(initialContent))
-  }, [initialContent, setNodeContent])
+    if (initialContent?.nodeType === defaultContent.nodeType) {
+      setNodeContent(cloneDeep(defaultContent))
+    }
+  }, [defaultContent, initialContent, setNodeContent])
 
   // Copy node data to cache
   const [allNodeContents, setAllNodeContents] = useAtom(allNodeContentsAtom)
