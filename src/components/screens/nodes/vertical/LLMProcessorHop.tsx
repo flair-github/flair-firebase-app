@@ -24,6 +24,7 @@ import { FaBoltLightning } from 'react-icons/fa6'
 import { useAtom, useAtomValue } from 'jotai'
 import { nodesAtom } from '../../FlowEditor'
 import { useNodeContent } from '../utils/hooks'
+import { Badge } from '~/catalyst/badge'
 
 type ColumnContent =
   | {
@@ -94,7 +95,7 @@ export const LLMProcessorHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const { nodeContent, setNodeContent, ancestorsData } = useNodeContent<LLMProcessorHopContent>({
+  const { nodeContent, setNodeContent, importedColumns } = useNodeContent<LLMProcessorHopContent>({
     nodeId: data.nodeId,
     defaultContent: llmProcessorHopDefaultContent,
     initialContent: data.initialContents,
@@ -226,6 +227,22 @@ export const LLMProcessorHop = ({
                           </div>
                         </div>
 
+                        {/* Available Columns */}
+                        <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                              Imported Columns
+                            </label>
+                          </div>
+                          <div className="flex flex-wrap space-x-2 sm:col-span-2">
+                            {importedColumns.map(col => (
+                              <Badge color="blue" key={col}>
+                                {col}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
                         <Table dense className="px-4">
                           <TableHead>
                             <TableRow>
@@ -337,6 +354,19 @@ export const LLMProcessorHop = ({
                                               })
                                             }}
                                           />
+                                        </Field>
+                                        <Field>
+                                          <Label>
+                                            Imported Columns{' '}
+                                            <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
+                                          </Label>
+                                          <div className="flex flex-wrap space-x-2 sm:col-span-2">
+                                            {importedColumns.map(col => (
+                                              <Badge color="blue" key={col}>
+                                                {col}
+                                              </Badge>
+                                            ))}
+                                          </div>
                                         </Field>
                                         <Field>
                                           <Label>
@@ -739,21 +769,6 @@ export const LLMProcessorHop = ({
                             }}>
                             Add
                           </Button>
-                        </div>
-
-                        <div className="space-y-2 border-t px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                          <div>
-                            <label
-                              htmlFor="project-name"
-                              className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                              Parent Nodes
-                            </label>
-                          </div>
-                          <div className="sm:col-span-2">
-                            <pre className="whitespace-pre-wrap">
-                              {JSON.stringify(ancestorsData[data.nodeId], null, 2)}
-                            </pre>
-                          </div>
                         </div>
                       </div>
 

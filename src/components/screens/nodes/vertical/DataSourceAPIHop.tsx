@@ -16,6 +16,7 @@ import { allExportedColumnsAtom, type NodeData } from '../Registry'
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
 import { AiFillApi } from 'react-icons/ai'
 import { useNodeContent } from '../utils/hooks'
+import { Badge } from '~/catalyst/badge'
 
 export interface DataSourceAPIHopContent {
   nodeType: 'data-source-api-hop'
@@ -35,6 +36,10 @@ export const dataSourceAPIHopDefaultContent: DataSourceAPIHopContent = {
   testPayload: '',
 }
 
+const exportedColumnsGen = (nodeContent: DataSourceAPIHopContent) => {
+  return JSON.parse(nodeContent.body)
+}
+
 export const DataSourceAPIHop = ({
   data,
   noHandle,
@@ -43,28 +48,12 @@ export const DataSourceAPIHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const { nodeContent, setNodeContent } = useNodeContent<DataSourceAPIHopContent>({
+  const { nodeContent, setNodeContent, importedColumns } = useNodeContent<DataSourceAPIHopContent>({
     nodeId: data.nodeId,
     defaultContent: dataSourceAPIHopDefaultContent,
     initialContent: data.initialContents,
+    exportedColumnsGen,
   })
-
-  // Store Exported Columns
-  const [allExportedColumns, setAllExportedColumns] = useAtom(allExportedColumnsAtom)
-  useEffect(() => {
-    let pairs: Record<string, any>
-
-    try {
-      pairs = JSON.parse(nodeContent.body)
-    } catch (e) {
-      pairs = {}
-    }
-
-    setAllExportedColumns(prev => ({
-      ...prev,
-      [data.nodeId]: pairs,
-    }))
-  }, [data.nodeId, nodeContent, setAllExportedColumns])
 
   const [nodeFormContent, setNodeFormContent] = useState<DataSourceAPIHopContent>(
     dataSourceAPIHopDefaultContent,
@@ -186,6 +175,22 @@ export const DataSourceAPIHop = ({
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Available Columns */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Imported Columns
+                              </label>
+                            </div>
+                            <div className="flex flex-wrap sm:col-span-2">
+                              {importedColumns.map(col => (
+                                <Badge color="blue" key={col}>
+                                  {col}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+
                           {/* File Type */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>

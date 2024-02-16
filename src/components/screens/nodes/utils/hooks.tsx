@@ -1,24 +1,26 @@
 import { useAtom } from 'jotai'
 import { cloneDeep } from 'lodash'
-import { useEffect, useState } from 'react'
-import { NodeContent, allNodeContentsAtom, nodeContents } from '../Registry'
+import { useEffect, useMemo, useState } from 'react'
+import { NodeContent, allExportedColumnsAtom, allNodeContentsAtom, nodeContents } from '../Registry'
 import { ancestorsDataAtom } from '../../FlowEditor'
 
 export const useNodeContent = <T extends NodeContent>({
   nodeId,
   initialContent,
   defaultContent,
+  exportedColumnsGen,
 }: {
   nodeId: string
   initialContent: T
   defaultContent: T
+  exportedColumnsGen?: (content: T) => Record<string, any>
 }) => {
   const [nodeContent, setNodeContent] = useState<T>(defaultContent)
 
   // Initial data
   useEffect(() => {
     if (initialContent?.nodeType === defaultContent.nodeType) {
-      setNodeContent(cloneDeep(defaultContent))
+      setNodeContent(cloneDeep(initialContent))
     }
   }, [defaultContent, initialContent, setNodeContent])
 
@@ -30,7 +32,61 @@ export const useNodeContent = <T extends NodeContent>({
     setAllNodeContents({ ...nodeContents.current })
   }, [nodeId, nodeContent, setAllNodeContents])
 
-  const [ancestorsData] = useAtom(ancestorsDataAtom)
+  // Get exported columns
+  const [exportedColumns, setExportedColumns] = useState<string[]>([])
+  const [allExportedColumns, setAllExportedColumns] = useAtom(allExportedColumnsAtom)
+  useEffect(() => {
+    if (!exportedColumnsGen) {
+      setExportedColumns([])
+      setAllExportedColumns(prev => ({
+        ...prev,
+        [nodeId]: {},
+      }))
+      return
+    }
 
-  return { nodeContent, setNodeContent, ancestorsData }
+    let pairs: Record<string, any>
+
+    try {
+      pairs = exportedColumnsGen(nodeContent)
+    } catch (e) {
+      pairs = {}
+    }
+
+    setExportedColumns(Object.keys(pairs))
+    setAllExportedColumns(prev => ({
+      ...prev,
+      [nodeId]: pairs,
+    }))
+  }, [exportedColumnsGen, nodeContent, nodeId, setAllExportedColumns])
+
+  // Get imported columns
+  const [ancestorsData] = useAtom(ancestorsDataAtom)
+  const importedColumns = useMemo(() => {
+    const ancestors = ancestorsData[nodeId]
+
+    if (!ancestors) {
+      return []
+    }
+
+    const newImportedColumns = new Set<string>()
+
+    for (const ancestorNodeId of ancestors) {
+      if (ancestorNodeId === nodeId) {
+        continue
+      }
+
+      if (!allExportedColumns[ancestorNodeId]) {
+        continue
+      }
+
+      for (const columnName of Object.keys(allExportedColumns[ancestorNodeId])) {
+        newImportedColumns.add(columnName)
+      }
+    }
+
+    return [...newImportedColumns]
+  }, [allExportedColumns, ancestorsData, nodeId])
+
+  return { nodeContent, setNodeContent, importedColumns, exportedColumns }
 }
