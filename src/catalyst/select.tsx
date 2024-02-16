@@ -47,7 +47,7 @@ export const Select = forwardRef<HTMLSelectElement, HeadlessSelectProps>(functio
           '[&_optgroup]:font-semibold',
 
           // Typography
-          'text-base/6 text-zinc-950 placeholder:text-zinc-500 sm:text-sm/6 dark:text-white dark:*:text-white',
+          'text-base/6 text-zinc-950 placeholder:text-zinc-500 dark:text-white dark:*:text-white sm:text-sm/6',
 
           // Border
           'border border-zinc-950/10 data-[hover]:border-zinc-950/20 dark:border-white/10 dark:data-[hover]:border-white/20',

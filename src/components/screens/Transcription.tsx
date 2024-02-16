@@ -79,7 +79,7 @@ function Transcription() {
                     </label>
                     <ul
                       tabIndex={0}
-                      className="menu dropdown-content rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
+                      className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow">
                       <li>
                         <button
                           className=""
