@@ -38,6 +38,10 @@ export const dataSourceURLScraperHopDefaultContent: DataSourceURLScraperHopConte
   queries: [],
 }
 
+const exportedColumnsGen = (content: DataSourceURLScraperHopContent) => {
+  return Object.fromEntries(content.queries.map(query => [query.column, true]))
+}
+
 export const DataSourceURLScraperHop = ({
   data,
   noHandle,
@@ -46,11 +50,13 @@ export const DataSourceURLScraperHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const { nodeContent, setNodeContent } = useNodeContent<DataSourceURLScraperHopContent>({
-    nodeId: data.nodeId,
-    defaultContent: dataSourceURLScraperHopDefaultContent,
-    initialContent: data.initialContents,
-  })
+  const { nodeContent, setNodeContent, importedColumns } =
+    useNodeContent<DataSourceURLScraperHopContent>({
+      nodeId: data.nodeId,
+      defaultContent: dataSourceURLScraperHopDefaultContent,
+      initialContent: data.initialContents,
+      exportedColumnsGen,
+    })
 
   const [nodeFormContent, setNodeFormContent] = useState<DataSourceURLScraperHopContent>(
     dataSourceURLScraperHopDefaultContent,
@@ -172,6 +178,23 @@ export const DataSourceURLScraperHop = ({
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Imported Columns */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Imported Columns
+                              </label>
+                            </div>
+                            <div className="flex flex-wrap sm:col-span-2">
+                              {importedColumns.map(col => (
+                                <Badge color="blue" key={col}>
+                                  {col}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* URL */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
