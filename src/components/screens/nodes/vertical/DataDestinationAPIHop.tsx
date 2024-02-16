@@ -19,6 +19,7 @@ import { PiTableBold } from 'react-icons/pi'
 import { useAtomValue } from 'jotai'
 import { apiResultAtom } from '../../FlowEditor'
 import { useNodeContent } from '../utils/hooks'
+import { Badge } from '~/catalyst/badge'
 
 export interface DataDestinationAPIHopContent {
   nodeType: 'data-destination-api-hop'
@@ -38,11 +39,12 @@ export const DataDestinationAPIHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const { nodeContent, setNodeContent } = useNodeContent<DataDestinationAPIHopContent>({
-    nodeId: data.nodeId,
-    defaultContent: dataDestinationAPIHopDefaultContent,
-    initialContent: data.initialContents,
-  })
+  const { nodeContent, setNodeContent, importedColumns } =
+    useNodeContent<DataDestinationAPIHopContent>({
+      nodeId: data.nodeId,
+      defaultContent: dataDestinationAPIHopDefaultContent,
+      initialContent: data.initialContents,
+    })
 
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationAPIHopContent>(
     dataDestinationAPIHopDefaultContent,
@@ -178,6 +180,22 @@ export const DataDestinationAPIHop = ({
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Imported Columns */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Imported Columns
+                              </label>
+                            </div>
+                            <div className="flex flex-wrap space-x-2 sm:col-span-2">
+                              {importedColumns.map(col => (
+                                <Badge color="blue" key={col}>
+                                  {col}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+
                           {/* Body */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>

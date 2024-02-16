@@ -232,7 +232,7 @@ export const LLMProcessorHop = ({
                           </div>
                         </div>
 
-                        {/* Available Columns */}
+                        {/* Imported Columns */}
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
                             <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">

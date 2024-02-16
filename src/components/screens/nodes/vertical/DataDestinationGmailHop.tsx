@@ -14,6 +14,7 @@ import { Select } from '~/catalyst/select'
 import { type NodeData } from '../Registry'
 
 import { useNodeContent } from '../utils/hooks'
+import { Badge } from '~/catalyst/badge'
 
 export interface DataDestinationGmailHopContent {
   nodeType: 'data-destination-gmail-hop'
@@ -37,11 +38,12 @@ export const DataDestinationGmailHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const { nodeContent, setNodeContent } = useNodeContent<DataDestinationGmailHopContent>({
-    nodeId: data.nodeId,
-    defaultContent: dataDestinationGmailHopDefaultContent,
-    initialContent: data.initialContents,
-  })
+  const { nodeContent, setNodeContent, importedColumns } =
+    useNodeContent<DataDestinationGmailHopContent>({
+      nodeId: data.nodeId,
+      defaultContent: dataDestinationGmailHopDefaultContent,
+      initialContent: data.initialContents,
+    })
 
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationGmailHopContent>(
     dataDestinationGmailHopDefaultContent,
@@ -221,6 +223,22 @@ export const DataDestinationGmailHop = ({
 
                         {/* Divider container */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Imported Columns */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Imported Columns
+                              </label>
+                            </div>
+                            <div className="flex flex-wrap space-x-2 sm:col-span-2">
+                              {importedColumns.map(col => (
+                                <Badge color="blue" key={col}>
+                                  {col}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+
                           {/* Credential */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
