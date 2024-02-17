@@ -15,6 +15,7 @@ import { type NodeData } from '../Registry'
 
 import { GrCube } from 'react-icons/gr'
 import { useNodeContent } from '../utils/hooks'
+import { Badge } from '~/catalyst/badge'
 
 export interface DataIndexerHopContent {
   nodeType: 'data-indexer-hop'
@@ -38,7 +39,7 @@ export const DataIndexerHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const { nodeContent, setNodeContent } = useNodeContent<DataIndexerHopContent>({
+  const { nodeContent, setNodeContent, importedColumns } = useNodeContent<DataIndexerHopContent>({
     nodeId: data.nodeId,
     defaultContent: dataIndexerHopDefaultContent,
     initialContent: data.initialContents,
@@ -164,6 +165,22 @@ export const DataIndexerHop = ({
 
                         {/* Divider container */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Imported Columns */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Imported Columns
+                              </label>
+                            </div>
+                            <div className="flex flex-wrap gap-2 sm:col-span-2">
+                              {importedColumns.map(col => (
+                                <Badge color="blue" key={col}>
+                                  {col}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label
