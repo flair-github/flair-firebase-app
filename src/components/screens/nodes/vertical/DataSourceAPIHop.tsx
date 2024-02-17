@@ -227,7 +227,7 @@ export const DataSourceAPIHop = ({
                             </div>
                             <div className="flex items-center sm:col-span-2">
                               <div className="mr-2 text-sm text-slate-500">
-                                api.flairlabs.ai/company/
+                                api.flairlabs.ai/testcompany/
                               </div>
                               <input
                                 type="text"
