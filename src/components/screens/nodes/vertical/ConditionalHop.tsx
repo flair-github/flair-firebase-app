@@ -24,6 +24,7 @@ import { useNodeContent } from '../utils/hooks'
 
 export interface ConditionalHopContent {
   nodeType: 'conditional-hop'
+  conditionalLabel: string
   conditions: {
     conditionId: string
     column: string
@@ -34,7 +35,20 @@ export interface ConditionalHopContent {
 
 export const conditionalHopDefaultContent: ConditionalHopContent = {
   nodeType: 'conditional-hop',
+  conditionalLabel: '',
   conditions: [],
+}
+
+const exportedColumnsGen = (nodeContent: ConditionalHopContent) => {
+  if (typeof nodeContent.conditionalLabel === 'string' && nodeContent.conditionalLabel.length > 0) {
+    return {
+      [nodeContent.conditionalLabel]: true,
+    }
+  }
+
+  return {
+    conditional: true,
+  }
 }
 
 export const ConditionalHop = ({
@@ -42,10 +56,11 @@ export const ConditionalHop = ({
   noHandle,
   yPos,
 }: { data: NodeData; noHandle?: boolean } & NodeProps) => {
-  const { nodeContent, setNodeContent } = useNodeContent<ConditionalHopContent>({
+  const { nodeContent, setNodeContent, importedColumns } = useNodeContent<ConditionalHopContent>({
     nodeId: data.nodeId,
     defaultContent: conditionalHopDefaultContent,
     initialContent: data.initialContents,
+    exportedColumnsGen,
   })
 
   const [nodeFormContent, setNodeFormContent] = useState<ConditionalHopContent>(
@@ -185,24 +200,51 @@ export const ConditionalHop = ({
                         </div>
 
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
-                          {/* Columns */}
+                          {/* Imported Columns */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                Inputs
+                                Imported Columns
                               </label>
                             </div>
                             <div className="flex flex-wrap gap-2 sm:col-span-2">
-                              <Badge color="blue">motivation</Badge>
-                              <Badge color="blue">summary</Badge>
-                              <Badge color="blue">outcome</Badge>
-                              <Badge color="blue">sentiment</Badge>
-                              <Badge color="blue">location</Badge>
+                              {importedColumns.map(col => (
+                                <Badge color="blue" key={col}>
+                                  {col}
+                                </Badge>
+                              ))}
                             </div>
                           </div>
-                        </div>
 
-                        <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Conditional Label */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Conditional Label
+                              </label>
+                            </div>
+                            <div className="sm:col-span-2">
+                              <input
+                                type="text"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={nodeFormContent.conditionalLabel}
+                                onChange={e => {
+                                  const newText = e.target.value
+
+                                  if (typeof newText !== 'string') {
+                                    return
+                                  }
+
+                                  setNodeFormContent(prev => {
+                                    const newFormContent = cloneDeep(prev)
+                                    newFormContent.conditionalLabel = newText
+                                    return newFormContent
+                                  })
+                                }}
+                              />
+                            </div>
+                          </div>
+
                           {/* Formula */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div className="sm:col-span-3">
@@ -221,7 +263,7 @@ export const ConditionalHop = ({
                                     return (
                                       <TableRow key={row.conditionId}>
                                         <TableCell>
-                                          <Input
+                                          <Select
                                             value={row.column}
                                             onChange={e => {
                                               const newText = e.target.value
@@ -232,11 +274,16 @@ export const ConditionalHop = ({
 
                                               setNodeFormContent(prev => {
                                                 const newFormContent = cloneDeep(prev)
-                                                newFormContent.conditions[i].column = newText
+                                                newFormContent.conditions[i].column = newText as any
                                                 return newFormContent
                                               })
-                                            }}
-                                          />
+                                            }}>
+                                            {importedColumns.map(col => (
+                                              <option value={col} key={col}>
+                                                {col}
+                                              </option>
+                                            ))}
+                                          </Select>
                                         </TableCell>
                                         <TableCell>
                                           <Select
