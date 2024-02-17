@@ -860,18 +860,18 @@ data_exporters:
           icon: '/images/data-sources/google.svg',
         },
         {
-          title: 'Meta',
-          handleOnClick: () => {
-            // addNode('llm-processor', 'LLMProcessorNode')
-          },
-          icon: '/images/data-sources/meta.svg',
-        },
-        {
           title: 'Mistral',
           handleOnClick: () => {
             // addNode('llm-processor', 'LLMProcessorNode')
           },
           icon: '/images/data-sources/mistral-ai.svg',
+        },
+        {
+          title: 'Meta',
+          handleOnClick: () => {
+            // addNode('llm-processor', 'LLMProcessorNode')
+          },
+          icon: '/images/data-sources/meta.svg',
         },
         {
           title: 'Mosaic',
