@@ -187,7 +187,7 @@ export const DataDestinationAPIHop = ({
                                 Imported Columns
                               </label>
                             </div>
-                            <div className="flex flex-wrap space-x-2 sm:col-span-2">
+                            <div className="flex flex-wrap gap-2 sm:col-span-2">
                               {importedColumns.map(col => (
                                 <Badge color="blue" key={col}>
                                   {col}

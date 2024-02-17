@@ -239,7 +239,7 @@ export const LLMProcessorHop = ({
                               Imported Columns
                             </label>
                           </div>
-                          <div className="flex flex-wrap space-x-2 sm:col-span-2">
+                          <div className="flex flex-wrap gap-2 sm:col-span-2">
                             {importedColumns.map(col => (
                               <Badge color="blue" key={col}>
                                 {col}
@@ -365,7 +365,7 @@ export const LLMProcessorHop = ({
                                             Imported Columns{' '}
                                             <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
                                           </Label>
-                                          <div className="flex flex-wrap space-x-2 sm:col-span-2">
+                                          <div className="flex flex-wrap gap-2 sm:col-span-2">
                                             {importedColumns.map(col => (
                                               <Badge color="blue" key={col}>
                                                 {col}
