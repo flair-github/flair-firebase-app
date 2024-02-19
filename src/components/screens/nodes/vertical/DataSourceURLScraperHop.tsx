@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAtom } from 'jotai'
 import { ImSpinner8 } from 'react-icons/im'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
@@ -10,7 +11,8 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, type NodeData } from '../Registry'
+import { type NodeData } from '../Registry'
+
 import { TiFlowMerge } from 'react-icons/ti'
 import { Badge } from '~/catalyst/badge'
 import { Button } from '~/catalyst/button'
@@ -18,6 +20,7 @@ import { v4 } from 'uuid'
 import { Input } from '~/catalyst/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/catalyst/table'
 import { FaSearch } from 'react-icons/fa'
+import { useNodeContent } from '../utils/hooks'
 
 export interface DataSourceURLScraperHopContent {
   nodeType: 'data-source-url-scraper-hop'
@@ -35,6 +38,10 @@ export const dataSourceURLScraperHopDefaultContent: DataSourceURLScraperHopConte
   queries: [],
 }
 
+const exportedColumnsGen = (content: DataSourceURLScraperHopContent) => {
+  return Object.fromEntries(content.queries.map(query => [query.column, true]))
+}
+
 export const DataSourceURLScraperHop = ({
   data,
   noHandle,
@@ -43,28 +50,20 @@ export const DataSourceURLScraperHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceURLScraperHopContent>(
-    dataSourceURLScraperHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent, importedColumns } =
+    useNodeContent<DataSourceURLScraperHopContent>({
+      nodeId: data.nodeId,
+      defaultContent: dataSourceURLScraperHopDefaultContent,
+      initialContent: data.initialContents,
+      exportedColumnsGen,
+    })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataSourceURLScraperHopContent>(
     dataSourceURLScraperHopDefaultContent,
   )
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-url-scraper-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, nodeContent])
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   const [open, setOpen] = useState(false)
 
@@ -179,6 +178,23 @@ export const DataSourceURLScraperHop = ({
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Imported Columns */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Imported Columns
+                              </label>
+                            </div>
+                            <div className="flex flex-wrap gap-2 sm:col-span-2">
+                              {importedColumns.map(col => (
+                                <Badge color="blue" key={col}>
+                                  {col}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* URL */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
                               <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">

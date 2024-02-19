@@ -204,7 +204,7 @@ function TemplateWizard() {
   return (
     <div className="container mx-auto p-10">
       <div className="mb-3 text-2xl font-bold">Basic Prompting</div>
-      <ol className="flex w-full items-center space-x-2 rounded-lg border border-gray-200 bg-white p-3 text-center text-sm font-medium text-gray-500 shadow-sm sm:space-x-4 sm:p-4 sm:text-base dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+      <ol className="flex w-full items-center space-x-2 rounded-lg border border-gray-200 bg-white p-3 text-center text-sm font-medium text-gray-500 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 sm:space-x-4 sm:p-4 sm:text-base">
         <li
           className={[
             'flex items-center',
@@ -392,7 +392,7 @@ export const DataSourcePage: React.FC<{
 }) => {
   return (
     <>
-      <div className="rounded-box mb-1 flex space-x-3 overflow-x-auto py-2">
+      <div className="mb-1 flex space-x-3 overflow-x-auto rounded-box py-2">
         <div
           onClick={() => {
             setSelectedNodeType('data-source-local-files')
@@ -482,7 +482,7 @@ export const DataExporterPage: React.FC<{
 }> = ({ dataExporterFlairNodeId, selectedNodeType, setSelectedNodeType }) => {
   return (
     <>
-      <div className="rounded-box mb-1 flex space-x-3 overflow-x-auto py-2">
+      <div className="mb-1 flex space-x-3 overflow-x-auto rounded-box py-2">
         <div className="flex shrink-0 flex-col items-center rounded-md border border-blue-600 bg-slate-50 px-5 py-3">
           <img src="/images/flair-logo.svg" width={75} height={75} className="p-1" />
           <div className="text-center font-bold">Flair</div>

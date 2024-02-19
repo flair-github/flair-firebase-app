@@ -118,3 +118,6 @@ export type Edges = Edge[]
 export const nodeContents: MutableRefObject<{ [nodeId: string]: NodeContent }> = {
   current: {},
 }
+
+export const allNodeContentsAtom = atom<{ [nodeId: string]: NodeContent }>({})
+export const allExportedColumnsAtom = atom<{ [nodeId: string]: { [x: string]: string } }>({})

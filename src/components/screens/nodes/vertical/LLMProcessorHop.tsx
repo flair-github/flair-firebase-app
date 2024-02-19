@@ -11,6 +11,7 @@ import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
 import { nodeContents, type NodeData } from '../Registry'
+
 import { GrFormClose } from 'react-icons/gr'
 import { v4 } from 'uuid'
 import { Description, Field, FieldGroup, Fieldset, Label, Legend } from '~/catalyst/fieldset'
@@ -20,8 +21,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { Button } from '~/catalyst/button'
 import { Text } from '~/catalyst/text'
 import { FaBoltLightning } from 'react-icons/fa6'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { nodesAtom } from '../../FlowEditor'
+import { useNodeContent } from '../utils/hooks'
+import { Badge } from '~/catalyst/badge'
 
 type ColumnContent =
   | {
@@ -84,6 +87,10 @@ export const llmProcessorHopDefaultContent: LLMProcessorHopContent = {
   exportedKeys: {},
 }
 
+const exportedColumnsGen = (content: LLMProcessorHopContent) => {
+  return Object.fromEntries(content.columns.map(column => [column.name, true]))
+}
+
 export const LLMProcessorHop = ({
   data,
   noHandle,
@@ -92,9 +99,13 @@ export const LLMProcessorHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<LLMProcessorHopContent>(
-    llmProcessorHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent, importedColumns } = useNodeContent<LLMProcessorHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: llmProcessorHopDefaultContent,
+    initialContent: data.initialContents,
+    exportedColumnsGen,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<LLMProcessorHopContent>(
     llmProcessorHopDefaultContent,
   )
@@ -105,20 +116,7 @@ export const LLMProcessorHop = ({
   }, [nodes])
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'llm-processor-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, nodeContent])
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   const [open, setOpen] = useState(false)
 
@@ -234,6 +232,22 @@ export const LLMProcessorHop = ({
                           </div>
                         </div>
 
+                        {/* Imported Columns */}
+                        <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                              Imported Columns
+                            </label>
+                          </div>
+                          <div className="flex flex-wrap gap-2 sm:col-span-2">
+                            {importedColumns.map(col => (
+                              <Badge color="blue" key={col}>
+                                {col}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
                         <Table dense className="px-4">
                           <TableHead>
                             <TableRow>
@@ -345,6 +359,19 @@ export const LLMProcessorHop = ({
                                               })
                                             }}
                                           />
+                                        </Field>
+                                        <Field>
+                                          <Label>
+                                            Imported Columns{' '}
+                                            <FaQuestionCircle className="mb-1 inline-block text-slate-400" />
+                                          </Label>
+                                          <div className="flex flex-wrap gap-2 sm:col-span-2">
+                                            {importedColumns.map(col => (
+                                              <Badge color="blue" key={col}>
+                                                {col}
+                                              </Badge>
+                                            ))}
+                                          </div>
                                         </Field>
                                         <Field>
                                           <Label>

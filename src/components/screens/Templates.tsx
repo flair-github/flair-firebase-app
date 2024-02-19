@@ -41,7 +41,7 @@ function Templates() {
       <div className="container mx-auto px-4">
         <div className="my-5 flex">
           {/* Menu */}
-          <ul className="menu rounded-box w-56 bg-base-100">
+          <ul className="menu w-56 rounded-box bg-base-100">
             <li>
               <h2 className="menu-title">Categories</h2>
               <ul>

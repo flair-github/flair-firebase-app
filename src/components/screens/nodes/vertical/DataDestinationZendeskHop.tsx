@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAtom } from 'jotai'
 import { ImSpinner8 } from 'react-icons/im'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
@@ -10,10 +11,12 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, type NodeData } from '../Registry'
+import { type NodeData } from '../Registry'
+
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
 import { AiFillApi } from 'react-icons/ai'
 import { SiZendesk } from 'react-icons/si'
+import { useNodeContent } from '../utils/hooks'
 
 export interface DataDestinationZendeskHopContent {
   nodeType: 'data-destination-zendesk-hop'
@@ -39,28 +42,18 @@ export const DataDestinationZendeskHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataDestinationZendeskHopContent>(
-    dataDestinationZendeskHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent } = useNodeContent<DataDestinationZendeskHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: dataDestinationZendeskHopDefaultContent,
+    initialContent: data.initialContents,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationZendeskHopContent>(
     dataDestinationZendeskHopDefaultContent,
   )
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-destination-zendesk-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, nodeContent])
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   const [open, setOpen] = useState(false)
 

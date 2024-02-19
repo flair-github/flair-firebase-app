@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAtom } from 'jotai'
 import { ImSpinner8 } from 'react-icons/im'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
@@ -10,8 +11,10 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, type NodeData } from '../Registry'
+import { type NodeData } from '../Registry'
+
 import { PiTableBold } from 'react-icons/pi'
+import { useNodeContent } from '../utils/hooks'
 
 export interface DataDestinationSheetsHopContent {
   nodeType: 'data-destination-sheets-hop'
@@ -35,28 +38,18 @@ export const DataDestinationSheetsHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataDestinationSheetsHopContent>(
-    dataDestinationSheetsHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent } = useNodeContent<DataDestinationSheetsHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: dataDestinationSheetsHopDefaultContent,
+    initialContent: data.initialContents,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationSheetsHopContent>(
     dataDestinationSheetsHopDefaultContent,
   )
 
   // Right animation
   const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-destination-sheets-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, nodeContent])
 
   const [open, setOpen] = useState(false)
 

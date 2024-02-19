@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAtom } from 'jotai'
 import { ImSpinner8 } from 'react-icons/im'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
@@ -10,9 +11,12 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, type NodeData } from '../Registry'
+import { allExportedColumnsAtom, type NodeData } from '../Registry'
+
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
 import { AiFillApi } from 'react-icons/ai'
+import { useNodeContent } from '../utils/hooks'
+import { Badge } from '~/catalyst/badge'
 
 export interface DataSourceAPIHopContent {
   nodeType: 'data-source-api-hop'
@@ -32,6 +36,10 @@ export const dataSourceAPIHopDefaultContent: DataSourceAPIHopContent = {
   testPayload: '',
 }
 
+const exportedColumnsGen = (nodeContent: DataSourceAPIHopContent) => {
+  return JSON.parse(nodeContent.body)
+}
+
 export const DataSourceAPIHop = ({
   data,
   noHandle,
@@ -40,28 +48,19 @@ export const DataSourceAPIHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataSourceAPIHopContent>(
-    dataSourceAPIHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent, importedColumns } = useNodeContent<DataSourceAPIHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: dataSourceAPIHopDefaultContent,
+    initialContent: data.initialContents,
+    exportedColumnsGen,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataSourceAPIHopContent>(
     dataSourceAPIHopDefaultContent,
   )
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-source-api-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, nodeContent])
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   const [open, setOpen] = useState(false)
 
@@ -176,6 +175,22 @@ export const DataSourceAPIHop = ({
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Imported Columns */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Imported Columns
+                              </label>
+                            </div>
+                            <div className="flex flex-wrap gap-2 sm:col-span-2">
+                              {importedColumns.map(col => (
+                                <Badge color="blue" key={col}>
+                                  {col}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+
                           {/* File Type */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
@@ -212,7 +227,7 @@ export const DataSourceAPIHop = ({
                             </div>
                             <div className="flex items-center sm:col-span-2">
                               <div className="mr-2 text-sm text-slate-500">
-                                api.flairlabs.ai/company/
+                                api.flairlabs.ai/testcompany/
                               </div>
                               <input
                                 type="text"

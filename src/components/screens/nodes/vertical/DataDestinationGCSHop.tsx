@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAtom } from 'jotai'
 import { ImSpinner8 } from 'react-icons/im'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
@@ -10,7 +11,9 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, type NodeData } from '../Registry'
+import { type NodeData } from '../Registry'
+
+import { useNodeContent } from '../utils/hooks'
 
 export interface DataDestinationGCSHopContent {
   nodeType: 'data-destination-gcs-hop'
@@ -35,28 +38,18 @@ export const DataDestinationGCSHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataDestinationGCSHopContent>(
-    dataDestinationGCSHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent } = useNodeContent<DataDestinationGCSHopContent>({
+    nodeId: data.nodeId,
+    defaultContent: dataDestinationGCSHopDefaultContent,
+    initialContent: data.initialContents,
+  })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationGCSHopContent>(
     dataDestinationGCSHopDefaultContent,
   )
 
   // Right animation
-  const { rightIconMode } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-destination-gcs-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, nodeContent])
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   const [open, setOpen] = useState(false)
 

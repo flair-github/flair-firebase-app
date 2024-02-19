@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAtom } from 'jotai'
 import { ImSpinner8 } from 'react-icons/im'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useRightIconMode } from '../utils/useRightIconMode'
@@ -10,12 +11,15 @@ import { Fragment, useEffect, useState } from 'react'
 import { FaEllipsisH } from 'react-icons/fa'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { Select } from '~/catalyst/select'
-import { nodeContents, type NodeData } from '../Registry'
+import { type NodeData } from '../Registry'
+
 import { FaBoltLightning, FaFolder } from 'react-icons/fa6'
 import { AiFillApi } from 'react-icons/ai'
 import { PiTableBold } from 'react-icons/pi'
 import { useAtomValue } from 'jotai'
 import { apiResultAtom } from '../../FlowEditor'
+import { useNodeContent } from '../utils/hooks'
+import { Badge } from '~/catalyst/badge'
 
 export interface DataDestinationAPIHopContent {
   nodeType: 'data-destination-api-hop'
@@ -35,28 +39,19 @@ export const DataDestinationAPIHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const [nodeContent, setNodeContent] = useState<DataDestinationAPIHopContent>(
-    dataDestinationAPIHopDefaultContent,
-  )
+  const { nodeContent, setNodeContent, importedColumns } =
+    useNodeContent<DataDestinationAPIHopContent>({
+      nodeId: data.nodeId,
+      defaultContent: dataDestinationAPIHopDefaultContent,
+      initialContent: data.initialContents,
+    })
+
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationAPIHopContent>(
     dataDestinationAPIHopDefaultContent,
   )
 
   // Right animation
   const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
-
-  // Initial data
-  useEffect(() => {
-    if (data.initialContents.nodeType === 'data-destination-api-hop') {
-      setNodeContent(cloneDeep(data.initialContents))
-    }
-  }, [data.initialContents])
-
-  // Copy node data to cache
-  useEffect(() => {
-    const cache = cloneDeep(nodeContent)
-    nodeContents.current[data.nodeId] = cache
-  }, [data.nodeId, nodeContent])
 
   const [open, setOpen] = useState(false)
 
@@ -185,6 +180,22 @@ export const DataDestinationAPIHop = ({
 
                         {/* Content */}
                         <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                          {/* Imported Columns */}
+                          <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                            <div>
+                              <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                Imported Columns
+                              </label>
+                            </div>
+                            <div className="flex flex-wrap gap-2 sm:col-span-2">
+                              {importedColumns.map(col => (
+                                <Badge color="blue" key={col}>
+                                  {col}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+
                           {/* Body */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>

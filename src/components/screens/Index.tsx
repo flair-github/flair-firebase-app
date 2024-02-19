@@ -265,7 +265,7 @@ function Index() {
                           <TableCell>
                             {isChatbot && (
                               <div className="text-sm">
-                                api.flairlabs.ai/company/{convertToKebab(myflow.workflowTitle)}
+                                api.flairlabs.ai/testcompany/{convertToKebab(myflow.workflowTitle)}
                               </div>
                             )}
                             {!isChatbot &&

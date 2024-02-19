@@ -3,6 +3,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { findPercentagePosition } from '~/lib/utils'
 import { borderPosAtom } from '../../FlowEditor'
 
+//
+// For dummy runners
+//
+
 export const dummyRunners = { current: new Set<() => void>() }
 
 export const useRightIconMode = (yPos: number) => {
