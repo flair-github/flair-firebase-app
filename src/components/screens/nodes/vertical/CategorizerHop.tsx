@@ -137,7 +137,7 @@ export const CategorizerHop = ({
                 height: 14,
                 background: 'rgb(148 163 184)',
               }}
-              id={'out-' + row.categoryId}
+              id={'out-' + i}
             />
           ))}
       </div>
@@ -380,48 +380,30 @@ export const CategorizerHop = ({
                               // })
 
                               // Cleanup handles
-                              // {
-                              //   const outHandlesOld = nodeContent.categories
-                              //     .map(el => 'out-' + el.categoryId)
-                              //     .join('')
-                              //   const outHandlesNew = nodeFormContent.categories
-                              //     .map(el => 'out-' + el.categoryId)
-                              //     .join('')
+                              {
+                                const outHandlesOld = nodeContent.categories.map(
+                                  el => 'out-' + el.categoryId,
+                                )
+                                const outHandlesNew = nodeFormContent.categories.map(
+                                  el => 'out-' + el.categoryId,
+                                )
 
-                              //   if (outHandlesOld !== outHandlesNew) {
-                              //     newContent.categories.forEach(el => {
-                              //       el.categoryId = v4()
-                              //     })
+                                if (outHandlesNew.length < outHandlesOld.length) {
+                                  setEdges(prev => {
+                                    const res: typeof prev = []
 
-                              //     setEdges(prev => {
-                              //       const res: typeof prev = []
+                                    for (const edge of prev) {
+                                      if (edge.source === data.nodeId) {
+                                        continue
+                                      }
 
-                              //       for (const edge of prev) {
-                              //         if (edge.source === data.nodeId) {
-                              //           continue
-                              //         }
+                                      res.push(edge)
+                                    }
 
-                              //         res.push(edge)
-                              //       }
-
-                              //       return res
-                              //     })
-                              //   }
-                              // }
-
-                              setEdges(prev => {
-                                const res: typeof prev = []
-
-                                for (const edge of prev) {
-                                  if (edge.source === data.nodeId) {
-                                    continue
-                                  }
-
-                                  res.push(edge)
+                                    return res
+                                  })
                                 }
-
-                                return res
-                              })
+                              }
 
                               setNodeContent(newContent)
                             }}>
