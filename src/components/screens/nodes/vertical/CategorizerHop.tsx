@@ -127,7 +127,7 @@ export const CategorizerHop = ({
         {!noHandle &&
           nodeContent.categories.map((row, i) => (
             <Handle
-              key={row.categoryId}
+              key={row.categoryId + '-' + i}
               type="source"
               position={Position.Bottom}
               style={{
@@ -374,36 +374,56 @@ export const CategorizerHop = ({
                             onClick={() => {
                               setOpen(false)
 
-                              // Cleanup handles
-                              {
-                                const outHandlesOld = nodeContent.categories
-                                  .map(el => 'out-' + el.categoryId)
-                                  .join('')
-                                const outHandlesNew = nodeFormContent.categories
-                                  .map(el => 'out-' + el.categoryId)
-                                  .join('')
-
-                                if (outHandlesOld !== outHandlesNew) {
-                                  setEdges(prev => {
-                                    const res: typeof prev = []
-
-                                    for (const edge of prev) {
-                                      if (edge.source === data.nodeId) {
-                                        continue
-                                      }
-
-                                      res.push(edge)
-                                    }
-
-                                    return res
-                                  })
-                                }
-                              }
-
-                              setNodeContent(prev => {
-                                const newContent = cloneDeep(nodeFormContent)
-                                return newContent
+                              const newContent = cloneDeep(nodeFormContent)
+                              newContent.categories.forEach(el => {
+                                el.categoryId = v4()
                               })
+
+                              // Cleanup handles
+                              // {
+                              //   const outHandlesOld = nodeContent.categories
+                              //     .map(el => 'out-' + el.categoryId)
+                              //     .join('')
+                              //   const outHandlesNew = nodeFormContent.categories
+                              //     .map(el => 'out-' + el.categoryId)
+                              //     .join('')
+
+                              //   if (outHandlesOld !== outHandlesNew) {
+                              //     newContent.categories.forEach(el => {
+                              //       el.categoryId = v4()
+                              //     })
+
+                              //     setEdges(prev => {
+                              //       const res: typeof prev = []
+
+                              //       for (const edge of prev) {
+                              //         if (edge.source === data.nodeId) {
+                              //           continue
+                              //         }
+
+                              //         res.push(edge)
+                              //       }
+
+                              //       return res
+                              //     })
+                              //   }
+                              // }
+
+                              setEdges(prev => {
+                                const res: typeof prev = []
+
+                                for (const edge of prev) {
+                                  if (edge.source === data.nodeId) {
+                                    continue
+                                  }
+
+                                  res.push(edge)
+                                }
+
+                                return res
+                              })
+
+                              setNodeContent(newContent)
                             }}>
                             Save
                           </button>
