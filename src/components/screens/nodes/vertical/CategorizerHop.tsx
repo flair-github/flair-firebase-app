@@ -22,6 +22,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { GrFormClose } from 'react-icons/gr'
 import { useNodeContent } from '../utils/hooks'
 import { MdCategory } from 'react-icons/md'
+import { edgesAtom } from '../../FlowEditor'
 
 export interface CategorizerHopContent {
   nodeType: 'categorizer-hop'
@@ -70,6 +71,7 @@ export const CategorizerHop = ({
   const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
 
   const [open, setOpen] = useState(false)
+  const [edges, setEdges] = useAtom(edgesAtom)
 
   return (
     <>
@@ -371,6 +373,33 @@ export const CategorizerHop = ({
                             className="inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                             onClick={() => {
                               setOpen(false)
+
+                              // Cleanup handles
+                              {
+                                const outHandlesOld = nodeContent.categories
+                                  .map(el => 'out-' + el.categoryId)
+                                  .join('')
+                                const outHandlesNew = nodeFormContent.categories
+                                  .map(el => 'out-' + el.categoryId)
+                                  .join('')
+
+                                if (outHandlesOld !== outHandlesNew) {
+                                  setEdges(prev => {
+                                    const res: typeof prev = []
+
+                                    for (const edge of prev) {
+                                      if (edge.source === data.nodeId) {
+                                        continue
+                                      }
+
+                                      res.push(edge)
+                                    }
+
+                                    return res
+                                  })
+                                }
+                              }
+
                               setNodeContent(prev => {
                                 const newContent = cloneDeep(nodeFormContent)
                                 return newContent

@@ -362,7 +362,10 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       console.log(changes)
-      setEdges(eds => applyEdgeChanges(changes, eds))
+      setEdges(eds => {
+        const newEdges = applyEdgeChanges(changes, eds)
+        return newEdges
+      })
     },
     [setEdges],
   )
