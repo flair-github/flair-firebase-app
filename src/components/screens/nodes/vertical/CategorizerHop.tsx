@@ -381,12 +381,8 @@ export const CategorizerHop = ({
 
                               // Cleanup handles
                               {
-                                const outHandlesOld = nodeContent.categories.map(
-                                  el => 'out-' + el.categoryId,
-                                )
-                                const outHandlesNew = nodeFormContent.categories.map(
-                                  el => 'out-' + el.categoryId,
-                                )
+                                const outHandlesOld = nodeContent.categories
+                                const outHandlesNew = nodeFormContent.categories
 
                                 if (outHandlesNew.length < outHandlesOld.length) {
                                   setEdges(prev => {
