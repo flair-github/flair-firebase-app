@@ -375,9 +375,9 @@ export const CategorizerHop = ({
                               setOpen(false)
 
                               const newContent = cloneDeep(nodeFormContent)
-                              newContent.categories.forEach(el => {
-                                el.categoryId = v4()
-                              })
+                              // newContent.categories.forEach(el => {
+                              //   el.categoryId = v4()
+                              // })
 
                               // Cleanup handles
                               // {
