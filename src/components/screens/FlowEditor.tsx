@@ -112,6 +112,7 @@ export const nodeTypes = {
   DataDestinationZendeskHop,
   DataDestinationSalesforceHop,
   ConditionalHop,
+  CategorizerHop,
   AggregatorHop,
   DataIndexerHop,
   DataSourceURLScraperHop,
@@ -156,7 +157,7 @@ import {
   BsPeople,
   BsThunderbolt,
 } from 'react-icons/bs'
-import { MdEmail, MdThunderstorm } from 'react-icons/md'
+import { MdCategory, MdEmail, MdThunderstorm } from 'react-icons/md'
 import { HiOutlineRocketLaunch } from 'react-icons/hi2'
 import { DataSourceS3Hop, DataSourceS3HopContent } from './nodes/vertical/DataSourceS3Hop'
 import { LLMProcessorHop } from './nodes/vertical/LLMProcessorHop'
@@ -188,6 +189,7 @@ import { httpsCallable } from 'firebase/functions'
 import { LLMProcessorAnthropicHop } from './nodes/vertical/LLMProcessorAnthropicHop'
 import { LLMProcessorGoogleHop } from './nodes/vertical/LLMProcessorGoogleHop'
 import { LLMProcessorMistralHop } from './nodes/vertical/LLMProcessorMistralHop'
+import { CategorizerHop } from './nodes/vertical/CategorizerHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -959,10 +961,16 @@ data_exporters:
         {
           title: 'Conditional',
           handleOnClick: () => {
-            // addNode('conditional-logic', 'ConditionalLogicNode')
             addNode('conditional-hop', 'ConditionalHop')
           },
           icon: BiGitBranch,
+        },
+        {
+          title: 'Categorizer',
+          handleOnClick: () => {
+            addNode('categorizer-hop', 'CategorizerHop')
+          },
+          icon: MdCategory,
         },
       ],
     },

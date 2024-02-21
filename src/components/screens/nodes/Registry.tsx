@@ -54,6 +54,7 @@ import { DataSourceURLScraperHopContent } from './vertical/DataSourceURLScraperH
 import { LLMProcessorAnthropicHopContent } from './vertical/LLMProcessorAnthropicHop'
 import { LLMProcessorGoogleHopContent } from './vertical/LLMProcessorGoogleHop'
 import { LLMProcessorMistralHopContent } from './vertical/LLMProcessorMistralHop'
+import { CategorizerHopContent } from './vertical/CategorizerHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -106,6 +107,7 @@ export type NodeContent =
   | DataDestinationZendeskHopContent
   | DataDestinationSalesforceHopContent
   | ConditionalHopContent
+  | CategorizerHopContent
   | AggregatorHopContent
   | DataIndexerHopContent
   | DataSourceURLScraperHopContent
