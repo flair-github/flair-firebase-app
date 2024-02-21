@@ -51,6 +51,9 @@ import { DataDestinationAPIHopContent } from './vertical/DataDestinationAPIHop'
 import { DataDestinationSalesforceHopContent } from './vertical/DataDestinationSalesforceHop'
 import { DataDestinationZendeskHopContent } from './vertical/DataDestinationZendeskHop'
 import { DataSourceURLScraperHopContent } from './vertical/DataSourceURLScraperHop'
+import { LLMProcessorAnthropicHopContent } from './vertical/LLMProcessorAnthropicHop'
+import { LLMProcessorGoogleHopContent } from './vertical/LLMProcessorGoogleHop'
+import { LLMProcessorMistralHopContent } from './vertical/LLMProcessorMistralHop'
 
 export type NodeContent =
   | { nodeType: 'init' }
@@ -106,6 +109,9 @@ export type NodeContent =
   | AggregatorHopContent
   | DataIndexerHopContent
   | DataSourceURLScraperHopContent
+  | LLMProcessorAnthropicHopContent
+  | LLMProcessorGoogleHopContent
+  | LLMProcessorMistralHopContent
 
 export interface NodeData {
   nodeId: string

@@ -115,6 +115,9 @@ export const nodeTypes = {
   AggregatorHop,
   DataIndexerHop,
   DataSourceURLScraperHop,
+  LLMProcessorAnthropicHop,
+  LLMProcessorGoogleHop,
+  LLMProcessorMistralHop,
 }
 
 import { LuLayoutTemplate, LuSaveAll } from 'react-icons/lu'
@@ -182,6 +185,9 @@ import { dummyRunners } from './nodes/utils/useRightIconMode'
 import { DataSourceURLScraperHop } from './nodes/vertical/DataSourceURLScraperHop'
 import { FaBoltLightning } from 'react-icons/fa6'
 import { httpsCallable } from 'firebase/functions'
+import { LLMProcessorAnthropicHop } from './nodes/vertical/LLMProcessorAnthropicHop'
+import { LLMProcessorGoogleHop } from './nodes/vertical/LLMProcessorGoogleHop'
+import { LLMProcessorMistralHop } from './nodes/vertical/LLMProcessorMistralHop'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -840,7 +846,6 @@ data_exporters:
         {
           title: 'Open AI',
           handleOnClick: () => {
-            // addNode('llm-processor', 'LLMProcessorNode')
             addNode('llm-processor-hop', 'LLMProcessorHop')
           },
           icon: '/images/data-sources/open-ai.svg',
@@ -848,21 +853,21 @@ data_exporters:
         {
           title: 'Anthropic',
           handleOnClick: () => {
-            // addNode('llm-processor', 'LLMProcessorNode')
+            addNode('llm-processor-anthropic-hop', 'LLMProcessorAnthropicHop')
           },
           icon: '/images/data-sources/anthropic.svg',
         },
         {
           title: 'Google',
           handleOnClick: () => {
-            // addNode('llm-processor', 'LLMProcessorNode')
+            addNode('llm-processor-google-hop', 'LLMProcessorGoogleHop')
           },
           icon: '/images/data-sources/google.svg',
         },
         {
           title: 'Mistral',
           handleOnClick: () => {
-            // addNode('llm-processor', 'LLMProcessorNode')
+            addNode('llm-processor-mistral-hop', 'LLMProcessorMistralHop')
           },
           icon: '/images/data-sources/mistral-ai.svg',
         },
