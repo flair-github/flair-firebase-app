@@ -125,21 +125,24 @@ export const CategorizerHop = ({
           />
         )}
         {!noHandle &&
-          nodeContent.categories.map((row, i) => (
-            <Handle
-              key={row.categoryId + '-' + i}
-              type="source"
-              position={Position.Bottom}
-              style={{
-                bottom: -8,
-                left: 50 + i * 100,
-                width: 14,
-                height: 14,
-                background: 'rgb(148 163 184)',
-              }}
-              id={'out-' + i}
-            />
-          ))}
+          Array(10)
+            .fill({})
+            .map((row, i) => (
+              <Handle
+                key={'out-' + i}
+                type="source"
+                position={Position.Bottom}
+                style={{
+                  bottom: -8,
+                  left: 50 + i * 100,
+                  width: 14,
+                  height: 14,
+                  background: 'rgb(148 163 184)',
+                  visibility: i < nodeContent.categories.length ? 'visible' : 'hidden',
+                }}
+                id={'out-' + i}
+              />
+            ))}
       </div>
 
       <Transition.Root show={open} as={Fragment}>
@@ -336,6 +339,7 @@ export const CategorizerHop = ({
                               <div className="mt-2" />
                               <Button
                                 color="blue"
+                                disabled={nodeFormContent.categories.length >= 10}
                                 onClick={() => {
                                   const categoryId = v4()
 
