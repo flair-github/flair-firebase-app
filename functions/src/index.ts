@@ -11,7 +11,7 @@ import * as logger from 'firebase-functions/logger'
 import { HttpsError, onCall } from 'firebase-functions/v2/https'
 import { chat } from './modules/chat'
 import { dataSourceS3 } from './modules/dataSourceS3'
-import { llmProcessorOpenAI } from 'modules/llmProcessorOpenAI'
+import { llmProcessorOpenAI } from './modules/llmProcessorOpenAI'
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
