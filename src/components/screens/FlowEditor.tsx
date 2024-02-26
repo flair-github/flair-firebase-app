@@ -1198,34 +1198,52 @@ data_exporters:
 
         setApiResult('')
 
-        function replacePlaceholders(template: string, values: Record<string, string>) {
-          return template.replace(/{{(.*?)}}/g, (match, key) => values[key] || match)
-        }
-
-        let testPayload: Record<string, string> | undefined
-        let prompt: string | undefined
-        for (const [key, node] of Object.entries(nodeContents.current)) {
-          if (node.nodeType === 'data-source-api-hop') {
-            console.log('node.testPayload', node.testPayload)
-            testPayload = JSON.parse(node.testPayload)
+        // For API Chatbot Test
+        if (workflowId === '9mipopy9OdgICa86EvCJ') {
+          function replacePlaceholders(template: string, values: Record<string, string>) {
+            return template.replace(/{{(.*?)}}/g, (match, key) => values[key] || match)
           }
 
-          if (node.nodeType === 'llm-processor-hop') {
-            for (const x of node.columns) {
-              if (x.name === 'response') {
-                prompt = x.prompt
+          let testPayload: Record<string, string> | undefined
+          let prompt: string | undefined
+          for (const [key, node] of Object.entries(nodeContents.current)) {
+            if (node.nodeType === 'data-source-api-hop') {
+              console.log('node.testPayload', node.testPayload)
+              testPayload = JSON.parse(node.testPayload)
+            }
+
+            if (node.nodeType === 'llm-processor-hop') {
+              for (const x of node.columns) {
+                if (x.name === 'response') {
+                  prompt = x.prompt
+                }
               }
             }
           }
+
+          if (typeof testPayload === 'object' && typeof prompt === 'string') {
+            const content = replacePlaceholders(prompt, testPayload)
+
+            const callHelloWorld = httpsCallable(functions, 'helloWorld')
+
+            console.log({ content })
+            callHelloWorld({ content })
+              .then(result => {
+                // Read result of the Cloud Function.
+                setApiResult((result.data as any).choices[0].message.content)
+                console.log('result.data', result.data)
+              })
+              .catch(e => {
+                console.log('error', e)
+              })
+          }
         }
+        // For Call Center QA Grading
+        else if (workflowId === '9mipopy9OdgICa86EvCJ') {
+          const callAwsLlmSheetsDemo = httpsCallable(functions, 'awsLlmSheetsDemo')
+          const frontEndConfig = getFrontendConfig()
 
-        if (typeof testPayload === 'object' && typeof prompt === 'string') {
-          const content = replacePlaceholders(prompt, testPayload)
-
-          const callHelloWorld = httpsCallable(functions, 'helloWorld')
-
-          console.log({ content })
-          callHelloWorld({ content })
+          callAwsLlmSheetsDemo({ frontEndConfig })
             .then(result => {
               // Read result of the Cloud Function.
               setApiResult((result.data as any).choices[0].message.content)
