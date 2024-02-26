@@ -1246,7 +1246,7 @@ data_exporters:
           callAwsLlmSheetsDemo({ frontEndConfig })
             .then(result => {
               // Read result of the Cloud Function.
-              setApiResult((result.data as any).choices[0].message.content)
+              setApiResult(JSON.stringify(result.data, null, 2))
               console.log('result.data', result.data)
             })
             .catch(e => {
