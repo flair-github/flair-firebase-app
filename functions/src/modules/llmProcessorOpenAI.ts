@@ -40,15 +40,11 @@ export const llmProcessorOpenAI = async (table: Record<string, string>[], llmCon
       const aiResponse = chatCompletion.choices[0].message.content || '{}'
       const aiJSON = JSON.parse(aiResponse)
 
-      const merged = { ...tableRow }
+      const merged = { ...tableRow, ...aiJSON }
 
-      for (const llmColumnData of llmConfig.initialContents.columns) {
-        const val = aiJSON[llmColumnData.name]
-
-        if (typeof val === 'object') {
-          merged[llmColumnData.name] = JSON.stringify(aiJSON[llmColumnData.name]) || ''
-        } else {
-          merged[llmColumnData.name] = aiJSON[llmColumnData.name]
+      for (let key in merged) {
+        if (typeof merged[key] === 'object' && merged[key] !== null) {
+          merged[key] = JSON.stringify(merged[key])
         }
       }
 

@@ -1,7 +1,7 @@
 import { dataSourceS3 } from './dataSourceS3'
 import { llmProcessorOpenAI } from './llmProcessorOpenAI'
 
-jest.setTimeout(30000)
+jest.setTimeout(60000)
 
 describe('test', () => {
   it('test', async () => {
