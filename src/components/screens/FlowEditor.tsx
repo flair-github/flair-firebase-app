@@ -293,7 +293,7 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
       newAncestorsData[id] = getAncestors(parentsData, id)
     }
 
-    console.log('ancestorsData', newAncestorsData)
+    // console.log('ancestorsData', newAncestorsData)
 
     setAncestorsData(newAncestorsData)
   }, [edges, nodeIds, setAncestorsData])
@@ -307,7 +307,7 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
       ]),
     )
 
-    console.log('cleanedAllExportedColumns', cleanedAllExportedColumns)
+    // console.log('cleanedAllExportedColumns', cleanedAllExportedColumns)
   }, [allExportedColumns, nodeIds])
 
   // Load initial
@@ -1239,11 +1239,11 @@ data_exporters:
           }
         }
         // For Call Center QA Grading
-        else if (workflowId === '9mipopy9OdgICa86EvCJ') {
+        else if (workflowId === 'WlM9xvtIcKFjUPCtOtKf') {
           const callAwsLlmSheetsDemo = httpsCallable(functions, 'awsLlmSheetsDemo')
-          const frontEndConfig = getFrontendConfig()
+          const frontendConfig = JSON.stringify(getFrontendConfig())
 
-          callAwsLlmSheetsDemo({ frontEndConfig })
+          callAwsLlmSheetsDemo({ frontendConfig, content: '' })
             .then(result => {
               // Read result of the Cloud Function.
               setApiResult(JSON.stringify(result.data, null, 2))
