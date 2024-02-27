@@ -1236,6 +1236,8 @@ data_exporters:
           }
 
           if (typeof testPayload === 'object' && typeof prompt === 'string') {
+            console.log('Running helloWorld')
+
             const content = replacePlaceholders(prompt, testPayload)
 
             const callHelloWorld = httpsCallable(functions, 'helloWorld')
@@ -1251,11 +1253,32 @@ data_exporters:
                 console.log('error', e)
               })
           }
+
+          // Dummy spinners
+          dummyRunners.current.forEach(dummyRunner =>
+            dummyRunner.run({
+              duration: 'standard',
+            }),
+          )
         }
         // For Call Center QA Grading
         else if (workflowId === CALL_CENTER_GRADING_ID) {
+          console.log('Running awsLlmSheetsDemo')
           const callAwsLlmSheetsDemo = httpsCallable(functions, 'awsLlmSheetsDemo')
           const frontendConfig = JSON.stringify(getFrontendConfig())
+
+          // Dummy spinners
+          dummyRunners.current.forEach(dummyRunner => {
+            if (dummyRunner.nodeType === 'data-source-s3-hop') {
+              dummyRunner.run({
+                duration: 'standard',
+              })
+            } else {
+              dummyRunner.run({
+                duration: 'forever',
+              })
+            }
+          })
 
           callAwsLlmSheetsDemo({ frontendConfig, content: '' })
             .then(result => {
@@ -1266,16 +1289,24 @@ data_exporters:
             .catch(e => {
               console.log('error', e)
             })
+            .finally(() => {
+              dummyRunners.current.forEach(dummyRunner => {
+                dummyRunner.stop()
+              })
+            })
+        } else {
+          // Dummy spinners
+          dummyRunners.current.forEach(dummyRunner => {
+            dummyRunner.run({
+              duration: 'standard',
+            })
+          })
         }
 
         setDeploymentStatus(['success', 'Your pipeline has been initiated!'])
         setTimeout(() => {
           setDeploymentStatus(undefined)
         }, 3000)
-
-        console.log('dummyRunners.current size', dummyRunners.current.size)
-
-        dummyRunners.current.forEach(dummyRunnerFunc => dummyRunnerFunc())
       },
     },
     {

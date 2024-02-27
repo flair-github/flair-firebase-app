@@ -68,7 +68,7 @@ export const CategorizerHop = ({
   )
 
   // Right animation
-  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos, nodeContent.nodeType)
 
   const [open, setOpen] = useState(false)
   const [edges, setEdges] = useAtom(edgesAtom)

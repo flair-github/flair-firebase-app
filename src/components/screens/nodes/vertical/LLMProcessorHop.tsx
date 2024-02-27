@@ -116,7 +116,7 @@ export const LLMProcessorHop = ({
   }, [nodes])
 
   // Right animation
-  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos, nodeContent.nodeType)
 
   const [open, setOpen] = useState(false)
 
@@ -558,6 +558,7 @@ export const LLMProcessorHop = ({
                                               'gpt-3.5-turbo-1106',
                                             ].map(model => (
                                               <option
+                                                key={model}
                                                 value={model satisfies ColumnContent['model']}>
                                                 {model}
                                               </option>

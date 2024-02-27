@@ -49,7 +49,7 @@ export const DataDestinationS3Hop = ({
   )
 
   // Right animation
-  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos, nodeContent.nodeType)
 
   const [open, setOpen] = useState(false)
 

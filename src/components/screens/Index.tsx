@@ -232,7 +232,7 @@ function Index() {
                         myflow.workflowTitle?.toLocaleLowerCase().includes('chatbot') || false
 
                       return (
-                        <TableRow>
+                        <TableRow key={myflow.workflowId}>
                           <TableCell className="">
                             <div className="flex items-center justify-center">
                               <Switch
