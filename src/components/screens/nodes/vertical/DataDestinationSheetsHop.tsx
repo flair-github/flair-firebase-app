@@ -112,7 +112,6 @@ export const DataDestinationSheetsHop = ({
         {/* Result */}
         {didRunOnce && rightIconMode !== 'spinner' && (
           <div className="mt-3 border-t pt-2">
-            <div className="mb-2 font-medium">Row Result</div>
             <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
               <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
                 <div className="flex w-0 flex-1 items-center">
