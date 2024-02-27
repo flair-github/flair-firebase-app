@@ -190,6 +190,7 @@ import { LLMProcessorAnthropicHop } from './nodes/vertical/LLMProcessorAnthropic
 import { LLMProcessorGoogleHop } from './nodes/vertical/LLMProcessorGoogleHop'
 import { LLMProcessorMistralHop } from './nodes/vertical/LLMProcessorMistralHop'
 import { CategorizerHop } from './nodes/vertical/CategorizerHop'
+import { CALL_CENTER_GRADING_ID, FAQ_CHATBOT_ID } from '~/constants/workflowIds'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -231,6 +232,7 @@ export const borderPosAtom = atom<ReturnType<typeof findPositionExtremes> | unde
 
 export const nodesAtom = atom<Nodes>([])
 export const edgesAtom = atom<Edges>([])
+export const workflowIdAtom = atom<string | undefined>(undefined)
 
 export const apiResultAtom = atom<string>('')
 
@@ -251,6 +253,18 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
   const setApiResult = useSetAtom(apiResultAtom)
 
   const { workflowId, workflowRequestId } = useParams()
+  const setWorkflowId = useSetAtom(workflowIdAtom)
+  useEffect(() => {
+    if (typeof workflowId === 'string') {
+      setWorkflowId(workflowId)
+    } else {
+      setWorkflowId(undefined)
+    }
+
+    return () => {
+      setWorkflowId(undefined)
+    }
+  }, [setWorkflowId, workflowId])
 
   const setBorderPosAtom = useSetAtom(borderPosAtom)
   useEffect(() => {
@@ -1199,7 +1213,7 @@ data_exporters:
         setApiResult('')
 
         // For API Chatbot Test
-        if (workflowId === '9mipopy9OdgICa86EvCJ') {
+        if (workflowId === FAQ_CHATBOT_ID) {
           function replacePlaceholders(template: string, values: Record<string, string>) {
             return template.replace(/{{(.*?)}}/g, (match, key) => values[key] || match)
           }
@@ -1239,7 +1253,7 @@ data_exporters:
           }
         }
         // For Call Center QA Grading
-        else if (workflowId === 'WlM9xvtIcKFjUPCtOtKf') {
+        else if (workflowId === CALL_CENTER_GRADING_ID) {
           const callAwsLlmSheetsDemo = httpsCallable(functions, 'awsLlmSheetsDemo')
           const frontendConfig = JSON.stringify(getFrontendConfig())
 

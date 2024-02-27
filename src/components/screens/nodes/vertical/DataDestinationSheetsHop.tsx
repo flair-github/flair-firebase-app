@@ -15,6 +15,7 @@ import { type NodeData } from '../Registry'
 
 import { PiTableBold } from 'react-icons/pi'
 import { useNodeContent } from '../utils/hooks'
+import { CALL_CENTER_GRADING_ID, LEAD_QUALIFICATION_ID } from '~/constants/workflowIds'
 
 export interface DataDestinationSheetsHopContent {
   nodeType: 'data-destination-sheets-hop'
@@ -38,11 +39,12 @@ export const DataDestinationSheetsHop = ({
   data: NodeData
   noHandle?: boolean
 } & NodeProps) => {
-  const { nodeContent, setNodeContent } = useNodeContent<DataDestinationSheetsHopContent>({
-    nodeId: data.nodeId,
-    defaultContent: dataDestinationSheetsHopDefaultContent,
-    initialContent: data.initialContents,
-  })
+  const { nodeContent, setNodeContent, workflowId } =
+    useNodeContent<DataDestinationSheetsHopContent>({
+      nodeId: data.nodeId,
+      defaultContent: dataDestinationSheetsHopDefaultContent,
+      initialContent: data.initialContents,
+    })
 
   const [nodeFormContent, setNodeFormContent] = useState<DataDestinationSheetsHopContent>(
     dataDestinationSheetsHopDefaultContent,
@@ -110,7 +112,7 @@ export const DataDestinationSheetsHop = ({
         )} */}
 
         {/* Result */}
-        {didRunOnce && rightIconMode !== 'spinner' && (
+        {workflowId === CALL_CENTER_GRADING_ID && didRunOnce && rightIconMode !== 'spinner' && (
           <div className="mt-3 border-t pt-2">
             <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
               <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
@@ -125,6 +127,57 @@ export const DataDestinationSheetsHop = ({
                     target="_blank"
                     href={
                       'https://docs.google.com/spreadsheets/d/1ey04b4cJNy6VZLa74pW7HTaukZ9rFZsRX0lgQ_Ou_bA/edit#gid=0'
+                    }
+                    className="font-medium text-primary hover:text-primary/80">
+                    Open
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        )}
+
+        {workflowId === LEAD_QUALIFICATION_ID && didRunOnce && rightIconMode !== 'spinner' && (
+          <div className="mt-3 border-t pt-2">
+            <div className="mb-2 font-medium">Row Result</div>
+            <pre className="mb-1 overflow-x-auto whitespace-pre-wrap text-xs">
+              {`{
+  "filename": "1133390.txt",
+  "motivation": "Looking to sell quickly, possibly to an investor",
+  "sentiment": "Neutral",
+  "talk_time": 0.54,
+  "talk_over": [],
+  "location": ["College Grove"],
+  "bed_count": "NA",
+  "bath_count": "NA",
+  "property_type": "NA",
+  "home_preferences": [],
+  "budget": "NA",
+  "appointment_asked": "YES",
+  "appointment_date": "12 o'clock today",
+  "lead_type_asked": "YES",
+  "lead_type": "Seller",
+  "objections": ["wants to sell to an investor"],
+  "objection_handling": "The agent mentioned a guaranteed offer program and a cash offer program to appeal to the prospect's interest in selling to an investor.",
+  "follow_ups": [
+    "Send a three-way text introduction to the College Grove agent",
+    "Have the agent call around 12 o'clock today and leave a message if the prospect doesn't answer"
+  ]
+}`}
+            </pre>
+            <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
+              <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                <div className="flex w-0 flex-1 items-center">
+                  <PiTableBold className="h-5 w-5 shrink-0 text-gray-400" />
+                  <div className="ml-4 flex min-w-0 flex-1 gap-2 overflow-hidden">
+                    <p className="truncate font-medium">FUB call metadata</p>
+                  </div>
+                </div>
+                <div className="ml-4 shrink-0">
+                  <a
+                    target="_blank"
+                    href={
+                      'https://docs.google.com/spreadsheets/d/19uYCfSJF3j7hVz4tDtQSwIKuq-6LoegEGq9ctYKOhLA/edit#gid=0'
                     }
                     className="font-medium text-primary hover:text-primary/80">
                     Open
