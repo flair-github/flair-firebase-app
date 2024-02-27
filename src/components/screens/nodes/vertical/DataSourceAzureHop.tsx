@@ -50,7 +50,7 @@ export const DataSourceAzureHop = ({
   )
 
   // Right animation
-  const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
+  const { rightIconMode, didRunOnce } = useRightIconMode(yPos, nodeContent.nodeType)
 
   const [open, setOpen] = useState(false)
 

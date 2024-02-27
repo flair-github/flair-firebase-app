@@ -190,6 +190,7 @@ import { LLMProcessorAnthropicHop } from './nodes/vertical/LLMProcessorAnthropic
 import { LLMProcessorGoogleHop } from './nodes/vertical/LLMProcessorGoogleHop'
 import { LLMProcessorMistralHop } from './nodes/vertical/LLMProcessorMistralHop'
 import { CategorizerHop } from './nodes/vertical/CategorizerHop'
+import { CALL_CENTER_GRADING_ID, FAQ_CHATBOT_ID } from '~/constants/workflowIds'
 
 const randPos = (viewport: { x: number; y: number; zoom: number }) => {
   console.log(viewport)
@@ -231,6 +232,7 @@ export const borderPosAtom = atom<ReturnType<typeof findPositionExtremes> | unde
 
 export const nodesAtom = atom<Nodes>([])
 export const edgesAtom = atom<Edges>([])
+export const workflowIdAtom = atom<string | undefined>(undefined)
 
 export const apiResultAtom = atom<string>('')
 
@@ -251,6 +253,18 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
   const setApiResult = useSetAtom(apiResultAtom)
 
   const { workflowId, workflowRequestId } = useParams()
+  const setWorkflowId = useSetAtom(workflowIdAtom)
+  useEffect(() => {
+    if (typeof workflowId === 'string') {
+      setWorkflowId(workflowId)
+    } else {
+      setWorkflowId(undefined)
+    }
+
+    return () => {
+      setWorkflowId(undefined)
+    }
+  }, [setWorkflowId, workflowId])
 
   const setBorderPosAtom = useSetAtom(borderPosAtom)
   useEffect(() => {
@@ -293,7 +307,7 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
       newAncestorsData[id] = getAncestors(parentsData, id)
     }
 
-    console.log('ancestorsData', newAncestorsData)
+    // console.log('ancestorsData', newAncestorsData)
 
     setAncestorsData(newAncestorsData)
   }, [edges, nodeIds, setAncestorsData])
@@ -307,7 +321,7 @@ export const FlowEditor: React.FC<{ viewOnlyFrontEndConfig?: string }> = ({
       ]),
     )
 
-    console.log('cleanedAllExportedColumns', cleanedAllExportedColumns)
+    // console.log('cleanedAllExportedColumns', cleanedAllExportedColumns)
   }, [allExportedColumns, nodeIds])
 
   // Load initial
@@ -1198,52 +1212,101 @@ data_exporters:
 
         setApiResult('')
 
-        function replacePlaceholders(template: string, values: Record<string, string>) {
-          return template.replace(/{{(.*?)}}/g, (match, key) => values[key] || match)
-        }
-
-        let testPayload: Record<string, string> | undefined
-        let prompt: string | undefined
-        for (const [key, node] of Object.entries(nodeContents.current)) {
-          if (node.nodeType === 'data-source-api-hop') {
-            console.log('node.testPayload', node.testPayload)
-            testPayload = JSON.parse(node.testPayload)
+        // For API Chatbot Test
+        if (workflowId === FAQ_CHATBOT_ID) {
+          function replacePlaceholders(template: string, values: Record<string, string>) {
+            return template.replace(/{{(.*?)}}/g, (match, key) => values[key] || match)
           }
 
-          if (node.nodeType === 'llm-processor-hop') {
-            for (const x of node.columns) {
-              if (x.name === 'response') {
-                prompt = x.prompt
+          let testPayload: Record<string, string> | undefined
+          let prompt: string | undefined
+          for (const [key, node] of Object.entries(nodeContents.current)) {
+            if (node.nodeType === 'data-source-api-hop') {
+              console.log('node.testPayload', node.testPayload)
+              testPayload = JSON.parse(node.testPayload)
+            }
+
+            if (node.nodeType === 'llm-processor-hop') {
+              for (const x of node.columns) {
+                if (x.name === 'response') {
+                  prompt = x.prompt
+                }
               }
             }
           }
+
+          if (typeof testPayload === 'object' && typeof prompt === 'string') {
+            console.log('Running helloWorld')
+
+            const content = replacePlaceholders(prompt, testPayload)
+
+            const callHelloWorld = httpsCallable(functions, 'helloWorld')
+
+            console.log({ content })
+            callHelloWorld({ content })
+              .then(result => {
+                // Read result of the Cloud Function.
+                setApiResult((result.data as any).choices[0].message.content)
+                console.log('result.data', result.data)
+              })
+              .catch(e => {
+                console.log('error', e)
+              })
+          }
+
+          // Dummy spinners
+          dummyRunners.current.forEach(dummyRunner =>
+            dummyRunner.run({
+              duration: 'standard',
+            }),
+          )
         }
+        // For Call Center QA Grading
+        else if (workflowId === CALL_CENTER_GRADING_ID) {
+          console.log('Running awsLlmSheetsDemo')
+          const callAwsLlmSheetsDemo = httpsCallable(functions, 'awsLlmSheetsDemo')
+          const frontendConfig = JSON.stringify(getFrontendConfig())
 
-        if (typeof testPayload === 'object' && typeof prompt === 'string') {
-          const content = replacePlaceholders(prompt, testPayload)
+          // Dummy spinners
+          dummyRunners.current.forEach(dummyRunner => {
+            if (dummyRunner.nodeType === 'data-source-s3-hop') {
+              dummyRunner.run({
+                duration: 'standard',
+              })
+            } else {
+              dummyRunner.run({
+                duration: 'forever',
+              })
+            }
+          })
 
-          const callHelloWorld = httpsCallable(functions, 'helloWorld')
-
-          console.log({ content })
-          callHelloWorld({ content })
+          callAwsLlmSheetsDemo({ frontendConfig, content: '' })
             .then(result => {
               // Read result of the Cloud Function.
-              setApiResult((result.data as any).choices[0].message.content)
+              setApiResult(JSON.stringify(result.data, null, 2))
               console.log('result.data', result.data)
             })
             .catch(e => {
               console.log('error', e)
             })
+            .finally(() => {
+              dummyRunners.current.forEach(dummyRunner => {
+                dummyRunner.stop()
+              })
+            })
+        } else {
+          // Dummy spinners
+          dummyRunners.current.forEach(dummyRunner => {
+            dummyRunner.run({
+              duration: 'standard',
+            })
+          })
         }
 
         setDeploymentStatus(['success', 'Your pipeline has been initiated!'])
         setTimeout(() => {
           setDeploymentStatus(undefined)
         }, 3000)
-
-        console.log('dummyRunners.current size', dummyRunners.current.size)
-
-        dummyRunners.current.forEach(dummyRunnerFunc => dummyRunnerFunc())
       },
     },
     {

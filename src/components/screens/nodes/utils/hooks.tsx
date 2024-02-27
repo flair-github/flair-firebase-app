@@ -1,8 +1,8 @@
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { cloneDeep } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
 import { NodeContent, allExportedColumnsAtom, allNodeContentsAtom, nodeContents } from '../Registry'
-import { ancestorsDataAtom } from '../../FlowEditor'
+import { ancestorsDataAtom, workflowIdAtom } from '../../FlowEditor'
 
 export const useNodeContent = <T extends NodeContent>({
   nodeId,
@@ -15,6 +15,8 @@ export const useNodeContent = <T extends NodeContent>({
   defaultContent: T
   exportedColumnsGen?: (content: T) => Record<string, any>
 }) => {
+  const workflowId = useAtomValue(workflowIdAtom)
+
   const [nodeContent, setNodeContent] = useState<T>(defaultContent)
 
   // Initial data
@@ -88,5 +90,5 @@ export const useNodeContent = <T extends NodeContent>({
     return [...newImportedColumns]
   }, [allExportedColumns, ancestorsData, nodeId])
 
-  return { nodeContent, setNodeContent, importedColumns, exportedColumns }
+  return { nodeContent, setNodeContent, importedColumns, exportedColumns, workflowId }
 }

@@ -57,7 +57,7 @@ export const generateHop = <T extends NodeContent>(config: {
     const [nodeFormContent, setNodeFormContent] = useState<T>(defaultContent)
 
     // Right animation
-    const { rightIconMode, didRunOnce } = useRightIconMode(yPos)
+    const { rightIconMode, didRunOnce } = useRightIconMode(yPos, nodeContent.nodeType)
 
     const [open, setOpen] = useState(false)
 
