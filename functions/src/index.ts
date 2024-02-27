@@ -12,7 +12,7 @@ import { HttpsError, onCall } from 'firebase-functions/v2/https'
 import { chat } from './modules/chat'
 import { dataSourceS3 } from './modules/dataSourceS3'
 import { llmProcessorOpenAI } from './modules/llmProcessorOpenAI'
-import { googleSheetsExporter } from 'modules/googleSheetsExporter'
+import { googleSheetsCleaner, googleSheetsExporter } from './modules/googleSheetsExporter'
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -63,6 +63,8 @@ export const awsLlmSheetsDemo = onCall(
         llmConfig = node.data
       }
     }
+
+    await googleSheetsCleaner()
 
     const step1 = dataSourceS3()
     const step2 = await llmProcessorOpenAI(step1, llmConfig)
