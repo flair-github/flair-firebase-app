@@ -133,7 +133,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   const inlineOutputArray = useMemo(() => {
     if (resultData?.inlineOutput) {
       const index0 = resultData.inlineOutput[0]
-      const headers = Object.keys(index0)
+      const headers = Object.keys(index0).sort()
       const contents: string[][] = [headers]
 
       for (const rowObj of resultData.inlineOutput) {
