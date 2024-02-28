@@ -27,6 +27,7 @@ import { useAtom } from 'jotai'
 import { resultDataAtom } from './Results'
 import { chatbotData } from '~/constants/chatbotData'
 import FlowEditor from './FlowEditor'
+import { CALL_CENTER_GRADING_ID, FAQ_CHATBOT_ID } from '~/constants/workflowIds'
 
 const yaml = `name: 'My LLM Pipeline'
 description: 'Pipeline that extracts information from customer support calls.'
@@ -129,7 +130,27 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
   }, [resultId, columnName]) // Dependencies for useMemo, recompute when these change.
 
   const [resultData, setResultData] = useAtom(resultDataAtom)
-  const isChatbot = resultData?.workflowName?.toLocaleLowerCase().includes('chatbot') || false
+  const inlineOutputArray = useMemo(() => {
+    if (resultData?.inlineOutput) {
+      const index0 = resultData.inlineOutput[0]
+      const headers = Object.keys(index0)
+      const contents: string[][] = [headers]
+
+      for (const rowObj of resultData.inlineOutput) {
+        const rowArray: string[] = []
+
+        for (const header of headers) {
+          rowArray.push(rowObj[header] || '')
+        }
+
+        contents.push(rowArray)
+      }
+
+      return contents
+    }
+
+    return undefined
+  }, [resultData?.inlineOutput])
 
   // const {
   //   items,
@@ -391,7 +412,23 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                     <div className="overflow-hidden shadow ring-1 ring-black/5 sm:rounded-lg">
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
-                          {isChatbot ? (
+                          {inlineOutputArray ? (
+                            <tr>
+                              <th
+                                scope="col"
+                                className="w-[0.1%] whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                              />
+                              {inlineOutputArray[0].map(header => (
+                                <th
+                                  key={header}
+                                  scope="col"
+                                  className="whitespace-nowrap px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                  {header}{' '}
+                                  <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                                </th>
+                              ))}
+                            </tr>
+                          ) : resultData?.workflowId === FAQ_CHATBOT_ID ? (
                             <tr>
                               <th
                                 scope="col"
@@ -558,7 +595,52 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                           )}{' '}
                         </thead>
                         <tbody className="divide-y divide-gray-200 bg-white">
-                          {isChatbot
+                          {inlineOutputArray
+                            ? inlineOutputArray.slice(1).map((row, index) => (
+                                <tr>
+                                  <td className="px-3 py-4 text-sm text-gray-500">
+                                    <Checkbox
+                                      color="blue"
+                                      checked={editMode.has(index)}
+                                      onChange={checked => {
+                                        if (checked) {
+                                          setEditMode(prev => {
+                                            const newSet = new Set(prev)
+                                            newSet.add(index)
+                                            return newSet
+                                          })
+                                        } else {
+                                          setEditMode(prev => {
+                                            const newSet = new Set(prev)
+                                            newSet.delete(index)
+                                            return newSet
+                                          })
+                                        }
+                                      }}
+                                    />
+                                  </td>
+                                  {row.map((el, i) => (
+                                    <td
+                                      key={i}
+                                      onClick={() => {
+                                        setEditMode(prev => {
+                                          const newSet = new Set(prev)
+                                          newSet.add(index)
+                                          return newSet
+                                        })
+                                      }}
+                                      className={clsx(
+                                        'max-w-80 px-3 py-4 text-sm text-gray-500',
+                                        !editMode.has(index) && 'truncate',
+                                        editMode.has(index) && 'bg-yellow-100',
+                                      )}
+                                      contentEditable={editMode.has(index)}>
+                                      {el}
+                                    </td>
+                                  ))}
+                                </tr>
+                              ))
+                            : resultData?.workflowId === FAQ_CHATBOT_ID
                             ? chatbotData.map((row, index) => (
                                 <tr key={index}>
                                   <td className="px-3 py-4 text-sm text-gray-500">
@@ -871,7 +953,9 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
                             <a
                               target="_blank"
                               href={
-                                'https://docs.google.com/spreadsheets/d/1QzgPwvy4Ws1OHJ8geUvdoyUufU--nEkc1w9KHFNG3IE/edit#gid=1720787933'
+                                resultData?.workflowId === CALL_CENTER_GRADING_ID
+                                  ? 'https://docs.google.com/spreadsheets/d/1ey04b4cJNy6VZLa74pW7HTaukZ9rFZsRX0lgQ_Ou_bA/edit#gid=0'
+                                  : 'https://docs.google.com/spreadsheets/d/1QzgPwvy4Ws1OHJ8geUvdoyUufU--nEkc1w9KHFNG3IE/edit#gid=1720787933'
                               }
                               className="font-medium text-primary hover:text-primary/80">
                               Open
