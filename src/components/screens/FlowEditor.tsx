@@ -14,7 +14,7 @@ import ReactFlow, {
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
-import { DocWorkflow, DocWorkflowRequest } from 'Types/firebaseStructure'
+import { DocWorkflow, DocWorkflowRequest, DocWorkflowResult } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { Link, useParams } from 'react-router-dom'
@@ -1197,7 +1197,7 @@ data_exporters:
         // await new Promise(resolve => setTimeout(resolve, 2000))
         // runningModalRef.current?.close()
 
-        db.collection('workflow_results').add({
+        const workflowResult: Partial<DocWorkflowResult> = {
           docExists: true,
           averageEvaluationData: 0.86,
           workflowName: title,
@@ -1205,10 +1205,10 @@ data_exporters:
           frontendConfig: JSON.stringify(getFrontendConfig()),
           workflowId: workflowId || '',
           status: 'initiated',
-          createdTimestamp: new Date(),
+          createdTimestamp: new Date() as any,
           model: 'gpt-4',
           executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
-        })
+        }
 
         setApiResult('')
 
@@ -1260,6 +1260,9 @@ data_exporters:
               duration: 'standard',
             }),
           )
+
+          // Add result to firestore
+          db.collection('workflow_results').add(workflowResult)
         }
         // For Call Center QA Grading
         else if (workflowId === CALL_CENTER_GRADING_ID) {
@@ -1283,8 +1286,11 @@ data_exporters:
           callAwsLlmSheetsDemo({ frontendConfig, content: '' })
             .then(result => {
               // Read result of the Cloud Function.
-              setApiResult(JSON.stringify(result.data, null, 2))
               console.log('result.data', result.data)
+
+              // Add result to firestore
+              workflowResult.inlineOutput = result.data as Record<string, string>[]
+              db.collection('workflow_results').add(workflowResult)
             })
             .catch(e => {
               console.log('error', e)
@@ -1301,6 +1307,9 @@ data_exporters:
               duration: 'standard',
             })
           })
+
+          // Add result to firestore
+          db.collection('workflow_results').add(workflowResult)
         }
 
         setDeploymentStatus(['success', 'Your pipeline has been initiated!'])

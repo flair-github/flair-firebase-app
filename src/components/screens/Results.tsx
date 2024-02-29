@@ -204,7 +204,7 @@ function Results() {
                                 ? '-'
                                 : isOld
                                 ? 50 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'
-                                : averaged.answer_relevancy
+                                : typeof averaged !== 'number' && averaged.answer_relevancy
                                 ? Math.floor(averaged.answer_relevancy * 100) + '%'
                                 : 75 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'}
                             </td>

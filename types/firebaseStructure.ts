@@ -108,7 +108,7 @@ export interface DocWorkflowResult {
   docExists: boolean
   requestType: null
   model: Model
-  averageEvaluationData: AverageEvaluationData
+  averageEvaluationData: AverageEvaluationData | number
   evaluationData: EvaluationData
   resultData: ResultData
   outputData: ResultData
@@ -117,6 +117,13 @@ export interface DocWorkflowResult {
   completionTimestamp: Timestamp
   status?: string
   frontendConfig?: string
+
+  /**
+   * Inline output
+   * For writing the outputs in this doc directly.
+   * Must be less than 1 MB
+   */
+  inlineOutput?: Record<string, string>[]
 }
 
 export interface AverageEvaluationData {
