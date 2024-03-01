@@ -13,6 +13,7 @@ import { chat } from './modules/chat'
 import { dataSourceS3 } from './modules/dataSourceS3'
 import { llmProcessorOpenAI } from './modules/llmProcessorOpenAI'
 import { googleSheetsCleaner, googleSheetsExporter } from './modules/googleSheetsExporter'
+import { emailSender } from './modules/emailSender'
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -69,6 +70,7 @@ export const awsLlmSheetsDemo = onCall(
     const step1 = dataSourceS3()
     const step2 = await llmProcessorOpenAI(step1, llmConfig)
     const step3 = await googleSheetsExporter(step2)
+    const step4 = emailSender()
 
     return step2
   },
