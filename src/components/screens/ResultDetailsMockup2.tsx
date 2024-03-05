@@ -262,7 +262,7 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
               <dt className="truncate text-sm font-medium text-gray-500">Embedding Type</dt>
               <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-                Sentence embeddings
+                Text-Embedding-3
               </dd>
             </div>
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">

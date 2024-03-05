@@ -620,7 +620,7 @@ function Index() {
                       input.click()
                     }}>
                     <FaCloudUploadAlt className="mr-1" />
-                    <span>Upload CSV</span>
+                    <span>Upload Python Script</span>
                   </Button>
                 </div>
               </div>
