@@ -58,6 +58,7 @@ export interface DocWorkflow extends DocRoot {
   workflowTitle: string
   frontendConfig: string
   isToggleOn?: boolean
+  isPythonScript?: boolean
 }
 
 export interface DocWorkflowRequest extends DocRoot {

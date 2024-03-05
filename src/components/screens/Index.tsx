@@ -12,7 +12,7 @@ import { BsArrowLeftShort, BsTerminalFill, BsThreeDots } from 'react-icons/bs'
 import { ImFileEmpty, ImSpinner8, ImSpinner9 } from 'react-icons/im'
 import { Button } from '~/catalyst/button'
 import clsx from 'clsx'
-import { FaChevronRight, FaTasks } from 'react-icons/fa'
+import { FaChevronRight, FaCloudUploadAlt, FaTasks } from 'react-icons/fa'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronRightIcon, EllipsisVerticalIcon } from '@heroicons/react/20/solid'
@@ -95,12 +95,39 @@ function Index() {
     } catch (e) {
       setShowCreateFlowSpinner(false)
     }
+  }
 
-    // TODO: Continue to flow editor
+  const createNewPythonFlow = async () => {
+    if (!userData?.userId) {
+      return
+    }
+
+    try {
+      setShowCreateFlowSpinner(false)
+
+      const ref = db.collection('workflows').doc()
+      const newFlowData: DocWorkflow = {
+        createdTimestamp: serverTimestamp() as Timestamp,
+        updatedTimestamp: serverTimestamp() as Timestamp,
+        lastSaveTimestamp: serverTimestamp() as Timestamp,
+        docExists: true,
+        workflowId: ref.id,
+        frontendConfig: '',
+        workflowTitle: createNewFlowTitle || 'New Flow',
+        ownerUserId: USER_ID_MODE === 'samir' ? 'IVqAyQJR4ugRGR8qL9UuB809OX82' : userData.userId,
+        isPythonScript: true,
+      }
+
+      await ref.set(newFlowData)
+      setCreateNewFlowTitle('')
+    } catch (e) {
+      setShowCreateFlowSpinner(false)
+    }
   }
 
   const [showNewFlowModal, setShowNewFlowModal] = useState(false)
   const [showNewFlowModalFromDescription, setShowNewFlowModalFromDescription] = useState(false)
+  const [showNewFlowModalFromPython, setShowNewFlowModalFromPython] = useState(false)
   const navigate = useNavigate()
 
   const openWorkflow = (workflowId: string) => {
@@ -157,6 +184,7 @@ function Index() {
       description: 'Load advanced piplining features using ',
       onClick: () => {
         setAddPipelineModal(false)
+        setShowNewFlowModalFromPython(true)
       },
       iconColor: 'bg-red-500',
       icon: FaPython,
@@ -183,13 +211,6 @@ function Index() {
                     }}>
                     + New Pipeline
                   </Button>
-                  {/* <Button
-                    color="zinc"
-                    onClick={() => {
-                      setShowNewFlowModalFromDescription(true)
-                    }}>
-                    + Pipeline Templates
-                  </Button> */}
                 </div>
               </div>
             </div>
@@ -247,7 +268,10 @@ function Index() {
                             onClick={() => {
                               openWorkflow(myflow.workflowId)
                             }}>
-                            {myflow.workflowTitle}
+                            <div className="flex flex-1 gap-2">
+                              <span>{myflow.workflowTitle}</span>
+                              {myflow.isPythonScript && <Badge color="teal">Python</Badge>}
+                            </div>
                           </TableCell>
                           <TableCell>
                             {isToggleOn ? (
@@ -273,6 +297,10 @@ function Index() {
                             <Button
                               color="white"
                               onClick={() => {
+                                if (myflow.isPythonScript) {
+                                  return
+                                }
+
                                 openWorkflow(myflow.workflowId)
                               }}>
                               View Pipeline
@@ -425,6 +453,7 @@ function Index() {
         </div>
       </Modal>
 
+      {/* List of pipelines */}
       <Modal
         shown={addPipelineModal}
         size="sm"
@@ -486,6 +515,77 @@ function Index() {
               Start from Description
             </Button>
           </div> */}
+        </div>
+      </Modal>
+
+      {/* New Flow Modal from Python */}
+      <Modal
+        shown={showNewFlowModalFromPython}
+        onClickBackdrop={() => setShowNewFlowModalFromPython(false)}>
+        <div>
+          <h3 className="text-lg font-bold">Create Pipeline from Python</h3>
+          {!showCreateFlowSpinner && (
+            <>
+              <div className="form-control my-1 w-full">
+                <label className="label">
+                  <span className="label-text">Title</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder=""
+                  className="input input-bordered w-full"
+                  value={createNewFlowTitle}
+                  onChange={ev => setCreateNewFlowTitle(ev.target.value)}
+                  onKeyDown={async e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      setShowNewFlowModalFromPython(false)
+
+                      await createNewPythonFlow()
+                      setCreateNewFlowTitle('')
+                    }
+                  }}
+                />
+              </div>
+
+              <div className="form-control my-1 w-full">
+                <label className="label">
+                  <span className="label-text">Python Script</span>
+                </label>
+                <div className="flex">
+                  <Button
+                    className="flair-btn-primary btn-sm"
+                    color="white"
+                    onClick={() => {
+                      const input = document.createElement('input')
+                      input.type = 'file'
+                      input.click()
+                    }}>
+                    <FaCloudUploadAlt className="mr-1" />
+                    <span>Upload CSV</span>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="modal-action flex items-center justify-center">
+                <button
+                  className="btn btn-primary"
+                  onClick={async () => {
+                    setShowNewFlowModalFromPython(false)
+
+                    await createNewPythonFlow()
+                    setCreateNewFlowTitle('')
+                  }}>
+                  Create Pipeline
+                </button>
+              </div>
+            </>
+          )}
+          {showCreateFlowSpinner && (
+            <div className="flex h-32 w-full items-center justify-center">
+              <ImSpinner8 className="h-16 w-16 animate-spin text-slate-400" />
+            </div>
+          )}
         </div>
       </Modal>
 
