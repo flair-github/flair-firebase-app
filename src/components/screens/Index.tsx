@@ -270,7 +270,7 @@ function Index() {
                             }}>
                             <div className="flex flex-1 gap-2">
                               <span>{myflow.workflowTitle}</span>
-                              {myflow.isPythonScript && <Badge color="teal">Python</Badge>}
+                              {/* {myflow.isPythonScript && <Badge color="teal">Python</Badge>} */}
                             </div>
                           </TableCell>
                           <TableCell>
@@ -303,7 +303,7 @@ function Index() {
 
                                 openWorkflow(myflow.workflowId)
                               }}>
-                              View Pipeline
+                              {myflow.isPythonScript ? 'View Pipeline' : 'View Pipeline'}
                             </Button>
                             <Menu as="div" className="relative flex-none">
                               <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
@@ -620,7 +620,7 @@ function Index() {
                       input.click()
                     }}>
                     <FaCloudUploadAlt className="mr-1" />
-                    <span>Upload Python Script</span>
+                    <span>Upload</span>
                   </Button>
                 </div>
               </div>
