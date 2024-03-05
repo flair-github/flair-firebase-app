@@ -254,16 +254,22 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
               <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">GPT-4</dd>
             </div>
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-              <dt className="truncate text-sm font-medium text-gray-500">Accuracy</dt>
-              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">94%</dd>
+              <dt className="truncate text-sm font-medium text-gray-500">Prompt Strategy</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+                Chain of Thought
+              </dd>
             </div>
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-              <dt className="truncate text-sm font-medium text-gray-500">Hallucination</dt>
-              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">1%</dd>
+              <dt className="truncate text-sm font-medium text-gray-500">Embedding Type</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+                Sentence embeddings
+              </dd>
             </div>
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-              <dt className="truncate text-sm font-medium text-gray-500">Invalid Format</dt>
-              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">2%</dd>
+              <dt className="truncate text-sm font-medium text-gray-500">Chunking Strategy</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+                Naive Chunking
+              </dd>
             </div>
           </dl>
         </div>
@@ -271,12 +277,12 @@ const ResultDetailsMockup2 = ({ id }: { id?: string }) => {
         <div>
           <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-              <dt className="truncate text-sm font-medium text-gray-500">Request Time</dt>
-              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">2/5/2024</dd>
+              <dt className="truncate text-sm font-medium text-gray-500">Accuracy</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">94%</dd>
             </div>
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-              <dt className="truncate text-sm font-medium text-gray-500">Total Time</dt>
-              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">1h 12min</dd>
+              <dt className="truncate text-sm font-medium text-gray-500">Hallucination</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">1%</dd>
             </div>
             <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
               <dt className="truncate text-sm font-medium text-gray-500">Average Tokens</dt>
