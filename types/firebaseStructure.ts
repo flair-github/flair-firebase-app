@@ -125,6 +125,8 @@ export interface DocWorkflowResult {
    * Must be less than 1 MB
    */
   inlineOutput?: Record<string, string>[]
+
+  isPythonScript?: boolean
 }
 
 export interface AverageEvaluationData {

@@ -4,7 +4,7 @@ import { Head } from '~/components/shared/Head'
 import { useAtomValue } from 'jotai'
 import { atomUserData } from '~/jotai/jotai'
 import { db } from '~/lib/firebase'
-import { DocWorkflow } from 'Types/firebaseStructure'
+import { DocWorkflow, DocWorkflowResult } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { Link, useNavigate } from 'react-router-dom'
 import { TfiLayoutWidthDefault } from 'react-icons/tfi'
@@ -320,7 +320,65 @@ function Index() {
                                 leaveTo="transform opacity-0 scale-95">
                                 <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                                   <Menu.Item>
-                                    {({ active }) => (
+                                    {({ focus }) => (
+                                      <a
+                                        onClick={event => {
+                                          const workflowResult: Partial<DocWorkflowResult> = {
+                                            docExists: true,
+                                            averageEvaluationData: 0.86,
+                                            workflowName: myflow.workflowTitle,
+                                            workflowRequestId: db
+                                              .collection('workflow_results')
+                                              .doc().id,
+                                            frontendConfig: '',
+                                            workflowId: myflow.workflowId || '',
+                                            status: 'initiated',
+                                            createdTimestamp: new Date() as any,
+                                            model: 'gpt-4',
+                                            executorUserId: 'IVqAyQJR4ugRGR8qL9UuB809OX82',
+                                            isPythonScript: true,
+                                          }
+
+                                          const exp1: Partial<DocWorkflowResult> = {
+                                            ...workflowResult,
+                                            workflowRequestId: db
+                                              .collection('workflow_results')
+                                              .doc().id,
+                                            model: 'gpt-4',
+                                            createdTimestamp: new Date(Date.now() - 2000) as any,
+                                          }
+                                          db.collection('workflow_results').add(exp1)
+
+                                          const exp2: Partial<DocWorkflowResult> = {
+                                            ...workflowResult,
+                                            workflowRequestId: db
+                                              .collection('workflow_results')
+                                              .doc().id,
+                                            model: 'claude-2',
+                                            createdTimestamp: new Date(Date.now() - 1000) as any,
+                                          }
+                                          db.collection('workflow_results').add(exp2)
+
+                                          const exp3: Partial<DocWorkflowResult> = {
+                                            ...workflowResult,
+                                            workflowRequestId: db
+                                              .collection('workflow_results')
+                                              .doc().id,
+                                            model: 'google-7b-v0-1',
+                                            createdTimestamp: new Date(Date.now() - 0) as any,
+                                          }
+                                          db.collection('workflow_results').add(exp3)
+                                        }}
+                                        className={clsx(
+                                          focus ? 'bg-gray-50' : '',
+                                          'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900',
+                                        )}>
+                                        Run Experiments
+                                      </a>
+                                    )}
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    {({ focus }) => (
                                       <a
                                         onClick={event => {
                                           event.stopPropagation()
@@ -329,7 +387,7 @@ function Index() {
                                           })
                                         }}
                                         className={clsx(
-                                          active ? 'bg-gray-50' : '',
+                                          focus ? 'bg-gray-50' : '',
                                           'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900',
                                         )}>
                                         Delete
