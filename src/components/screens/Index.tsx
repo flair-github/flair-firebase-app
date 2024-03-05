@@ -181,7 +181,7 @@ function Index() {
     },
     {
       name: 'Upload Python Script',
-      description: 'Load advanced piplining features using ',
+      description: 'Load advanced pipelining features using ',
       onClick: () => {
         setAddPipelineModal(false)
         setShowNewFlowModalFromPython(true)
