@@ -203,14 +203,30 @@ function Index() {
                 <h1 className="text-3xl font-bold tracking-tight text-white">Pipelines</h1>
                 <div className="flex-1" />
                 <div className="flex gap-2">
-                  <Button
+                  {/* <Button
                     color="blue"
                     onClick={() => {
                       setAddPipelineModal(true)
                       // setShowNewFlowModal(true)
                     }}>
                     + New Pipeline
-                  </Button>
+                  </Button> */}
+                  <div className="flex gap-2">
+                    <Button
+                      color="blue"
+                      onClick={() => {
+                        setShowNewFlowModal(true)
+                      }}>
+                      + New Pipeline
+                    </Button>
+                    <Button
+                      color="zinc"
+                      onClick={() => {
+                        setShowNewFlowModalFromDescription(true)
+                      }}>
+                      + Pipeline Templates
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
