@@ -207,26 +207,23 @@ function Index() {
                     color="blue"
                     onClick={() => {
                       setAddPipelineModal(true)
-                      // setShowNewFlowModal(true)
                     }}>
                     + New Pipeline
                   </Button> */}
-                  <div className="flex gap-2">
-                    <Button
-                      color="blue"
-                      onClick={() => {
-                        setShowNewFlowModal(true)
-                      }}>
-                      + New Pipeline
-                    </Button>
-                    <Button
-                      color="zinc"
-                      onClick={() => {
-                        setShowNewFlowModalFromDescription(true)
-                      }}>
-                      + Pipeline Templates
-                    </Button>
-                  </div>
+                  <Button
+                    color="blue"
+                    onClick={() => {
+                      setShowNewFlowModal(true)
+                    }}>
+                    + New Pipeline
+                  </Button>
+                  <Button
+                    color="zinc"
+                    onClick={() => {
+                      setShowNewFlowModalFromDescription(true)
+                    }}>
+                    + Pipeline Templates
+                  </Button>
                 </div>
               </div>
             </div>
