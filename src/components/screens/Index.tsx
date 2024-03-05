@@ -8,7 +8,7 @@ import { DocWorkflow } from 'Types/firebaseStructure'
 import { Timestamp, serverTimestamp } from 'firebase/firestore'
 import { Link, useNavigate } from 'react-router-dom'
 import { TfiLayoutWidthDefault } from 'react-icons/tfi'
-import { BsArrowLeftShort, BsThreeDots } from 'react-icons/bs'
+import { BsArrowLeftShort, BsTerminalFill, BsThreeDots } from 'react-icons/bs'
 import { ImFileEmpty, ImSpinner8, ImSpinner9 } from 'react-icons/im'
 import { Button } from '~/catalyst/button'
 import clsx from 'clsx'
@@ -26,8 +26,9 @@ import { convertToKebab } from '~/lib/utils'
 import { Modal } from '../ui/modal'
 import { PiChatBold, PiEnvelope, PiFileText, PiHeadset, PiPhoneCallFill } from 'react-icons/pi'
 import { RiNotificationBadgeFill } from 'react-icons/ri'
-import { FaEnvelope, FaMagnifyingGlass } from 'react-icons/fa6'
+import { FaChalkboard, FaEnvelope, FaMagnifyingGlass, FaPython } from 'react-icons/fa6'
 import { REAL_ESTATE_PIPELINE } from '~/constants/flowSamples'
+import { BiSolidFileJson } from 'react-icons/bi'
 
 function Index() {
   const userData = useAtomValue(atomUserData)
@@ -116,56 +117,49 @@ function Index() {
     Paused: 'text-yellow-800 bg-yellow-50 ring-yellow-600/20',
   }
 
-  const [addAgentModal, setAddAgentModal] = useState(false)
+  const [addPipelineModal, setAddPipelineModal] = useState(false)
 
   const items = [
     {
-      name: 'Real Estate Lead Enrichment',
-      description: 'Enrich lead data with motivations, sentiments, buying intents, and more',
-      onClick: () => {},
+      name: 'Empty Pipeline',
+      description: 'Create a blank pipeline and start editing in flow editor',
+      onClick: () => {
+        setAddPipelineModal(false)
+        setShowNewFlowModal(true)
+      },
       iconColor: 'bg-blue-500',
-      icon: PiPhoneCallFill, // Assuming PiPhoneCallFill is a predefined icon component
+      icon: FaChalkboard,
       grayedOut: false,
     },
     {
-      name: 'Action Item Extraction',
-      description: 'Extract actionable items from meetings, conversations, and documents',
-      onClick: () => {},
+      name: 'Generate Pipeline from Prompt',
+      description: 'Automatically generate pipeline from a text description',
+      onClick: () => {
+        setAddPipelineModal(false)
+        setShowNewFlowModalFromDescription(true)
+      },
       iconColor: 'bg-green-500',
-      icon: FaTasks, // Placeholder icon component
+      icon: BsTerminalFill,
       grayedOut: false,
     },
     {
-      name: 'Chatbot',
-      description: 'Interactive AI-powered chatbots for customer service and engagement',
-      onClick: () => {},
+      name: 'Upload JSON config',
+      description: 'Load previously created config in JSON',
+      onClick: () => {
+        setAddPipelineModal(false)
+      },
       iconColor: 'bg-yellow-500',
-      icon: PiChatBold, // Placeholder icon component
+      icon: BiSolidFileJson,
       grayedOut: false,
     },
     {
-      name: 'Call Center QA Grading',
-      description:
-        'Quality assurance grading for call center interactions to ensure service excellence',
-      onClick: () => {},
+      name: 'Upload Python Script',
+      description: 'Load advanced piplining features using ',
+      onClick: () => {
+        setAddPipelineModal(false)
+      },
       iconColor: 'bg-red-500',
-      icon: PiHeadset, // Placeholder icon component
-      grayedOut: false,
-    },
-    {
-      name: 'Email Categorization',
-      description: 'Automate the sorting and categorization of incoming emails for efficiency',
-      onClick: () => {},
-      iconColor: 'bg-purple-500',
-      icon: PiEnvelope, // Placeholder icon component
-      grayedOut: false,
-    },
-    {
-      name: 'Invoice Processing',
-      description: 'Streamline the processing of invoices for faster payment cycles and accuracy',
-      onClick: () => {},
-      iconColor: 'bg-orange-500',
-      icon: PiFileText, // Placeholder icon component
+      icon: FaPython,
       grayedOut: false,
     },
   ]
@@ -184,17 +178,18 @@ function Index() {
                   <Button
                     color="blue"
                     onClick={() => {
-                      setShowNewFlowModal(true)
+                      setAddPipelineModal(true)
+                      // setShowNewFlowModal(true)
                     }}>
                     + New Pipeline
                   </Button>
-                  <Button
+                  {/* <Button
                     color="zinc"
                     onClick={() => {
                       setShowNewFlowModalFromDescription(true)
                     }}>
                     + Pipeline Templates
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
             </div>
@@ -431,16 +426,16 @@ function Index() {
       </Modal>
 
       <Modal
-        shown={addAgentModal}
-        size="md"
+        shown={addPipelineModal}
+        size="sm"
         onClickBackdrop={() => {
-          setAddAgentModal(false)
+          setAddPipelineModal(false)
         }}>
         <div className="mx-auto">
-          <h2 className="text-base font-semibold leading-6 text-gray-900">Start from a Template</h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <h2 className="text-base font-semibold leading-6 text-gray-900">Start a Pipeline</h2>
+          {/* <p className="mt-1 text-sm text-gray-500">
             Get started by selecting a template or start from an empty project.
-          </p>
+          </p> */}
           <ul role="list" className="mt-6 divide-y divide-gray-200 border-y border-gray-200">
             {items.map((item, itemIdx) => (
               <li key={itemIdx}>
@@ -478,7 +473,7 @@ function Index() {
             ))}
           </ul>
 
-          <div className="flex flex-col items-center justify-center">
+          {/* <div className="flex flex-col items-center justify-center">
             <p className="my-3 text-sm text-gray-500">
               or generate automated pipeline from a text description
             </p>
@@ -490,7 +485,7 @@ function Index() {
               }}>
               Start from Description
             </Button>
-          </div>
+          </div> */}
         </div>
       </Modal>
 
