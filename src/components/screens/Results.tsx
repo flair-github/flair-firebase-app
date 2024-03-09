@@ -201,8 +201,8 @@ function Results() {
                               <Checkbox className="scale-125" color="blue" />
                             </td> */}
                             <td className="whitespace-nowrap break-words py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                              {/* {el.workflowName} */}
-                              Call Center QA Grading
+                              {el.workflowName}
+                              {/* Call Center QA Grading */}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {el.workflowRequestId}
