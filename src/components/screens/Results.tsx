@@ -133,6 +133,12 @@ function Results() {
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Model
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                           Prompt Type
                           <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
@@ -146,12 +152,6 @@ function Results() {
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                           Retrieval Type
-                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                          Model
                           <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
                         {/* <th>Faithfulness</th> */}
@@ -225,34 +225,54 @@ function Results() {
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {
                                 [
-                                  'Chain-of-Thought',
-                                  'Tree-of-Thought',
-                                  'Reflection',
-                                  'Consistency',
-                                  'Multi-hop Prompt',
+                                  <div className="flex items-center gap-1">
+                                    <img src="/images/data-sources/open-ai.svg" className="w-6" />
+                                    gpt-4
+                                  </div>,
+                                  <div className="flex items-center gap-1">
+                                    <img src="/images/data-sources/anthropic.svg" className="w-6" />
+                                    claude-2
+                                  </div>,
+                                  <div className="flex items-center gap-1">
+                                    <img src="/images/data-sources/google.svg" className="w-6" />
+                                    gemma-7b
+                                  </div>,
+                                  <div className="flex items-center gap-1">
+                                    <img src="/images/data-sources/mistral.svg" className="w-6" />
+                                    mistral-7b-v0-1
+                                  </div>,
+                                ][simpleHash(el.createdTimestamp.toString()) % 4]
+                              }
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {
+                                [
+                                  <Badge color="amber">Chain-of-Thought</Badge>,
+                                  <Badge color="lime">Tree-of-Thought</Badge>,
+                                  <Badge color="teal">Reflection</Badge>,
+                                  <Badge color="blue">Consistency</Badge>,
+                                  <Badge color="rose">Multi-hop Prompt</Badge>,
                                 ][simpleHash(el.createdTimestamp.toString()) % 5]
                               }
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {
                                 [
-                                  'Vector Indexing',
-                                  'Inverted Indexing',
-                                  'Hashing',
-                                  'Trie Structures',
-                                  'Dimensionality Reduction',
+                                  <Badge color="sky">default</Badge>,
+                                  <Badge color="lime">HyDE</Badge>,
+                                  <Badge color="teal">Hybrid</Badge>,
                                 ][simpleHash(el.createdTimestamp.toString()) % 3]
                               }
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {
-                                ['default', 'Top 5', 'Top 10'][
-                                  simpleHash(el.createdTimestamp.toString()) % 3
-                                ]
+                                [
+                                  <Badge color="sky">default</Badge>,
+                                  <Badge color="lime">top-1</Badge>,
+                                  <Badge color="teal">top-5</Badge>,
+                                  <Badge color="blue">re-ranking</Badge>,
+                                ][simpleHash(el.createdTimestamp.toString()) % 4]
                               }
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {isOld ? 'gpt-3.5' : el.model}
                             </td>
                             {/* <td>{averaged.faithfulness?.toFixed(3) ?? '-'}</td> */}
                             {/* <td>{averaged.average_latency_per_request?.toFixed(3) ?? '-'}</td> */}
@@ -267,12 +287,15 @@ function Results() {
                                 : 75 + (simpleHash(el.createdTimestamp.toString()) % 20) + '%'}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              ${((simpleHash(el.createdTimestamp.toString()) % 50) + 10) / 10}
+                            </td>
+                            {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {status === 'Initiated' || status === 'Scheduled'
                                 ? '-'
                                 : isOld
                                 ? (simpleHash(el.createdTimestamp.toString()) % 70) / 10 + 10 + '%'
                                 : (simpleHash(el.createdTimestamp.toString()) % 70) / 10 + '%'}
-                            </td>
+                            </td> */}
                             {/* <td>{averaged.invalid_format_percentage?.toFixed(2) ?? '-'}</td> */}
                             {/* <td>{averaged.average_tokens_per_request?.toFixed(0) ?? '-'}</td> */}
                             <td className="relative flex items-center justify-center whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
