@@ -1,4 +1,8 @@
-export const simpleHash = (str: string) => {
+export const simpleHash = (str: string | number) => {
+  if (typeof str === 'number') {
+    str = String(str)
+  }
+
   if (typeof str !== 'string') {
     return 0
   }

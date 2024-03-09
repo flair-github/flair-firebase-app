@@ -133,6 +133,24 @@ function Results() {
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Prompt Type
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Index Type
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Retrieval Type
+                          <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                           Model
                           <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
@@ -148,7 +166,7 @@ function Results() {
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                          Hallucination
+                          Cost
                           <TbCaretUpDownFilled className="mb-1 ml-1 inline-block text-slate-500" />
                         </th>
                         {/* <th>Invalid Format (%)</th> */}
@@ -203,6 +221,35 @@ function Results() {
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {timestampToLocaleString(el.createdTimestamp)}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {
+                                [
+                                  'Chain-of-Thought',
+                                  'Tree-of-Thought',
+                                  'Reflection',
+                                  'Consistency',
+                                  'Multi-hop Prompt',
+                                ][simpleHash(el.createdTimestamp.toString()) % 5]
+                              }
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {
+                                [
+                                  'Vector Indexing',
+                                  'Inverted Indexing',
+                                  'Hashing',
+                                  'Trie Structures',
+                                  'Dimensionality Reduction',
+                                ][simpleHash(el.createdTimestamp.toString()) % 3]
+                              }
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {
+                                ['default', 'Top 5', 'Top 10'][
+                                  simpleHash(el.createdTimestamp.toString()) % 3
+                                ]
+                              }
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {isOld ? 'gpt-3.5' : el.model}
