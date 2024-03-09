@@ -15,6 +15,7 @@ import { Input } from '~/catalyst/input'
 import { Checkbox } from '~/catalyst/checkbox'
 import { TbCaretUpDownFilled } from 'react-icons/tb'
 import { atom, useAtom } from 'jotai'
+import { Badge } from '~/catalyst/badge'
 
 export const resultDataAtom = atom<DocWorkflowResult | undefined>(undefined)
 
@@ -188,7 +189,17 @@ function Results() {
                               {el.workflowRequestId}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {status}
+                              {status === 'API' ? (
+                                <Badge color="blue">API</Badge>
+                              ) : status === 'Scheduled' ? (
+                                <Badge color="orange">Scheduled</Badge>
+                              ) : status === 'Initiated' ? (
+                                <Badge color="cyan">Initiated</Badge>
+                              ) : status === 'Completed' ? (
+                                <Badge color="green">Completed</Badge>
+                              ) : (
+                                <Badge color="zinc">{status}</Badge>
+                              )}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {timestampToLocaleString(el.createdTimestamp)}
